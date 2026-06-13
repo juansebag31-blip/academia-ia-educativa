@@ -7,6 +7,7 @@ export type ExamActionState = {
   percent: number;
   passed: boolean;
   message: string;
+  answers: Record<string, string>;
 };
 
 export const initialExamState: ExamActionState = {
@@ -18,4 +19,5 @@ export const initialExamState: ExamActionState = {
   percent: 0,
   passed: false,
   message: "",
+  answers: {},
 };

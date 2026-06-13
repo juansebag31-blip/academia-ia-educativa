@@ -1,14 +1,31 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { Award, CheckCircle2, RotateCcw, XCircle } from "lucide-react";
 import type { CourseModule } from "@/lib/course";
 import { submitModuleExam } from "@/lib/exam-actions";
 import { initialExamState } from "@/lib/exam-state";
+import { addLocalExamAttempt } from "@/lib/learning/local-learning-state";
 import { ProgressBar } from "./progress-bar";
 
 export function ModuleExam({ courseModule }: { courseModule: CourseModule }) {
   const [state, action, pending] = useActionState(submitModuleExam, initialExamState);
+  const savedAttempt = useRef(false);
+
+  useEffect(() => {
+    if (!state.submitted || savedAttempt.current) return;
+    savedAttempt.current = true;
+    addLocalExamAttempt({
+      moduleSlug: courseModule.slug,
+      correct: state.correct,
+      incorrect: state.incorrect,
+      unanswered: state.unanswered,
+      total: state.total,
+      percent: state.percent,
+      passed: state.passed,
+      answers: state.answers,
+    });
+  }, [courseModule.slug, state]);
 
   return (
     <div className="space-y-6">

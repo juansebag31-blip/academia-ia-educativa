@@ -1,14 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, FileText } from "lucide-react";
-import { getModuleProgress } from "@/lib/course";
 import type { CourseModule } from "@/lib/course";
 import { courseSeed } from "@/lib/course-seed";
 import { ModuleImageFrame } from "./module-image-frame";
-import { ProgressBar } from "./progress-bar";
+import { LocalModuleProgress } from "./learning/local-progress";
 
-export function ModuleCard({ courseModule, completedSlugs }: { courseModule: CourseModule; completedSlugs: Set<string> }) {
-  const progress = getModuleProgress(courseModule, completedSlugs);
-
+export function ModuleCard({ courseModule }: { courseModule: CourseModule }) {
   return (
     <Link
       href={`/courses/${courseSeed.slug}/modules/${courseModule.slug}`}
@@ -29,13 +28,7 @@ export function ModuleCard({ courseModule, completedSlugs }: { courseModule: Cou
         <p className="text-xs font-bold uppercase tracking-wide text-ember">Módulo {courseModule.order}</p>
         <h3 className="mt-2 min-h-14 text-lg font-bold leading-tight text-ink">{courseModule.title.replace(/^Módulo \d+ - /, "")}</h3>
         <p className="mt-3 line-clamp-2 text-sm text-slate-600">{courseModule.purpose}</p>
-        <div className="mt-5 space-y-2">
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-500">
-            <span>{progress.completed}/{progress.total} completadas</span>
-            <span>{progress.percent}%</span>
-          </div>
-          <ProgressBar percent={progress.percent} />
-        </div>
+        <div className="mt-5"><LocalModuleProgress courseModule={courseModule} /></div>
         <div className="mt-5 flex items-center justify-between text-sm font-bold text-ember">
           <span className="inline-flex items-center gap-2">
             <CheckCircle2 size={17} />

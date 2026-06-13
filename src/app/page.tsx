@@ -1,10 +1,8 @@
 import Link from "next/link";
 import { ArrowRight, BookOpen, CheckCircle2, Clock, FileText, Sparkles } from "lucide-react";
 import { ModuleCard } from "@/components/module-card";
-import { ProgressBar } from "@/components/progress-bar";
-import { calculateCourseProgress } from "@/lib/course";
+import { LocalCourseProgress } from "@/components/learning/local-progress";
 import { courseSeed } from "@/lib/course-seed";
-import { getLastLessonSlug, getProgressForCourse } from "@/lib/progress";
 
 const moduleHighlights = [
   "Comprender la evolución histórica de la IA y su impacto educativo.",
@@ -29,10 +27,7 @@ const featuredHeroQuote = {
 };
 
 export default function DashboardPage() {
-  const progressEntries = getProgressForCourse();
-  const summary = calculateCourseProgress(progressEntries);
-  const completedSlugs = new Set(progressEntries.filter((entry) => entry.status === "completed").map((entry) => entry.lessonSlug));
-  const lastLessonSlug = getLastLessonSlug();
+  const firstLessonSlug = courseSeed.modules[0].lessons[0].slug;
 
   return (
     <div className="space-y-8">
@@ -47,7 +42,7 @@ export default function DashboardPage() {
             <div className="max-w-2xl">
               <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-sm font-semibold backdrop-blur">
                 <Sparkles size={16} />
-                Programa privado de aprendizaje
+                Programa gratuito de aprendizaje
               </span>
               <h1 className="mt-6 text-3xl font-black leading-tight sm:text-4xl">{courseSeed.title}</h1>
               <p className="mt-5 max-w-xl text-base leading-7 text-slate-100">{courseSeed.description}</p>
@@ -93,7 +88,7 @@ export default function DashboardPage() {
 
               <div className="flex flex-wrap gap-3">
                 <Link
-                  href={`/courses/${courseSeed.slug}/lessons/${lastLessonSlug}`}
+                  href={`/courses/${courseSeed.slug}/lessons/${firstLessonSlug}`}
                   className="inline-flex items-center gap-2 rounded-xl bg-ember px-5 py-3 text-sm font-bold text-white shadow-lg shadow-blue-950/20 transition hover:bg-ember-dark"
                 >
                   Continúa donde lo dejaste
@@ -124,17 +119,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="mt-6 flex items-end justify-between gap-5">
-            <div>
-              <p className="text-5xl font-black">{summary.percent}%</p>
-              <p className="mt-1 text-sm font-semibold text-slate-500">
-                {summary.completed} de {summary.total} lecciones completadas
-              </p>
-            </div>
-          </div>
-          <div className="mt-5">
-            <ProgressBar percent={summary.percent} />
-          </div>
+          <div className="mt-6"><LocalCourseProgress showCount /></div>
 
           <div className="mt-6 grid grid-cols-2 gap-3">
             <div className="rounded-xl bg-slate-50 p-4">
@@ -160,8 +145,6 @@ export default function DashboardPage() {
 
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {courseSeed.modules.map((courseModule, index) => {
-                const completed = courseModule.lessons.every((lesson) => completedSlugs.has(lesson.slug));
-
                 return (
                   <Link
                     key={courseModule.slug}
@@ -170,11 +153,7 @@ export default function DashboardPage() {
                   >
                     <div className="flex items-start justify-between gap-2">
                       <span className="rounded-lg bg-white px-2 py-1 text-[11px] font-black text-ember shadow-sm">Módulo {courseModule.order}</span>
-                      {completed ? (
-                        <CheckCircle2 className="shrink-0 text-emerald-600" size={16} />
-                      ) : (
-                        <ArrowRight className="shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-ember" size={16} />
-                      )}
+                      <ArrowRight className="shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-ember" size={16} />
                     </div>
                     <p className="mt-3 text-sm font-bold leading-5 text-ink">{moduleHighlights[index]}</p>
                   </Link>
@@ -197,7 +176,7 @@ export default function DashboardPage() {
         </div>
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {courseSeed.modules.map((courseModule) => (
-            <ModuleCard key={courseModule.slug} courseModule={courseModule} completedSlugs={completedSlugs} />
+            <ModuleCard key={courseModule.slug} courseModule={courseModule} />
           ))}
         </div>
       </section>

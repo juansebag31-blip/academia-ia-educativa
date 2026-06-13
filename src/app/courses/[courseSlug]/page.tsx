@@ -3,10 +3,8 @@ import { notFound } from "next/navigation";
 import { ArrowRight, Download, FileText, GraduationCap } from "lucide-react";
 import { ModuleCard } from "@/components/module-card";
 import { ModuleImageFrame } from "@/components/module-image-frame";
-import { ProgressBar } from "@/components/progress-bar";
+import { LocalCourseProgress } from "@/components/learning/local-progress";
 import { courseSeed } from "@/lib/course-seed";
-import { calculateCourseProgress } from "@/lib/course";
-import { getCompletedLessonSlugs, getLastLessonSlug, getProgressForCourse } from "@/lib/progress";
 
 export default async function CoursePage({ params }: { params: Promise<{ courseSlug: string }> }) {
   const { courseSlug } = await params;
@@ -15,10 +13,7 @@ export default async function CoursePage({ params }: { params: Promise<{ courseS
     notFound();
   }
 
-  const progressEntries = getProgressForCourse();
-  const summary = calculateCourseProgress(progressEntries);
-  const completedSlugs = getCompletedLessonSlugs();
-  const lastLessonSlug = getLastLessonSlug();
+  const firstLessonSlug = courseSeed.modules[0].lessons[0].slug;
 
   return (
     <div className="space-y-8">
@@ -40,7 +35,7 @@ export default async function CoursePage({ params }: { params: Promise<{ courseS
             <p className="mt-4 text-slate-600">{courseSeed.description}</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href={`/courses/${courseSeed.slug}/lessons/${lastLessonSlug}`}
+                href={`/courses/${courseSeed.slug}/lessons/${firstLessonSlug}`}
                 className="inline-flex items-center gap-2 rounded-xl bg-ember px-5 py-3 text-sm font-bold text-white shadow-lg shadow-blue-950/20 hover:bg-ember-dark"
               >
                 Continúa donde lo dejaste
@@ -64,13 +59,10 @@ export default async function CoursePage({ params }: { params: Promise<{ courseS
             <h2 className="text-xl font-black">Tu progreso</h2>
             <p className="mt-1 text-sm text-slate-500">Continúa el recorrido desde la última lección abierta.</p>
           </div>
-          <div className="text-right">
-            <p className="text-3xl font-black">{summary.percent}%</p>
-            <p className="text-sm text-slate-500">Completado</p>
-          </div>
+          <p className="text-sm font-bold text-slate-500">Guardado en este navegador</p>
         </div>
         <div className="mt-5">
-          <ProgressBar percent={summary.percent} />
+          <LocalCourseProgress showCount />
         </div>
       </section>
 
@@ -84,7 +76,7 @@ export default async function CoursePage({ params }: { params: Promise<{ courseS
         </div>
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {courseSeed.modules.map((courseModule) => (
-            <ModuleCard key={courseModule.slug} courseModule={courseModule} completedSlugs={completedSlugs} />
+            <ModuleCard key={courseModule.slug} courseModule={courseModule} />
           ))}
         </div>
       </section>

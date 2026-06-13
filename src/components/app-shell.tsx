@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Bell, BrainCircuit, Menu, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import { courseSeed } from "@/lib/course-seed";
+import type { SessionUser } from "@/lib/auth/session";
 import { SearchBox } from "./search-box";
 import { SidebarNavLinks } from "./nav-links";
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+export function AppShell({ children, user }: { children: React.ReactNode; user: SessionUser | null }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -90,13 +91,24 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <button type="button" className="focus-ring ml-auto rounded-full p-2 text-slate-600 hover:bg-slate-100" aria-label="Notificaciones">
               <Bell size={21} />
             </button>
-            <div className="flex items-center gap-3 rounded-2xl border border-blue-200 bg-blue-50 px-2 py-2 sm:px-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-ember text-sm font-bold text-white sm:h-10 sm:w-10">JS</span>
-              <div className="hidden sm:block">
-                <p className="text-sm font-bold">Juan Sebastian</p>
-                <p className="text-xs text-slate-500">Estudiante privado</p>
+            {user ? (
+              <Link href="/account" className="flex items-center gap-3 rounded-2xl border border-blue-200 bg-blue-50 px-2 py-2 sm:px-3">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-ember text-sm font-bold text-white sm:h-10 sm:w-10">{user.initials}</span>
+                <div className="hidden sm:block">
+                  <p className="max-w-36 truncate text-sm font-bold">{user.displayName}</p>
+                  <p className="text-xs text-slate-500">Progreso sincronizado</p>
+                </div>
+              </Link>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Link href="/auth/login" className="rounded-xl border border-line-soft px-3 py-2 text-sm font-black text-slate-700 hover:bg-slate-50">
+                  Entrar
+                </Link>
+                <Link href="/auth/register" className="hidden rounded-xl bg-ember px-3 py-2 text-sm font-black text-white hover:bg-ember-dark sm:inline-flex">
+                  Registrarse
+                </Link>
               </div>
-            </div>
+            )}
           </div>
           <div className="block border-t border-line-soft px-4 py-3 md:hidden">
             <SearchBox course={courseSeed} />

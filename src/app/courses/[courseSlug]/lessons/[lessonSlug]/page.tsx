@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, Award, CheckCircle2, Download, FileText, Video } from "lucide-react";
-import { ProgressBar } from "@/components/progress-bar";
+import { ArrowLeft, ArrowRight, Award, Download, FileText, Video } from "lucide-react";
+import { LessonCompletionButton } from "@/components/learning/lesson-completion-button";
+import { LocalModuleProgress } from "@/components/learning/local-progress";
 import { ModuleImageFrame } from "@/components/module-image-frame";
 import { VideoPlayer } from "@/components/video-player";
 import { courseSeed } from "@/lib/course-seed";
-import { findAdjacentLessons, findLessonBySlug, getModuleProgress } from "@/lib/course";
-import { getCompletedLessonSlugs, markLessonCompleted } from "@/lib/progress";
+import { findAdjacentLessons, findLessonBySlug } from "@/lib/course";
 
 export default async function LessonPage({ params }: { params: Promise<{ courseSlug: string; lessonSlug: string }> }) {
   const { courseSlug, lessonSlug } = await params;
@@ -22,9 +22,6 @@ export default async function LessonPage({ params }: { params: Promise<{ courseS
 
   const { module: courseModule, lesson } = found;
   const adjacent = findAdjacentLessons(courseSeed, lesson.slug);
-  const completedSlugs = getCompletedLessonSlugs();
-  const isCompleted = completedSlugs.has(lesson.slug);
-  const moduleProgress = getModuleProgress(courseModule, completedSlugs);
 
   return (
     <div className="grid gap-7 xl:grid-cols-[minmax(0,1fr)_340px]">
@@ -63,12 +60,7 @@ export default async function LessonPage({ params }: { params: Promise<{ courseS
         </div>
 
         <div className="flex flex-col gap-3 border-t border-line-soft p-6 sm:flex-row sm:items-center sm:justify-between">
-          <form action={markLessonCompleted.bind(null, lesson.slug)}>
-            <button className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-ember px-5 py-3 text-sm font-bold text-white hover:bg-ember-dark sm:w-auto">
-              <CheckCircle2 size={18} />
-              {isCompleted ? "Completado" : "Marcar como completado"}
-            </button>
-          </form>
+          <LessonCompletionButton lessonSlug={lesson.slug} />
           <div className="flex gap-3">
             {adjacent.previous && (
               <Link href={`/courses/${courseSeed.slug}/lessons/${adjacent.previous.slug}`} className="inline-flex items-center gap-2 rounded-xl border border-line-soft px-4 py-3 text-sm font-bold hover:bg-slate-50">
@@ -89,13 +81,7 @@ export default async function LessonPage({ params }: { params: Promise<{ courseS
       <aside className="space-y-5">
         <section className="rounded-2xl border border-line-soft bg-white p-5 shadow-card">
           <h2 className="text-lg font-black">Progreso del módulo</h2>
-          <div className="mt-4 flex items-center justify-between text-sm font-semibold text-slate-500">
-            <span>{moduleProgress.completed}/{moduleProgress.total} lecciones</span>
-            <span>{moduleProgress.percent}%</span>
-          </div>
-          <div className="mt-2">
-            <ProgressBar percent={moduleProgress.percent} />
-          </div>
+          <div className="mt-4"><LocalModuleProgress courseModule={courseModule} /></div>
         </section>
 
         <Link

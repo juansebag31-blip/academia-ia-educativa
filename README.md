@@ -59,6 +59,20 @@ npm run build
 
 Los nombres requeridos están documentados en `.env.example`.
 
+## Acceso gratuito y cuentas
+
+Todo el curso permanece disponible sin iniciar sesión. El visitante conserva
+su progreso en `localStorage`. Las cuentas gratuitas usan Supabase Auth para
+sincronizar lecciones, actividades y exámenes desde `/account`.
+
+Rutas principales:
+
+- `/auth/register`
+- `/auth/login`
+- `/auth/forgot-password`
+- `/auth/update-password`
+- `/account`
+
 Nunca deben subirse:
 
 - `.env` o `.env.local`;

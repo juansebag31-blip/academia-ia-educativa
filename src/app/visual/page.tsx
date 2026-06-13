@@ -1,11 +1,7 @@
 import { ModuleCard } from "@/components/module-card";
 import { courseSeed } from "@/lib/course-seed";
-import { getProgressForCourse } from "@/lib/progress";
 
 export default function VisualPage() {
-  const progressEntries = getProgressForCourse();
-  const completedSlugs = new Set(progressEntries.filter((entry) => entry.status === "completed").map((entry) => entry.lessonSlug));
-
   return (
     <div className="space-y-7">
       <section className="rounded-2xl border border-line-soft bg-white p-6 shadow-card">
@@ -18,7 +14,7 @@ export default function VisualPage() {
 
       <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {courseSeed.modules.map((courseModule) => (
-          <ModuleCard key={courseModule.slug} courseModule={courseModule} completedSlugs={completedSlugs} />
+          <ModuleCard key={courseModule.slug} courseModule={courseModule} />
         ))}
       </section>
     </div>

@@ -1,15 +1,9 @@
 import Link from "next/link";
 import { ArrowRight, BookOpen, CheckCircle2, ClipboardList } from "lucide-react";
-import { ProgressBar } from "@/components/progress-bar";
-import { calculateCourseProgress, getModuleProgress } from "@/lib/course";
+import { LocalCourseProgress, LocalModuleProgress } from "@/components/learning/local-progress";
 import { courseSeed } from "@/lib/course-seed";
-import { getProgressForCourse } from "@/lib/progress";
 
 export default function ModulesPage() {
-  const progressEntries = getProgressForCourse();
-  const completedSlugs = new Set(progressEntries.filter((entry) => entry.status === "completed").map((entry) => entry.lessonSlug));
-  const courseProgress = calculateCourseProgress(progressEntries);
-
   return (
     <div className="space-y-7">
       <section className="rounded-2xl border border-line-soft bg-white p-6 shadow-card">
@@ -22,21 +16,13 @@ export default function ModulesPage() {
             </p>
           </div>
           <div className="min-w-full rounded-xl bg-slate-50 p-4 lg:min-w-72">
-            <div className="flex items-center justify-between text-sm font-bold text-slate-600">
-              <span>Progreso general</span>
-              <span>{courseProgress.percent}%</span>
-            </div>
-            <div className="mt-3">
-              <ProgressBar percent={courseProgress.percent} />
-            </div>
+            <LocalCourseProgress />
           </div>
         </div>
       </section>
 
       <section className="grid gap-4 xl:grid-cols-2">
         {courseSeed.modules.map((courseModule) => {
-          const moduleProgress = getModuleProgress(courseModule, completedSlugs);
-
           return (
             <Link
               key={courseModule.slug}
@@ -70,12 +56,12 @@ export default function ModulesPage() {
                   </div>
                   <div className="rounded-xl bg-slate-50 p-3">
                     <CheckCircle2 className="text-ember" size={18} />
-                    <p className="mt-2 font-bold">{moduleProgress.percent}% completo</p>
+                    <p className="mt-2 font-bold">Avance local</p>
                   </div>
                 </div>
 
                 <div className="mt-5">
-                  <ProgressBar percent={moduleProgress.percent} />
+                  <LocalModuleProgress courseModule={courseModule} />
                 </div>
               </div>
             </Link>

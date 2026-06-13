@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import type { CourseModule } from "@/lib/course";
 import { learningSections, type LearningSectionKey } from "@/lib/learning-flow";
+import { getLocalLearningState, saveLocalModuleState } from "@/lib/learning/local-learning-state";
 
 type SavedState = {
   path: Record<string, boolean>;
@@ -55,13 +56,16 @@ export function ModuleLearningBoxes({ courseModule }: { courseModule: CourseModu
   const storageKey = useMemo(() => `academia-ia-active-learning-${courseModule.slug}`, [courseModule.slug]);
 
   useEffect(() => {
+    const canonical = getLocalLearningState().moduleStates[courseModule.slug];
     const saved = window.localStorage.getItem(storageKey);
-    if (saved) setState({ ...emptyState, ...(JSON.parse(saved) as SavedState) });
-  }, [storageKey]);
+    const value = canonical ?? (saved ? JSON.parse(saved) : null);
+    if (value) setState({ ...emptyState, ...(value as SavedState) });
+  }, [courseModule.slug, storageKey]);
 
   useEffect(() => {
     window.localStorage.setItem(storageKey, JSON.stringify(state));
-  }, [state, storageKey]);
+    saveLocalModuleState(courseModule.slug, state);
+  }, [courseModule.slug, state, storageKey]);
 
   const pathDone = countDone(state.path, courseModule.guidedPath.length);
   const masteryDone = countDone(state.mastery, courseModule.masteryChecklist.length);
