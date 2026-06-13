@@ -6,10 +6,8 @@ import {
   getLocalLearningState,
   hasLocalLearningProgress,
 } from "@/lib/learning/local-learning-state";
-import {
-  importLearningProgress,
-  initialImportState,
-} from "@/lib/learning/import-actions";
+import { importLearningProgress } from "@/lib/learning/import-actions";
+import { initialImportState } from "@/lib/learning/import-state";
 
 export function ImportProgressCard() {
   const [payload, setPayload] = useState("");
