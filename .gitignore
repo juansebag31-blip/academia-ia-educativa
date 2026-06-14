@@ -22,3 +22,5 @@ supabase/.temp
 # Local source material and generated course media stay outside Git.
 MODULO Y CUADERNILLO/
 public/course-assets/
+
+.vercel
