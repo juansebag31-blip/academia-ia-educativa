@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { getOptimizedDocumentSrc, getOptimizedImageSrc } from "./course-assets";
+import {
+  getOptimizedDocumentSrc,
+  getOptimizedImageSrc,
+  getOptimizedVideoSrc,
+} from "./course-assets";
 
 describe("course asset delivery", () => {
   it("maps course PNG and JPEG images to versioned WebP display assets", () => {
@@ -26,6 +30,15 @@ describe("course asset delivery", () => {
     );
     expect(getOptimizedDocumentSrc("https://example.com/module.pdf")).toBe(
       "https://example.com/module.pdf",
+    );
+  });
+
+  it("maps course MP4 videos to versioned delivery paths", () => {
+    expect(getOptimizedVideoSrc("/course-assets/modules/module-01/media/video.mp4")).toBe(
+      "/course-assets-optimized/modules/module-01/media/video.mp4",
+    );
+    expect(getOptimizedVideoSrc("https://youtube.com/watch?v=example")).toBe(
+      "https://youtube.com/watch?v=example",
     );
   });
 });

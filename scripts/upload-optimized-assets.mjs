@@ -6,6 +6,7 @@ const root = resolve(".generated/course-assets-v2");
 const contentTypes = {
   ".webp": "image/webp",
   ".pdf": "application/pdf",
+  ".mp4": "video/mp4",
 };
 
 function loadEnv(path) {

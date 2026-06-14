@@ -19,7 +19,7 @@ import type {
   ModuleResourceBundle,
   ModuleVisualResource,
 } from "@/lib/module-resource-bundles";
-import { getOptimizedImageSrc } from "@/lib/course-assets";
+import { getOptimizedImageSrc, getOptimizedVideoSrc } from "@/lib/course-assets";
 import { DeferredAudio, DeferredDocument, DeferredVideo } from "./deferred-media";
 
 export function ModuleResourceLibrary({ bundle }: { bundle: ModuleResourceBundle }) {
@@ -69,7 +69,7 @@ export function ModuleResourceLibrary({ bundle }: { bundle: ModuleResourceBundle
               title={bundle.media.video.title}
               description={bundle.media.video.description}
               duration={bundle.media.video.duration}
-              href={bundle.media.video.src}
+              href={getOptimizedVideoSrc(bundle.media.video.src)}
               downloadLabel="Descargar video"
             />
           </article>

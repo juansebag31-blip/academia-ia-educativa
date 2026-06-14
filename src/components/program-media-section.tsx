@@ -1,5 +1,6 @@
 import { Clock3, Download, Headphones, PlaySquare } from "lucide-react";
 import { programMedia } from "@/lib/program-media";
+import { getOptimizedVideoSrc } from "@/lib/course-assets";
 import { DeferredAudio, DeferredVideo } from "./deferred-media";
 
 export function ProgramMediaSection() {
@@ -30,7 +31,7 @@ export function ProgramMediaSection() {
             title={programMedia.video.title}
             description={programMedia.video.description}
             duration={programMedia.video.duration}
-            downloadHref={programMedia.video.src}
+            downloadHref={getOptimizedVideoSrc(programMedia.video.src)}
             downloadLabel="Descargar video"
           />
         </article>

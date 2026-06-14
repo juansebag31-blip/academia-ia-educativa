@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import { FileText, Headphones, PlayCircle } from "lucide-react";
-import { getOptimizedDocumentSrc, getOptimizedImageSrc } from "@/lib/course-assets";
+import {
+  getOptimizedDocumentSrc,
+  getOptimizedImageSrc,
+  getOptimizedVideoSrc,
+} from "@/lib/course-assets";
 
 type MediaSourceProps = {
   src: string;
@@ -42,6 +46,7 @@ export function DeferredVideo({
   title,
 }: MediaSourceProps & { type: string; poster: string }) {
   const [loaded, setLoaded] = useState(false);
+  const videoSrc = getOptimizedVideoSrc(src);
 
   if (loaded) {
     return (
@@ -52,7 +57,7 @@ export function DeferredVideo({
         preload="metadata"
         poster={poster}
       >
-        <source src={src} type={type} />
+        <source src={videoSrc} type={type} />
         Tu navegador no puede reproducir este video.
       </video>
     );
