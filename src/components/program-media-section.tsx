@@ -1,5 +1,6 @@
 import { Clock3, Download, Headphones, PlaySquare } from "lucide-react";
 import { programMedia } from "@/lib/program-media";
+import { DeferredAudio, DeferredVideo } from "./deferred-media";
 
 export function ProgramMediaSection() {
   return (
@@ -16,15 +17,12 @@ export function ProgramMediaSection() {
       <div className="grid lg:grid-cols-[minmax(0,1.5fr)_minmax(320px,0.8fr)]">
         <article className="border-b border-white/10 lg:border-b-0 lg:border-r">
           <div className="aspect-video bg-black">
-            <video
-              className="h-full w-full object-contain"
-              controls
-              preload="metadata"
+            <DeferredVideo
+              src={programMedia.video.src}
+              type={programMedia.video.type}
               poster={programMedia.video.poster}
-            >
-              <source src={programMedia.video.src} type={programMedia.video.type} />
-              Tu navegador no puede reproducir este video.
-            </video>
+              title={programMedia.video.title}
+            />
           </div>
           <MediaDetails
             icon={<PlaySquare size={18} />}
@@ -52,10 +50,11 @@ export function ProgramMediaSection() {
           </div>
 
           <div className="border-t border-white/10 p-5 sm:p-6">
-            <audio className="w-full" controls preload="metadata">
-              <source src={programMedia.audio.src} type={programMedia.audio.type} />
-              Tu navegador no puede reproducir este audio.
-            </audio>
+            <DeferredAudio
+              src={programMedia.audio.src}
+              type={programMedia.audio.type}
+              title={programMedia.audio.title}
+            />
             <a
               href={programMedia.audio.src}
               download

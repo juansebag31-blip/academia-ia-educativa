@@ -1,6 +1,7 @@
 import { Download, ExternalLink, FileText } from "lucide-react";
 import type { CourseModule } from "@/lib/course";
 import { getModulePdfUrl } from "@/lib/module-page";
+import { DeferredDocument } from "./deferred-media";
 
 export function ModuleSourceDocument({ courseModule }: { courseModule: CourseModule }) {
   const pdfUrl = getModulePdfUrl(courseModule.pdfFile);
@@ -47,8 +48,8 @@ export function ModuleSourceDocument({ courseModule }: { courseModule: CourseMod
         </div>
       </header>
 
-      <iframe
-        src={`${pdfUrl}#view=FitH`}
+      <DeferredDocument
+        src={pdfUrl}
         title={`Cuadernillo fuente del módulo ${courseModule.order}`}
         className="hidden h-[720px] w-full bg-slate-100 sm:block lg:h-[820px]"
       />

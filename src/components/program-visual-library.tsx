@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { BookOpenCheck, Download, Expand, ExternalLink, FileSliders, Images, X } from "lucide-react";
 import { programVisualResources } from "@/lib/program-visual-resources";
+import { getOptimizedImageSrc } from "@/lib/course-assets";
+import { DeferredDocument } from "./deferred-media";
 
 type VisualResource =
   | (typeof programVisualResources.infographics)[number]
@@ -68,7 +70,7 @@ export function ProgramVisualLibrary() {
                 aria-label={`Ampliar ${resource.title}`}
               >
                 <Image
-                  src={resource.src}
+                  src={getOptimizedImageSrc(resource.src)}
                   alt={resource.alt}
                   width={resource.width}
                   height={resource.height}
@@ -110,7 +112,7 @@ export function ProgramVisualLibrary() {
               aria-label={`Ampliar ${resource.title}`}
             >
               <Image
-                src={resource.src}
+                src={getOptimizedImageSrc(resource.src)}
                 alt={resource.alt}
                 width={resource.width}
                 height={resource.height}
@@ -200,11 +202,10 @@ export function ProgramVisualLibrary() {
               );
             })}
           </div>
-          <iframe
+          <DeferredDocument
             key={activeDocument.id}
-            src={`${activeDocument.src}#view=FitH`}
+            src={activeDocument.src}
             title={activeDocument.title}
-            className="hidden h-[680px] w-full bg-slate-100 sm:block lg:h-[780px]"
           />
           <div className="bg-slate-950/60 p-5 sm:hidden">
             <p className="text-sm leading-6 text-slate-300">
@@ -243,7 +244,7 @@ export function ProgramVisualLibrary() {
           </button>
           <div className="max-h-full w-full max-w-[1700px] overflow-auto border border-white/15 bg-[#071A2B] shadow-2xl">
             <Image
-              src={selected.src}
+              src={getOptimizedImageSrc(selected.src)}
               alt={selected.alt}
               width={selected.width}
               height={selected.height}

@@ -19,6 +19,8 @@ import type {
   ModuleResourceBundle,
   ModuleVisualResource,
 } from "@/lib/module-resource-bundles";
+import { getOptimizedImageSrc } from "@/lib/course-assets";
+import { DeferredAudio, DeferredDocument, DeferredVideo } from "./deferred-media";
 
 export function ModuleResourceLibrary({ bundle }: { bundle: ModuleResourceBundle }) {
   const [selectedVisual, setSelectedVisual] = useState<ModuleVisualResource | null>(null);
@@ -54,15 +56,12 @@ export function ModuleResourceLibrary({ bundle }: { bundle: ModuleResourceBundle
         <div className="grid border-b border-white/10 lg:grid-cols-[minmax(0,1.5fr)_minmax(320px,0.8fr)]">
           <article className="border-b border-white/10 lg:border-b-0 lg:border-r">
             <div className="aspect-video bg-black">
-              <video
-                className="h-full w-full object-contain"
-                controls
-                preload="metadata"
+              <DeferredVideo
+                src={bundle.media.video.src}
+                type={bundle.media.video.type}
                 poster={bundle.media.video.poster}
-              >
-                <source src={bundle.media.video.src} type={bundle.media.video.type} />
-                Tu navegador no puede reproducir este video.
-              </video>
+                title={bundle.media.video.title}
+              />
             </div>
             <MediaDescription
               icon={<PlaySquare size={18} />}
@@ -89,10 +88,11 @@ export function ModuleResourceLibrary({ bundle }: { bundle: ModuleResourceBundle
               </p>
             </div>
             <div className="border-t border-white/10 p-5 sm:p-6">
-              <audio className="w-full" controls preload="metadata">
-                <source src={bundle.media.audio.src} type={bundle.media.audio.type} />
-                Tu navegador no puede reproducir este audio.
-              </audio>
+              <DeferredAudio
+                src={bundle.media.audio.src}
+                type={bundle.media.audio.type}
+                title={bundle.media.audio.title}
+              />
               <DownloadButton href={bundle.media.audio.src} label="Descargar audio" primary />
             </div>
           </article>
@@ -146,7 +146,7 @@ export function ModuleResourceLibrary({ bundle }: { bundle: ModuleResourceBundle
           </button>
           <div className="max-h-full w-full max-w-[1700px] overflow-auto border border-white/15 bg-[#071A2B]">
             <Image
-              src={selectedVisual.src}
+              src={getOptimizedImageSrc(selectedVisual.src)}
               alt={selectedVisual.alt}
               width={selectedVisual.width}
               height={selectedVisual.height}
@@ -178,7 +178,7 @@ function VisualCard({
         aria-label={`Ampliar ${visual.title}`}
       >
         <Image
-          src={visual.src}
+          src={getOptimizedImageSrc(visual.src)}
           alt={visual.alt}
           width={visual.width}
           height={visual.height}
@@ -259,11 +259,10 @@ function DocumentViewer({
           </button>
         ))}
       </div>
-      <iframe
+      <DeferredDocument
         key={activeDocument.id}
-        src={`${activeDocument.src}#view=FitH`}
+        src={activeDocument.src}
         title={activeDocument.title}
-        className="hidden h-[680px] w-full bg-slate-100 sm:block lg:h-[780px]"
       />
       <div className="bg-slate-950/60 p-5 sm:hidden">
         <p className="text-sm leading-6 text-slate-300">

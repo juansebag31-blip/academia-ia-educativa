@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Download, Expand, ImageIcon, X } from "lucide-react";
 import { programInfographicAssets } from "@/lib/program-infographic-content";
+import { getOptimizedImageSrc } from "@/lib/course-assets";
 
 export function ProgramInfographicGallery() {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,7 +65,7 @@ export function ProgramInfographicGallery() {
           aria-label="Ampliar infografía general del programa"
         >
           <Image
-            src={programInfographicAssets.horizontal}
+            src={getOptimizedImageSrc(programInfographicAssets.horizontal)}
             alt="Infografía general del programa de inteligencia artificial aplicada a la educación con NotebookLM"
             width={2400}
             height={1350}
@@ -94,7 +95,7 @@ export function ProgramInfographicGallery() {
           </button>
           <div className="max-h-full w-full max-w-[1600px] overflow-auto border border-white/15 bg-[#071A2B] shadow-2xl">
             <Image
-              src={programInfographicAssets.horizontal}
+              src={getOptimizedImageSrc(programInfographicAssets.horizontal)}
               alt="Infografía general ampliada del programa"
               width={2400}
               height={1350}

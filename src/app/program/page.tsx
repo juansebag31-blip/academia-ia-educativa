@@ -3,6 +3,7 @@ import { ArrowRight, Download, FileText } from "lucide-react";
 import { ProgramInfographicGallery } from "@/components/program-infographic-gallery";
 import { ProgramMediaSection } from "@/components/program-media-section";
 import { ProgramVisualLibrary } from "@/components/program-visual-library";
+import { DeferredDocument } from "@/components/deferred-media";
 import { courseSeed } from "@/lib/course-seed";
 
 const programPdf = "/course-assets/pdfs/Cuadernillo_Institucional_Programa_IA_Educativa_NotebookLM_COMPLETO.pdf";
@@ -52,7 +53,12 @@ export default function ProgramPage() {
             <FileText className="text-ember" />
             <h2 className="text-xl font-black">Cuadernillo institucional completo</h2>
           </div>
-          <iframe className="h-[720px] w-full bg-slate-100" src={programPdf} title="Programa completo del curso" />
+          <DeferredDocument
+            className="h-[720px] w-full bg-slate-100"
+            placeholderClassName="flex min-h-64 items-center justify-center bg-slate-950/60 p-6"
+            src={programPdf}
+            title="Programa completo del curso"
+          />
         </section>
       </section>
     </div>
