@@ -67,11 +67,37 @@ sincronizar lecciones, actividades y exámenes desde `/account`.
 
 Rutas principales:
 
+- `/` - landing pública optimizada para buscadores;
+- `/dashboard` - panel principal del curso;
 - `/auth/register`
 - `/auth/login`
 - `/auth/forgot-password`
 - `/auth/update-password`
 - `/account`
+
+## Landing, SEO y captación
+
+La portada pública presenta el curso a docentes y estudiantes, enlaza el contenido real y ofrece un kit gratuito de prompts. El formulario necesita las variables privadas documentadas en `.env.example` y la migración `20260622190000_marketing_subscribers.sql` aplicada en Supabase.
+
+Regenerar el kit descargable:
+
+```powershell
+npm run kit:generate
+```
+
+El PDF final queda en `output/pdf/kit-prompts-ia-educativa.pdf`. La API lo entrega únicamente mediante un enlace firmado; no se publica dentro de `public/`.
+
+Resend es opcional. Sin `RESEND_API_KEY` y `RESEND_FROM_EMAIL`, una suscripción válida habilita la descarga en pantalla, pero no envía correo.
+
+Después del despliegue:
+
+1. confirmar que `NEXT_PUBLIC_APP_URL` contiene la URL canónica definitiva;
+2. abrir `/sitemap.xml` y `/robots.txt`;
+3. registrar el sitio en Google Search Console;
+4. enviar la URL del sitemap;
+5. verificar indexación, clics al curso, suscripciones y descargas.
+
+La configuración técnica facilita el rastreo y la indexación, pero no garantiza una posición concreta en buscadores.
 
 Nunca deben subirse:
 
