@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { ArrowRight, BookOpenCheck, CheckCircle2, Download, GraduationCap, SearchCheck, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpenCheck, Download, GraduationCap, SearchCheck, Sparkles } from "lucide-react";
 import { courseSeed } from "@/lib/course-seed";
 import { MarketingFooter } from "./marketing-footer";
 import { MarketingHeader } from "./marketing-header";
+import { FaqList } from "./faq-list";
 
 export const landingStats = [
   ["11", "módulos progresivos"],
@@ -18,6 +19,29 @@ export const landingBenefits = [
 ] as const;
 
 const benefitIcons = [GraduationCap, BookOpenCheck, SearchCheck] as const;
+
+const faqItems = [
+  {
+    question: "¿El curso es realmente gratuito?",
+    answer: "Sí. Podés recorrer los 11 módulos, sus lecciones, actividades y evaluaciones sin pagar ni entregar tu correo.",
+  },
+  {
+    question: "¿Necesito conocimientos previos?",
+    answer: "No. La ruta comienza con fundamentos explicados en lenguaje claro y avanza de forma progresiva hacia aplicaciones prácticas.",
+  },
+  {
+    question: "¿Está pensado para docentes o estudiantes?",
+    answer: "Para ambos. Incluye usos de IA y NotebookLM para planificar, investigar, enseñar, comprender textos y estudiar con fuentes propias.",
+  },
+  {
+    question: "¿Incluye certificados?",
+    answer: "Sí. Cada módulo tiene una evaluación y permite generar un certificado cuando alcanzás el porcentaje de aprobación requerido.",
+  },
+  {
+    question: "¿Qué es NotebookLM y para qué sirve?",
+    answer: "NotebookLM es una herramienta de Google que permite trabajar con tus propias fuentes para resumir, preguntar, organizar y producir materiales con trazabilidad.",
+  },
+] as const;
 
 export function LandingPage() {
   return (
@@ -122,13 +146,7 @@ export function LandingPage() {
           <div className="mx-auto w-full max-w-4xl px-4 sm:px-8">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-blue-300">Preguntas frecuentes</p>
             <h2 className="mt-4 text-4xl font-black tracking-[-0.05em] sm:text-6xl">Antes de empezar.</h2>
-            <div className="mt-10 space-y-3">
-              {["¿El curso es realmente gratuito?", "¿Necesito conocimientos previos?", "¿Está pensado para docentes o estudiantes?", "¿Incluye certificados?", "¿Qué es NotebookLM y para qué sirve?"].map((question) => (
-                <div key={question} className="flex items-center justify-between rounded-2xl border border-white/10 bg-neural-panel px-5 py-5 font-bold">
-                  <span>{question}</span><CheckCircle2 className="shrink-0 text-blue-300" size={19} aria-hidden="true" />
-                </div>
-              ))}
-            </div>
+            <FaqList items={[...faqItems]} />
           </div>
         </section>
       </main>
