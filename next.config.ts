@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  outputFileTracingIncludes: {
+    "/api/marketing/kit": ["./output/pdf/kit-prompts-ia-educativa.pdf"],
+  },
   experimental: {
     serverActions: {
       bodySizeLimit: "2mb",

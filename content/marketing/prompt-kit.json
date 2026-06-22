@@ -1,0 +1,142 @@
+[
+  {
+    "category": "Planificar clases",
+    "title": "Diseñar una secuencia didáctica",
+    "objective": "Convertir un tema en una clase con inicio, desarrollo y cierre.",
+    "prompt": "Actuá como especialista en didáctica. Diseñá una secuencia de [duración] sobre [tema] para [nivel]. Incluí objetivo observable, actividad inicial, práctica guiada, producción del estudiante, cierre y evidencia de aprendizaje. Indicá qué parte debe revisar el docente antes de usarla.",
+    "adapt": "Reemplazá los campos entre corchetes y agregá los recursos reales disponibles en tu aula."
+  },
+  {
+    "category": "Planificar clases",
+    "title": "Activar conocimientos previos",
+    "objective": "Detectar ideas iniciales antes de presentar un contenido nuevo.",
+    "prompt": "Creá cinco preguntas breves para explorar qué sabe un grupo de [nivel] sobre [tema]. Ordenalas desde una experiencia cotidiana hasta una explicación conceptual. Para cada pregunta, explicá qué respuesta o confusión debería observar el docente.",
+    "adapt": "Pedí versiones orales, escritas o anónimas según el clima del grupo."
+  },
+  {
+    "category": "Planificar clases",
+    "title": "Diferenciar una actividad",
+    "objective": "Ofrecer distintos apoyos sin cambiar el propósito de aprendizaje.",
+    "prompt": "Tomá esta actividad: [pegar actividad]. Proponé tres niveles de apoyo para el mismo objetivo: andamiaje alto, apoyo medio y trabajo autónomo. No reduzcas la exigencia conceptual. Explicá qué cambia y qué debe mantenerse igual.",
+    "adapt": "Indicá necesidades específicas del grupo sin incluir datos personales."
+  },
+  {
+    "category": "Planificar clases",
+    "title": "Crear una rúbrica clara",
+    "objective": "Evaluar una producción con criterios observables.",
+    "prompt": "Construí una rúbrica para [producto] de [nivel]. Usá cuatro criterios vinculados con [objetivo] y tres niveles de desempeño. Escribí descriptores observables, evitá adjetivos vagos y agregá una pregunta de autoevaluación por criterio.",
+    "adapt": "Compartí un ejemplo de trabajo esperado para ajustar la precisión de los descriptores."
+  },
+  {
+    "category": "Planificar clases",
+    "title": "Revisar una evaluación",
+    "objective": "Comprobar que una evaluación mida lo que se enseñó.",
+    "prompt": "Analizá esta evaluación: [pegar evaluación]. Comparala con estos objetivos: [objetivos]. Señalá desajustes, preguntas ambiguas, carga innecesaria y oportunidades de evidencia auténtica. Proponé cambios y justificá cada uno.",
+    "adapt": "Agregá tiempo disponible y modalidad antes de pedir la revisión."
+  },
+  {
+    "category": "Estudiar y comprender",
+    "title": "Explicar sin perder rigor",
+    "objective": "Comprender un concepto difícil con lenguaje accesible.",
+    "prompt": "Explicá [concepto] para una persona que conoce [conocimiento previo]. Usá una definición precisa, una analogía con límites explícitos, un ejemplo, un contraejemplo y tres preguntas para comprobar comprensión. Separá hechos de interpretaciones.",
+    "adapt": "Pedí una segunda versión con el vocabulario técnico del material de estudio."
+  },
+  {
+    "category": "Estudiar y comprender",
+    "title": "Interrogar un texto",
+    "objective": "Leer activamente en lugar de resumir de manera pasiva.",
+    "prompt": "A partir del siguiente texto: [pegar fragmento], formulá diez preguntas en tres niveles: localizar información, relacionar ideas y evaluar argumentos. No respondas todavía. Esperá mis respuestas y luego corregime citando el fragmento relevante.",
+    "adapt": "Usá fragmentos breves y conservá siempre la fuente original para contrastar."
+  },
+  {
+    "category": "Estudiar y comprender",
+    "title": "Crear tarjetas de recuperación",
+    "objective": "Practicar memoria activa con preguntas útiles.",
+    "prompt": "Convertí estas notas en tarjetas de recuperación: [pegar notas]. Cada tarjeta debe tener una pregunta concreta, una respuesta breve y una pista opcional. Evitá preguntas de sí o no. Marcá las tarjetas que exigen aplicación y no solo recuerdo.",
+    "adapt": "Limitá cada tanda a 15 tarjetas para poder revisarlas con atención."
+  },
+  {
+    "category": "Estudiar y comprender",
+    "title": "Detectar lagunas de comprensión",
+    "objective": "Encontrar qué falta entender antes de continuar.",
+    "prompt": "Voy a explicar [tema] con mis palabras. No completes mi respuesta de inmediato. Identificá afirmaciones correctas, lagunas, contradicciones y términos imprecisos. Luego haceme una pregunta por vez para que yo mismo mejore la explicación.",
+    "adapt": "Grabá o escribí tu explicación sin consultar apuntes antes de usar el prompt."
+  },
+  {
+    "category": "Estudiar y comprender",
+    "title": "Planificar un repaso espaciado",
+    "objective": "Distribuir el estudio según dificultad y fecha.",
+    "prompt": "Diseñá un plan de repaso para [temas] hasta [fecha]. Dispongo de [tiempo] por día. Priorizá recuperación activa, práctica mezclada y repasos espaciados. Incluí una forma breve de decidir si avanzo o repito cada tema.",
+    "adapt": "Informá días no disponibles y temas que ya dominás para evitar planes irreales."
+  },
+  {
+    "category": "Investigar con fuentes",
+    "title": "Convertir un interés en pregunta",
+    "objective": "Formular una pregunta investigable y acotada.",
+    "prompt": "Transformá este interés general: [tema] en cinco preguntas de investigación viables para [nivel o contexto]. Para cada una indicá alcance, conceptos centrales, evidencia necesaria y una limitación probable. No inventes fuentes.",
+    "adapt": "Agregá tiempo, acceso a datos y extensión esperada del trabajo."
+  },
+  {
+    "category": "Investigar con fuentes",
+    "title": "Crear una estrategia de búsqueda",
+    "objective": "Buscar evidencia con términos y filtros adecuados.",
+    "prompt": "Proponé una estrategia de búsqueda para [pregunta]. Generá términos principales, sinónimos en español e inglés, combinaciones booleanas y criterios de inclusión y exclusión. Sugerí tipos de repositorios, pero no inventes artículos ni enlaces.",
+    "adapt": "Indicá disciplina, período y región si son relevantes para el problema."
+  },
+  {
+    "category": "Investigar con fuentes",
+    "title": "Comparar dos fuentes",
+    "objective": "Evaluar acuerdos, diferencias y calidad de evidencia.",
+    "prompt": "Compará estas dos fuentes: [fuente A] y [fuente B]. Separá propósito, autoría, fecha, método, evidencia, conclusiones y limitaciones. Identificá coincidencias y desacuerdos. Citá fragmentos o páginas cuando estén disponibles y marcá lo que no puede verificarse.",
+    "adapt": "Pegá referencias completas y no reemplaces la lectura de los documentos originales."
+  },
+  {
+    "category": "Investigar con fuentes",
+    "title": "Construir una matriz de literatura",
+    "objective": "Organizar varias fuentes sin perder trazabilidad.",
+    "prompt": "Creá una matriz para estas fuentes: [lista o notas]. Usá columnas de referencia, pregunta, método, muestra, hallazgo, limitación y utilidad para mi trabajo. Si falta un dato, escribí 'no informado' en lugar de inferirlo.",
+    "adapt": "Agregá una columna con página o ubicación exacta de cada evidencia."
+  },
+  {
+    "category": "Investigar con fuentes",
+    "title": "Preparar una síntesis argumentada",
+    "objective": "Integrar evidencia sin encadenar resúmenes aislados.",
+    "prompt": "Usando únicamente estas notas con fuente: [notas], proponé una síntesis organizada por ideas y no por autores. Para cada afirmación indicá qué fuentes la apoyan, cuáles la contradicen y qué incertidumbre queda. No agregues datos externos.",
+    "adapt": "Verificá cada referencia en el documento original antes de entregar el trabajo."
+  },
+  {
+    "category": "Verificar respuestas",
+    "title": "Auditar afirmaciones",
+    "objective": "Separar datos comprobables de opiniones o inferencias.",
+    "prompt": "Revisá esta respuesta: [pegar respuesta]. Clasificá cada afirmación importante como verificable, interpretativa o normativa. Para las verificables, indicá qué evidencia haría falta y qué términos buscar. No declares que algo es cierto sin una fuente disponible.",
+    "adapt": "Aplicalo especialmente a cifras, fechas, citas, nombres propios y causalidades."
+  },
+  {
+    "category": "Verificar respuestas",
+    "title": "Buscar señales de alucinación",
+    "objective": "Detectar contenido plausible pero posiblemente inventado.",
+    "prompt": "Actuá como revisor crítico. Señalá en este texto: [pegar texto] referencias incompletas, precisión sospechosa, citas sin ubicación, conceptos atribuidos sin evidencia y saltos lógicos. Asigná prioridad alta, media o baja a cada comprobación.",
+    "adapt": "No uses la revisión como prueba final: abrí y comprobá las fuentes señaladas."
+  },
+  {
+    "category": "Verificar respuestas",
+    "title": "Contrastar con una fuente primaria",
+    "objective": "Comprobar si un resumen representa correctamente el original.",
+    "prompt": "Compará este resumen: [resumen] con esta fuente primaria: [fragmento o documento]. Marcá qué está respaldado, qué está exagerado, qué omite contexto y qué contradice el original. Citá la ubicación exacta usada para cada observación.",
+    "adapt": "Si la fuente está incompleta, pedí el fragmento faltante antes de concluir."
+  },
+  {
+    "category": "Verificar respuestas",
+    "title": "Examinar una relación causal",
+    "objective": "Evitar confundir correlación, secuencia y causalidad.",
+    "prompt": "Evaluá esta afirmación causal: [afirmación]. Identificá causa propuesta, efecto, mecanismo, variables alternativas y evidencia necesaria. Explicá qué diseño de estudio permitiría sostenerla y qué conclusiones más prudentes podrían formularse.",
+    "adapt": "Agregá contexto temporal y población para limitar generalizaciones."
+  },
+  {
+    "category": "Verificar respuestas",
+    "title": "Crear una lista de control final",
+    "objective": "Revisar un trabajo antes de publicarlo o entregarlo.",
+    "prompt": "Generá una lista de control para este trabajo: [pegar texto o describir producto]. Incluí exactitud factual, trazabilidad de fuentes, citas, coherencia, límites, privacidad, sesgos y claridad. Ordená las revisiones por riesgo y pedime evidencia antes de marcar cada punto como resuelto.",
+    "adapt": "Sumá los criterios específicos de tu institución o asignatura."
+  }
+]

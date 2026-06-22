@@ -10,7 +10,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "db:seed": "tsx scripts/seed-db.ts",
-    "content:import": "tsx scripts/import-pdfs.ts"
+    "content:import": "tsx scripts/import-pdfs.ts",
+    "kit:generate": "python scripts/generate_prompt_kit.py"
   },
   "dependencies": {
     "@drizzle-team/brocli": "^0.10.2",
