@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { BookOpen, CalendarDays, FileText, HelpCircle, Images, Layers3, Lightbulb } from "lucide-react";
 
 const navItems = [
-  { href: "/", label: "Cursos", icon: BookOpen },
+  { href: "/dashboard", label: "Cursos", icon: BookOpen },
   { href: "/program", label: "Programa", icon: FileText },
   { href: "/modules", label: "Módulos", icon: Layers3 },
   { href: "/visual", label: "Vista visual", icon: Images },
@@ -15,8 +15,8 @@ const navItems = [
 ];
 
 function isActivePath(pathname: string, href: string) {
-  if (href === "/") {
-    return pathname === "/" || pathname.startsWith("/courses");
+  if (href === "/dashboard") {
+    return pathname === "/dashboard" || pathname.startsWith("/courses");
   }
 
   return pathname === href || pathname.startsWith(`${href}/`);

@@ -1,20 +1,18 @@
 ﻿import type { Metadata } from "next";
 import "./globals.css";
-import { AppShell } from "@/components/app-shell";
-import { getCurrentUser } from "@/lib/auth/session";
-
 export const metadata: Metadata = {
-  title: "Academia IA Educativa",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
+  title: {
+    default: "Academia IA Educativa",
+    template: "%s | Academia IA",
+  },
   description: "Curso gratuito de inteligencia artificial aplicada a la educación con NotebookLM.",
 };
 
-export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const user = await getCurrentUser();
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es">
-      <body>
-        <AppShell user={user}>{children}</AppShell>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
