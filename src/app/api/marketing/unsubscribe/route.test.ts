@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createUnsubscribeToken } from "@/lib/marketing/download-token";
-import { handleUnsubscribe } from "./route";
+import { handleUnsubscribe } from "./handler";
 
 const secret = "unsubscribe-test-secret";
 const originalSecret = process.env.MARKETING_DOWNLOAD_SECRET;

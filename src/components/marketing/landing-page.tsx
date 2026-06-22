@@ -4,9 +4,8 @@ import { courseSeed } from "@/lib/course-seed";
 import { MarketingFooter } from "./marketing-footer";
 import { MarketingHeader } from "./marketing-header";
 import { FaqList } from "./faq-list";
-import { NewsletterForm } from "./newsletter-form";
+import { NewsletterForm, type NewsletterAction } from "./newsletter-form";
 import { TrackedCourseLink } from "./tracked-course-link";
-import { subscribeNewsletterAction } from "@/lib/marketing/actions";
 
 export const landingStats = [
   ["11", "módulos progresivos"],
@@ -46,7 +45,7 @@ const faqItems = [
   },
 ] as const;
 
-export function LandingPage() {
+export function LandingPage({ newsletterAction }: { newsletterAction?: NewsletterAction }) {
   return (
     <div className="marketing-page">
       <MarketingHeader />
@@ -134,7 +133,7 @@ export function LandingPage() {
               <h2 className="mt-4 max-w-2xl text-4xl font-black tracking-[-0.055em] sm:text-6xl">Tu kit de prompts para enseñar y estudiar con IA.</h2>
               <p className="mt-5 max-w-2xl text-lg leading-8 text-blue-100/75">Prompts listos para planificar clases, comprender textos, estudiar mejor y verificar respuestas.</p>
             </div>
-            <NewsletterForm action={subscribeNewsletterAction} />
+            <NewsletterForm action={newsletterAction} />
           </div>
         </section>
 

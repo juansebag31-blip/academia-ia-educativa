@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LandingPage } from "@/components/marketing/landing-page";
+import { subscribeNewsletterAction } from "@/lib/marketing/actions";
 import { buildCourseJsonLd, getCanonicalOrigin } from "@/lib/marketing/seo";
 
 export const metadata: Metadata = {
@@ -31,7 +32,7 @@ export default function MarketingHomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(courseJsonLd).replace(/</g, "\\u003c") }}
       />
-      <LandingPage />
+      <LandingPage newsletterAction={subscribeNewsletterAction} />
     </>
   );
 }

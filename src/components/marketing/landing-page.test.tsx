@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import MarketingHomePage from "@/app/(marketing)/page";
+import { LandingPage } from "./landing-page";
 
 describe("marketing landing", () => {
   it("renders the value proposition, evidence and real course links", () => {
-    render(<MarketingHomePage />);
+    render(<LandingPage />);
 
     expect(
       screen.getByRole("heading", { level: 1, name: /Aprendé inteligencia artificial/i }),

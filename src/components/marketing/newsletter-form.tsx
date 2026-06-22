@@ -7,7 +7,7 @@ import { Download, LoaderCircle } from "lucide-react";
 import type { NewsletterActionState } from "@/lib/marketing/actions";
 import { trackMarketingEvent } from "@/lib/marketing/analytics";
 
-type NewsletterAction = (state: NewsletterActionState, formData: FormData) => Promise<NewsletterActionState>;
+export type NewsletterAction = (state: NewsletterActionState, formData: FormData) => Promise<NewsletterActionState>;
 
 const unavailableAction: NewsletterAction = async () => ({
   status: "unavailable",
