@@ -51,3 +51,39 @@ input {
 .focus-ring:focus-visible {
   outline-color: #06b6d4;
 }
+
+.marketing-page {
+  min-height: 100vh;
+  background: #07091a;
+  color: #f7f8ff;
+}
+
+.neural-grid {
+  background-image:
+    linear-gradient(rgba(116, 142, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(116, 142, 255, 0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.neural-glow {
+  background:
+    radial-gradient(circle at 78% 34%, rgba(244, 60, 176, 0.22), transparent 25%),
+    radial-gradient(circle at 64% 24%, rgba(51, 110, 255, 0.34), transparent 36%);
+}
+
+.text-neural-gradient {
+  background: linear-gradient(90deg, #7e9fff, #f763bc);
+  background-clip: text;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

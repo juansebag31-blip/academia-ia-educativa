@@ -17,6 +17,11 @@ const config: Config = {
         "cognitive-violet": "#7C3AED",
         "line-soft": "#DCE5F0",
         "paper-soft": "#F5F8FC",
+        "neural-night": "#07091A",
+        "neural-panel": "#0C1029",
+        "neural-blue": "#336EFF",
+        "neural-magenta": "#F43CB0",
+        "neural-muted": "#A3AECF",
       },
       boxShadow: {
         soft: "0 10px 28px rgba(7, 26, 43, 0.09)",
