@@ -1,9 +1,12 @@
 import Link from "next/link";
-import { ArrowRight, BookOpenCheck, Download, GraduationCap, SearchCheck, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpenCheck, GraduationCap, SearchCheck, Sparkles } from "lucide-react";
 import { courseSeed } from "@/lib/course-seed";
 import { MarketingFooter } from "./marketing-footer";
 import { MarketingHeader } from "./marketing-header";
 import { FaqList } from "./faq-list";
+import { NewsletterForm } from "./newsletter-form";
+import { TrackedCourseLink } from "./tracked-course-link";
+import { subscribeNewsletterAction } from "@/lib/marketing/actions";
 
 export const landingStats = [
   ["11", "módulos progresivos"],
@@ -62,9 +65,7 @@ export function LandingPage() {
               Una formación gratuita y práctica para docentes y estudiantes que quieren usar IA con criterio, fuentes confiables y resultados reales.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Link href="/dashboard" className="focus-ring inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-neural-blue to-neural-magenta px-6 py-4 text-sm font-black text-white shadow-2xl shadow-fuchsia-950/30 transition hover:brightness-110">
-                Empezar el curso gratis <ArrowRight size={18} aria-hidden="true" />
-              </Link>
+              <TrackedCourseLink />
               <a href="#programa" className="focus-ring inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 py-4 text-sm font-black text-white transition hover:bg-white/10">Ver el programa</a>
             </div>
           </div>
@@ -133,12 +134,7 @@ export function LandingPage() {
               <h2 className="mt-4 max-w-2xl text-4xl font-black tracking-[-0.055em] sm:text-6xl">Tu kit de prompts para enseñar y estudiar con IA.</h2>
               <p className="mt-5 max-w-2xl text-lg leading-8 text-blue-100/75">Prompts listos para planificar clases, comprender textos, estudiar mejor y verificar respuestas.</p>
             </div>
-            <div className="rounded-3xl border border-white/15 bg-neural-night/80 p-6 shadow-2xl shadow-black/30 backdrop-blur sm:p-8">
-              <Download className="text-pink-300" size={28} aria-hidden="true" />
-              <h3 className="mt-5 text-xl font-black">Recibí el kit gratis en tu correo</h3>
-              <p className="mt-3 leading-7 text-slate-300">La descarga se habilitará después de registrar tu correo. El curso seguirá abierto sin registro.</p>
-              <a href="#kit" className="focus-ring mt-6 inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-neural-blue to-neural-magenta px-5 py-4 text-sm font-black">Quiero mi kit de prompts</a>
-            </div>
+            <NewsletterForm action={subscribeNewsletterAction} />
           </div>
         </section>
 
