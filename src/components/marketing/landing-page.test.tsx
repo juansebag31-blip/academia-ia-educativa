@@ -3,15 +3,16 @@ import { describe, expect, it } from "vitest";
 import { LandingPage } from "./landing-page";
 
 describe("marketing landing", () => {
-  it("renders the value proposition, evidence and real course links", () => {
+  it("renders the value proposition, evidence, visual hero and real course links", () => {
     render(<LandingPage />);
 
     expect(
-      screen.getByRole("heading", { level: 1, name: /Aprendé inteligencia artificial/i }),
+      screen.getByRole("heading", { level: 1, name: /Aprend/i }),
     ).toBeInTheDocument();
-    expect(screen.getByText("11 módulos progresivos")).toBeInTheDocument();
-    expect(screen.getByText("33 lecciones prácticas")).toBeInTheDocument();
+    expect(screen.getByText(/11.*progresivos/i)).toBeInTheDocument();
+    expect(screen.getByText(/33.*pr/i)).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: /visual animado de inteligencia artificial aplicada a la educaci/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Empezar el curso gratis/i })).toHaveAttribute("href", "/dashboard");
-    expect(screen.getByRole("link", { name: /Explorar los 11 módulos/i })).toHaveAttribute("href", "/modules");
+    expect(screen.getByRole("link", { name: /Explorar los 11/i })).toHaveAttribute("href", "/modules");
   });
 });

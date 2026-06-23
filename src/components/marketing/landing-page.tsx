@@ -6,6 +6,7 @@ import { MarketingHeader } from "./marketing-header";
 import { FaqList } from "./faq-list";
 import { NewsletterForm, type NewsletterAction } from "./newsletter-form";
 import { TrackedCourseLink } from "./tracked-course-link";
+import { AiEducationVisual } from "./ai-education-visual";
 
 export const landingStats = [
   ["11", "módulos progresivos"],
@@ -57,7 +58,7 @@ export function LandingPage({ newsletterAction }: { newsletterAction?: Newslette
             <span className="inline-flex items-center gap-2 rounded-full border border-blue-400/40 bg-blue-400/10 px-3 py-2 text-xs font-black uppercase tracking-[0.16em] text-blue-200">
               <Sparkles size={14} aria-hidden="true" /> Curso gratuito · IA + NotebookLM
             </span>
-            <h1 className="mt-7 max-w-5xl text-5xl font-black leading-[0.94] tracking-[-0.065em] sm:text-7xl lg:text-[5.7rem]">
+            <h1 className="mt-7 max-w-5xl text-5xl font-black leading-[0.94] tracking-[-0.065em] sm:text-7xl lg:max-w-4xl lg:text-[5.15rem]">
               Aprendé inteligencia artificial. <span className="text-neural-gradient">Enseñá y estudiá mejor.</span>
             </h1>
             <p className="mt-7 max-w-2xl text-lg font-medium leading-8 text-neural-muted sm:text-xl">
@@ -67,6 +68,9 @@ export function LandingPage({ newsletterAction }: { newsletterAction?: Newslette
               <TrackedCourseLink />
               <a href="#programa" className="focus-ring inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 py-4 text-sm font-black text-white transition hover:bg-white/10">Ver el programa</a>
             </div>
+          </div>
+          <div className="mt-12 lg:pointer-events-none lg:absolute lg:bottom-10 lg:right-[max(2rem,calc((100vw-80rem)/2))] lg:mt-0 lg:w-[34rem]">
+            <AiEducationVisual />
           </div>
         </section>
 

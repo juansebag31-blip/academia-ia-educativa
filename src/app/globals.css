@@ -77,6 +77,95 @@ input {
   color: transparent;
 }
 
+.ai-education-visual {
+  transform-style: preserve-3d;
+  perspective: 900px;
+}
+
+.ai-orb {
+  animation: ai-float 7s ease-in-out infinite;
+}
+
+.ai-orbit {
+  animation: ai-spin 18s linear infinite;
+  transform: rotateX(62deg) rotateZ(-12deg);
+}
+
+.ai-orbit-delayed {
+  animation-duration: 24s;
+  animation-direction: reverse;
+}
+
+.ai-network {
+  animation: ai-pulse 5s ease-in-out infinite;
+}
+
+.ai-card {
+  animation: ai-card-float 6s ease-in-out infinite;
+}
+
+.ai-chip {
+  animation: ai-float 5.5s ease-in-out infinite;
+}
+
+.ai-cursor {
+  animation: ai-cursor-tap 4.6s ease-in-out infinite;
+}
+
+@keyframes ai-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -14px, 22px);
+  }
+}
+
+@keyframes ai-spin {
+  from {
+    transform: rotateX(62deg) rotateZ(0deg);
+  }
+  to {
+    transform: rotateX(62deg) rotateZ(360deg);
+  }
+}
+
+@keyframes ai-pulse {
+  0%,
+  100% {
+    opacity: 0.68;
+    transform: scale(0.985);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.015);
+  }
+}
+
+@keyframes ai-card-float {
+  0%,
+  100% {
+    transform: rotate(-2deg) translate3d(0, 0, 18px);
+  }
+  50% {
+    transform: rotate(1deg) translate3d(0, -12px, 34px);
+  }
+}
+
+@keyframes ai-cursor-tap {
+  0%,
+  100% {
+    transform: rotate(-18deg) translate3d(0, 0, 0) scale(1);
+  }
+  45% {
+    transform: rotate(-18deg) translate3d(-8px, -8px, 26px) scale(1.04);
+  }
+  58% {
+    transform: rotate(-18deg) translate3d(-2px, -2px, 12px) scale(0.96);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
