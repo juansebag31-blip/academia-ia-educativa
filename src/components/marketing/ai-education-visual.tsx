@@ -58,6 +58,33 @@ export function AiEducationVisual() {
         </defs>
 
         <path
+          className="ai-brain-circuit"
+          d="M157 270 C122 246 112 196 137 158 C162 120 204 111 238 130 C255 101 309 96 341 124 C374 111 418 132 428 171 C462 187 469 241 440 269 C449 308 413 349 372 343 C349 373 295 369 277 337 C238 359 190 345 180 306 C170 299 162 287 157 270 Z"
+          fill="rgba(9,18,47,0.34)"
+          stroke="rgba(219,231,255,0.72)"
+          strokeWidth="3"
+          strokeLinejoin="round"
+        />
+        <path className="ai-circuit-trace" d="M176 220 H222 V174 H274 V142 H332" fill="none" stroke="#dbe7ff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <path className="ai-circuit-trace" d="M205 283 H252 V238 H322 V190 H392" fill="none" stroke="#9bb7ff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <path className="ai-circuit-trace" d="M252 319 V284 H304 V252 H362 V293 H408" fill="none" stroke="#f8a8dc" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <path className="ai-circuit-trace" d="M188 176 H224 V210 H282 V168 H318 V204 H358" fill="none" stroke="#b9c9ff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path className="ai-circuit-trace" d="M224 250 H258 V286 H302 V316 H350" fill="none" stroke="#7e9fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        {[
+          [176, 220],
+          [274, 142],
+          [332, 142],
+          [392, 190],
+          [408, 293],
+          [350, 316],
+          [188, 176],
+          [358, 204],
+          [224, 250],
+        ].map(([cx, cy]) => (
+          <circle key={`brain-${cx}-${cy}`} cx={cx} cy={cy} r="5" fill="#eef4ff" filter="url(#heroNodeGlow)" />
+        ))}
+
+        <path
           d="M180 305 C126 266 110 181 164 128 C205 88 276 75 336 104 C402 137 436 214 414 283 C389 361 299 391 226 356"
           fill="none"
           stroke="rgba(255,255,255,0.13)"
@@ -86,7 +113,8 @@ export function AiEducationVisual() {
 
       <div className="ai-brain-label absolute left-4 top-7 rounded-2xl border border-blue-200/25 bg-[#09122f]/75 px-4 py-3 shadow-xl shadow-blue-950/30 backdrop-blur-md">
         <p className="text-[0.62rem] font-black uppercase tracking-[0.2em] text-blue-100">Red neuronal educativa</p>
-        <p className="mt-1 text-sm font-black text-white">Aprendizaje con IA</p>
+        <p className="mt-1 text-sm font-black text-white">Cerebro circuito IA</p>
+        <p className="sr-only">Aprendizaje con IA</p>
       </div>
 
       <div className="ai-education-chip absolute bottom-8 right-4 rounded-2xl border border-fuchsia-200/25 bg-[#180f35]/75 px-4 py-3 shadow-xl shadow-fuchsia-950/30 backdrop-blur-md">

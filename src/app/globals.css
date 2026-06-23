@@ -104,6 +104,16 @@ input {
   animation: ai-pulse 5s ease-in-out infinite;
 }
 
+.ai-brain-circuit {
+  filter: drop-shadow(0 0 18px rgba(155, 183, 255, 0.5));
+}
+
+.ai-circuit-trace {
+  animation: ai-circuit-flow 4.8s ease-in-out infinite;
+  filter: drop-shadow(0 0 9px rgba(219, 231, 255, 0.72));
+  stroke-dasharray: 18 10;
+}
+
 .ai-brain-label {
   animation: ai-label-float 6.4s ease-in-out infinite;
 }
@@ -148,6 +158,21 @@ input {
   50% {
     opacity: 1;
     transform: scale(1.015);
+  }
+}
+
+@keyframes ai-circuit-flow {
+  0% {
+    stroke-dashoffset: 0;
+    opacity: 0.58;
+  }
+  50% {
+    stroke-dashoffset: -42;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -84;
+    opacity: 0.58;
   }
 }
 

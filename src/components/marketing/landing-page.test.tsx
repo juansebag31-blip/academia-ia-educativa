@@ -15,6 +15,7 @@ describe("marketing landing", () => {
     expect(screen.getByRole("img", { name: /visual animado de inteligencia artificial aplicada a la educaci/i })).toBeInTheDocument();
     expect(screen.getByText(/Red neuronal educativa/i)).toBeInTheDocument();
     expect(screen.getByText(/Aprendizaje con IA/i)).toBeInTheDocument();
+    expect(screen.getByText(/Cerebro circuito IA/i)).toBeInTheDocument();
     expect(screen.getByText(/fuentes.*estudio.*criterio/i)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Empezar el curso gratis/i })).toHaveAttribute("href", "/dashboard");
     expect(screen.getByRole("link", { name: /Explorar los 11/i })).toHaveAttribute("href", "/modules");
