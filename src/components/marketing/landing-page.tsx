@@ -51,14 +51,14 @@ export function LandingPage({ newsletterAction }: { newsletterAction?: Newslette
     <div className="marketing-page">
       <MarketingHeader />
       <main>
-        <section className="neural-glow relative isolate overflow-hidden border-b border-white/10 py-20 sm:py-28 lg:py-36">
+        <section className="neural-glow relative isolate overflow-hidden border-b border-white/10 py-16 sm:py-24 lg:py-28">
           <div className="neural-grid absolute inset-0 -z-20 opacity-50" aria-hidden="true" />
-          <div className="absolute right-[-9rem] top-16 -z-10 h-80 w-80 rounded-full border border-blue-300/40 shadow-[0_0_100px_rgba(244,60,176,0.25),inset_0_0_80px_rgba(51,110,255,0.18)] sm:right-[8%] sm:h-96 sm:w-96" aria-hidden="true" />
-          <div className="mx-auto w-full max-w-7xl px-4 sm:px-8">
+          <div data-testid="marketing-hero-layout" className="mx-auto grid w-full max-w-7xl items-center gap-10 px-4 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(24rem,32rem)] lg:gap-12">
+            <div className="relative z-10">
             <span className="inline-flex items-center gap-2 rounded-full border border-blue-400/40 bg-blue-400/10 px-3 py-2 text-xs font-black uppercase tracking-[0.16em] text-blue-200">
               <Sparkles size={14} aria-hidden="true" /> Curso gratuito · IA + NotebookLM
             </span>
-            <h1 className="mt-7 max-w-5xl text-5xl font-black leading-[0.94] tracking-[-0.065em] sm:text-7xl lg:max-w-4xl lg:text-[5.15rem]">
+            <h1 className="mt-7 max-w-4xl text-5xl font-black leading-[0.94] tracking-[-0.065em] sm:text-7xl lg:text-[4.9rem] xl:text-[5.25rem]">
               Aprendé inteligencia artificial. <span className="text-neural-gradient">Enseñá y estudiá mejor.</span>
             </h1>
             <p className="mt-7 max-w-2xl text-lg font-medium leading-8 text-neural-muted sm:text-xl">
@@ -68,9 +68,10 @@ export function LandingPage({ newsletterAction }: { newsletterAction?: Newslette
               <TrackedCourseLink />
               <a href="#programa" className="focus-ring inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 py-4 text-sm font-black text-white transition hover:bg-white/10">Ver el programa</a>
             </div>
-          </div>
-          <div className="mt-12 lg:pointer-events-none lg:absolute lg:bottom-10 lg:right-[max(2rem,calc((100vw-80rem)/2))] lg:mt-0 lg:w-[34rem]">
-            <AiEducationVisual />
+            </div>
+            <div className="relative z-0 mx-auto w-full max-w-[32rem] lg:justify-self-end">
+              <AiEducationVisual />
+            </div>
           </div>
         </section>
 
