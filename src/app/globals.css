@@ -114,6 +114,14 @@ input {
   stroke-dasharray: 18 10;
 }
 
+.ai-core-ia {
+  animation: ai-core-pulse 4.2s ease-in-out infinite;
+}
+
+.ai-neural-title {
+  animation: ai-label-float 7s ease-in-out infinite;
+}
+
 .ai-brain-label {
   animation: ai-label-float 6.4s ease-in-out infinite;
 }
@@ -173,6 +181,16 @@ input {
   100% {
     stroke-dashoffset: -84;
     opacity: 0.58;
+  }
+}
+
+@keyframes ai-core-pulse {
+  0%,
+  100% {
+    transform: translate3d(-50%, -50%, 28px) scale(1);
+  }
+  50% {
+    transform: translate3d(-50%, -50%, 44px) scale(1.06);
   }
 }
 

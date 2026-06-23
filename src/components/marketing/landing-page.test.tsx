@@ -14,6 +14,8 @@ describe("marketing landing", () => {
     expect(screen.getByTestId("marketing-hero-layout")).toHaveClass("lg:grid-cols-[minmax(0,1fr)_minmax(24rem,32rem)]");
     expect(screen.getByRole("img", { name: /visual animado de inteligencia artificial aplicada a la educaci/i })).toBeInTheDocument();
     expect(screen.getByText(/Red neuronal educativa/i)).toBeInTheDocument();
+    expect(screen.getByText(/Redes neuronales/i)).toBeInTheDocument();
+    expect(screen.getByTestId("hero-ia-core")).toHaveTextContent("IA");
     expect(screen.getByText(/Aprendizaje con IA/i)).toBeInTheDocument();
     expect(screen.getByText(/Cerebro circuito IA/i)).toBeInTheDocument();
     expect(screen.getByText(/fuentes.*estudio.*criterio/i)).toBeInTheDocument();

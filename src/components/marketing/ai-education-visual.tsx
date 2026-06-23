@@ -41,6 +41,18 @@ export function AiEducationVisual() {
       <div className="ai-orbit ai-orbit-delayed absolute inset-[17%] rounded-full border border-fuchsia-200/25" />
       <div className="ai-orbit ai-orbit-fast absolute inset-[3%] rounded-full border border-cyan-200/15" />
 
+      <div className="ai-neural-title absolute left-1/2 top-8 z-20 -translate-x-1/2 rounded-2xl border border-blue-200/25 bg-[#09122f]/78 px-5 py-3 text-center shadow-xl shadow-blue-950/30 backdrop-blur-md">
+        <p className="text-[0.66rem] font-black uppercase tracking-[0.24em] text-blue-100">Redes neuronales</p>
+        <p className="sr-only">Aprendizaje con IA</p>
+      </div>
+
+      <div
+        data-testid="hero-ia-core"
+        className="ai-core-ia absolute left-1/2 top-1/2 z-20 grid h-28 w-28 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/25 bg-[#07112d]/55 text-5xl font-black tracking-[-0.12em] text-white shadow-[0_0_70px_rgba(126,159,255,0.52),inset_0_0_32px_rgba(247,99,188,0.22)] backdrop-blur-sm"
+      >
+        IA
+      </div>
+
       <svg className="ai-network absolute inset-0 h-full w-full" viewBox="0 0 520 520" aria-hidden="true">
         <defs>
           <linearGradient id="heroNeuralLine" x1="0" x2="1" y1="0" y2="1">
@@ -59,27 +71,27 @@ export function AiEducationVisual() {
 
         <path
           className="ai-brain-circuit"
-          d="M157 270 C122 246 112 196 137 158 C162 120 204 111 238 130 C255 101 309 96 341 124 C374 111 418 132 428 171 C462 187 469 241 440 269 C449 308 413 349 372 343 C349 373 295 369 277 337 C238 359 190 345 180 306 C170 299 162 287 157 270 Z"
+          d="M126 271 C91 247 82 197 107 159 C132 121 176 112 210 131 C229 99 284 96 318 124 C354 108 399 130 411 171 C447 188 454 242 425 271 C433 312 395 352 354 345 C330 379 273 374 254 341 C214 365 161 348 150 308 C139 301 131 288 126 271 Z"
           fill="rgba(9,18,47,0.34)"
           stroke="rgba(219,231,255,0.72)"
           strokeWidth="3"
           strokeLinejoin="round"
         />
-        <path className="ai-circuit-trace" d="M176 220 H222 V174 H274 V142 H332" fill="none" stroke="#dbe7ff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-        <path className="ai-circuit-trace" d="M205 283 H252 V238 H322 V190 H392" fill="none" stroke="#9bb7ff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-        <path className="ai-circuit-trace" d="M252 319 V284 H304 V252 H362 V293 H408" fill="none" stroke="#f8a8dc" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-        <path className="ai-circuit-trace" d="M188 176 H224 V210 H282 V168 H318 V204 H358" fill="none" stroke="#b9c9ff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-        <path className="ai-circuit-trace" d="M224 250 H258 V286 H302 V316 H350" fill="none" stroke="#7e9fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path className="ai-circuit-trace" d="M146 220 H192 V174 H244 V142 H302" fill="none" stroke="#dbe7ff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <path className="ai-circuit-trace" d="M175 283 H222 V238 H292 V190 H362" fill="none" stroke="#9bb7ff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <path className="ai-circuit-trace" d="M222 319 V284 H274 V252 H332 V293 H378" fill="none" stroke="#f8a8dc" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <path className="ai-circuit-trace" d="M158 176 H194 V210 H252 V168 H288 V204 H328" fill="none" stroke="#b9c9ff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path className="ai-circuit-trace" d="M194 250 H228 V286 H272 V316 H320" fill="none" stroke="#7e9fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
         {[
-          [176, 220],
-          [274, 142],
-          [332, 142],
-          [392, 190],
-          [408, 293],
-          [350, 316],
-          [188, 176],
-          [358, 204],
-          [224, 250],
+          [146, 220],
+          [244, 142],
+          [302, 142],
+          [362, 190],
+          [378, 293],
+          [320, 316],
+          [158, 176],
+          [328, 204],
+          [194, 250],
         ].map(([cx, cy]) => (
           <circle key={`brain-${cx}-${cy}`} cx={cx} cy={cy} r="5" fill="#eef4ff" filter="url(#heroNodeGlow)" />
         ))}
@@ -111,10 +123,9 @@ export function AiEducationVisual() {
         ))}
       </svg>
 
-      <div className="ai-brain-label absolute left-4 top-7 rounded-2xl border border-blue-200/25 bg-[#09122f]/75 px-4 py-3 shadow-xl shadow-blue-950/30 backdrop-blur-md">
+      <div className="ai-brain-label absolute left-4 top-20 rounded-2xl border border-blue-200/25 bg-[#09122f]/75 px-4 py-3 shadow-xl shadow-blue-950/30 backdrop-blur-md">
         <p className="text-[0.62rem] font-black uppercase tracking-[0.2em] text-blue-100">Red neuronal educativa</p>
         <p className="mt-1 text-sm font-black text-white">Cerebro circuito IA</p>
-        <p className="sr-only">Aprendizaje con IA</p>
       </div>
 
       <div className="ai-education-chip absolute bottom-8 right-4 rounded-2xl border border-fuchsia-200/25 bg-[#180f35]/75 px-4 py-3 shadow-xl shadow-fuchsia-950/30 backdrop-blur-md">
