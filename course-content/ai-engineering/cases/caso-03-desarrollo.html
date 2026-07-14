@@ -1,0 +1,48 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Caso 3 — Copiloto de desarrollo de software con supervisión</title><style>
+:root{--navy:#071a33;--blue:#1769e0;--green:#0c8f68;--orange:#c96a00;--red:#c74343;--ink:#172033;--muted:#5d687b;--line:#d8e2ee;--bg:#eef3f9}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;line-height:1.7}
+header{padding:56px 24px;background:linear-gradient(135deg,var(--navy),#0b4160);color:white}
+header div,main{max-width:1000px;margin:auto}h1{font-size:clamp(2rem,5vw,4rem);line-height:1.08;margin:.2em 0}.kicker{letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:#8edcff}
+main{background:white;margin-top:28px;margin-bottom:70px;border-radius:20px;padding:clamp(24px,5vw,58px);box-shadow:0 14px 34px rgba(12,39,75,.1)}
+h2{color:var(--navy);font-size:1.75rem;margin-top:2rem}h3{color:#0c274b;margin-top:1.5rem}.lead{font-size:1.12rem;color:#36445a}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.box{border:1px solid var(--line);border-radius:14px;padding:18px;background:#fbfdff}.box strong{display:block;color:var(--blue);margin-bottom:6px}
+.flow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:#071a33;color:white;border-radius:14px;padding:16px;margin:20px 0}.flow span{background:#10355f;border:1px solid #2a6095;padding:9px 12px;border-radius:9px}.flow b{color:#7bdff0}
+.callout{border-left:5px solid var(--blue);background:#f1f7ff;border-radius:12px;padding:18px;margin:22px 0}.warning{border-left-color:var(--red);background:#fff2f2}.success{border-left-color:var(--green);background:#effaf6}.decision{border-left-color:var(--orange);background:#fff7ec}
+table{width:100%;border-collapse:collapse;margin:20px 0}th,td{border:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}th{background:#eaf2ff}ul,ol{padding-left:1.25rem}li{margin:.35rem 0}.footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;color:var(--muted);font-size:.9rem}
+@media(max-width:760px){.grid{grid-template-columns:1fr}main{margin:14px;border-radius:16px}}
+</style></head><body><header><div><div class="kicker">AI Engineering Aplicado · Módulo 1 · Caso real</div><h1>Caso 3 — Copiloto de desarrollo de software con supervisión</h1><p>Material complementario del Módulo 1: De un modelo a un sistema inteligente.</p></div></header><main>
+<p class="lead">Este caso aplica los conceptos del módulo a un flujo de desarrollo: analizar un repositorio, proponer cambios, generar código, ejecutar pruebas y preparar una explicación técnica.</p>
+
+<h2>1. Problema productivo</h2>
+<p>Un desarrollador trabaja sobre aplicaciones que combinan frontend, backend, base de datos y servicios externos. Muchas tareas no son simplemente escribir código: hay que comprender el estado del proyecto, diagnosticar errores, tomar decisiones de arquitectura, probar cambios y documentar lo realizado.</p>
+
+<div class="grid">
+<div class="box"><strong>Dolor operativo</strong>Contexto distribuido entre código, issues, conversaciones, documentación y decisiones no registradas.</div>
+<div class="box"><strong>Valor esperado</strong>Un asistente que ayude a comprender, planificar, modificar y revisar, sin ejecutar acciones peligrosas sin permiso.</div>
+</div>
+
+<h2>2. Primer diseño</h2>
+<div class="flow"><span>Issue</span><b>→</b><span>Lectura del repo</span><b>→</b><span>Plan</span><b>→</b><span>Propuesta de cambio</span><b>→</b><span>Pruebas</span><b>→</b><span>Revisión humana</span></div>
+
+<h2>3. Workflow o agente</h2>
+<p>Si el cambio es pequeño y previsible, alcanza un workflow: leer archivo, aplicar cambio, ejecutar test, mostrar diff. Si el problema requiere investigar causas, revisar varios archivos y adaptar el plan según errores, un agente puede estar justificado.</p>
+
+<table><tr><th>Situación</th><th>Arquitectura adecuada</th></tr>
+<tr><td>Actualizar textos, estilos o configuraciones simples.</td><td>Workflow controlado.</td></tr>
+<tr><td>Generar un componente siguiendo una especificación clara.</td><td>Modelo con herramientas y validación.</td></tr>
+<tr><td>Diagnosticar un bug desconocido.</td><td>Agente con límites de pasos y pruebas.</td></tr>
+<tr><td>Coordinar refactor grande, docs y revisión.</td><td>Posible sistema multiagente con supervisor.</td></tr></table>
+
+<h2>4. Controles necesarios</h2>
+<ul><li>Trabajar en rama separada.</li><li>Mostrar diff antes de aplicar cambios.</li><li>Ejecutar tests y linters.</li><li>No tocar credenciales ni archivos sensibles.</li><li>Solicitar aprobación antes de commits o despliegues.</li><li>Registrar herramientas utilizadas y errores.</li></ul>
+
+<h2>5. Multiagente solo si aporta valor</h2>
+<p>Una versión avanzada podría separar arquitecto, programador, revisor y documentador. Pero esa separación solo se justifica si mejora calidad, especialización o revisión independiente. En una tarea simple, un único orquestador es suficiente.</p>
+
+<div class="callout warning"><strong>Riesgo principal</strong>Un sistema que modifica código sin pruebas y sin revisión puede acelerar errores. La productividad real aparece cuando se combina generación con verificación.</div>
+
+<h2>6. Métricas de éxito</h2>
+<ul><li>Pull requests completados con menos retrabajo.</li><li>Pruebas superadas después del cambio.</li><li>Errores detectados antes de revisión humana.</li><li>Tiempo ahorrado en comprensión del repositorio.</li><li>Calidad de la explicación técnica del cambio.</li></ul>
+
+<div class="callout success"><strong>Aprendizaje del caso</strong>El desarrollador competitivo no solo pide código: diseña el flujo donde la IA entiende contexto, propone cambios, verifica resultados y deja trazabilidad.</div>
+<div class="footer">AI Engineering Aplicado · Módulo 1 · Caso real independiente</div></main></body></html>

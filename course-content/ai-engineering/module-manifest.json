@@ -1,0 +1,35 @@
+{
+  "course": "AI Engineering Aplicado",
+  "version": "1.0",
+  "module": {
+    "id": "modulo-01",
+    "number": 1,
+    "title": "De un modelo a un sistema inteligente",
+    "status": "approved-content-ready-for-integration",
+    "estimatedStudyMinutes": 120,
+    "learningPath": [
+      "orientacion",
+      "contenido_fundacional",
+      "infografia",
+      "audio_explicativo",
+      "casos_reales",
+      "presentacion",
+      "actividad",
+      "autoevaluacion"
+    ],
+    "assets": {
+      "contentHtml": "content/modulo-01/contenido-fundacional.html",
+      "visualAudioHtml": "content/modulo-01/experiencia-visual-auditiva.html",
+      "infographic": "assets/images/modulo-01-infografia.png",
+      "audioMp3": "assets/audio/modulo-01-audio-explicativo.mp3",
+      "audioM4a": "assets/audio/modulo-01-audio-explicativo.m4a",
+      "audioScript": "content/modulo-01/guion-audio.txt",
+      "presentation": "assets/presentations/modulo-01-presentacion.pptx",
+      "cases": [
+        "cases/caso-01-clinica.html",
+        "cases/caso-02-aprendizaje.html",
+        "cases/caso-03-desarrollo.html"
+      ]
+    }
+  }
+}

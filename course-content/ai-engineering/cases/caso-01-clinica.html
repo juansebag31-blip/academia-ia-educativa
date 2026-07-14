@@ -1,0 +1,47 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Caso 1 — Asistente documental para estudios por imágenes</title><style>
+:root{--navy:#071a33;--blue:#1769e0;--green:#0c8f68;--orange:#c96a00;--red:#c74343;--ink:#172033;--muted:#5d687b;--line:#d8e2ee;--bg:#eef3f9}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;line-height:1.7}
+header{padding:56px 24px;background:linear-gradient(135deg,var(--navy),#0b4160);color:white}
+header div,main{max-width:1000px;margin:auto}h1{font-size:clamp(2rem,5vw,4rem);line-height:1.08;margin:.2em 0}.kicker{letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:#8edcff}
+main{background:white;margin-top:28px;margin-bottom:70px;border-radius:20px;padding:clamp(24px,5vw,58px);box-shadow:0 14px 34px rgba(12,39,75,.1)}
+h2{color:var(--navy);font-size:1.75rem;margin-top:2rem}h3{color:#0c274b;margin-top:1.5rem}.lead{font-size:1.12rem;color:#36445a}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.box{border:1px solid var(--line);border-radius:14px;padding:18px;background:#fbfdff}.box strong{display:block;color:var(--blue);margin-bottom:6px}
+.flow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:#071a33;color:white;border-radius:14px;padding:16px;margin:20px 0}.flow span{background:#10355f;border:1px solid #2a6095;padding:9px 12px;border-radius:9px}.flow b{color:#7bdff0}
+.callout{border-left:5px solid var(--blue);background:#f1f7ff;border-radius:12px;padding:18px;margin:22px 0}.warning{border-left-color:var(--red);background:#fff2f2}.success{border-left-color:var(--green);background:#effaf6}.decision{border-left-color:var(--orange);background:#fff7ec}
+table{width:100%;border-collapse:collapse;margin:20px 0}th,td{border:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}th{background:#eaf2ff}ul,ol{padding-left:1.25rem}li{margin:.35rem 0}.footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;color:var(--muted);font-size:.9rem}
+@media(max-width:760px){.grid{grid-template-columns:1fr}main{margin:14px;border-radius:16px}}
+</style></head><body><header><div><div class="kicker">AI Engineering Aplicado · Módulo 1 · Caso real</div><h1>Caso 1 — Asistente documental para estudios por imágenes</h1><p>Material complementario del Módulo 1: De un modelo a un sistema inteligente.</p></div></header><main>
+<p class="lead">Este caso toma como referencia un proceso administrativo conocido: interpretar pedidos de estudios, consultar códigos, valores y reglas, y responder con evidencia. Se usa como ejemplo pedagógico con datos ficticios o anonimizados.</p>
+
+<h2>1. Problema productivo</h2>
+<p>En un centro de diagnóstico por imágenes, una misma solicitud puede llegar escrita de muchas maneras: con abreviaturas, sinónimos, regiones anatómicas incompletas, indicaciones de contraste o reglas particulares según financiador. El trabajo humano consiste en interpretar la solicitud, encontrar el código correcto, verificar valores vigentes y evitar errores administrativos.</p>
+
+<div class="grid">
+<div class="box"><strong>Dolor operativo</strong>Tiempo perdido buscando en planillas, dudas sobre sinónimos, riesgo de usar valores desactualizados y dependencia de experiencia personal.</div>
+<div class="box"><strong>Valor esperado</strong>Respuesta rápida, trazable y con fuente visible, manteniendo revisión humana antes de confirmar información sensible.</div>
+</div>
+
+<h2>2. Arquitectura mínima recomendable</h2>
+<div class="flow"><span>Usuario</span><b>→</b><span>Formulario</span><b>→</b><span>Backend</span><b>→</b><span>RAG base maestra</span><b>→</b><span>Reglas de cálculo</span><b>→</b><span>Respuesta con fuente</span></div>
+
+<p>La primera versión no necesita múltiples agentes. El problema principal se resuelve mejor con RAG, reglas deterministas y supervisión humana.</p>
+
+<h2>3. Distribución de responsabilidades</h2>
+<table><tr><th>Componente</th><th>Responsabilidad</th></tr>
+<tr><td>Modelo</td><td>Interpretar lenguaje natural, detectar sinónimos, formular aclaraciones y redactar una respuesta comprensible.</td></tr>
+<tr><td>RAG</td><td>Recuperar fragmentos de la base maestra, planillas vigentes, reglas y documentos autorizados.</td></tr>
+<tr><td>Código tradicional</td><td>Calcular valores, aplicar porcentajes, validar fechas, detectar reglas incompatibles y controlar formatos.</td></tr>
+<tr><td>Backend</td><td>Gestionar usuarios, permisos, logs, versiones y reglas de acceso.</td></tr>
+<tr><td>Humano</td><td>Confirmar casos ambiguos, aprobar modificaciones y decidir ante contradicciones documentales.</td></tr></table>
+
+<h2>4. Por qué no empezar con un agente</h2>
+<div class="callout warning"><strong>Decisión arquitectónica</strong>Un agente sería atractivo, pero prematuro. Si el flujo principal es identificar, recuperar, calcular y responder, un workflow controlado es más seguro, barato y fácil de auditar.</div>
+
+<h2>5. Cuándo sí podría aparecer un agente</h2>
+<p>Más adelante, un agente podría revisar inconsistencias entre documentos, proponer nuevos sinónimos, detectar valores vencidos o preparar un informe de actualización. Aun así, no debería modificar la fuente maestra sin aprobación humana.</p>
+
+<h2>6. Métricas de éxito</h2>
+<ul><li>Porcentaje de consultas respondidas con fuente vigente.</li><li>Reducción del tiempo promedio de búsqueda.</li><li>Número de errores detectados antes de responder.</li><li>Consultas que requieren aclaración.</li><li>Nuevos sinónimos incorporados a la base.</li></ul>
+
+<div class="callout success"><strong>Aprendizaje del caso</strong>El valor no está en “poner IA” sobre una planilla. El valor está en diseñar un sistema confiable que combine interpretación lingüística, recuperación de evidencia, reglas deterministas y control humano.</div>
+<div class="footer">AI Engineering Aplicado · Módulo 1 · Caso real independiente</div></main></body></html>

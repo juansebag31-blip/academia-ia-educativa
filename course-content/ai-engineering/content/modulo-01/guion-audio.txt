@@ -1,0 +1,371 @@
+GUION DE AUDIO — MÓDULO 1
+DE UN MODELO A UN SISTEMA INTELIGENTE
+
+Duración estimada: 11 a 14 minutos
+Objetivo: acompañar visualmente la infografía del Módulo 1, siguiendo exactamente su orden de lectura.
+
+INTRODUCCIÓN
+
+Bienvenido al Módulo 1 del curso AI Engineering Aplicado.
+
+En esta infografía vamos a recorrer el proceso completo que permite pasar de un modelo de inteligencia artificial a un sistema inteligente capaz de resolver problemas reales.
+
+La idea central de este módulo es sencilla, pero fundamental: un modelo de inteligencia artificial no es todavía una aplicación completa, y mucho menos un producto listo para utilizarse en procesos reales.
+
+Para comprenderlo, vamos a avanzar de manera ordenada por los diez bloques de la infografía.
+
+Comenzaremos por el panorama general. Después veremos qué es un modelo, cómo se transforma en una aplicación, cuál es la diferencia entre un workflow y un agente, qué componentes necesita un sistema inteligente, cómo aplicar la regla de mínima complejidad, cómo llevar estos conceptos a un caso real y, finalmente, cómo resumir todo en una arquitectura profesional.
+
+BLOQUE 1. PANORAMA GENERAL
+
+Comencemos por la parte superior izquierda de la infografía, en el bloque número uno, titulado Panorama general.
+
+Aquí aparecen cinco niveles organizados de izquierda a derecha.
+
+El primer nivel es el modelo.
+
+Un modelo recibe una entrada y genera una salida probable. Puede resumir, clasificar, redactar, extraer información, generar código o responder preguntas. Sin embargo, todavía no conoce por sí mismo las reglas del negocio, los permisos de los usuarios ni la información privada de una organización.
+
+El segundo nivel es la aplicación de inteligencia artificial.
+
+La aplicación envuelve al modelo con una interfaz, datos, reglas y mecanismos de control. Es decir, transforma una capacidad general en una solución concreta para un usuario real.
+
+El tercer nivel es el workflow.
+
+Un workflow es una secuencia de pasos definida previamente por el software. El sistema sabe qué etapa viene después y qué condiciones deben cumplirse.
+
+El cuarto nivel es el agente.
+
+En este caso, el modelo no se limita a responder. Puede decidir dinámicamente qué hacer, qué herramienta utilizar y cuál debe ser el siguiente paso.
+
+El quinto nivel es el sistema multiagente.
+
+Aquí varios agentes especializados colaboran y se coordinan para resolver una tarea común.
+
+Debajo de estos cinco niveles aparece una advertencia importante.
+
+No todos los productos deben llegar al nivel multiagente.
+
+La complejidad solo se justifica cuando produce una mejora real en la calidad, la flexibilidad o la productividad.
+
+Esta será una regla permanente durante todo el curso.
+
+BLOQUE 2. ¿QUÉ ES UN MODELO?
+
+Ahora dirigimos la mirada hacia la parte superior derecha, al bloque número dos.
+
+Un modelo fundacional es un componente que transforma una entrada en una salida según los patrones aprendidos durante su entrenamiento y las instrucciones presentes en el contexto actual.
+
+Puede resumir, clasificar, redactar, extraer información y generar código.
+
+Pero debemos observar con atención los límites que aparecen en este bloque.
+
+El modelo no conoce automáticamente el negocio donde se lo utiliza.
+
+Tampoco conoce los documentos privados, los permisos de los usuarios ni las reglas internas de una organización.
+
+Además, una respuesta convincente no garantiza exactitud.
+
+El modelo puede expresarse de manera clara y segura, pero aun así utilizar información incompleta, desactualizada o incorrecta.
+
+Por eso necesita contexto, fuentes, validaciones y mecanismos de control.
+
+Esta distinción es esencial.
+
+La fluidez de una respuesta no debe confundirse con su veracidad.
+
+BLOQUE 3. DE MODELO A APLICACIÓN DE INTELIGENCIA ARTIFICIAL
+
+Descendamos ahora al bloque número tres, ubicado en la zona central izquierda.
+
+Aquí vemos un flujo que comienza con el usuario.
+
+El usuario expresa una necesidad, una pregunta o una tarea.
+
+Esa entrada llega a la interfaz.
+
+La interfaz puede ser una página web, una aplicación móvil, un chat, una integración empresarial o incluso una experiencia de voz.
+
+Después aparece el backend o el orquestador.
+
+Este componente autentica al usuario, aplica las reglas del negocio, prepara el contexto y determina qué recursos puede utilizar el sistema.
+
+Luego interviene el modelo.
+
+El modelo procesa la solicitud, pero no trabaja aislado.
+
+La respuesta pasa por una etapa de validación y finalmente llega al resultado que recibe el usuario.
+
+Debajo del flujo aparecen los componentes que hacen posible la aplicación.
+
+Primero, la interfaz de usuario.
+
+Segundo, el backend y la lógica de negocio.
+
+Tercero, las herramientas y las APIs.
+
+Cuarto, los datos y los documentos.
+
+Quinto, el contexto, el estado y la memoria.
+
+Sexto, los guardrails y los permisos.
+
+Séptimo, la observabilidad y la trazabilidad.
+
+Octavo, la evaluación.
+
+Y noveno, la supervisión humana.
+
+La idea principal es que el producto no es solamente el modelo.
+
+El producto es el sistema completo que rodea, controla y evalúa al modelo.
+
+BLOQUE 4. WORKFLOW FRENTE A AGENTE
+
+Pasemos ahora al bloque número cuatro, ubicado en la zona central derecha.
+
+Aquí encontramos una comparación directa entre workflow y agente.
+
+En un workflow, el camino está definido por código.
+
+Es ideal para procesos repetitivos, donde las etapas son conocidas y necesitamos consistencia.
+
+Por ejemplo, recibir un documento, extraer datos, validar la información y generar un informe.
+
+El workflow ofrece mayor previsibilidad, aunque tiene menos flexibilidad frente a situaciones no contempladas.
+
+En cambio, en un agente, el modelo decide el siguiente paso.
+
+El agente resulta útil para problemas abiertos, donde no conocemos de antemano toda la secuencia de acciones.
+
+Puede seleccionar herramientas según el contexto, investigar información, revisar resultados y modificar su estrategia.
+
+Un ejemplo sería investigar un error de software, consultar archivos, ejecutar pruebas y corregir el código según los resultados obtenidos.
+
+En la franja inferior de este bloque aparece una regla práctica.
+
+Primero debemos utilizar lógica tradicional o workflows.
+
+Solo debemos utilizar agentes cuando la tarea no pueda predefinirse correctamente.
+
+Esta decisión reduce errores, coste, latencia y dificultad de mantenimiento.
+
+BLOQUE 5. COMPONENTES FUNDAMENTALES DEL SISTEMA INTELIGENTE
+
+Continuamos hacia el gran bloque número cinco, situado en el centro de la infografía.
+
+Aquí aparecen los nueve componentes fundamentales.
+
+El primero es la interfaz.
+
+La interfaz recoge la necesidad del usuario y presenta los resultados de una manera comprensible.
+
+El segundo es el orquestador o backend.
+
+Controla las reglas, el contexto, la ejecución y la conexión entre los distintos componentes.
+
+El tercero son las herramientas y APIs.
+
+Permiten que el sistema consulte servicios externos, ejecute funciones o actúe sobre otros sistemas.
+
+El cuarto componente son los datos y el conocimiento.
+
+Incluyen documentos, bases de datos, reglas empresariales y fuentes autorizadas.
+
+El quinto es el contexto, el estado y la memoria.
+
+El contexto contiene la información disponible en una interacción.
+
+El estado representa la situación actual de una tarea.
+
+La memoria permite conservar información relevante más allá de una sola conversación.
+
+El sexto componente son los guardrails.
+
+Validan entradas, salidas y acciones. También permiten aplicar permisos y restricciones.
+
+El séptimo es la trazabilidad.
+
+La trazabilidad permite observar qué hizo el sistema, qué herramientas utilizó, qué decisiones tomó y por qué finalizó de determinada manera.
+
+El octavo componente es la evaluación.
+
+La evaluación mide calidad, exactitud, utilidad, seguridad, coste y cumplimiento de instrucciones.
+
+El noveno es la supervisión humana.
+
+La persona debe aprobar acciones sensibles, corregir errores y mantener el control sobre decisiones importantes.
+
+Estos componentes convierten una respuesta probabilística en un sistema confiable y profesional.
+
+BLOQUE 6. REGLA DE MÍNIMA COMPLEJIDAD SUFICIENTE
+
+Ahora descendemos al bloque número seis, en la parte inferior izquierda.
+
+Aquí vemos una escalera con cinco niveles.
+
+El primer escalón es la lógica tradicional.
+
+Antes de utilizar inteligencia artificial, debemos preguntarnos si el problema puede resolverse con reglas, validaciones, consultas SQL o cálculos deterministas.
+
+El segundo escalón es una sola llamada al modelo.
+
+Si la tarea requiere comprensión lingüística o generación de texto, pero no necesita acciones complejas, una única llamada puede ser suficiente.
+
+El tercer escalón incorpora RAG y herramientas.
+
+Aquí el sistema recupera información desde fuentes autorizadas o utiliza funciones externas.
+
+El cuarto escalón es el workflow.
+
+Se utiliza cuando existen varias etapas conocidas que deben ejecutarse en orden.
+
+El quinto escalón es el agente o el sistema multiagente.
+
+Se reserva para problemas donde el recorrido no puede definirse de antemano o donde la especialización aporta una mejora demostrable.
+
+A la derecha de la escalera aparece una idea clave.
+
+La complejidad debe aumentar solamente cuando podamos justificar una mejora real en calidad, flexibilidad o productividad.
+
+No debemos construir una arquitectura compleja por moda o por apariencia tecnológica.
+
+BLOQUE 7. CASO APLICADO
+
+Pasemos al bloque número siete, ubicado en la parte inferior derecha.
+
+El caso elegido es un asistente documental para estudios por imágenes.
+
+En la columna roja aparece el problema.
+
+Las solicitudes pueden llegar con nombres diferentes, abreviaturas o sinónimos.
+
+También existen reglas distintas según el financiador o el uso de contraste.
+
+Además, la respuesta debe mostrar la fuente utilizada y la vigencia de la información.
+
+En la columna verde aparece la solución.
+
+El sistema utiliza RAG sobre una base maestra versionada.
+
+El modelo interpreta las variantes lingüísticas.
+
+Las reglas deterministas realizan cálculos y validaciones.
+
+La respuesta muestra la fuente, la fecha y las advertencias necesarias.
+
+Finalmente, se registran las consultas para detectar errores, nuevas variantes y oportunidades de mejora.
+
+Este ejemplo permite comprender la distribución correcta de responsabilidades.
+
+El modelo interpreta el lenguaje.
+
+RAG recupera la evidencia.
+
+El código realiza los cálculos.
+
+La aplicación controla permisos y vigencia.
+
+Y la persona mantiene la supervisión final.
+
+BLOQUE 8. ARCHITECTURE CANVAS DEL JSG AI ENGINEERING HUB
+
+Ahora observamos el bloque número ocho.
+
+Aquí se resume la primera arquitectura del proyecto transversal del curso.
+
+El problema es la dispersión de información, proyectos y documentos.
+
+El usuario inicial es Juan.
+
+La propuesta de valor consiste en transformar información dispersa en conocimiento organizado, decisiones y próximos pasos.
+
+Las capacidades iniciales serán consultar, resumir, relacionar y planificar.
+
+El control humano será obligatorio antes de enviar información, modificar documentos o ejecutar acciones importantes.
+
+El producto mínimo viable incluirá una aplicación web, un modelo, RAG, herramientas y aprobación humana.
+
+En la parte inferior vemos el flujo técnico.
+
+El usuario interactúa con una interfaz desarrollada en React.
+
+La interfaz se comunica con un backend en Django.
+
+El backend utiliza un orquestador.
+
+El orquestador conecta el modelo con RAG, herramientas y memoria.
+
+Antes de ejecutar una acción sensible, interviene la validación humana.
+
+Esta arquitectura es sencilla a propósito.
+
+Nos permite construir una base estable antes de incorporar autonomía adicional.
+
+BLOQUE 9. IDEAS CLAVE PARA UNA ENTREVISTA
+
+Continuamos hacia el bloque número nueve.
+
+Aquí se resumen tres ideas que deben poder explicarse con claridad en una entrevista técnica.
+
+Primera idea.
+
+El modelo es una capacidad. El producto es el sistema completo.
+
+Segunda idea.
+
+Un workflow sigue pasos definidos. Un agente decide dinámicamente.
+
+Tercera idea.
+
+No se utilizan varios agentes por moda, sino por necesidad arquitectónica.
+
+Estas tres frases condensan la filosofía del módulo.
+
+En una entrevista no alcanza con repetir definiciones.
+
+Es necesario explicar por qué se eligió una arquitectura, qué riesgos se consideraron y cómo se verificará que la solución funciona.
+
+BLOQUE 10. FUENTES BASE DEL MÓDULO
+
+Finalmente, llegamos al bloque número diez, en la franja inferior.
+
+El módulo se apoya en fuentes técnicas reconocidas.
+
+La primera es la guía Building Effective Agents de Anthropic.
+
+La segunda es la documentación del Agents SDK de OpenAI.
+
+La tercera es la documentación oficial de Model Context Protocol.
+
+La cuarta es el Agent Development Kit de Google.
+
+La quinta es el libro AI Engineering, de Chip Huyen.
+
+Estas fuentes proporcionan el fundamento técnico.
+
+El curso organiza, explica y aplica esos conocimientos mediante una propuesta pedagógica propia.
+
+CIERRE
+
+Hemos recorrido toda la infografía del Módulo 1.
+
+Comenzamos con un modelo capaz de generar una salida y terminamos con un sistema inteligente compuesto por interfaz, backend, datos, herramientas, memoria, evaluación, guardrails, trazabilidad y supervisión humana.
+
+La conclusión más importante es que la inteligencia de un producto no depende únicamente de la potencia del modelo.
+
+Depende de cómo diseñamos el sistema completo.
+
+También aprendimos que la mejor arquitectura no es la más compleja.
+
+Es la arquitectura más simple que permite resolver el problema con calidad, seguridad y capacidad de evaluación.
+
+Antes de continuar, intenta explicar con tus propias palabras estas tres diferencias.
+
+La diferencia entre un modelo y una aplicación.
+
+La diferencia entre un workflow y un agente.
+
+Y la diferencia entre utilizar un solo agente y construir un sistema multiagente.
+
+Cuando puedas explicar esas diferencias con claridad y aplicarlas a un caso real, habrás comprendido el fundamento del AI Engineering.

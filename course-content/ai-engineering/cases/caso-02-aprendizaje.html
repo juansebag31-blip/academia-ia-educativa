@@ -1,0 +1,47 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Caso 2 — Sistema personal de aprendizaje con IA</title><style>
+:root{--navy:#071a33;--blue:#1769e0;--green:#0c8f68;--orange:#c96a00;--red:#c74343;--ink:#172033;--muted:#5d687b;--line:#d8e2ee;--bg:#eef3f9}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;line-height:1.7}
+header{padding:56px 24px;background:linear-gradient(135deg,var(--navy),#0b4160);color:white}
+header div,main{max-width:1000px;margin:auto}h1{font-size:clamp(2rem,5vw,4rem);line-height:1.08;margin:.2em 0}.kicker{letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:#8edcff}
+main{background:white;margin-top:28px;margin-bottom:70px;border-radius:20px;padding:clamp(24px,5vw,58px);box-shadow:0 14px 34px rgba(12,39,75,.1)}
+h2{color:var(--navy);font-size:1.75rem;margin-top:2rem}h3{color:#0c274b;margin-top:1.5rem}.lead{font-size:1.12rem;color:#36445a}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.box{border:1px solid var(--line);border-radius:14px;padding:18px;background:#fbfdff}.box strong{display:block;color:var(--blue);margin-bottom:6px}
+.flow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:#071a33;color:white;border-radius:14px;padding:16px;margin:20px 0}.flow span{background:#10355f;border:1px solid #2a6095;padding:9px 12px;border-radius:9px}.flow b{color:#7bdff0}
+.callout{border-left:5px solid var(--blue);background:#f1f7ff;border-radius:12px;padding:18px;margin:22px 0}.warning{border-left-color:var(--red);background:#fff2f2}.success{border-left-color:var(--green);background:#effaf6}.decision{border-left-color:var(--orange);background:#fff7ec}
+table{width:100%;border-collapse:collapse;margin:20px 0}th,td{border:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}th{background:#eaf2ff}ul,ol{padding-left:1.25rem}li{margin:.35rem 0}.footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;color:var(--muted);font-size:.9rem}
+@media(max-width:760px){.grid{grid-template-columns:1fr}main{margin:14px;border-radius:16px}}
+</style></head><body><header><div><div class="kicker">AI Engineering Aplicado · Módulo 1 · Caso real</div><h1>Caso 2 — Sistema personal de aprendizaje con IA</h1><p>Material complementario del Módulo 1: De un modelo a un sistema inteligente.</p></div></header><main>
+<p class="lead">Este caso aplica el módulo a una situación de aprendizaje continuo: organizar cursos, documentos, proyectos, audios, infografías y próximos pasos en un sistema personal de conocimiento.</p>
+
+<h2>1. Problema productivo</h2>
+<p>Una persona que estudia IA, programación y desarrollo de productos acumula materiales en muchas plataformas: conversaciones, PDFs, repositorios, notas, videos, infografías y cursos. El problema no es falta de información, sino dispersión, repetición y dificultad para convertir aprendizaje en acción.</p>
+
+<div class="grid">
+<div class="box"><strong>Dolor operativo</strong>Ideas valiosas quedan enterradas, proyectos pierden continuidad y el aprendizaje no siempre se convierte en entregables.</div>
+<div class="box"><strong>Valor esperado</strong>Un sistema que recuerde proyectos, recupere documentación, proponga próximos pasos y genere evidencia para portafolio.</div>
+</div>
+
+<h2>2. Arquitectura inicial</h2>
+<div class="flow"><span>Proyecto elegido</span><b>→</b><span>Base documental</span><b>→</b><span>RAG</span><b>→</b><span>Resumen de estado</span><b>→</b><span>Plan semanal</span><b>→</b><span>Aprobación</span></div>
+
+<h2>3. Componentes</h2>
+<table><tr><th>Componente</th><th>Uso en el caso</th></tr>
+<tr><td>Modelo</td><td>Explica, sintetiza, conecta ideas y transforma materiales en planes de estudio.</td></tr>
+<tr><td>Memoria</td><td>Conserva objetivos, preferencias, proyectos activos y decisiones tomadas.</td></tr>
+<tr><td>RAG</td><td>Recupera documentos del curso, notas, transcripciones, guiones e infografías.</td></tr>
+<tr><td>Workflow</td><td>Revisión semanal: recuperar estado, detectar pendientes, priorizar y proponer acciones.</td></tr>
+<tr><td>Agente futuro</td><td>Investigar recursos nuevos, comparar fuentes y preparar materiales de estudio.</td></tr></table>
+
+<h2>4. Por qué conviene comenzar simple</h2>
+<p>La primera versión puede ser un asistente documental con memoria básica. No necesita editar repositorios, enviar correos ni actuar sobre calendarios. Primero debe demostrar que recupera bien la información y propone pasos útiles.</p>
+
+<div class="callout decision"><strong>Decisión arquitectónica</strong>La memoria no debe confundirse con meter todo el historial en el prompt. Conviene separar preferencias estables, estado de proyectos, documentos recuperados y notas temporales.</div>
+
+<h2>5. Evolución posible</h2>
+<ol><li>Asistente que consulta documentos.</li><li>Memoria de proyectos y objetivos.</li><li>Generador de planes semanales.</li><li>Integración con GitHub y Drive.</li><li>Agente de aprendizaje que propone prácticas.</li><li>Agente de portafolio que convierte avances en publicaciones.</li></ol>
+
+<h2>6. Métricas de éxito</h2>
+<ul><li>Proyectos retomados gracias al sistema.</li><li>Materiales encontrados con citas correctas.</li><li>Tareas completadas por semana.</li><li>Reducción de tiempo buscando contexto.</li><li>Publicaciones o entregables generados.</li></ul>
+
+<div class="callout success"><strong>Aprendizaje del caso</strong>Un buen sistema de IA personal no reemplaza el pensamiento. Lo organiza, lo recupera y lo convierte en acción concreta.</div>
+<div class="footer">AI Engineering Aplicado · Módulo 1 · Caso real independiente</div></main></body></html>

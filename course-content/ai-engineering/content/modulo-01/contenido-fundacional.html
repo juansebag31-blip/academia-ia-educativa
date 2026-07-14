@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Módulo 1 — De un modelo a un sistema inteligente</title>
+<meta name="description" content="Contenido fundacional del curso AI Engineering Aplicado. Módulo 1: De un modelo a un sistema inteligente.">
+<style>
+:root{
+  --navy:#071a33; --navy2:#0c274b; --blue:#1769e0; --cyan:#00b8d9;
+  --ink:#172033; --muted:#5d687b; --paper:#ffffff; --bg:#eef3f9;
+  --line:#d9e2ee; --soft:#f7f9fc; --green:#0b8f64; --orange:#c96a00;
+  --violet:#6d45c8; --red:#c74343;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  line-height:1.72;
+}
+a{color:var(--blue)}
+.cover{
+  min-height:92vh; padding:72px 7vw; display:flex; align-items:center;
+  background:
+    radial-gradient(circle at 80% 20%, rgba(0,184,217,.22), transparent 28%),
+    radial-gradient(circle at 15% 80%, rgba(23,105,224,.22), transparent 30%),
+    linear-gradient(135deg,var(--navy),#0b315f 65%,#0b4160);
+  color:white;
+}
+.cover-inner{max-width:1050px}
+.kicker{
+  display:inline-block; border:1px solid rgba(255,255,255,.35);
+  border-radius:999px; padding:7px 14px; letter-spacing:.08em;
+  font-weight:700; text-transform:uppercase; font-size:.82rem;
+}
+h1{font-size:clamp(2.8rem,7vw,5.7rem);line-height:1.02;margin:.28em 0 .25em;max-width:980px}
+.cover p{font-size:1.25rem;max-width:760px;color:#dbeaff}
+.meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.meta span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:9px 13px;border-radius:10px}
+.layout{display:grid;grid-template-columns:290px minmax(0,900px);gap:34px;max-width:1260px;margin:0 auto;padding:34px 24px 90px}
+aside{
+  position:sticky;top:20px;align-self:start;background:var(--navy);color:white;
+  border-radius:18px;padding:22px;box-shadow:0 12px 30px rgba(7,26,51,.18)
+}
+aside h2{font-size:1rem;margin:0 0 12px;color:#8edcff}
+aside a{display:block;color:#dce9f8;text-decoration:none;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:.93rem}
+aside a:hover{color:white}
+main{background:var(--paper);border-radius:20px;padding:clamp(24px,5vw,64px);box-shadow:0 12px 35px rgba(14,39,75,.10)}
+h2{font-size:2rem;line-height:1.2;margin:2.2em 0 .5em;color:var(--navy)}
+h3{font-size:1.35rem;line-height:1.3;margin:1.7em 0 .35em;color:var(--navy2)}
+h4{font-size:1.08rem;color:var(--blue);margin:1.4em 0 .25em}
+.lead{font-size:1.14rem;color:#36445a}
+.callout,.case,.interview,.decision,.warning{
+  border-radius:14px;padding:20px 22px;margin:24px 0;border-left:5px solid var(--blue);background:#f1f7ff
+}
+.case{border-color:var(--green);background:#effaf6}
+.interview{border-color:var(--violet);background:#f6f2ff}
+.decision{border-color:var(--orange);background:#fff7ec}
+.warning{border-color:var(--red);background:#fff2f2}
+.callout strong,.case strong,.interview strong,.decision strong,.warning strong{display:block;margin-bottom:5px}
+.definition{
+  display:grid;grid-template-columns:145px 1fr;gap:16px;align-items:start;
+  border:1px solid var(--line);border-radius:14px;padding:18px;margin:16px 0;background:var(--soft)
+}
+.term{font-weight:800;color:var(--blue);font-size:1.05rem}
+.flow{
+  display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:18px;background:var(--navy);
+  color:white;border-radius:14px;margin:18px 0
+}
+.flow span{background:#10355f;border:1px solid #2a6095;padding:9px 12px;border-radius:9px}
+.flow b{color:#7bdff0}
+table{width:100%;border-collapse:collapse;margin:22px 0;font-size:.95rem}
+th,td{border:1px solid var(--line);padding:12px 13px;vertical-align:top}
+th{background:#eaf2ff;text-align:left;color:var(--navy)}
+figure{margin:30px 0}
+figcaption{font-size:.9rem;color:var(--muted);margin-top:8px}
+ul,ol{padding-left:1.25rem}
+li{margin:.38rem 0}
+hr{border:0;border-top:1px solid var(--line);margin:42px 0}
+.small{font-size:.9rem;color:var(--muted)}
+.ref-list li{margin-bottom:12px}
+.checklist{list-style:none;padding:0}
+.checklist li{padding-left:30px;position:relative}
+.checklist li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:900}
+.footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  aside{position:relative;top:0}
+  main{padding:26px}
+  .definition{grid-template-columns:1fr}
+}
+@media print{
+  body{background:white}
+  .cover{min-height:auto;page-break-after:always}
+  .layout{display:block;max-width:none;padding:0}
+  aside{display:none}
+  main{box-shadow:none;border-radius:0;padding:16mm}
+  h2{page-break-before:auto}
+  a{color:#111;text-decoration:none}
+}
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-inner">
+    <span class="kicker">AI Engineering Aplicado · Módulo 1</span>
+    <h1>De un modelo a un sistema inteligente</h1>
+    <p>Fundamentos para comprender cómo se transforma un modelo fundacional en una aplicación útil, controlada, observable y capaz de intervenir en procesos productivos reales.</p>
+    <div class="meta">
+      <span>Versión 1.0</span>
+      <span>Nivel fundacional</span>
+      <span>Lectura estimada: 55–70 min</span>
+      <span>Incluye caso real y cápsula de entrevista</span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+<aside>
+  <h2>Contenido del módulo</h2>
+  <a href="#proposito">1. Propósito</a>
+  <a href="#panorama">2. Panorama general</a>
+  <a href="#modelo">3. Qué es un modelo</a>
+  <a href="#aplicacion">4. De modelo a aplicación</a>
+  <a href="#workflow">5. Workflows</a>
+  <a href="#agente">6. Agentes</a>
+  <a href="#multiagente">7. Sistemas multiagente</a>
+  <a href="#componentes">8. Componentes fundamentales</a>
+  <a href="#complejidad">9. Regla de mínima complejidad</a>
+  <a href="#caso">10. Caso aplicado</a>
+  <a href="#arquitectura">11. Architecture Canvas</a>
+  <a href="#entrevista">12. Cápsula de entrevista</a>
+  <a href="#actividad">13. Actividad práctica</a>
+  <a href="#evaluacion">14. Autoevaluación</a>
+  <a href="#fuentes">15. Fuentes</a>
+</aside>
+
+<main>
+<section id="proposito">
+  <h2>1. Propósito del módulo</h2>
+  <p class="lead">Este módulo establece el lenguaje común que utilizaremos durante todo el curso. Antes de estudiar RAG, herramientas, MCP, memoria, evaluación o sistemas multiagente, necesitamos distinguir con precisión qué es cada elemento y qué función cumple dentro de una solución de inteligencia artificial.</p>
+  <p>En el uso cotidiano, términos como <em>modelo</em>, <em>asistente</em>, <em>agente</em> y <em>automatización</em> suelen mezclarse. Esa confusión puede parecer menor cuando estamos experimentando, pero se vuelve problemática cuando debemos diseñar un producto, estimar costes, explicar una arquitectura en una entrevista o garantizar que un sistema no realice acciones indebidas.</p>
+  <p>La meta no es memorizar definiciones aisladas. La meta es adquirir una forma de pensar: observar un problema real, identificar su grado de incertidumbre, decidir qué partes pueden resolverse mediante código tradicional, cuáles necesitan un modelo, cuáles requieren recuperación de información y cuáles justifican que un agente tome decisiones dinámicas.</p>
+
+  <div class="callout">
+    <strong>Idea central</strong>
+    Un modelo fundacional es una capacidad dentro del sistema. El producto real surge cuando esa capacidad se combina con interfaz, datos, herramientas, reglas, evaluación, seguridad y supervisión humana.
+  </div>
+
+  <h3>Objetivos de aprendizaje</h3>
+  <ul class="checklist">
+    <li>Diferenciar modelo, aplicación de IA, workflow, agente y sistema multiagente.</li>
+    <li>Reconocer los componentes que convierten una respuesta probabilística en un servicio útil.</li>
+    <li>Comprender por qué una arquitectura más compleja no es necesariamente una arquitectura mejor.</li>
+    <li>Relacionar cada concepto con procesos productivos verificables.</li>
+    <li>Diseñar la primera versión del JSG AI Engineering Hub.</li>
+  </ul>
+</section>
+
+<section id="panorama">
+  <h2>2. Panorama general: cinco niveles de construcción</h2>
+  <p>Podemos imaginar la evolución de una solución de IA como una secuencia de cinco niveles. Cada nivel incorpora capacidades y también nuevas responsabilidades.</p>
+
+  <div class="flow">
+    <span>Modelo</span><b>→</b><span>Aplicación de IA</span><b>→</b><span>Workflow</span><b>→</b><span>Agente</span><b>→</b><span>Sistema multiagente</span>
+  </div>
+
+  <p>La flecha no significa que todos los productos deban recorrer obligatoriamente los cinco niveles. Muchas soluciones valiosas terminan correctamente en el segundo o en el tercero. Un buscador documental con buenas fuentes, citas y evaluación puede ser superior a un sistema multiagente innecesariamente complejo.</p>
+  <p>Anthropic propone una distinción arquitectónica especialmente útil: los <strong>workflows</strong> siguen caminos predefinidos por código, mientras que los <strong>agentes</strong> permiten que el modelo dirija dinámicamente su propio proceso y la utilización de herramientas. La misma guía recomienda comenzar por la solución más sencilla y aumentar la complejidad únicamente cuando exista una mejora demostrable en los resultados.<sup><a href="#ref1">[1]</a></sup></p>
+
+  <table>
+    <thead><tr><th>Nivel</th><th>Qué aporta</th><th>Quién controla el recorrido</th><th>Riesgo principal</th></tr></thead>
+    <tbody>
+      <tr><td>Modelo</td><td>Generación, clasificación, extracción, razonamiento probabilístico</td><td>Una llamada concreta y sus instrucciones</td><td>Respuesta incorrecta o no fundamentada</td></tr>
+      <tr><td>Aplicación</td><td>Interfaz, datos, reglas, persistencia y experiencia de usuario</td><td>El software que rodea al modelo</td><td>Integración deficiente o falta de control</td></tr>
+      <tr><td>Workflow</td><td>Proceso repetible en varios pasos</td><td>Rutas programadas</td><td>Rigidez ante casos no previstos</td></tr>
+      <tr><td>Agente</td><td>Decisión dinámica y uso autónomo de herramientas</td><td>El modelo dentro de límites</td><td>Errores acumulativos, mayor coste y latencia</td></tr>
+      <tr><td>Multiagente</td><td>Especialización y coordinación de funciones</td><td>Orquestador, handoffs o reglas de colaboración</td><td>Complejidad operativa y difícil depuración</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="modelo">
+  <h2>3. Qué es un modelo de inteligencia artificial</h2>
+  <p>Un modelo fundacional es un sistema entrenado con grandes cantidades de datos para aprender patrones generales que luego pueden adaptarse a numerosas tareas. Los modelos de lenguaje reciben una secuencia de entrada y producen una continuación probable. Aunque desde la experiencia del usuario parezcan “comprender” una petición, su funcionamiento no equivale a poseer por defecto conocimiento completo del negocio, acceso a documentos privados o responsabilidad sobre las consecuencias de una acción.</p>
+
+  <div class="definition">
+    <div class="term">Modelo</div>
+    <div>Componente computacional que transforma una entrada en una salida según patrones aprendidos durante el entrenamiento y las instrucciones presentes en el contexto actual.</div>
+  </div>
+
+  <h3>3.1 Lo que un modelo sí puede aportar</h3>
+  <p>Dependiendo de sus capacidades, un modelo puede redactar, resumir, clasificar, traducir, extraer entidades, interpretar instrucciones, generar código, elegir entre herramientas disponibles y producir salidas estructuradas. También puede combinar información presente en el contexto para elaborar una respuesta nueva.</p>
+
+  <h3>3.2 Lo que un modelo no conoce automáticamente</h3>
+  <p>El modelo no conoce por defecto el estado actualizado de una organización, las reglas internas, los permisos de cada usuario ni el contenido de una base documental privada. Tampoco sabe automáticamente si una respuesta es aceptable para el negocio. Para adquirir ese conocimiento operativo necesita que la aplicación le entregue contexto, fuentes, herramientas y criterios de evaluación.</p>
+
+  <h3>3.3 Probabilidad no significa arbitrariedad</h3>
+  <p>Decir que la salida es probabilística no significa que el modelo responda al azar sin estructura. Significa que existe variabilidad y que la respuesta se genera a partir de distribuciones aprendidas, no de una base de datos determinista que garantice una única salida correcta. Por eso el diseño profesional no confía únicamente en la fluidez del texto: añade fuentes, validaciones, esquemas, pruebas y controles.</p>
+
+  <div class="warning">
+    <strong>Error frecuente</strong>
+    Confundir una respuesta convincente con una respuesta verificada. La calidad lingüística es una propiedad distinta de la exactitud factual, la vigencia de la información y el cumplimiento de una política empresarial.
+  </div>
+
+  <h3>3.4 El modelo como “motor”, no como “vehículo completo”</h3>
+  <p>Una analogía útil es pensar en el modelo como el motor de un vehículo. El motor aporta potencia, pero no define por sí solo el volante, los frenos, las normas de circulación, la ruta, el tablero de control ni la responsabilidad del conductor. Del mismo modo, el modelo aporta capacidades cognitivas aproximadas, pero la aplicación debe proporcionar control, dirección y seguridad.</p>
+</section>
+
+<section id="aplicacion">
+  <h2>4. De un modelo a una aplicación de IA</h2>
+  <p>Una aplicación de inteligencia artificial es un sistema de software que utiliza uno o más modelos para resolver una necesidad concreta. La diferencia decisiva está en que la aplicación incorpora contexto operativo y transforma la capacidad general del modelo en una experiencia repetible.</p>
+
+  <div class="definition">
+    <div class="term">Aplicación de IA</div>
+    <div>Producto de software que combina modelos con interfaz, lógica de negocio, datos, herramientas, persistencia, seguridad y mecanismos de evaluación.</div>
+  </div>
+
+  <h3>4.1 El recorrido básico de una solicitud</h3>
+  <ol>
+    <li>El usuario expresa una necesidad mediante una interfaz.</li>
+    <li>El backend autentica al usuario y determina qué acciones puede realizar.</li>
+    <li>La aplicación prepara el contexto: instrucciones, datos, historial y documentos relevantes.</li>
+    <li>El modelo procesa la solicitud y puede devolver texto, datos estructurados o una petición de herramienta.</li>
+    <li>La aplicación valida el resultado y decide si debe mostrarse, corregirse, registrarse o solicitar aprobación.</li>
+    <li>La respuesta y los eventos de la ejecución quedan disponibles para evaluación y mejora.</li>
+  </ol>
+
+  <h3>4.2 Por qué el backend es esencial</h3>
+  <p>El backend no es simplemente un puente técnico entre la interfaz y el modelo. Es el lugar donde se aplican las reglas: quién puede consultar un documento, qué herramienta está permitida, cuánto puede gastar una tarea, qué información debe anonimizarse y qué operaciones requieren confirmación.</p>
+
+  <h3>4.3 La interfaz también forma parte de la inteligencia del sistema</h3>
+  <p>Una interfaz bien diseñada evita peticiones ambiguas, muestra las fuentes, diferencia una propuesta de una acción ejecutada y permite que el usuario corrija el rumbo. En AI Engineering, la calidad no depende solamente del prompt; también depende de cómo la aplicación presenta opciones, límites y evidencia.</p>
+
+  <div class="decision">
+    <strong>Decisión arquitectónica</strong>
+    En este curso separaremos siempre la capa de experiencia, la capa de orquestación, la capa de conocimiento y la capa de acciones. Esa separación facilita la actualización del modelo sin reconstruir todo el producto.
+  </div>
+</section>
+
+<section id="workflow">
+  <h2>5. Workflows: inteligencia dentro de un proceso predefinido</h2>
+  <p>Un workflow es una secuencia organizada de pasos. Algunos pueden estar resueltos mediante código tradicional y otros mediante modelos. Lo importante es que el camino general está definido previamente.</p>
+
+  <div class="definition">
+    <div class="term">Workflow</div>
+    <div>Sistema en el que modelos y herramientas son coordinados mediante rutas de ejecución determinadas por el software.</div>
+  </div>
+
+  <h3>5.1 Cuándo conviene utilizar un workflow</h3>
+  <p>Los workflows son adecuados cuando el proceso es repetitivo, las etapas son conocidas y necesitamos consistencia. Por ejemplo, recibir un documento, verificar su tipo, extraer campos, validar formatos, consultar una tabla y generar un informe.</p>
+
+  <h3>5.2 Patrones frecuentes</h3>
+  <p>Anthropic describe varios patrones productivos: encadenamiento de prompts, enrutamiento, paralelización, orquestador con trabajadores y ciclos de evaluador-optimizador.<sup><a href="#ref1">[1]</a></sup></p>
+
+  <h4>Encadenamiento</h4>
+  <p>Divide una tarea en etapas. La salida de una etapa se convierte en entrada de la siguiente. Es útil cuando cada paso puede verificarse y la división reduce la dificultad.</p>
+
+  <h4>Enrutamiento</h4>
+  <p>Clasifica la petición y la dirige hacia un procedimiento especializado. Puede utilizarse para diferenciar consultas administrativas, técnicas o sensibles, o para enviar tareas simples a un modelo económico y tareas complejas a uno más capaz.</p>
+
+  <h4>Paralelización</h4>
+  <p>Ejecuta tareas independientes al mismo tiempo. También puede solicitar varias evaluaciones sobre el mismo resultado y combinar sus conclusiones.</p>
+
+  <h4>Orquestador y trabajadores</h4>
+  <p>Un componente central divide el trabajo y lo distribuye. A diferencia de una paralelización completamente fija, la cantidad y naturaleza de las subtareas puede depender de la solicitud recibida.</p>
+
+  <h4>Evaluador y optimizador</h4>
+  <p>Un modelo genera una respuesta y otro proceso la evalúa según criterios definidos. El ciclo continúa hasta alcanzar un nivel aceptable o un límite de iteraciones.</p>
+
+  <div class="case">
+    <strong>Ejemplo productivo</strong>
+    Una clínica recibe una orden médica. El workflow identifica el estudio, extrae región anatómica y contraste, consulta la tabla vigente, verifica incompatibilidades y prepara una propuesta para revisión administrativa. La secuencia es conocida; por eso no necesitamos que un agente invente libremente el proceso.
+  </div>
+</section>
+
+<section id="agente">
+  <h2>6. Agentes: autonomía limitada para problemas abiertos</h2>
+  <p>Un agente es un sistema donde el modelo puede decidir qué pasos realizar y qué herramientas utilizar para alcanzar un objetivo. Esa autonomía no debe interpretarse como libertad irrestricta. El agente opera dentro de un entorno diseñado por desarrolladores, con herramientas, permisos, límites y condiciones de detención.</p>
+
+  <div class="definition">
+    <div class="term">Agente</div>
+    <div>Modelo equipado con instrucciones, herramientas y un ciclo de ejecución que le permite observar resultados, decidir el siguiente paso y continuar hasta completar o detener una tarea.</div>
+  </div>
+
+  <p>La documentación del OpenAI Agents SDK organiza este tipo de aplicaciones alrededor de primitivas como agentes, herramientas, handoffs, sesiones, guardrails, intervención humana y trazabilidad.<sup><a href="#ref2">[2]</a></sup> Esto muestra que un agente profesional no se reduce a “un prompt autónomo”; requiere infraestructura para ejecutar y observar su comportamiento.</p>
+
+  <h3>6.1 El ciclo básico del agente</h3>
+  <ol>
+    <li>Recibe un objetivo y el contexto inicial.</li>
+    <li>Analiza el estado y decide una acción.</li>
+    <li>Invoca una herramienta o produce una respuesta intermedia.</li>
+    <li>Observa el resultado real de la herramienta.</li>
+    <li>Actualiza su plan y continúa.</li>
+    <li>Finaliza al completar el objetivo, alcanzar un límite o requerir intervención humana.</li>
+  </ol>
+
+  <h3>6.2 Ground truth: la realidad debe responder</h3>
+  <p>Un agente confiable necesita información del entorno. Si modifica código, debe ejecutar pruebas. Si consulta un calendario, debe recibir la respuesta real del servicio. Si busca documentación, debe poder citar el fragmento recuperado. La retroalimentación externa permite detectar errores que el modelo no podría descubrir mediante reflexión textual aislada.</p>
+
+  <h3>6.3 Cuándo un agente aporta valor</h3>
+  <p>Conviene considerar un agente cuando el número de pasos no puede predecirse fácilmente, las herramientas dependen del contexto y el sistema necesita adaptarse a resultados intermedios. La resolución de incidencias de software es un ejemplo: el agente inspecciona archivos, formula una hipótesis, modifica código, ejecuta pruebas y corrige según los fallos.</p>
+
+  <h3>6.4 Coste de la autonomía</h3>
+  <p>Cada iteración consume tiempo y recursos. Además, un error inicial puede influir en decisiones posteriores. Por eso los agentes necesitan límites de pasos, presupuestos, herramientas claramente definidas, entornos aislados y puntos de aprobación.</p>
+
+  <div class="warning">
+    <strong>Principio de seguridad</strong>
+    Nunca debemos otorgar una capacidad irreversible solo porque el modelo “parece entender” la tarea. El nivel de autonomía debe aumentar junto con la capacidad de verificar, registrar y revertir acciones.
+  </div>
+</section>
+
+<section id="multiagente">
+  <h2>7. Sistemas multiagente: especialización con un coste de coordinación</h2>
+  <p>Un sistema multiagente distribuye responsabilidades entre varias unidades especializadas. Puede existir un supervisor central, transferencias entre agentes o colaboración paralela. La especialización puede mejorar claridad y calidad, pero también aumenta el número de interacciones y los puntos de fallo.</p>
+
+  <div class="definition">
+    <div class="term">Multiagente</div>
+    <div>Arquitectura en la que varios agentes, con funciones o herramientas diferentes, colaboran para resolver una tarea común.</div>
+  </div>
+
+  <h3>7.1 Razones válidas para separar agentes</h3>
+  <ul>
+    <li>Los dominios requieren instrucciones y herramientas muy diferentes.</li>
+    <li>Existen permisos incompatibles que conviene aislar.</li>
+    <li>Varias tareas pueden ejecutarse en paralelo.</li>
+    <li>Se necesita una revisión independiente del resultado.</li>
+    <li>El contexto completo sería demasiado grande o confuso para un único agente.</li>
+  </ul>
+
+  <h3>7.2 Razones inválidas</h3>
+  <p>No deberíamos crear cinco agentes únicamente porque sus nombres resultan atractivos. Si todos reciben casi las mismas instrucciones y utilizan las mismas herramientas, probablemente estamos añadiendo capas sin ganar especialización real.</p>
+
+  <h3>7.3 Orquestación y handoffs</h3>
+  <p>La orquestación define quién conserva el control. En un modelo supervisor, un agente central delega y reúne resultados. En un handoff, un agente transfiere la conversación o la tarea a otro especializado. OpenAI documenta ambas posibilidades dentro de su SDK y ofrece mecanismos para registrar la ejecución completa.<sup><a href="#ref2">[2]</a></sup></p>
+
+  <div class="decision">
+    <strong>Regla del curso</strong>
+    El JSG AI Engineering Hub comenzará con un único orquestador. Solo separaremos agentes cuando podamos escribir una justificación concreta relacionada con especialización, permisos, paralelismo o evaluación independiente.
+  </div>
+</section>
+
+<section id="componentes">
+  <h2>8. Componentes fundamentales de un sistema inteligente</h2>
+
+  <h3>8.1 Interfaz de usuario</h3>
+  <p>Recoge la intención, presenta resultados, evidencia incertidumbre y permite confirmar acciones. Puede ser una aplicación web, móvil, chat, voz o integración dentro de otra herramienta.</p>
+
+  <h3>8.2 Backend y orquestación</h3>
+  <p>Gestiona autenticación, reglas, contexto, llamadas al modelo, herramientas, errores, reintentos y persistencia. Es el centro de control del producto.</p>
+
+  <h3>8.3 Herramientas y APIs</h3>
+  <p>Permiten que el sistema consulte o modifique el mundo externo. Una buena herramienta posee nombre claro, parámetros comprensibles, validación, permisos y respuestas estructuradas. Anthropic destaca que la documentación de herramientas merece tanta atención como el prompt general del agente.<sup><a href="#ref1">[1]</a></sup></p>
+
+  <h3>8.4 Datos y conocimiento</h3>
+  <p>Incluyen documentos, bases de datos, reglas de negocio y fuentes externas. En el módulo 5 estudiaremos cómo recuperar fragmentos relevantes mediante RAG, mantener versiones y citar evidencia.</p>
+
+  <h3>8.5 Contexto, estado y memoria</h3>
+  <p>El contexto es la información disponible en una llamada. El estado representa la situación actual de una tarea. La memoria permite conservar información más allá de una interacción. Separar estos conceptos evita introducir datos irrelevantes o mantener información que debería expirar.</p>
+
+  <h3>8.6 Guardrails y permisos</h3>
+  <p>Son controles sobre entradas, salidas y herramientas. Pueden bloquear solicitudes, validar formatos, exigir aprobación o impedir acciones fuera del alcance autorizado.</p>
+
+  <h3>8.7 Observabilidad y trazabilidad</h3>
+  <p>Permiten reconstruir qué ocurrió: qué instrucciones recibió el sistema, qué herramienta eligió, cuánto tardó, cuánto costó y por qué terminó. El OpenAI Agents SDK incluye trazabilidad como una capacidad de primera clase.<sup><a href="#ref2">[2]</a></sup></p>
+
+  <h3>8.8 Evaluación</h3>
+  <p>Define qué significa “funcionar bien”. Una evaluación puede medir exactitud, fidelidad a fuentes, selección de herramientas, coste, latencia, seguridad o utilidad para el usuario. Sin evaluación, el equipo solo posee impresiones.</p>
+
+  <h3>8.9 Supervisión humana</h3>
+  <p>La persona no debe aparecer únicamente al final para asumir la responsabilidad. El sistema debe incorporar puntos claros donde el usuario revisa, corrige o autoriza. La supervisión es parte de la arquitectura, no un parche posterior.</p>
+</section>
+
+<section id="complejidad">
+  <h2>9. La regla de mínima complejidad suficiente</h2>
+  <p>Una de las decisiones más importantes de AI Engineering es evitar que la fascinación tecnológica sustituya al análisis del problema. Anthropic señala que muchos casos se resuelven adecuadamente optimizando una sola llamada al modelo, añadiendo recuperación de información o utilizando ejemplos en contexto; los sistemas agénticos suelen intercambiar mayor coste y latencia por flexibilidad y desempeño.<sup><a href="#ref1">[1]</a></sup></p>
+
+  <ol>
+    <li><strong>Primero, lógica tradicional:</strong> reglas, filtros, consultas SQL y validaciones deterministas.</li>
+    <li><strong>Luego, una llamada al modelo:</strong> para la parte lingüística o ambigua.</li>
+    <li><strong>Después, RAG y herramientas:</strong> si necesita conocimiento o acciones externas.</li>
+    <li><strong>Más tarde, workflow:</strong> si la tarea tiene varias etapas conocidas.</li>
+    <li><strong>Agente:</strong> cuando el recorrido no puede predefinirse.</li>
+    <li><strong>Multiagente:</strong> cuando la separación aporta una ventaja verificable.</li>
+  </ol>
+
+  <div class="callout">
+    <strong>Pregunta de arquitectura</strong>
+    ¿Qué capacidad concreta obtenemos al añadir este nivel de complejidad y cómo demostraremos que mejora el resultado?
+  </div>
+</section>
+
+<section id="caso">
+  <h2>10. Caso aplicado: asistente documental para estudios por imágenes</h2>
+  <p>Utilizaremos un ejemplo cercano a procesos reales, pero diseñado con datos ficticios y sin información personal de pacientes.</p>
+
+  <h3>10.1 Problema</h3>
+  <p>El personal administrativo recibe solicitudes expresadas de formas diferentes. Debe identificar el estudio, región, modalidad, contraste, financiador, código y valor vigente. Los errores pueden surgir por sinónimos, documentos desactualizados o reglas diferentes entre financiadores.</p>
+
+  <h3>10.2 Solución mínima</h3>
+  <p>La primera versión no necesita un sistema multiagente. Puede utilizar:</p>
+  <ul>
+    <li>Interfaz para escribir o seleccionar el estudio.</li>
+    <li>Backend que normaliza la consulta.</li>
+    <li>RAG sobre una base maestra versionada.</li>
+    <li>Modelo que interpreta variantes lingüísticas.</li>
+    <li>Reglas deterministas para cálculos.</li>
+    <li>Respuesta con fuente, fecha de vigencia y advertencias.</li>
+    <li>Registro de consultas para detectar nuevos sinónimos.</li>
+  </ul>
+
+  <h3>10.3 Qué debe hacer el modelo</h3>
+  <p>Interpretar la forma en que el usuario expresa el estudio, relacionar sinónimos, pedir aclaraciones cuando falten datos y redactar una respuesta comprensible.</p>
+
+  <h3>10.4 Qué no debe dejarse al modelo</h3>
+  <p>Los cálculos aritméticos, la vigencia de una tabla, la autorización para modificar valores y la decisión de utilizar información sensible deben quedar controlados por código y permisos.</p>
+
+  <h3>10.5 Cuándo aparecería un agente</h3>
+  <p>Un agente podría justificarse más adelante para investigar discrepancias entre documentos, proponer actualizaciones, preparar un informe de inconsistencias y solicitar aprobación. No debería modificar la fuente maestra por sí mismo.</p>
+
+  <h3>10.6 Métricas</h3>
+  <ul>
+    <li>Porcentaje de consultas correctamente identificadas.</li>
+    <li>Porcentaje de respuestas con fuente vigente.</li>
+    <li>Número de aclaraciones necesarias.</li>
+    <li>Tiempo promedio de resolución.</li>
+    <li>Errores de cálculo.</li>
+    <li>Consultas sin evidencia suficiente.</li>
+  </ul>
+</section>
+
+<section id="arquitectura">
+  <h2>11. Architecture Canvas — JSG AI Engineering Hub v0.1</h2>
+
+  <table>
+    <tbody>
+      <tr><th>Problema</th><td>Proyectos, documentos, aprendizajes y tareas distribuidos entre diferentes plataformas.</td></tr>
+      <tr><th>Usuario inicial</th><td>Juan, como estudiante, creador de productos y administrador de proyectos.</td></tr>
+      <tr><th>Propuesta de valor</th><td>Convertir información dispersa en conocimiento organizado, decisiones y próximos pasos verificables.</td></tr>
+      <tr><th>Entrada</th><td>Pregunta, proyecto elegido, documentos autorizados y estado actual.</td></tr>
+      <tr><th>Capacidades iniciales</th><td>Consultar, resumir, relacionar, citar y planificar.</td></tr>
+      <tr><th>Conocimiento</th><td>Documentación del curso, repositorios, notas y archivos seleccionados.</td></tr>
+      <tr><th>Acciones futuras</th><td>Crear borradores, tareas, documentos, análisis de repositorios y propuestas de agenda.</td></tr>
+      <tr><th>Control humano</th><td>Obligatorio antes de enviar, modificar, publicar o eliminar información.</td></tr>
+      <tr><th>Métricas</th><td>Exactitud, fuentes correctas, utilidad, tiempo ahorrado, errores y coste por tarea.</td></tr>
+      <tr><th>MVP</th><td>Aplicación web, un modelo, RAG, dos herramientas, registro de ejecuciones y aprobación humana.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Arquitectura inicial</h3>
+  <div class="flow">
+    <span>Usuario</span><b>→</b><span>Interfaz React</span><b>→</b><span>Backend Django</span><b>→</b><span>Orquestador</span><b>→</b><span>Modelo + RAG + herramientas</span><b>→</b><span>Validación humana</span>
+  </div>
+
+  <div class="decision">
+    <strong>Documento de decisión ADR-001</strong>
+    Comenzaremos con una arquitectura de un solo orquestador porque el objetivo inicial puede resolverse con un workflow controlado. Esta elección reduce coste, facilita pruebas y permite comprender los componentes antes de introducir coordinación multiagente.
+  </div>
+</section>
+
+<section id="entrevista">
+  <h2>12. Cápsula de entrevista técnica</h2>
+  <div class="interview">
+    <strong>Pregunta: ¿Cuál es la diferencia entre un workflow y un agente?</strong>
+    Un workflow sigue una ruta programada y previsible: el software determina qué paso viene después. En un agente, el modelo decide dinámicamente el siguiente paso y qué herramienta utilizar según los resultados que obtiene. Prefiero workflows para procesos repetibles y agentes para problemas abiertos donde no puedo anticipar la secuencia completa. En ambos casos incorporo límites, evaluación, trazabilidad y aprobación humana cuando existen acciones sensibles.
+  </div>
+
+  <div class="interview">
+    <strong>Pregunta: ¿Por qué no utilizar siempre varios agentes?</strong>
+    Porque cada agente adicional aumenta llamadas, coste, latencia, transferencia de contexto y dificultad de depuración. Solo separo agentes cuando existe una ventaja concreta: especialización, aislamiento de permisos, ejecución paralela o evaluación independiente.
+  </div>
+
+  <div class="interview">
+    <strong>Pregunta: ¿Qué convierte a un modelo en un producto?</strong>
+    La combinación con interfaz, lógica de negocio, datos, herramientas, persistencia, seguridad, observabilidad y una evaluación vinculada al objetivo del usuario. El modelo es una capacidad; el producto es el sistema completo.
+  </div>
+</section>
+
+<section id="actividad">
+  <h2>13. Actividad práctica</h2>
+  <h3>Mapa de un proceso real</h3>
+  <p>Selecciona un proceso que conozcas bien. Puede ser administrativo, educativo o de desarrollo de software.</p>
+  <ol>
+    <li>Describe el resultado final esperado.</li>
+    <li>Enumera las etapas que hoy realiza una persona.</li>
+    <li>Marca cuáles son deterministas y cuáles contienen ambigüedad.</li>
+    <li>Decide dónde usarías código tradicional.</li>
+    <li>Decide dónde usarías un modelo.</li>
+    <li>Identifica qué datos o herramientas externas necesita.</li>
+    <li>Define qué acciones requieren aprobación.</li>
+    <li>Propón tres métricas para evaluar el sistema.</li>
+    <li>Determina si basta una llamada, un workflow o un agente.</li>
+  </ol>
+
+  <h3>Entregable</h3>
+  <p>Una página titulada <strong>“Mapa del proceso y justificación arquitectónica”</strong>. Este documento se incorporará posteriormente al portafolio del curso.</p>
+</section>
+
+<section id="evaluacion">
+  <h2>14. Autoevaluación</h2>
+  <ol>
+    <li>¿Por qué un modelo no equivale a una aplicación completa?</li>
+    <li>¿Qué diferencia el control de un workflow del control de un agente?</li>
+    <li>¿Qué tipo de información debe obtener un agente del entorno para corregirse?</li>
+    <li>¿Cuándo puede justificarse una arquitectura multiagente?</li>
+    <li>¿Qué tareas conviene mantener deterministas?</li>
+    <li>¿Por qué la supervisión humana debe diseñarse desde el comienzo?</li>
+    <li>¿Qué significa mínima complejidad suficiente?</li>
+    <li>¿Qué tres métricas utilizarías para evaluar un asistente documental?</li>
+  </ol>
+
+  <div class="callout">
+    <strong>Criterio de aprobación</strong>
+    Puedes explicar los cinco niveles sin leer, aplicar la regla de mínima complejidad a un caso real y defender por qué elegiste workflow o agente.
+  </div>
+</section>
+
+<section id="fuentes">
+  <h2>15. Fuentes y lecturas recomendadas</h2>
+  <ol class="ref-list">
+    <li id="ref1"><strong>Anthropic — “Building effective agents”.</strong> Distinción entre workflows y agentes; patrones de encadenamiento, routing, paralelización, orchestrator-workers y evaluator-optimizer; recomendación de comenzar con soluciones simples. <a href="https://www.anthropic.com/engineering/building-effective-agents">Fuente oficial</a>.</li>
+    <li id="ref2"><strong>OpenAI — Agents SDK documentation.</strong> Primitivas y capacidades para construir aplicaciones agénticas: agentes, herramientas, handoffs, sesiones, guardrails, intervención humana, MCP y tracing. <a href="https://openai.github.io/openai-agents-python/">Fuente oficial</a>.</li>
+    <li id="ref3"><strong>Model Context Protocol — Introduction.</strong> Introducción al protocolo abierto para conectar aplicaciones de IA con herramientas y fuentes de datos. <a href="https://modelcontextprotocol.io/docs/getting-started/intro">Fuente oficial</a>.</li>
+    <li id="ref4"><strong>Google — Agent Development Kit.</strong> Framework modular para desarrollar y desplegar agentes y workflows, con soporte para herramientas, sesiones y orquestación. <a href="https://adk.dev/">Fuente oficial</a>.</li>
+    <li id="ref5"><strong>Chip Huyen — AI Engineering: Building Applications with Foundation Models.</strong> Marco general para diseño, evaluación y operación de aplicaciones construidas con modelos fundacionales. O’Reilly Media, 2025.</li>
+  </ol>
+
+  <p class="small">Nota editorial: este módulo sintetiza y explica conceptos con finalidad educativa. Las fuentes se utilizan como fundamento técnico; la redacción, los ejemplos y la arquitectura pedagógica son originales del curso.</p>
+</section>
+
+<div class="footer">
+  <strong>AI Engineering Aplicado — Módulo 1</strong><br>
+  Documento base para revisión pedagógica y posterior integración en la plataforma del curso.<br>
+  Versión 1.0 · 13 de julio de 2026
+</div>
+</main>
+</div>
+</body>
+</html>

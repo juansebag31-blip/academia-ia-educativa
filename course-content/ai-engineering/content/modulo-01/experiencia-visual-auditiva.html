@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Módulo 1 — Experiencia visual y auditiva</title>
+<style>
+:root{--navy:#071a33;--blue:#1769e0;--cyan:#0eb7d4;--ink:#172033;--muted:#5d687b;--line:#d8e2ee}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,#eaf1f8,#fff);color:var(--ink);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;line-height:1.65}
+.hero{padding:64px 24px 42px;background:radial-gradient(circle at 80% 20%,rgba(14,183,212,.22),transparent 26%),linear-gradient(135deg,var(--navy),#0e315c 70%,#0c4963);color:white}
+.hero-inner{max-width:1180px;margin:auto} .badge{display:inline-block;padding:7px 13px;border:1px solid rgba(255,255,255,.35);border-radius:999px;font-size:.82rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+h1{font-size:clamp(2.3rem,5vw,4.6rem);line-height:1.05;margin:.25em 0 .2em} .hero p{max-width:820px;font-size:1.15rem;color:#dceafb}
+.shell{max-width:1220px;margin:auto;padding:28px 22px 80px} .guide{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.step,.card,.notes{background:white;border:1px solid var(--line);border-radius:18px;box-shadow:0 10px 28px rgba(12,39,75,.08)}
+.step{padding:18px} .step strong{display:block;color:var(--blue);margin-bottom:6px} .study-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,.75fr);gap:24px;align-items:start}
+.card{overflow:hidden} .card-head{padding:22px 24px;border-bottom:1px solid var(--line);background:#fbfdff} .card-head h2{margin:0;color:var(--navy);font-size:1.45rem} .card-head p{margin:6px 0 0;color:var(--muted)}
+.infographic-wrap{padding:18px;background:#f3f6fa} .infographic-wrap img{width:100%;display:block;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.10)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px 20px 22px} .btn{display:inline-flex;align-items:center;justify-content:center;padding:11px 15px;border-radius:10px;text-decoration:none;font-weight:700;border:1px solid var(--line);color:var(--navy);background:white} .btn.primary{background:var(--blue);color:white;border-color:var(--blue)}
+.audio-panel{padding:24px} audio{width:100%;margin:12px 0 18px} .duration{display:inline-block;background:#edf6ff;color:#0b4f9c;padding:6px 10px;border-radius:999px;font-size:.88rem;font-weight:700}
+.callout{margin:18px 0;padding:16px 18px;border-left:5px solid var(--cyan);background:#effbfe;border-radius:12px} .reflection{margin-top:24px;padding:22px;border-radius:16px;background:#f1f7ff;border:1px solid #cfe1fb}
+.notes{margin-top:28px;padding:24px} textarea{width:100%;min-height:170px;border:1px solid var(--line);border-radius:12px;padding:14px;font:inherit;background:#fbfdff}
+.footer{text-align:center;color:var(--muted);padding:36px 20px 0}
+@media(max-width:920px){.study-grid{grid-template-columns:1fr}.guide{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.guide{grid-template-columns:1fr}.shell{padding-left:14px;padding-right:14px}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="hero-inner">
+<span class="badge">AI Engineering Aplicado · Módulo 1</span>
+<h1>Estudio visual y auditivo</h1>
+<p>Abre la infografía, reproduce la explicación y sigue cada bloque con la mirada. Esta experiencia combina organización visual, explicación auditiva y reflexión personal.</p>
+</div></header>
+
+<main class="shell">
+<section class="guide">
+<div class="step"><strong>Paso 1</strong>Observa primero la estructura completa.</div>
+<div class="step"><strong>Paso 2</strong>Reproduce el audio y sigue los bloques.</div>
+<div class="step"><strong>Paso 3</strong>Pausa para revisar relaciones importantes.</div>
+<div class="step"><strong>Paso 4</strong>Explica las diferencias con tus palabras.</div>
+</section>
+
+<section class="study-grid">
+<article class="card">
+<div class="card-head"><h2>Infografía educativa definitiva</h2><p>De un modelo a un sistema inteligente</p></div>
+<div class="infographic-wrap"><a href="assets/modulo-01-infografia.png" target="_blank"><img src="assets/modulo-01-infografia.png" alt="Infografía del Módulo 1"></a></div>
+<div class="actions"><a class="btn primary" href="assets/modulo-01-infografia.png" target="_blank">Abrir en pantalla completa</a><a class="btn" href="assets/modulo-01-infografia.png" download>Descargar PNG</a></div>
+</article>
+
+<aside class="card">
+<div class="card-head"><h2>Audio explicativo</h2><p>Clase guiada creada a partir del contenido, la infografía y las fuentes.</p></div>
+<div class="audio-panel">
+<span class="duration">Duración aproximada: 25 min</span>
+<audio controls preload="metadata"><source src="assets/modulo-01-audio-explicativo.mp3" type="audio/mpeg"><source src="assets/modulo-01-audio-explicativo.m4a" type="audio/mp4">Tu navegador no puede reproducir este audio.</audio>
+<div class="callout"><strong>Cómo escucharlo</strong><br>Mantén la infografía visible. El audio explica el mapa completo; no es una lectura mecánica.</div>
+<h3>Mientras escuchas, identifica:</h3>
+<ul>
+<li>Modelo frente a aplicación.</li><li>Workflow frente a agente.</li><li>Herramientas, RAG, memoria y evaluación.</li><li>Regla de mínima complejidad.</li><li>Supervisión humana.</li>
+</ul>
+<div class="actions" style="padding:10px 0 0"><a class="btn" href="assets/modulo-01-audio-explicativo.m4a" download>Descargar M4A</a><a class="btn" href="assets/modulo-01-audio-explicativo.mp3" download>Descargar MP3</a><a class="btn" href="assets/modulo-01-guion-base.html" target="_blank">Leer guion base</a></div>
+</div>
+</aside>
+</section>
+
+<section class="reflection"><h3>Actividad de consolidación</h3>
+<ol><li>¿Por qué un modelo no es todavía un producto?</li><li>¿Cuándo conviene un workflow y cuándo un agente?</li><li>¿Qué justifica un sistema multiagente?</li><li>¿Qué componentes vuelven confiable a una aplicación?</li><li>¿Cómo se aplica la mínima complejidad al caso real?</li></ol>
+</section>
+
+<section class="notes"><h2 style="margin-top:0;color:var(--navy)">Notas personales</h2><textarea placeholder="Escribe aquí conceptos, preguntas o relaciones que quieras recordar..."></textarea></section>
+<div class="footer">AI Engineering Aplicado · Módulo 1 · Experiencia visual y auditiva v1.0</div>
+</main>
+</body>
+</html>
