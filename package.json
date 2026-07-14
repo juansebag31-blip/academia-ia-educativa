@@ -3,14 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "npm run content:prepare:ai-engineering",
     "dev": "next dev",
+    "prebuild": "npm run content:prepare:ai-engineering",
     "build": "next build",
     "start": "next start",
+    "prelint": "npm run content:prepare:ai-engineering",
     "lint": "eslint .",
+    "pretest": "npm run content:prepare:ai-engineering",
     "test": "vitest run",
+    "pretest:watch": "npm run content:prepare:ai-engineering",
     "test:watch": "vitest",
     "db:seed": "tsx scripts/seed-db.ts",
     "content:import": "tsx scripts/import-pdfs.ts",
+    "content:prepare:ai-engineering": "tsx scripts/prepare-ai-engineering-content.ts",
     "kit:generate": "python scripts/generate_prompt_kit.py"
   },
   "dependencies": {
@@ -34,6 +40,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@types/better-sqlite3": "^7.6.12",
+    "@types/jsdom": "^28.0.3",
     "@types/node": "^22.10.5",
     "@types/pdf-parse": "^1.1.5",
     "@types/react": "^19.0.2",

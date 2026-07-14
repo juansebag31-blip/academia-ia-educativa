@@ -10,24 +10,47 @@ import { ModuleResourceLibrary } from "@/components/module-resource-library";
 import { ModuleSourceDocument } from "@/components/module-source-document";
 import { LocalLessonStatus, LocalModuleProgress } from "@/components/learning/local-progress";
 import { VideoPlayer } from "@/components/video-player";
-import { findAdjacentModules, findModuleBySlug } from "@/lib/course";
-import { courseSeed } from "@/lib/course-seed";
+import { findAdjacentModules } from "@/lib/course";
+import { getModuleRouteParams, resolveCourseModule } from "@/lib/courses/catalog";
 import { getModuleResourceBundle } from "@/lib/module-resource-bundles";
+
+export function generateStaticParams() {
+  return getModuleRouteParams();
+}
 
 export default async function ModulePage({ params }: { params: Promise<{ courseSlug: string; moduleSlug: string }> }) {
   const { courseSlug, moduleSlug } = await params;
+  const resolvedModule = resolveCourseModule(courseSlug, moduleSlug);
 
-  if (courseSlug !== courseSeed.slug) {
+  if (!resolvedModule) {
     notFound();
   }
 
-  const courseModule = findModuleBySlug(courseSeed, moduleSlug);
-  if (!courseModule) {
-    notFound();
+  if (resolvedModule.kind === "ai-engineering") {
+    return (
+      <section className="rounded-2xl border border-line-soft bg-white p-7 shadow-card">
+        <Link
+          href={`/courses/${resolvedModule.course.summary.slug}`}
+          className="text-sm font-bold text-slate-500 hover:text-ember"
+        >
+          Volver al curso
+        </Link>
+        <p className="mt-6 text-sm font-bold uppercase tracking-wide text-ember">
+          Módulo {resolvedModule.summary.order} · Datos preparados
+        </p>
+        <h1 className="mt-3 text-3xl font-black leading-tight">{resolvedModule.summary.title}</h1>
+        <p className="mt-4 max-w-3xl text-slate-600">
+          Los HTML normalizados, el guion y los medios ya están disponibles en la capa de datos.
+          Su renderer pedagógico y visual corresponde a la Fase 2.
+        </p>
+      </section>
+    );
   }
 
+  const activeCourse = resolvedModule.course.course;
+  const courseModule = resolvedModule.module;
   const resourceBundle = getModuleResourceBundle(courseModule.slug);
-  const adjacentModules = findAdjacentModules(courseSeed, courseModule.slug);
+  const adjacentModules = findAdjacentModules(activeCourse, courseModule.slug);
 
   return (
     <div className="space-y-8">
@@ -49,14 +72,14 @@ export default async function ModulePage({ params }: { params: Promise<{ courseS
                 Ver PDF del módulo
               </a>
               <Link
-                href={`/courses/${courseSeed.slug}/lessons/${courseModule.lessons[0].slug}`}
+                href={`/courses/${activeCourse.slug}/lessons/${courseModule.lessons[0].slug}`}
                 className="inline-flex items-center gap-2 rounded-xl bg-ember px-5 py-3 text-sm font-bold text-white hover:bg-ember-dark"
               >
                 Empezar módulo
                 <ArrowRight size={18} />
               </Link>
               <Link
-                href={`/courses/${courseSeed.slug}/modules/${courseModule.slug}/exam`}
+                href={`/courses/${activeCourse.slug}/modules/${courseModule.slug}/exam`}
                 className="inline-flex items-center gap-2 rounded-xl bg-ink px-5 py-3 text-sm font-bold text-white hover:bg-slate-800"
               >
                 <Award size={18} />
@@ -107,7 +130,7 @@ export default async function ModulePage({ params }: { params: Promise<{ courseS
             return (
               <Link
                 key={lesson.slug}
-                href={`/courses/${courseSeed.slug}/lessons/${lesson.slug}`}
+                href={`/courses/${activeCourse.slug}/lessons/${lesson.slug}`}
                 className="flex flex-col gap-4 p-5 transition hover:bg-blue-50 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div className="flex gap-4">
@@ -127,12 +150,12 @@ export default async function ModulePage({ params }: { params: Promise<{ courseS
 
       <ModuleExamCallout
         courseModule={courseModule}
-        courseSlug={courseSeed.slug}
+        courseSlug={activeCourse.slug}
         latestAttempt={undefined}
       />
 
       <ModuleNavigation
-        courseSlug={courseSeed.slug}
+        courseSlug={activeCourse.slug}
         previous={adjacentModules.previous}
         next={adjacentModules.next}
       />

@@ -17,6 +17,8 @@ tsconfig.tsbuildinfo
 .vercel
 .tools/
 .generated/
+src/generated/ai-engineering/
+public/ai-engineering-assets/
 .superpowers
 supabase/.branches
 supabase/.temp
