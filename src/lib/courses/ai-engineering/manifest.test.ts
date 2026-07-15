@@ -6,6 +6,7 @@ import { JSDOM } from "jsdom";
 import {
   generatedModulePath,
   prepareAiEngineeringContent,
+  presentationSlides,
   projectRoot,
 } from "../../../../scripts/prepare-ai-engineering-content";
 import type { PreparedAiEngineeringModule } from "@/lib/courses/types";
@@ -46,6 +47,7 @@ describe("AI Engineering manifest preparation", () => {
       prepared.assets.audioScript.sourcePath,
       prepared.assets.presentation.sourcePath,
       ...prepared.assets.cases.map((item) => item.sourcePath),
+      ...presentationSlides.map((slide) => slide.sourcePath),
     ];
 
     for (const sourcePath of sourcePaths) {
@@ -66,6 +68,14 @@ describe("AI Engineering manifest preparation", () => {
       const source = await readFile(path.join(projectRoot, "course-content", "ai-engineering", asset.sourcePath));
       const copied = await readFile(path.join(projectRoot, "public", asset.publicPath.replace(/^\//, "")));
       expect(hash(copied), asset.publicPath).toBe(hash(source));
+    }
+
+    expect(presentationSlides).toHaveLength(17);
+    for (const slide of presentationSlides) {
+      expect(slide.publicPath).toMatch(/^\/ai-engineering-assets\/modulo-01\/slides\/slide-\d{2}\.webp$/);
+      const source = await readFile(path.join(projectRoot, "course-content", "ai-engineering", slide.sourcePath));
+      const copied = await readFile(path.join(projectRoot, "public", slide.publicPath.replace(/^\//, "")));
+      expect(hash(copied), slide.publicPath).toBe(hash(source));
     }
 
     expect(prepared.assets.audioM4a).toEqual({

@@ -1,10 +1,13 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { resolveCourse } from "@/lib/courses/catalog";
+import { getAiEngineeringModulePresentation } from "@/lib/courses/ai-engineering/module-presentations";
+import { getAiEngineeringModuleVisuals } from "@/lib/courses/ai-engineering/module-visuals";
 import { AiEngineeringCases } from "./ai-engineering-cases";
 import { AiEngineeringCourseOverview } from "./ai-engineering-course-overview";
 import { AiEngineeringInfographic } from "./ai-engineering-infographic";
 import { AiEngineeringModulePage } from "./ai-engineering-module-page";
+import { AiEngineeringPresentationViewer } from "./ai-engineering-presentation-viewer";
 
 const course = resolveCourse("ai-engineering-aplicado");
 if (!course || course.kind !== "ai-engineering") {
@@ -45,6 +48,15 @@ describe("AI Engineering visual renderer", () => {
     expect(container.querySelectorAll("#contenido article")).toHaveLength(12);
     expect(screen.getByText(/Mapa de un proceso real/i)).toBeInTheDocument();
     expect(screen.getByText(/Anthropic.*Building effective agents/i)).toBeInTheDocument();
+    expect(screen.getAllByText("Síntesis visual")).toHaveLength(5);
+    expect(screen.getAllByText("Idea esencial")).toHaveLength(3);
+    expect(getAiEngineeringModuleVisuals(moduleOne.summary.slug).map((visual) => visual.afterSection)).toEqual([
+      "aplicacion",
+      "agente",
+      "componentes",
+      "complejidad",
+      "caso",
+    ]);
     expect(screen.getByRole("link", { name: "Descargar PPTX" })).toHaveAttribute(
       "href",
       moduleOne.assets.presentation.publicPath,
@@ -55,6 +67,39 @@ describe("AI Engineering visual renderer", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Reproducir Audio explicativo del Módulo 1" }));
     expect(container.querySelector("audio source")).toHaveAttribute("src", moduleOne.assets.audioMp3.publicPath);
+  });
+
+  it("opens the 17-slide presentation and supports controls, keyboard and fullscreen", () => {
+    const presentation = getAiEngineeringModulePresentation(moduleOne.summary.slug);
+    if (!presentation) throw new Error("Presentation fixture is unavailable.");
+
+    render(
+      <AiEngineeringPresentationViewer
+        presentation={presentation}
+        downloadHref={moduleOne.assets.presentation.publicPath}
+      />,
+    );
+
+    expect(presentation.slides).toHaveLength(17);
+    fireEvent.click(screen.getByRole("button", { name: "Abrir presentación" }));
+    expect(screen.getByText("Diapositiva 1 de 17")).toBeInTheDocument();
+    expect(screen.getByRole("img")).toHaveAttribute("alt", presentation.slides[0].alt);
+    expect(screen.getByRole("button", { name: "Diapositiva anterior" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Diapositiva siguiente" })).toBeEnabled();
+
+    fireEvent.keyDown(window, { key: "ArrowRight" });
+    expect(screen.getByText("Diapositiva 2 de 17")).toBeInTheDocument();
+    expect(screen.getByRole("img")).toHaveAttribute("alt", presentation.slides[1].alt);
+
+    fireEvent.click(screen.getByRole("button", { name: "Abrir en pantalla completa" }));
+    expect(screen.getByRole("dialog", { name: "Presentación en pantalla completa" })).toBeInTheDocument();
+
+    fireEvent.keyDown(window, { key: "Escape" });
+    expect(screen.queryByRole("dialog", { name: "Presentación en pantalla completa" })).not.toBeInTheDocument();
+    expect(screen.getByText("Diapositiva 2 de 17")).toBeInTheDocument();
+
+    fireEvent.keyDown(window, { key: "Escape" });
+    expect(screen.queryByText("Diapositiva 2 de 17")).not.toBeInTheDocument();
   });
 
   it("opens the infographic, traps it as a dialog and closes with Escape", () => {

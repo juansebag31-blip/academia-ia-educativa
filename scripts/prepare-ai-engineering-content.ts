@@ -7,6 +7,7 @@ import {
   AI_ENGINEERING_COURSE_SLUG,
   aiEngineeringManifest,
 } from "../src/lib/courses/ai-engineering/manifest";
+import { aiEngineeringModulePresentations } from "../src/lib/courses/ai-engineering/module-presentations";
 import type {
   AiEngineeringAssets,
   AiEngineeringPreparedHtml,
@@ -31,6 +32,8 @@ export const publicModuleRoot = path.join(
 );
 
 const publicUrlRoot = `/ai-engineering-assets/${aiEngineeringManifest.module.id}`;
+export const presentationSlides =
+  aiEngineeringModulePresentations[aiEngineeringManifest.module.id]?.slides ?? [];
 
 const publicAssets = {
   infographic: {
@@ -112,6 +115,7 @@ async function verifySourceFiles(assets: AiEngineeringAssets) {
     assets.audioScript.sourcePath,
     assets.presentation.sourcePath,
     ...assets.cases.map((item) => item.sourcePath),
+    ...presentationSlides.map((slide) => slide.sourcePath),
   ];
 
   for (const sourcePath of sourcePaths) {
@@ -130,6 +134,13 @@ async function copyPublicAssets(assets: AiEngineeringAssets) {
     const destination = path.join(projectRoot, "public", asset.publicPath.replace(/^\//, ""));
     assertInside(publicModuleRoot, destination);
     await copyFile(resolveSourcePath(asset.sourcePath), destination);
+  }
+
+  for (const slide of presentationSlides) {
+    const destination = path.join(projectRoot, "public", slide.publicPath.replace(/^\//, ""));
+    assertInside(publicModuleRoot, destination);
+    await mkdir(path.dirname(destination), { recursive: true });
+    await copyFile(resolveSourcePath(slide.sourcePath), destination);
   }
 }
 

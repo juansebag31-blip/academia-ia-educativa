@@ -5,20 +5,28 @@ import {
   BookOpen,
   BriefcaseBusiness,
   Clock3,
-  Download,
   FileAudio,
   FileImage,
-  FileText,
   Library,
   ListChecks,
   PencilLine,
   Presentation,
 } from "lucide-react";
 import { DeferredAudio } from "@/components/deferred-media";
+import { getAiEngineeringModulePresentation } from "@/lib/courses/ai-engineering/module-presentations";
+import {
+  getAiEngineeringModuleKeyIdeas,
+  getAiEngineeringModuleVisuals,
+} from "@/lib/courses/ai-engineering/module-visuals";
 import type { AiEngineeringCourseDefinition, AiEngineeringModule } from "@/lib/courses/types";
 import { AiEngineeringActivity } from "./ai-engineering-activity";
 import { AiEngineeringCases } from "./ai-engineering-cases";
 import { AiEngineeringInfographic } from "./ai-engineering-infographic";
+import {
+  AiEngineeringKeyIdeaCard,
+  AiEngineeringLearningVisual,
+} from "./ai-engineering-learning-visual";
+import { AiEngineeringPresentationViewer } from "./ai-engineering-presentation-viewer";
 import { AiEngineeringSelfAssessment } from "./ai-engineering-self-assessment";
 import { SanitizedHtml } from "./sanitized-html";
 
@@ -46,6 +54,9 @@ export function AiEngineeringModulePage({
   const activity = findSection(module, "actividad");
   const evaluation = findSection(module, "evaluacion");
   const sources = findSection(module, "fuentes");
+  const learningVisuals = getAiEngineeringModuleVisuals(module.summary.slug);
+  const keyIdeas = getAiEngineeringModuleKeyIdeas(module.summary.slug);
+  const presentation = getAiEngineeringModulePresentation(module.summary.slug);
 
   return (
     <div className="space-y-7 pb-12">
@@ -117,11 +128,28 @@ export function AiEngineeringModulePage({
             </div>
           ) : null}
           <div className="divide-y divide-slate-200">
-            {foundationalSections.map((section) => (
-              <article key={section.id} id={section.id} className="scroll-mt-28 py-7 first:pt-0 last:pb-0">
-                <SanitizedHtml html={section.html} />
-              </article>
-            ))}
+            {foundationalSections.map((section) => {
+              const sectionVisuals = learningVisuals.filter(
+                (visual) => visual.afterSection === section.id,
+              );
+              const sectionIdeas = keyIdeas.filter(
+                (idea) => idea.afterSection === section.id,
+              );
+
+              return (
+                <div key={section.id}>
+                  <article id={section.id} className="scroll-mt-28 py-7 first:pt-0">
+                    <SanitizedHtml html={section.html} />
+                  </article>
+                  {sectionVisuals.map((visual) => (
+                    <AiEngineeringLearningVisual key={visual.visualId} visual={visual} />
+                  ))}
+                  {sectionIdeas.map((idea) => (
+                    <AiEngineeringKeyIdeaCard key={idea.ideaId} idea={idea} />
+                  ))}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -159,23 +187,12 @@ export function AiEngineeringModulePage({
       </ModuleSection>
 
       <ModuleSection id="presentacion" icon={<Presentation />} eyebrow="Presentación" title="Material de presentación">
-        <div className="flex flex-col gap-5 rounded-2xl border border-[#0f766e]/20 bg-[#f3f7f6] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
-          <div className="flex gap-4">
-            <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-[#0b1f33] text-white"><FileText /></span>
-            <div>
-              <p className="font-black text-slate-950">Módulo 1 · Presentación PPTX</p>
-              <p className="mt-1 text-sm text-slate-600">Archivo original preparado para el módulo.</p>
-            </div>
-          </div>
-          <a
-            href={module.assets.presentation.publicPath}
-            download
-            className="focus-ring inline-flex items-center justify-center gap-2 rounded-xl bg-[#0f766e] px-5 py-3 text-sm font-black text-white hover:bg-[#0b5f59]"
-          >
-            <Download size={18} />
-            Descargar PPTX
-          </a>
-        </div>
+        {presentation ? (
+          <AiEngineeringPresentationViewer
+            presentation={presentation}
+            downloadHref={module.assets.presentation.publicPath}
+          />
+        ) : null}
       </ModuleSection>
 
       <ModuleSection id="actividad" icon={<PencilLine />} eyebrow="Actividad">
