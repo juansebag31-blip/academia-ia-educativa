@@ -36,7 +36,7 @@ export function AiEngineeringCases({ cases }: { cases: AiEngineeringPreparedCase
               tabIndex={activeIndex === index ? 0 : -1}
               onClick={() => setActiveIndex(index)}
               onKeyDown={(event) => moveTab(event, index)}
-              className="focus-ring rounded-xl border border-slate-300 px-4 py-3 text-left text-sm font-black text-slate-700 aria-selected:border-cyan-400 aria-selected:bg-cyan-50 aria-selected:text-cyan-900"
+              className="focus-ring rounded-xl border border-slate-300 px-4 py-3 text-left text-sm font-black text-slate-700 aria-selected:border-[#0f766e] aria-selected:bg-[#e8f5f2] aria-selected:text-[#0b1f33]"
             >
               {caseItem.title}
             </button>
@@ -63,7 +63,7 @@ export function AiEngineeringCases({ cases }: { cases: AiEngineeringPreparedCase
             <summary className="focus-ring cursor-pointer list-none rounded-xl px-4 py-4 font-black text-slate-800 marker:content-none">
               <span className="flex items-center justify-between gap-3">
                 {caseItem.title}
-                <span aria-hidden="true" className="text-cyan-700 group-open:rotate-45 motion-reduce:transition-none">+</span>
+                <span aria-hidden="true" className="text-[#0f766e] group-open:rotate-45 motion-reduce:transition-none">+</span>
               </span>
             </summary>
             <div className="border-t border-slate-200 p-4">

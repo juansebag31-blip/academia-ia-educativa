@@ -16,7 +16,7 @@
 .content h1,
 .content h2,
 .content h3 {
-  color: #071a2b;
+  color: #0b1f33;
   font-weight: 900;
   letter-spacing: -0.025em;
   line-height: 1.2;
@@ -70,21 +70,21 @@
 }
 
 .content a {
-  color: #0369a1;
+  color: #0f766e;
   font-weight: 750;
   text-decoration: underline;
-  text-decoration-color: #67e8f9;
+  text-decoration-color: #5eead4;
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
 }
 
 .content a:hover {
-  color: #0e7490;
+  color: #0b5f59;
 }
 
 .content a:focus-visible {
   border-radius: 0.2rem;
-  outline: 3px solid #22d3ee;
+  outline: 3px solid #2dd4bf;
   outline-offset: 3px;
 }
 
@@ -95,7 +95,7 @@
 }
 
 .content :global(.kicker) {
-  color: #0891b2;
+  color: #0f766e;
   display: inline-block;
   font-size: 0.75rem;
   font-weight: 900;
@@ -113,10 +113,10 @@
 
 .content :global(.meta) span,
 .content :global(.term) {
-  background: #ecfeff;
-  border: 1px solid #a5f3fc;
+  background: #e8f5f2;
+  border: 1px solid #b7ddd6;
   border-radius: 999px;
-  color: #155e75;
+  color: #0f5f59;
   display: inline-flex;
   font-size: 0.78rem;
   font-weight: 800;
@@ -133,7 +133,7 @@
 .content :global(.box) {
   background: #f8fafc;
   border: 1px solid #cbd5e1;
-  border-left: 4px solid #06b6d4;
+  border-left: 4px solid #0f766e;
   border-radius: 0.85rem;
   padding: 1rem 1.1rem;
 }
@@ -150,8 +150,8 @@
 
 .content :global(.decision),
 .content :global(.interview) {
-  background: #f5f3ff;
-  border-left-color: #8b5cf6;
+  background: #eef7f5;
+  border-left-color: #0f766e;
 }
 
 .content :global(.grid) {
@@ -168,8 +168,8 @@
 }
 
 .content :global(.flow) > * {
-  background: #ecfeff;
-  border: 1px solid #a5f3fc;
+  background: #e8f5f2;
+  border: 1px solid #b7ddd6;
   border-radius: 0.65rem;
   flex: 1 1 8rem;
   padding: 0.7rem;
@@ -194,7 +194,7 @@
 }
 
 .content th {
-  background: #0f2940;
+  background: #0b1f33;
   color: white;
   font-size: 0.83rem;
 }
@@ -210,7 +210,7 @@
 }
 
 .content :global(.checklist) li::before {
-  border: 2px solid #0891b2;
+  border: 2px solid #0f766e;
   border-radius: 0.25rem;
   content: "";
   height: 0.9rem;

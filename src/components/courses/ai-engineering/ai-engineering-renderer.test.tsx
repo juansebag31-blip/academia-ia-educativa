@@ -17,25 +17,31 @@ describe("AI Engineering visual renderer", () => {
     render(<AiEngineeringCourseOverview course={course} />);
 
     expect(screen.getByRole("heading", { level: 1, name: "AI Engineering Aplicado" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Abrir Módulo 1" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Comenzar Módulo 1" })).toHaveAttribute(
       "href",
       "/courses/ai-engineering-aplicado/modules/modulo-01",
     );
-    expect(screen.getByRole("img", { name: /Infografía del Módulo 1/i })).toHaveAttribute(
-      "src",
-      expect.stringContaining("modulo-01-infografia.png"),
-    );
+    expect(screen.getByText("Arquitectura de un sistema inteligente")).toBeInTheDocument();
+    expect(screen.getByText("Modelo / RAG / Herramientas")).toBeInTheDocument();
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+    expect(screen.getAllByText("Disponible")).toHaveLength(1);
+    expect(screen.getAllByText("Próximamente")).toHaveLength(11);
+    expect(screen.getByText("JSG AI Engineering Hub v0.1")).toBeInTheDocument();
+    expect(screen.queryByText("Ruta pedagógica")).not.toBeInTheDocument();
   });
 
   it("renders the complete module structure and approved assets", () => {
     const { container } = render(<AiEngineeringModulePage course={course} module={moduleOne} />);
 
-    const navigation = screen.getByRole("navigation", { name: "Navegación interna del módulo" });
-    expect(within(navigation).getAllByRole("link")).toHaveLength(8);
-    expect(within(navigation).getByRole("link", { name: "Autoevaluación" })).toHaveAttribute(
+    const navigation = screen.getByRole("navigation", { name: "Navegación interna del módulo", hidden: true });
+    expect(within(navigation).getAllByRole("link", { hidden: true })).toHaveLength(8);
+    expect(within(navigation).getByRole("link", { name: "07 Autoevaluación", hidden: true })).toHaveAttribute(
       "href",
       "#autoevaluacion",
     );
+    expect(screen.getByText("Recorrido del módulo · 8 etapas")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Comenzar módulo" })).toHaveAttribute("href", "#contenido");
+    expect(screen.queryByText("approved-content-ready-for-integration")).not.toBeInTheDocument();
     expect(container.querySelectorAll("#contenido article")).toHaveLength(12);
     expect(screen.getByText(/Mapa de un proceso real/i)).toBeInTheDocument();
     expect(screen.getByText(/Anthropic.*Building effective agents/i)).toBeInTheDocument();
@@ -43,6 +49,8 @@ describe("AI Engineering visual renderer", () => {
       "href",
       moduleOne.assets.presentation.publicPath,
     );
+    expect(screen.getByLabelText("Tu respuesta")).toBeInTheDocument();
+    expect(screen.getAllByLabelText(/Respuesta \d/)).toHaveLength(8);
     expect(container.querySelector("audio")).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Reproducir Audio explicativo del Módulo 1" }));

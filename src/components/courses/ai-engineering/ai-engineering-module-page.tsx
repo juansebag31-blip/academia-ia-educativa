@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   ArrowLeft,
+  ArrowRight,
   BookOpen,
   BriefcaseBusiness,
   Clock3,
@@ -12,13 +13,13 @@ import {
   ListChecks,
   PencilLine,
   Presentation,
-  Route,
 } from "lucide-react";
 import { DeferredAudio } from "@/components/deferred-media";
 import type { AiEngineeringCourseDefinition, AiEngineeringModule } from "@/lib/courses/types";
-import { formatLearningPathLabel } from "@/lib/courses/ai-engineering/learning-path";
+import { AiEngineeringActivity } from "./ai-engineering-activity";
 import { AiEngineeringCases } from "./ai-engineering-cases";
 import { AiEngineeringInfographic } from "./ai-engineering-infographic";
+import { AiEngineeringSelfAssessment } from "./ai-engineering-self-assessment";
 import { SanitizedHtml } from "./sanitized-html";
 
 const navigation = [
@@ -48,66 +49,70 @@ export function AiEngineeringModulePage({
 
   return (
     <div className="space-y-7 pb-12">
-      <section className="relative overflow-hidden rounded-3xl border border-cyan-900/50 bg-[#071a2b] text-white shadow-2xl">
-        <div className="absolute inset-0 opacity-35 [background-image:radial-gradient(circle_at_20%_15%,rgba(34,211,238,.28),transparent_30%),linear-gradient(rgba(34,211,238,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,.12)_1px,transparent_1px)] [background-size:auto,30px_30px,30px_30px]" />
-        <div className="relative p-7 sm:p-10 lg:p-12">
+      <section className="relative overflow-hidden rounded-3xl border border-[#0f766e]/20 bg-[linear-gradient(135deg,#ffffff_0%,#f3f7f6_62%,#e8f5f2_100%)] shadow-[0_20px_60px_rgba(11,31,51,0.10)]">
+        <div className="absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,#0b1f33,#0f766e,#2dd4bf)]" />
+        <div className="relative p-6 sm:p-8 lg:p-10">
           <Link
             href={`/courses/${course.summary.slug}`}
-            className="focus-ring inline-flex items-center gap-2 rounded-lg text-sm font-bold text-cyan-200 hover:text-white"
+            className="focus-ring inline-flex items-center gap-2 rounded-lg text-sm font-bold text-[#0f766e] hover:text-[#0b1f33]"
           >
             <ArrowLeft size={17} />
             Volver a {course.summary.title}
           </Link>
-          <div className="mt-10 grid gap-8 xl:grid-cols-[1fr_360px] xl:items-end">
+          <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.23em] text-cyan-300">Módulo {module.summary.order}</p>
-              <h1 className="mt-4 max-w-4xl text-4xl font-black leading-[1.08] tracking-tight sm:text-5xl">
+              <div className="flex flex-wrap gap-2 text-xs font-black uppercase tracking-[0.14em] text-[#0f766e]">
+                <span>Módulo {module.summary.order}</span>
+                <span aria-hidden="true">·</span>
+                <span>Nivel fundacional</span>
+              </div>
+              <h1 className="mt-3 max-w-4xl text-3xl font-black leading-[1.08] tracking-tight text-[#0b1f33] sm:text-4xl lg:text-5xl">
                 {module.summary.title}
               </h1>
-              <div className="mt-6 flex flex-wrap gap-3 text-sm font-bold text-slate-200">
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2">
-                  <Clock3 size={17} className="text-cyan-300" />
+              <div className="mt-5 flex flex-wrap gap-3 text-sm font-bold text-slate-700">
+                <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2">
+                  <Clock3 size={17} className="text-[#0f766e]" />
                   {module.estimatedStudyMinutes} minutos
                 </span>
-                <span className="max-w-full break-all rounded-full border border-white/15 bg-white/10 px-4 py-2">
-                  Estado: {module.status}
-                </span>
               </div>
             </div>
-            <div className="rounded-2xl border border-cyan-300/25 bg-slate-950/35 p-5">
-              <div className="flex items-center gap-2 text-cyan-300">
-                <Route size={18} />
-                <h2 className="text-sm font-black uppercase tracking-wider">Ruta pedagógica</h2>
-              </div>
-              <ol className="mt-4 grid grid-cols-2 gap-2">
-                {module.learningPath.map((unit) => (
-                  <li key={unit.id} className="rounded-lg bg-white/10 px-3 py-2 text-xs font-bold text-slate-100">
-                    {unit.order}. {formatLearningPathLabel(unit.sourceKey)}
-                  </li>
-                ))}
-              </ol>
-            </div>
+            <a
+              href="#contenido"
+              className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0f766e] px-5 py-3.5 text-sm font-black text-white shadow-lg shadow-emerald-950/15 hover:bg-[#0b5f59] sm:w-fit"
+            >
+              Comenzar módulo
+              <ArrowRight size={18} />
+            </a>
           </div>
         </div>
       </section>
 
-      <nav aria-label="Navegación interna del módulo" className="sticky top-3 z-30 overflow-x-auto rounded-2xl border border-slate-200 bg-white/95 p-2 shadow-card backdrop-blur">
-        <ul className="flex min-w-max gap-1">
-          {navigation.map(([href, label]) => (
-            <li key={href}>
-              <a href={`#${href}`} className="focus-ring block rounded-xl px-3 py-2 text-sm font-black text-slate-600 hover:bg-cyan-50 hover:text-cyan-800">
-                {label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      <details className="group sticky top-3 z-30 rounded-2xl border border-slate-200 bg-white/95 shadow-card backdrop-blur">
+        <summary className="focus-ring cursor-pointer list-none rounded-2xl px-5 py-4 font-black text-[#0b1f33] marker:content-none">
+          <span className="flex items-center justify-between gap-4">
+            Recorrido del módulo · 8 etapas
+            <span aria-hidden="true" className="text-xl text-[#0f766e] group-open:rotate-45 motion-reduce:transition-none">+</span>
+          </span>
+        </summary>
+        <nav aria-label="Navegación interna del módulo" className="border-t border-slate-200 p-3">
+          <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            {navigation.map(([href, label], index) => (
+              <li key={href}>
+                <a href={`#${href}`} className="focus-ring flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-black text-slate-600 hover:bg-[#e8f5f2] hover:text-[#0f766e]">
+                  <span className="font-mono text-xs text-[#0f766e]">{String(index + 1).padStart(2, "0")}</span>
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </details>
 
       <section id="contenido" className="scroll-mt-28 rounded-3xl border border-slate-200 bg-white shadow-card">
         <SectionHeading icon={<BookOpen />} eyebrow="Contenido" title="Documento fundacional" />
         <div className="p-5 sm:p-8">
           {module.content.foundational.introHtml ? (
-            <div className="mb-8 rounded-2xl border border-cyan-100 bg-cyan-50/50 p-5 sm:p-7">
+            <div className="mb-8 rounded-2xl border border-[#0f766e]/20 bg-[#f3f7f6] p-5 sm:p-7">
               <SanitizedHtml html={module.content.foundational.introHtml} />
             </div>
           ) : null}
@@ -129,7 +134,7 @@ export function AiEngineeringModulePage({
       </ModuleSection>
 
       <ModuleSection id="audio" icon={<FileAudio />} eyebrow="Audio" title="Audio explicativo">
-        <div className="rounded-2xl bg-[#071a2b] p-5 text-white sm:p-6">
+        <div className="rounded-2xl bg-[#0b1f33] p-5 text-white sm:p-6">
           <DeferredAudio
             src={module.assets.audioMp3.publicPath}
             type={module.assets.audioMp3.mediaType}
@@ -140,7 +145,7 @@ export function AiEngineeringModulePage({
           <summary className="focus-ring cursor-pointer list-none rounded-2xl px-5 py-4 font-black text-slate-800 marker:content-none">
             <span className="flex items-center justify-between gap-3">
               Guion o transcripción
-              <span aria-hidden="true" className="text-cyan-700 group-open:rotate-45 motion-reduce:transition-none">+</span>
+              <span aria-hidden="true" className="text-[#0f766e] group-open:rotate-45 motion-reduce:transition-none">+</span>
             </span>
           </summary>
           <pre className="max-h-[34rem] overflow-auto whitespace-pre-wrap border-t border-slate-200 p-5 font-sans text-sm leading-7 text-slate-700">
@@ -154,9 +159,9 @@ export function AiEngineeringModulePage({
       </ModuleSection>
 
       <ModuleSection id="presentacion" icon={<Presentation />} eyebrow="Presentación" title="Material de presentación">
-        <div className="flex flex-col gap-5 rounded-2xl border border-violet-200 bg-violet-50 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <div className="flex flex-col gap-5 rounded-2xl border border-[#0f766e]/20 bg-[#f3f7f6] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <div className="flex gap-4">
-            <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-violet-700 text-white"><FileText /></span>
+            <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-[#0b1f33] text-white"><FileText /></span>
             <div>
               <p className="font-black text-slate-950">Módulo 1 · Presentación PPTX</p>
               <p className="mt-1 text-sm text-slate-600">Archivo original preparado para el módulo.</p>
@@ -165,7 +170,7 @@ export function AiEngineeringModulePage({
           <a
             href={module.assets.presentation.publicPath}
             download
-            className="focus-ring inline-flex items-center justify-center gap-2 rounded-xl bg-violet-700 px-5 py-3 text-sm font-black text-white hover:bg-violet-800"
+            className="focus-ring inline-flex items-center justify-center gap-2 rounded-xl bg-[#0f766e] px-5 py-3 text-sm font-black text-white hover:bg-[#0b5f59]"
           >
             <Download size={18} />
             Descargar PPTX
@@ -174,11 +179,19 @@ export function AiEngineeringModulePage({
       </ModuleSection>
 
       <ModuleSection id="actividad" icon={<PencilLine />} eyebrow="Actividad">
-        <SanitizedHtml html={activity.html} />
+        <AiEngineeringActivity
+          courseSlug={course.summary.slug}
+          moduleSlug={module.summary.slug}
+          sourceHtml={activity.html}
+        />
       </ModuleSection>
 
       <ModuleSection id="autoevaluacion" icon={<ListChecks />} eyebrow="Autoevaluación">
-        <SanitizedHtml html={evaluation.html} />
+        <AiEngineeringSelfAssessment
+          courseSlug={course.summary.slug}
+          moduleSlug={module.summary.slug}
+          sourceHtml={evaluation.html}
+        />
       </ModuleSection>
 
       <ModuleSection id="fuentes" icon={<Library />} eyebrow="Fuentes">
@@ -223,9 +236,9 @@ function ModuleSection({
 function SectionHeading({ icon, eyebrow, title }: { icon: React.ReactNode; eyebrow: string; title?: string }) {
   return (
     <div className="flex items-start gap-4 border-b border-slate-200 p-5 sm:p-7">
-      <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-cyan-100 text-cyan-800">{icon}</span>
+      <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-[#dff3ef] text-[#0f766e]">{icon}</span>
       <div>
-        <p className="text-xs font-black uppercase tracking-[0.18em] text-cyan-700">{eyebrow}</p>
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-[#0f766e]">{eyebrow}</p>
         {title ? <h2 className="mt-1 text-2xl font-black text-slate-950">{title}</h2> : null}
       </div>
     </div>

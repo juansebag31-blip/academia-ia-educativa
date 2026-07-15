@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { beforeAll, describe, expect, it } from "vitest";
+import { JSDOM } from "jsdom";
 import {
   generatedModulePath,
   prepareAiEngineeringContent,
@@ -111,6 +112,10 @@ describe("AI Engineering manifest preparation", () => {
     ]);
     expect(prepared.content.foundational.introHtml).toContain("Fundamentos para comprender");
     expect(prepared.content.foundational.footerHtml).toContain("Documento base para revisi");
+
+    const evaluation = prepared.content.foundational.sections.find((section) => section.id === "evaluacion");
+    const evaluationDocument = new JSDOM(`<section>${evaluation?.html ?? ""}</section>`).window.document;
+    expect(evaluationDocument.querySelectorAll("ol > li")).toHaveLength(8);
   });
 
   it("rewrites declared relative media links to stable public routes", () => {

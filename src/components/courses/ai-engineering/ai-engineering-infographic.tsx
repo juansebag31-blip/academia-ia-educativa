@@ -61,7 +61,7 @@ export function AiEngineeringInfographic({ src, alt }: AiEngineeringInfographicP
           ref={openerRef}
           type="button"
           onClick={() => setOpen(true)}
-          className="focus-ring group relative mx-auto aspect-[1055/1491] w-full max-w-sm overflow-hidden rounded-2xl border border-cyan-200 bg-slate-950 shadow-xl"
+          className="focus-ring group relative mx-auto aspect-[1055/1491] w-full max-w-sm overflow-hidden rounded-2xl border border-[#0f766e]/25 bg-[#0b1f33] shadow-xl"
           aria-label="Ampliar infografía a pantalla completa"
         >
           <Image
@@ -71,7 +71,7 @@ export function AiEngineeringInfographic({ src, alt }: AiEngineeringInfographicP
             sizes="(max-width: 640px) 88vw, 384px"
             className="object-contain"
           />
-          <span className="absolute inset-x-3 bottom-3 inline-flex items-center justify-center gap-2 rounded-xl bg-slate-950/90 px-4 py-3 text-sm font-black text-white transition group-hover:bg-cyan-950 motion-reduce:transition-none">
+          <span className="absolute inset-x-3 bottom-3 inline-flex items-center justify-center gap-2 rounded-xl bg-[#0b1f33]/95 px-4 py-3 text-sm font-black text-white transition group-hover:bg-[#0f766e] motion-reduce:transition-none">
             <Expand size={18} />
             Ver a pantalla completa
           </span>
@@ -85,7 +85,7 @@ export function AiEngineeringInfographic({ src, alt }: AiEngineeringInfographicP
             <button
               type="button"
               onClick={() => setOpen(true)}
-              className="focus-ring inline-flex items-center gap-2 rounded-xl bg-cyan-700 px-4 py-3 text-sm font-black text-white hover:bg-cyan-800"
+              className="focus-ring inline-flex items-center gap-2 rounded-xl bg-[#0f766e] px-4 py-3 text-sm font-black text-white hover:bg-[#0b5f59]"
             >
               <Expand size={18} />
               Ampliar
@@ -127,7 +127,7 @@ export function AiEngineeringInfographic({ src, alt }: AiEngineeringInfographicP
                 ref={closeButtonRef}
                 type="button"
                 onClick={() => setOpen(false)}
-                className="focus-ring inline-flex items-center gap-2 rounded-xl bg-cyan-300 px-4 py-2 text-sm font-black text-slate-950"
+                className="focus-ring inline-flex items-center gap-2 rounded-xl bg-[#5eead4] px-4 py-2 text-sm font-black text-[#0b1f33]"
               >
                 <X size={18} />
                 Cerrar
