@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowRight, Download, FileText, GraduationCap } from "lucide-react";
 import { ModuleCard } from "@/components/module-card";
 import { ModuleImageFrame } from "@/components/module-image-frame";
+import { AiEngineeringCourseOverview } from "@/components/courses/ai-engineering/ai-engineering-course-overview";
 import { LocalCourseProgress } from "@/components/learning/local-progress";
 import { getCourseRouteParams, resolveCourse } from "@/lib/courses/catalog";
 
@@ -19,24 +20,7 @@ export default async function CoursePage({ params }: { params: Promise<{ courseS
   }
 
   if (courseDefinition.kind === "ai-engineering") {
-    const firstModule = courseDefinition.summary.modules[0];
-    return (
-      <section className="rounded-2xl border border-line-soft bg-white p-7 shadow-card">
-        <p className="text-sm font-bold uppercase tracking-wide text-ember">Fase 1 · Infraestructura multicurso</p>
-        <h1 className="mt-3 text-3xl font-black leading-tight">{courseDefinition.summary.title}</h1>
-        <p className="mt-4 max-w-3xl text-slate-600">
-          El manifiesto y los materiales aprobados ya pueden resolverse desde el catálogo común.
-          La experiencia visual completa se incorporará en la siguiente fase.
-        </p>
-        <Link
-          href={`/courses/${courseDefinition.summary.slug}/modules/${firstModule.slug}`}
-          className="mt-6 inline-flex items-center gap-2 rounded-xl bg-ember px-5 py-3 text-sm font-bold text-white hover:bg-ember-dark"
-        >
-          Ver módulo preparado
-          <ArrowRight size={18} />
-        </Link>
-      </section>
-    );
+    return <AiEngineeringCourseOverview course={courseDefinition} />;
   }
 
   const activeCourse = courseDefinition.course;

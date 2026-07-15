@@ -1,0 +1,247 @@
+.content {
+  color: #334155;
+  font-size: 1rem;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+.content > :first-child {
+  margin-top: 0;
+}
+
+.content > :last-child {
+  margin-bottom: 0;
+}
+
+.content h1,
+.content h2,
+.content h3 {
+  color: #071a2b;
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.content h1 {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  margin-bottom: 1rem;
+}
+
+.content h2 {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  margin-bottom: 1rem;
+}
+
+.content h3 {
+  font-size: 1.15rem;
+  margin: 1.75rem 0 0.65rem;
+}
+
+.content p,
+.content ul,
+.content ol,
+.content table,
+.content :global(.flow),
+.content :global(.grid),
+.content :global(.callout),
+.content :global(.definition),
+.content :global(.decision),
+.content :global(.warning),
+.content :global(.success),
+.content :global(.interview),
+.content :global(.case),
+.content :global(.box) {
+  margin: 0 0 1.1rem;
+}
+
+.content ul,
+.content ol {
+  padding-left: 1.4rem;
+}
+
+.content li + li {
+  margin-top: 0.45rem;
+}
+
+.content strong {
+  color: #0f172a;
+  font-weight: 800;
+}
+
+.content a {
+  color: #0369a1;
+  font-weight: 750;
+  text-decoration: underline;
+  text-decoration-color: #67e8f9;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.content a:hover {
+  color: #0e7490;
+}
+
+.content a:focus-visible {
+  border-radius: 0.2rem;
+  outline: 3px solid #22d3ee;
+  outline-offset: 3px;
+}
+
+.content :global(.lead) {
+  color: #0f172a;
+  font-size: 1.08rem;
+  font-weight: 600;
+}
+
+.content :global(.kicker) {
+  color: #0891b2;
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+}
+
+.content :global(.meta) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 1.4rem;
+}
+
+.content :global(.meta) span,
+.content :global(.term) {
+  background: #ecfeff;
+  border: 1px solid #a5f3fc;
+  border-radius: 999px;
+  color: #155e75;
+  display: inline-flex;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.35rem 0.75rem;
+}
+
+.content :global(.callout),
+.content :global(.definition),
+.content :global(.decision),
+.content :global(.warning),
+.content :global(.success),
+.content :global(.interview),
+.content :global(.case),
+.content :global(.box) {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-left: 4px solid #06b6d4;
+  border-radius: 0.85rem;
+  padding: 1rem 1.1rem;
+}
+
+.content :global(.warning) {
+  background: #fffbeb;
+  border-left-color: #f59e0b;
+}
+
+.content :global(.success) {
+  background: #ecfdf5;
+  border-left-color: #10b981;
+}
+
+.content :global(.decision),
+.content :global(.interview) {
+  background: #f5f3ff;
+  border-left-color: #8b5cf6;
+}
+
+.content :global(.grid) {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.content :global(.flow) {
+  align-items: stretch;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.content :global(.flow) > * {
+  background: #ecfeff;
+  border: 1px solid #a5f3fc;
+  border-radius: 0.65rem;
+  flex: 1 1 8rem;
+  padding: 0.7rem;
+  text-align: center;
+}
+
+.content table {
+  border-collapse: collapse;
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  width: max-content;
+}
+
+.content th,
+.content td {
+  border: 1px solid #cbd5e1;
+  min-width: 9rem;
+  padding: 0.7rem 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.content th {
+  background: #0f2940;
+  color: white;
+  font-size: 0.83rem;
+}
+
+.content :global(.checklist) {
+  list-style: none;
+  padding-left: 0;
+}
+
+.content :global(.checklist) li {
+  padding-left: 1.6rem;
+  position: relative;
+}
+
+.content :global(.checklist) li::before {
+  border: 2px solid #0891b2;
+  border-radius: 0.25rem;
+  content: "";
+  height: 0.9rem;
+  left: 0;
+  position: absolute;
+  top: 0.42rem;
+  width: 0.9rem;
+}
+
+.content :global(.ref-list) li {
+  scroll-margin-top: 8rem;
+}
+
+.content :global(.small),
+.content :global(.footer) {
+  color: #64748b;
+  font-size: 0.86rem;
+}
+
+@media (max-width: 640px) {
+  .content {
+    font-size: 0.95rem;
+  }
+
+  .content :global(.grid) {
+    grid-template-columns: 1fr;
+  }
+
+  .content th,
+  .content td {
+    min-width: 8rem;
+    padding: 0.6rem;
+  }
+}

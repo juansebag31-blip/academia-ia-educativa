@@ -46,15 +46,24 @@ export type AiEngineeringAssets = {
   visualAudioHtml: AiEngineeringSourceAsset;
   infographic: AiEngineeringPublicAsset;
   audioMp3: AiEngineeringPublicAsset;
-  audioM4a: AiEngineeringPublicAsset;
+  audioM4a: AiEngineeringSourceAsset;
   audioScript: AiEngineeringSourceAsset;
   presentation: AiEngineeringPublicAsset;
   cases: AiEngineeringCaseAsset[];
 };
 
+export type AiEngineeringPreparedSection = {
+  id: string;
+  title: string;
+  html: string;
+};
+
 export type AiEngineeringPreparedHtml = {
   title: string;
   html: string;
+  introHtml: string;
+  footerHtml: string;
+  sections: AiEngineeringPreparedSection[];
 };
 
 export type AiEngineeringPreparedCase = AiEngineeringPreparedHtml & {

@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { readFile, stat } from "node:fs/promises";
+import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { beforeAll, describe, expect, it } from "vitest";
 import {
@@ -57,7 +57,6 @@ describe("AI Engineering manifest preparation", () => {
     const publicAssets = [
       prepared.assets.infographic,
       prepared.assets.audioMp3,
-      prepared.assets.audioM4a,
       prepared.assets.presentation,
     ];
 
@@ -67,6 +66,14 @@ describe("AI Engineering manifest preparation", () => {
       const copied = await readFile(path.join(projectRoot, "public", asset.publicPath.replace(/^\//, "")));
       expect(hash(copied), asset.publicPath).toBe(hash(source));
     }
+
+    expect(prepared.assets.audioM4a).toEqual({
+      sourcePath: aiEngineeringManifest.module.assets.audioM4a,
+    });
+    const copiedNames = await readdir(
+      path.join(projectRoot, "public", "ai-engineering-assets", "modulo-01"),
+    );
+    expect(copiedNames.some((fileName) => fileName.toLowerCase().endsWith(".m4a"))).toBe(false);
   });
 
   it("removes document wrappers, global styles, scripts and inline handlers", () => {
@@ -84,10 +91,34 @@ describe("AI Engineering manifest preparation", () => {
     expect(prepared.content.foundational.html).toContain("https://www.anthropic.com/engineering/building-effective-agents");
   });
 
+  it("extracts every approved foundational section without changing its order", () => {
+    expect(prepared.content.foundational.sections.map((section) => section.id)).toEqual([
+      "proposito",
+      "panorama",
+      "modelo",
+      "aplicacion",
+      "workflow",
+      "agente",
+      "multiagente",
+      "componentes",
+      "complejidad",
+      "caso",
+      "arquitectura",
+      "entrevista",
+      "actividad",
+      "evaluacion",
+      "fuentes",
+    ]);
+    expect(prepared.content.foundational.introHtml).toContain("Fundamentos para comprender");
+    expect(prepared.content.foundational.footerHtml).toContain("Documento base para revisi");
+  });
+
   it("rewrites declared relative media links to stable public routes", () => {
     expect(prepared.content.visualAudio.html).toContain(prepared.assets.infographic.publicPath);
     expect(prepared.content.visualAudio.html).toContain(prepared.assets.audioMp3.publicPath);
-    expect(prepared.content.visualAudio.html).toContain(prepared.assets.audioM4a.publicPath);
+    expect(prepared.content.visualAudio.html).not.toContain(
+      "/ai-engineering-assets/modulo-01/modulo-01-audio-explicativo.m4a",
+    );
   });
 
   it("produces identical generated data on repeated runs", async () => {

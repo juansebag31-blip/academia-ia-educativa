@@ -43,11 +43,6 @@ const publicAssets = {
     publicPath: `${publicUrlRoot}/modulo-01-audio-explicativo.mp3`,
     mediaType: "audio/mpeg",
   },
-  audioM4a: {
-    sourcePath: aiEngineeringManifest.module.assets.audioM4a,
-    publicPath: `${publicUrlRoot}/modulo-01-audio-explicativo.m4a`,
-    mediaType: "audio/mp4",
-  },
   presentation: {
     sourcePath: aiEngineeringManifest.module.assets.presentation,
     publicPath: `${publicUrlRoot}/modulo-01-presentacion.pptx`,
@@ -97,7 +92,7 @@ function buildAssets(): AiEngineeringAssets {
     visualAudioHtml: { sourcePath: aiEngineeringManifest.module.assets.visualAudioHtml },
     infographic: { ...publicAssets.infographic },
     audioMp3: { ...publicAssets.audioMp3 },
-    audioM4a: { ...publicAssets.audioM4a },
+    audioM4a: { sourcePath: aiEngineeringManifest.module.assets.audioM4a },
     audioScript: { sourcePath: aiEngineeringManifest.module.assets.audioScript },
     presentation: { ...publicAssets.presentation },
     cases: aiEngineeringManifest.module.assets.cases.map((sourcePath) => ({
@@ -131,7 +126,7 @@ async function copyPublicAssets(assets: AiEngineeringAssets) {
   await rm(publicModuleRoot, { recursive: true, force: true });
   await mkdir(publicModuleRoot, { recursive: true });
 
-  for (const asset of [assets.infographic, assets.audioMp3, assets.audioM4a, assets.presentation]) {
+  for (const asset of [assets.infographic, assets.audioMp3, assets.presentation]) {
     const destination = path.join(projectRoot, "public", asset.publicPath.replace(/^\//, ""));
     assertInside(publicModuleRoot, destination);
     await copyFile(resolveSourcePath(asset.sourcePath), destination);
@@ -171,9 +166,20 @@ async function prepareHtmlDocument(
     .filter(Boolean)
     .join("\n");
 
+  const sections = Array.from(document.querySelectorAll<HTMLElement>("main section[id]")).map(
+    (section) => ({
+      id: section.id,
+      title: section.querySelector("h2, h3")?.textContent?.trim() ?? section.id,
+      html: section.innerHTML.trim(),
+    }),
+  );
+
   return {
     title: document.title.trim(),
     html,
+    introHtml: document.querySelector("body > header")?.innerHTML.trim() ?? "",
+    footerHtml: document.querySelector("main > .footer")?.innerHTML.trim() ?? "",
+    sections,
   };
 }
 

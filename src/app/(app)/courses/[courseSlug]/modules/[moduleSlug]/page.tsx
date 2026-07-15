@@ -8,6 +8,7 @@ import { ModuleInfographic } from "@/components/module-infographic";
 import { ModuleNavigation } from "@/components/module-navigation";
 import { ModuleResourceLibrary } from "@/components/module-resource-library";
 import { ModuleSourceDocument } from "@/components/module-source-document";
+import { AiEngineeringModulePage } from "@/components/courses/ai-engineering/ai-engineering-module-page";
 import { LocalLessonStatus, LocalModuleProgress } from "@/components/learning/local-progress";
 import { VideoPlayer } from "@/components/video-player";
 import { findAdjacentModules } from "@/lib/course";
@@ -27,24 +28,7 @@ export default async function ModulePage({ params }: { params: Promise<{ courseS
   }
 
   if (resolvedModule.kind === "ai-engineering") {
-    return (
-      <section className="rounded-2xl border border-line-soft bg-white p-7 shadow-card">
-        <Link
-          href={`/courses/${resolvedModule.course.summary.slug}`}
-          className="text-sm font-bold text-slate-500 hover:text-ember"
-        >
-          Volver al curso
-        </Link>
-        <p className="mt-6 text-sm font-bold uppercase tracking-wide text-ember">
-          Módulo {resolvedModule.summary.order} · Datos preparados
-        </p>
-        <h1 className="mt-3 text-3xl font-black leading-tight">{resolvedModule.summary.title}</h1>
-        <p className="mt-4 max-w-3xl text-slate-600">
-          Los HTML normalizados, el guion y los medios ya están disponibles en la capa de datos.
-          Su renderer pedagógico y visual corresponde a la Fase 2.
-        </p>
-      </section>
-    );
+    return <AiEngineeringModulePage course={resolvedModule.course} module={resolvedModule.module} />;
   }
 
   const activeCourse = resolvedModule.course.course;
