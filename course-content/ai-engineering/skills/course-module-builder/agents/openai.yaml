@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Engineering Module Builder"
+  short_description: "Validate and integrate approved course modules"
+  default_prompt: "Use $course-module-builder to validate and integrate an approved AI Engineering module package from a local path."

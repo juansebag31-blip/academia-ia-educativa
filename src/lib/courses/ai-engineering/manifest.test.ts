@@ -1,148 +1,249 @@
 import { createHash } from "node:crypto";
-import { readFile, readdir, stat } from "node:fs/promises";
+import { mkdtemp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { JSDOM } from "jsdom";
 import {
-  generatedModulePath,
+  generatedModulesPath,
   prepareAiEngineeringContent,
-  presentationSlides,
+  prepareAiEngineeringModulePackage,
   projectRoot,
 } from "../../../../scripts/prepare-ai-engineering-content";
 import type { PreparedAiEngineeringModule } from "@/lib/courses/types";
-import { aiEngineeringManifest } from "./manifest";
+import { resolveCourseModule } from "@/lib/courses/catalog";
+import {
+  parseAiEngineeringCourseManifest,
+  parseAiEngineeringModuleManifest,
+  type AiEngineeringModuleManifest,
+} from "./module-contract";
+import {
+  aiEngineeringCourseManifest,
+  aiEngineeringManifest,
+} from "./manifest";
+import { validateAiEngineeringModulePackage } from "./module-validator";
 
 let prepared: PreparedAiEngineeringModule;
+let fixtureRoot = "";
+let fixturePublicRoot = "";
+let fixtureManifest: AiEngineeringModuleManifest;
 
 beforeAll(async () => {
   await prepareAiEngineeringContent();
-  prepared = JSON.parse(await readFile(generatedModulePath, "utf8")) as PreparedAiEngineeringModule;
+  const preparedModules = JSON.parse(await readFile(generatedModulesPath, "utf8")) as PreparedAiEngineeringModule[];
+  prepared = preparedModules[0];
+  fixtureRoot = await mkdtemp(path.join(tmpdir(), "ai-engineering-module-fixture-"));
+  fixturePublicRoot = path.join(fixtureRoot, "public");
+  fixtureManifest = await createValidPrivateFixture(fixtureRoot);
+});
+
+afterAll(async () => {
+  if (fixtureRoot) await rm(fixtureRoot, { recursive: true, force: true });
+});
+
+describe("AI Engineering course contract", () => {
+  it("keeps the approved twelve-module editorial itinerary", () => {
+    expect(aiEngineeringCourseManifest.modules).toHaveLength(12);
+    expect(aiEngineeringCourseManifest.modules.map((module) => module.title)).toEqual([
+      "De un modelo a un sistema inteligente",
+      "Modelos fundacionales y selección",
+      "Contexto, estado y memoria",
+      "Herramientas, APIs, function calling y MCP",
+      "RAG y sistemas de conocimiento",
+      "Workflows y automatización",
+      "Agentes y sistemas multiagente",
+      "Evaluación, observabilidad y trazabilidad",
+      "Seguridad, guardrails y supervisión humana",
+      "Coste, velocidad y confiabilidad",
+      "Producto y automatización empresarial",
+      "Producción y proyecto final",
+    ]);
+    expect(aiEngineeringCourseManifest.modules[0]).toMatchObject({
+      editorialSlug: "modulo-01-modelo-a-sistema-inteligente",
+      publicSlug: "modulo-01",
+      editorialStatus: "approved",
+      publish: true,
+    });
+    expect(aiEngineeringCourseManifest.modules.slice(1).every((module) => !module.publish)).toBe(true);
+  });
+
+  it("keeps Module 1 public route and derives declared quantities", () => {
+    expect(aiEngineeringManifest.module.publicSlug).toBe("modulo-01");
+    expect(aiEngineeringManifest.module.progressUnits).toHaveLength(8);
+    expect(aiEngineeringManifest.module.assets.cases).toHaveLength(3);
+    expect(aiEngineeringManifest.module.content.selfAssessment.questionCount).toBe(8);
+    expect(aiEngineeringManifest.module.assets.presentation.slideCount).toBe(17);
+    expect(prepared.presentation.slides).toHaveLength(17);
+  });
+
+  it("rejects unresolved placeholders and invalid public states", () => {
+    const todoManifest = structuredClone(aiEngineeringManifest);
+    todoManifest.module.title = "TODO_TITLE";
+    expect(() => parseAiEngineeringModuleManifest(todoManifest)).toThrow(/TODO_TITLE/);
+
+    const draftPublic = structuredClone(aiEngineeringManifest);
+    draftPublic.module.editorialStatus = "draft";
+    expect(() => parseAiEngineeringModuleManifest(draftPublic)).toThrow(/cannot publish/);
+
+    const duplicateCourse = structuredClone(aiEngineeringCourseManifest);
+    duplicateCourse.modules[1].editorialSlug = duplicateCourse.modules[0].editorialSlug;
+    expect(() => parseAiEngineeringCourseManifest(duplicateCourse)).toThrow(/duplicates/);
+  });
 });
 
 describe("AI Engineering manifest preparation", () => {
-  it("keeps the approved manifest metadata and learning path", () => {
-    expect(aiEngineeringManifest.course).toBe("AI Engineering Aplicado");
-    expect(aiEngineeringManifest.version).toBe("1.0");
-    expect(aiEngineeringManifest.module.id).toBe("modulo-01");
-    expect(aiEngineeringManifest.module.estimatedStudyMinutes).toBe(120);
-    expect(aiEngineeringManifest.module.learningPath).toEqual([
-      "orientacion",
-      "contenido_fundacional",
-      "infografia",
-      "audio_explicativo",
-      "casos_reales",
-      "presentacion",
-      "actividad",
-      "autoevaluacion",
-    ]);
-  });
-
-  it("requires every source file declared by the manifest", async () => {
-    const sourcePaths = [
-      prepared.assets.contentHtml.sourcePath,
-      prepared.assets.visualAudioHtml.sourcePath,
-      prepared.assets.infographic.sourcePath,
-      prepared.assets.audioMp3.sourcePath,
-      prepared.assets.audioM4a.sourcePath,
-      prepared.assets.audioScript.sourcePath,
-      prepared.assets.presentation.sourcePath,
-      ...prepared.assets.cases.map((item) => item.sourcePath),
-      ...presentationSlides.map((slide) => slide.sourcePath),
-    ];
-
-    for (const sourcePath of sourcePaths) {
-      const sourceStat = await stat(path.join(projectRoot, "course-content", "ai-engineering", sourcePath));
-      expect(sourceStat.isFile(), sourcePath).toBe(true);
-    }
-  });
-
   it("copies public media with stable routes and unchanged bytes", async () => {
-    const publicAssets = [
-      prepared.assets.infographic,
-      prepared.assets.audioMp3,
-      prepared.assets.presentation,
-    ];
-
-    for (const asset of publicAssets) {
+    for (const asset of [prepared.assets.infographic, prepared.assets.audioMp3, prepared.assets.presentation]) {
       expect(asset.publicPath).toMatch(/^\/ai-engineering-assets\/modulo-01\//);
       const source = await readFile(path.join(projectRoot, "course-content", "ai-engineering", asset.sourcePath));
       const copied = await readFile(path.join(projectRoot, "public", asset.publicPath.replace(/^\//, "")));
       expect(hash(copied), asset.publicPath).toBe(hash(source));
     }
-
-    expect(presentationSlides).toHaveLength(17);
-    for (const slide of presentationSlides) {
+    for (const slide of prepared.presentation.slides) {
       expect(slide.publicPath).toMatch(/^\/ai-engineering-assets\/modulo-01\/slides\/slide-\d{2}\.webp$/);
-      const source = await readFile(path.join(projectRoot, "course-content", "ai-engineering", slide.sourcePath));
-      const copied = await readFile(path.join(projectRoot, "public", slide.publicPath.replace(/^\//, "")));
-      expect(hash(copied), slide.publicPath).toBe(hash(source));
     }
-
-    expect(prepared.assets.audioM4a).toEqual({
-      sourcePath: aiEngineeringManifest.module.assets.audioM4a,
-    });
-    const copiedNames = await readdir(
-      path.join(projectRoot, "public", "ai-engineering-assets", "modulo-01"),
-    );
+    expect(prepared.assets.audioM4a?.sourcePath).toBe(aiEngineeringManifest.module.assets.audio.m4aSourcePath);
+    const copiedNames = await readdir(path.join(projectRoot, "public", "ai-engineering-assets", "modulo-01"));
     expect(copiedNames.some((fileName) => fileName.toLowerCase().endsWith(".m4a"))).toBe(false);
   });
 
-  it("removes document wrappers, global styles, scripts and inline handlers", () => {
-    const documents = [
-      prepared.content.foundational,
-      prepared.content.visualAudio,
-      ...prepared.content.cases,
-    ];
-
+  it("removes wrappers, global styles, scripts and inline handlers", () => {
+    const documents = [prepared.content.foundational, prepared.content.visualAudio, ...prepared.content.cases]
+      .filter((document): document is NonNullable<typeof document> => Boolean(document));
     for (const document of documents) {
       expect(document.html).not.toMatch(/<!doctype|<\/?(?:html|head|body)\b/i);
       expect(document.html).not.toMatch(/<style\b|<script\b|\sstyle=|\son[a-z]+=/i);
       expect(document.html).toMatch(/<(?:header|main|section)\b/i);
     }
-    expect(prepared.content.foundational.html).toContain("https://www.anthropic.com/engineering/building-effective-agents");
   });
 
-  it("extracts every approved foundational section without changing its order", () => {
-    expect(prepared.content.foundational.sections.map((section) => section.id)).toEqual([
-      "proposito",
-      "panorama",
-      "modelo",
-      "aplicacion",
-      "workflow",
-      "agente",
-      "multiagente",
-      "componentes",
-      "complejidad",
-      "caso",
-      "arquitectura",
-      "entrevista",
-      "actividad",
-      "evaluacion",
-      "fuentes",
-    ]);
-    expect(prepared.content.foundational.introHtml).toContain("Fundamentos para comprender");
-    expect(prepared.content.foundational.footerHtml).toContain("Documento base para revisi");
-
-    const evaluation = prepared.content.foundational.sections.find((section) => section.id === "evaluacion");
-    const evaluationDocument = new JSDOM(`<section>${evaluation?.html ?? ""}</section>`).window.document;
-    expect(evaluationDocument.querySelectorAll("ol > li")).toHaveLength(8);
-  });
-
-  it("rewrites declared relative media links to stable public routes", () => {
-    expect(prepared.content.visualAudio.html).toContain(prepared.assets.infographic.publicPath);
-    expect(prepared.content.visualAudio.html).toContain(prepared.assets.audioMp3.publicPath);
-    expect(prepared.content.visualAudio.html).not.toContain(
-      "/ai-engineering-assets/modulo-01/modulo-01-audio-explicativo.m4a",
+  it("extracts approved sections and the declared assessment questions", () => {
+    const evaluation = prepared.content.foundational.sections.find(
+      (section) => section.id === aiEngineeringManifest.module.content.selfAssessment.sectionId,
     );
+    const document = new JSDOM(`<section>${evaluation?.html ?? ""}</section>`).window.document;
+    expect(document.querySelectorAll(aiEngineeringManifest.module.content.selfAssessment.questionSelector))
+      .toHaveLength(aiEngineeringManifest.module.content.selfAssessment.questionCount);
   });
 
   it("produces identical generated data on repeated runs", async () => {
-    const first = hash(await readFile(generatedModulePath));
+    const first = hash(await readFile(generatedModulesPath));
     await prepareAiEngineeringContent();
-    const second = hash(await readFile(generatedModulePath));
+    const second = hash(await readFile(generatedModulesPath));
     expect(second).toBe(first);
   });
 });
+
+describe("controlled non-public module fixture", () => {
+  it("validates and prepares variable cases, questions, slides and progress without public registration", async () => {
+    const validation = await validateAiEngineeringModulePackage(fixtureManifest, fixtureRoot);
+    expect(validation.caseCount).toBe(1);
+    expect(validation.questionCount).toBe(2);
+    expect(validation.slideCount).toBe(2);
+    expect(fixtureManifest.module.progressUnits).toHaveLength(3);
+
+    const fixture = await prepareAiEngineeringModulePackage(fixtureManifest, fixtureRoot, fixturePublicRoot);
+    expect(fixture.presentation.slides).toHaveLength(2);
+    expect(fixture.content.cases).toHaveLength(1);
+    expect(resolveCourseModule("ai-engineering-aplicado", fixture.moduleSlug)).toBeNull();
+  });
+
+  it("rejects missing files, missing visual anchors and quantity mismatches", async () => {
+    const missingFile = structuredClone(fixtureManifest);
+    missingFile.module.assets.audio.mp3SourcePath = "missing.mp3";
+    await expect(validateAiEngineeringModulePackage(missingFile, fixtureRoot)).rejects.toThrow(/missing\.mp3/);
+
+    const missingAnchor = structuredClone(fixtureManifest);
+    missingAnchor.module.visuals = [{
+      afterSection: "inexistente",
+      visualId: "visual-prueba",
+      title: "Visual de prueba",
+      description: "Descripción de prueba",
+      componentType: "model-vs-system",
+    }];
+    await expect(validateAiEngineeringModulePackage(missingAnchor, fixtureRoot)).rejects.toThrow(/missing section/);
+
+    const questionMismatch = structuredClone(fixtureManifest);
+    questionMismatch.module.content.selfAssessment.questionCount = 3;
+    await expect(validateAiEngineeringModulePackage(questionMismatch, fixtureRoot)).rejects.toThrow(/declares 3 questions but found 2/);
+
+    const emptyQuestions = structuredClone(fixtureManifest);
+    emptyQuestions.module.content.selfAssessment.questionSelector = ".pregunta-inexistente";
+    await expect(validateAiEngineeringModulePackage(emptyQuestions, fixtureRoot)).rejects.toThrow(/must contain non-empty items/);
+
+    const emptyActivityPath = path.join(fixtureRoot, "content-empty-activity.html");
+    const originalHtml = await readFile(path.join(fixtureRoot, "content.html"), "utf8");
+    await writeFile(emptyActivityPath, originalHtml.replace("<p>Consigna de prueba.</p>", ""), "utf8");
+    const emptyActivity = structuredClone(fixtureManifest);
+    emptyActivity.module.content.foundationalHtml = "content-empty-activity.html";
+    await expect(validateAiEngineeringModulePackage(emptyActivity, fixtureRoot)).rejects.toThrow(/no non-empty prompt/);
+
+    const slideMismatch = structuredClone(fixtureManifest);
+    slideMismatch.module.assets.presentation.slideCount = 3;
+    await expect(validateAiEngineeringModulePackage(slideMismatch, fixtureRoot)).rejects.toThrow(/slide-03/);
+  });
+});
+
+async function createValidPrivateFixture(root: string): Promise<AiEngineeringModuleManifest> {
+  const manifest = structuredClone(aiEngineeringManifest);
+  manifest.module = {
+    ...manifest.module,
+    editorialSlug: "modulo-prueba-no-publicable",
+    publicSlug: "modulo-prueba-no-publicable",
+    number: 99,
+    title: "Módulo de prueba no publicable",
+    editorialStatus: "reviewed",
+    publish: false,
+    content: {
+      foundationalHtml: "content.html",
+      objectives: { sectionId: "proposito", selector: "ul > li" },
+      activity: { sectionId: "actividad" },
+      selfAssessment: { sectionId: "evaluacion", questionSelector: "ol > li", questionCount: 2 },
+      sources: { sectionId: "fuentes", itemSelector: "ol > li" },
+    },
+    assets: {
+      infographic: { sourcePath: "infografia.png", title: "Infografía de prueba", alt: "Infografía ficticia de prueba" },
+      audio: { mp3SourcePath: "audio.mp3", transcriptSourcePath: "transcripcion.txt", title: "Audio de prueba" },
+      cases: [{ id: "caso-prueba", sourcePath: "caso.html" }],
+      presentation: {
+        sourcePath: "presentacion.pptx",
+        title: "Presentación de prueba",
+        slidesDirectory: "slides",
+        slideCount: 2,
+        slideFilePattern: "slide-{number:2}.webp",
+        slideWidth: 16,
+        slideHeight: 9,
+        slideAltTemplate: "Diapositiva {current} de {total} de prueba",
+      },
+    },
+    sections: { casesTitle: "Caso de prueba", presentationTitle: "Presentación de prueba" },
+    interactions: {
+      activity: { unitId: "actividad", responseLabel: "Respuesta", placeholder: "Escribe una respuesta de prueba." },
+      selfAssessment: { unitId: "autoevaluacion" },
+    },
+    progressUnits: [
+      { id: "contenido", kind: "foundational-content", sectionId: "contenido", label: "Contenido" },
+      { id: "actividad", kind: "activity", sectionId: "actividad", label: "Actividad" },
+      { id: "autoevaluacion", kind: "self-assessment", sectionId: "autoevaluacion", label: "Autoevaluación" },
+    ],
+    visuals: [],
+    keyIdeas: [],
+  };
+
+  await mkdir(path.join(root, "slides"), { recursive: true });
+  await writeFile(path.join(root, "content.html"), `<!doctype html><html><body><main>
+    <section id="proposito"><h2>Propósito</h2><ul><li>Objetivo de prueba.</li></ul></section>
+    <section id="actividad"><h2>Actividad</h2><p>Consigna de prueba.</p></section>
+    <section id="evaluacion"><h2>Autoevaluación</h2><ol><li>Pregunta uno.</li><li>Pregunta dos.</li></ol></section>
+    <section id="fuentes"><h2>Fuentes</h2><ol><li>Fuente de prueba. <a href="https://example.com">Enlace</a></li></ol></section>
+  </main></body></html>`, "utf8");
+  await writeFile(path.join(root, "caso.html"), "<html><body><main><section id=\"caso\"><h2>Caso ficticio de prueba</h2></section></main></body></html>", "utf8");
+  await writeFile(path.join(root, "transcripcion.txt"), "Transcripción ficticia de prueba.", "utf8");
+  for (const fileName of ["infografia.png", "audio.mp3", "presentacion.pptx", "slides/slide-01.webp", "slides/slide-02.webp"]) {
+    await writeFile(path.join(root, fileName), `ASSET FICTICIO DE PRUEBA: ${fileName}`, "utf8");
+  }
+  return parseAiEngineeringModuleManifest(manifest);
+}
 
 function hash(value: Buffer) {
   return createHash("sha256").update(value).digest("hex");

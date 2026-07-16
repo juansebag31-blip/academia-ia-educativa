@@ -17,6 +17,9 @@
     "db:seed": "tsx scripts/seed-db.ts",
     "content:import": "tsx scripts/import-pdfs.ts",
     "content:prepare:ai-engineering": "tsx scripts/prepare-ai-engineering-content.ts",
+    "content:validate:ai-engineering-module": "tsx scripts/manage-ai-engineering-module.ts validate",
+    "content:prepare:ai-engineering-module": "tsx scripts/manage-ai-engineering-module.ts prepare",
+    "content:integrate:ai-engineering-module": "tsx scripts/manage-ai-engineering-module.ts integrate",
     "kit:generate": "python scripts/generate_prompt_kit.py"
   },
   "dependencies": {

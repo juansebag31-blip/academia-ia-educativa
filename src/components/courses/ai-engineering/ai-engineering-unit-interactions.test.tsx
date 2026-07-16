@@ -25,6 +25,9 @@ describe("AI Engineering unit interactions", () => {
         courseSlug={courseSlug}
         moduleSlug={moduleSlug}
         sourceHtml="<h2>Actividad práctica</h2>"
+        unitId="actividad"
+        responseLabel="Tu respuesta"
+        placeholder="Escribe aquí tu mapa del proceso y justificación arquitectónica."
       />,
     );
     const response = screen.getByLabelText("Tu respuesta");
@@ -47,6 +50,9 @@ describe("AI Engineering unit interactions", () => {
         courseSlug={courseSlug}
         moduleSlug={moduleSlug}
         sourceHtml="<h2>Actividad práctica</h2>"
+        unitId="actividad"
+        responseLabel="Tu respuesta"
+        placeholder="Escribe aquí tu mapa del proceso y justificación arquitectónica."
       />,
     );
     await waitFor(() => expect(screen.getByLabelText("Tu respuesta")).toHaveValue("Mi mapa del proceso"));
@@ -58,10 +64,12 @@ describe("AI Engineering unit interactions", () => {
         courseSlug={courseSlug}
         moduleSlug={moduleSlug}
         sourceHtml="<h2>Autoevaluación</h2>"
+        unitId="autoevaluacion"
+        questionCount={3}
       />,
     );
 
-    expect(screen.getAllByLabelText(/Respuesta \d/)).toHaveLength(8);
+    expect(screen.getAllByLabelText(/Respuesta \d/)).toHaveLength(3);
     fireEvent.change(screen.getByLabelText("Respuesta 1"), {
       target: { value: "Una aplicación incorpora control y contexto." },
     });
@@ -83,6 +91,7 @@ describe("AI Engineering unit interactions", () => {
       src: "/audio-prueba.mp3",
       type: "audio/mpeg",
       title: "Audio de prueba",
+      unitId: "audio_explicativo",
     };
     const { container, unmount } = render(<AiEngineeringAudioPlayer {...audioProps} />);
 

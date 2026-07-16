@@ -1,13 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  ArrowRight,
-  CheckCircle2,
-  Circle,
-  Clock3,
-  RotateCcw,
-} from "lucide-react";
+import { ArrowRight, CheckCircle2, Circle, Clock3, RotateCcw } from "lucide-react";
 import {
   createContext,
   useCallback,
@@ -18,45 +12,32 @@ import {
   useState,
 } from "react";
 import {
-  aiEngineeringProgressUnits,
   completeAiEngineeringStandardUnit,
   ensureAiEngineeringModuleCompletion,
   findAiEngineeringProgressUnit,
+  findAiEngineeringProgressUnitByKind,
   markAiEngineeringUnitInProgress,
   readAiEngineeringModuleProgress,
   recordAiEngineeringLastUnit,
   type AiEngineeringModuleProgressSnapshot,
   type AiEngineeringProgressStatus,
-  type AiEngineeringProgressUnitId,
+  type AiEngineeringProgressUnit,
 } from "@/lib/courses/ai-engineering/progress";
 import {
   AI_ENGINEERING_UNIT_STATE_EVENT,
   type AiEngineeringUnitCoordinates,
 } from "@/lib/courses/ai-engineering/unit-storage";
 
-type StandardProgressUnitId = Exclude<
-  AiEngineeringProgressUnitId,
-  "actividad" | "autoevaluacion"
->;
-
 type ProgressContextValue = {
+  units: readonly AiEngineeringProgressUnit[];
+  moduleNumber: number;
   snapshot: AiEngineeringModuleProgressSnapshot;
   hydrated: boolean;
-  resumeUnitId?: AiEngineeringProgressUnitId;
+  resumeUnitId?: string;
   dismissResume: () => void;
-  completeUnit: (unitId: StandardProgressUnitId) => void;
-  visitUnit: (unitId: AiEngineeringProgressUnitId) => void;
+  completeUnit: (unitId: string) => void;
+  visitUnit: (unitId: string) => void;
   refresh: () => void;
-};
-
-const emptyStatuses = Object.fromEntries(
-  aiEngineeringProgressUnits.map((unit) => [unit.id, "not-started"]),
-) as Record<AiEngineeringProgressUnitId, AiEngineeringProgressStatus>;
-
-const emptySnapshot: AiEngineeringModuleProgressSnapshot = {
-  statuses: emptyStatuses,
-  completedCount: 0,
-  percentage: 0,
 };
 
 const ProgressContext = createContext<ProgressContextValue | null>(null);
@@ -64,17 +45,20 @@ const ProgressContext = createContext<ProgressContextValue | null>(null);
 export function AiEngineeringProgressProvider({
   courseSlug,
   moduleSlug,
+  moduleNumber,
+  units,
   children,
 }: {
   courseSlug: string;
   moduleSlug: string;
+  moduleNumber: number;
+  units: readonly AiEngineeringProgressUnit[];
   children: React.ReactNode;
 }) {
-  const progress = useAiEngineeringProgressSnapshot(courseSlug, moduleSlug);
-  const lastUnitRef = useRef<AiEngineeringProgressUnitId | undefined>(undefined);
+  const progress = useAiEngineeringProgressSnapshot(courseSlug, moduleSlug, units);
+  const lastUnitRef = useRef<string | undefined>(undefined);
   const resumeInitializedRef = useRef(false);
-  const [resumeUnitId, setResumeUnitId] = useState<AiEngineeringProgressUnitId>();
-
+  const [resumeUnitId, setResumeUnitId] = useState<string>();
   const { refresh } = progress;
 
   useEffect(() => {
@@ -87,14 +71,16 @@ export function AiEngineeringProgressProvider({
     if (!window.location.hash) setResumeUnitId(progress.snapshot.lastUnitId);
   }, [progress.hydrated, progress.snapshot.lastUnitId]);
 
-  const visitUnit = useCallback((unitId: AiEngineeringProgressUnitId) => {
-    markAiEngineeringUnitInProgress(courseSlug, moduleSlug, unitId);
-    recordAiEngineeringLastUnit(courseSlug, moduleSlug, unitId);
-    lastUnitRef.current = unitId;
+  const visitUnit = useCallback((unitId: string) => {
+    const unit = findAiEngineeringProgressUnit(units, unitId);
+    if (!unit) return;
+    markAiEngineeringUnitInProgress(courseSlug, moduleSlug, unit);
+    recordAiEngineeringLastUnit(courseSlug, moduleSlug, unit.id);
+    lastUnitRef.current = unit.id;
     refresh();
-  }, [courseSlug, moduleSlug, refresh]);
+  }, [courseSlug, moduleSlug, refresh, units]);
 
-  const completeUnit = useCallback((unitId: StandardProgressUnitId) => {
+  const completeUnit = useCallback((unitId: string) => {
     completeAiEngineeringStandardUnit(courseSlug, moduleSlug, unitId);
     recordAiEngineeringLastUnit(courseSlug, moduleSlug, unitId);
     lastUnitRef.current = unitId;
@@ -103,7 +89,6 @@ export function AiEngineeringProgressProvider({
 
   useEffect(() => {
     if (!progress.hydrated || typeof IntersectionObserver === "undefined") return;
-
     const hasStoredContinuation = Boolean(lastUnitRef.current) && !window.location.hash;
     let firstObservation = true;
     const observer = new IntersectionObserver((entries) => {
@@ -111,20 +96,15 @@ export function AiEngineeringProgressProvider({
         .filter((entry) => entry.isIntersecting)
         .sort((left, right) => right.intersectionRatio - left.intersectionRatio)[0];
       if (!visible) return;
-
-      const unit = aiEngineeringProgressUnits.find(
-        (candidate) => candidate.sectionId === visible.target.id,
-      );
+      const unit = units.find((candidate) => candidate.sectionId === visible.target.id);
       if (!unit) return;
-
-      if (firstObservation && hasStoredContinuation && unit.id === "orientacion") {
+      if (firstObservation && hasStoredContinuation && unit.kind === "orientation") {
         firstObservation = false;
         return;
       }
       firstObservation = false;
-
       if (lastUnitRef.current !== unit.id) {
-        markAiEngineeringUnitInProgress(courseSlug, moduleSlug, unit.id);
+        markAiEngineeringUnitInProgress(courseSlug, moduleSlug, unit);
         recordAiEngineeringLastUnit(courseSlug, moduleSlug, unit.id);
         lastUnitRef.current = unit.id;
       }
@@ -133,22 +113,21 @@ export function AiEngineeringProgressProvider({
       threshold: [0.15, 0.35, 0.6],
     });
 
-    for (const unit of aiEngineeringProgressUnits) {
+    for (const unit of units) {
       const section = document.getElementById(unit.sectionId);
       if (section) observer.observe(section);
     }
-
     return () => observer.disconnect();
-  }, [courseSlug, moduleSlug, progress.hydrated]);
+  }, [courseSlug, moduleSlug, progress.hydrated, units]);
 
   useEffect(() => {
-    if (!progress.hydrated || progress.snapshot.completedCount !== aiEngineeringProgressUnits.length) {
-      return;
-    }
-    if (!progress.snapshot.completedAt) ensureAiEngineeringModuleCompletion(courseSlug, moduleSlug);
-  }, [courseSlug, moduleSlug, progress.hydrated, progress.snapshot.completedAt, progress.snapshot.completedCount]);
+    if (!progress.hydrated || progress.snapshot.completedCount !== units.length) return;
+    if (!progress.snapshot.completedAt) ensureAiEngineeringModuleCompletion(courseSlug, moduleSlug, units);
+  }, [courseSlug, moduleSlug, progress.hydrated, progress.snapshot.completedAt, progress.snapshot.completedCount, units]);
 
   const value = useMemo<ProgressContextValue>(() => ({
+    units,
+    moduleNumber,
     snapshot: progress.snapshot,
     hydrated: progress.hydrated,
     resumeUnitId,
@@ -156,16 +135,14 @@ export function AiEngineeringProgressProvider({
     completeUnit,
     visitUnit,
     refresh,
-  }), [completeUnit, progress.hydrated, progress.snapshot, refresh, resumeUnitId, visitUnit]);
+  }), [completeUnit, moduleNumber, progress.hydrated, progress.snapshot, refresh, resumeUnitId, units, visitUnit]);
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>;
 }
 
 export function AiEngineeringProgressNavigation() {
-  const { snapshot, resumeUnitId, dismissResume, visitUnit } = useProgressContext();
-  const lastUnit = resumeUnitId
-    ? findAiEngineeringProgressUnit(resumeUnitId)
-    : undefined;
+  const { units, moduleNumber, snapshot, resumeUnitId, dismissResume, visitUnit } = useProgressContext();
+  const lastUnit = resumeUnitId ? findAiEngineeringProgressUnit(units, resumeUnitId) : undefined;
 
   return (
     <div className="sticky top-3 z-30 space-y-3">
@@ -193,18 +170,18 @@ export function AiEngineeringProgressNavigation() {
         <summary className="focus-ring cursor-pointer list-none rounded-2xl px-5 py-4 marker:content-none">
           <span className="flex items-center justify-between gap-4">
             <span>
-              <span className="block font-black text-[#0b1f33]">Recorrido del módulo · 8 etapas</span>
+              <span className="block font-black text-[#0b1f33]">Recorrido del módulo · {units.length} etapas</span>
               <span className="mt-1 block text-xs font-bold text-slate-600">
-                {snapshot.completedCount} de 8 etapas · {snapshot.percentage} % completado
+                {snapshot.completedCount} de {units.length} etapas · {snapshot.percentage} % completado
               </span>
             </span>
             <span aria-hidden="true" className="text-xl text-[#0f766e] group-open:rotate-45 motion-reduce:transition-none">+</span>
           </span>
-          <ProgressBar percentage={snapshot.percentage} label="Progreso general del Módulo 1" />
+          <ProgressBar percentage={snapshot.percentage} label={`Progreso general del Módulo ${moduleNumber}`} />
         </summary>
         <nav aria-label="Navegación interna del módulo" className="border-t border-slate-200 p-3">
           <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-            {aiEngineeringProgressUnits.map((unit, index) => {
+            {units.map((unit, index) => {
               const status = snapshot.statuses[unit.id];
               return (
                 <li key={unit.id}>
@@ -230,13 +207,9 @@ export function AiEngineeringProgressNavigation() {
   );
 }
 
-export function AiEngineeringUnitCompletion({
-  unitId,
-}: {
-  unitId: StandardProgressUnitId;
-}) {
+export function AiEngineeringUnitCompletion({ unitId }: { unitId: string }) {
   const { snapshot, completeUnit } = useProgressContext();
-  const status = snapshot.statuses[unitId];
+  const status = snapshot.statuses[unitId] ?? "not-started";
   const completed = status === "completed";
 
   return (
@@ -259,11 +232,11 @@ export function AiEngineeringUnitCompletion({
 }
 
 export function AiEngineeringModuleCompletion({ courseHref }: { courseHref: string }) {
-  const { snapshot, visitUnit } = useProgressContext();
+  const { units, moduleNumber, snapshot, visitUnit } = useProgressContext();
   if (snapshot.percentage !== 100) return null;
-
   const completedAt = snapshot.completedAt ? new Date(snapshot.completedAt) : new Date();
   const formattedDate = new Intl.DateTimeFormat("es-AR", { dateStyle: "long" }).format(completedAt);
+  const orientation = findAiEngineeringProgressUnitByKind(units, "orientation");
 
   return (
     <section aria-live="polite" className="rounded-3xl border border-emerald-300 bg-[linear-gradient(135deg,#ecfdf5,#f0fdfa)] p-6 shadow-card sm:p-8">
@@ -273,7 +246,7 @@ export function AiEngineeringModuleCompletion({ courseHref }: { courseHref: stri
         </span>
         <div>
           <p className="text-xs font-black uppercase tracking-[0.16em] text-emerald-800">100 % completado</p>
-          <h2 className="mt-1 text-2xl font-black text-[#0b1f33]">Módulo 1 completado</h2>
+          <h2 className="mt-1 text-2xl font-black text-[#0b1f33]">Módulo {moduleNumber} completado</h2>
           <p className="mt-2 text-sm font-semibold text-slate-700">
             Fecha local de finalización: <time dateTime={completedAt.toISOString()}>{formattedDate}</time>
           </p>
@@ -281,8 +254,8 @@ export function AiEngineeringModuleCompletion({ courseHref }: { courseHref: stri
       </div>
       <div className="mt-6 flex flex-col gap-3 sm:flex-row">
         <a
-          href="#orientacion"
-          onClick={() => visitUnit("orientacion")}
+          href={`#${orientation?.sectionId ?? "orientacion"}`}
+          onClick={() => orientation && visitUnit(orientation.id)}
           className="focus-ring inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-700 bg-white px-4 py-3 text-sm font-black text-emerald-800"
         >
           <RotateCcw size={17} aria-hidden="true" />
@@ -300,54 +273,63 @@ export function AiEngineeringModuleCompletion({ courseHref }: { courseHref: stri
 export function AiEngineeringCourseProgressCta({
   courseSlug,
   moduleSlug,
+  moduleNumber,
+  units,
   moduleHref,
 }: {
   courseSlug: string;
   moduleSlug: string;
+  moduleNumber: number;
+  units: readonly AiEngineeringProgressUnit[];
   moduleHref: string;
 }) {
-  const { snapshot } = useAiEngineeringProgressSnapshot(courseSlug, moduleSlug);
+  const { snapshot } = useAiEngineeringProgressSnapshot(courseSlug, moduleSlug, units);
   const started = snapshot.percentage > 0 || Object.values(snapshot.statuses).some((status) => status === "in-progress");
 
   return (
     <div className="mt-8 max-w-md" aria-live="polite">
       <p className="text-sm font-black text-[#0b1f33]">
-        {snapshot.completedCount} de 8 etapas · {snapshot.percentage} % completado
+        {snapshot.completedCount} de {units.length} etapas · {snapshot.percentage} % completado
       </p>
-      <ProgressBar percentage={snapshot.percentage} label="Progreso del Módulo 1" />
+      <ProgressBar percentage={snapshot.percentage} label={`Progreso del Módulo ${moduleNumber}`} />
       <Link
         href={moduleHref}
         className="focus-ring mt-4 inline-flex items-center gap-2 rounded-xl bg-[#0f766e] px-5 py-3.5 text-sm font-black text-white shadow-lg shadow-emerald-950/15 hover:bg-[#0b5f59]"
       >
-        {started ? "Continuar Módulo 1" : "Comenzar Módulo 1"}
+        {started ? `Continuar Módulo ${moduleNumber}` : `Comenzar Módulo ${moduleNumber}`}
         <ArrowRight size={18} aria-hidden="true" />
       </Link>
     </div>
   );
 }
 
-export function useAiEngineeringProgressSnapshot(courseSlug: string, moduleSlug: string) {
+export function useAiEngineeringProgressSnapshot(
+  courseSlug: string,
+  moduleSlug: string,
+  units: readonly AiEngineeringProgressUnit[],
+) {
+  const emptySnapshot = useMemo<AiEngineeringModuleProgressSnapshot>(() => ({
+    statuses: Object.fromEntries(units.map((unit) => [unit.id, "not-started"])),
+    completedCount: 0,
+    percentage: 0,
+  }), [units]);
   const [snapshot, setSnapshot] = useState<AiEngineeringModuleProgressSnapshot>(emptySnapshot);
   const [hydrated, setHydrated] = useState(false);
 
   const refresh = useCallback(() => {
-    setSnapshot(readAiEngineeringModuleProgress(courseSlug, moduleSlug));
-  }, [courseSlug, moduleSlug]);
+    setSnapshot(readAiEngineeringModuleProgress(courseSlug, moduleSlug, units));
+  }, [courseSlug, moduleSlug, units]);
 
   useEffect(() => {
     refresh();
     setHydrated(true);
-
     const handleUnitChange = (event: Event) => {
       const detail = (event as CustomEvent<AiEngineeringUnitCoordinates>).detail;
       if (detail?.courseSlug === courseSlug && detail.moduleSlug === moduleSlug) refresh();
     };
     const handleStorage = (event: StorageEvent) => {
-      if (event.key?.includes(encodeURIComponent(courseSlug)) && event.key.includes(encodeURIComponent(moduleSlug))) {
-        refresh();
-      }
+      if (event.key?.includes(encodeURIComponent(courseSlug)) && event.key.includes(encodeURIComponent(moduleSlug))) refresh();
     };
-
     window.addEventListener(AI_ENGINEERING_UNIT_STATE_EVENT, handleUnitChange);
     window.addEventListener("storage", handleStorage);
     return () => {

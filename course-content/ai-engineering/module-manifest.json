@@ -1,35 +1,150 @@
 {
-  "course": "AI Engineering Aplicado",
-  "version": "1.0",
+  "schemaVersion": 2,
+  "sourceVersion": "1.0",
+  "courseSlug": "ai-engineering-aplicado",
   "module": {
-    "id": "modulo-01",
+    "editorialSlug": "modulo-01-modelo-a-sistema-inteligente",
+    "publicSlug": "modulo-01",
     "number": 1,
     "title": "De un modelo a un sistema inteligente",
-    "status": "approved-content-ready-for-integration",
+    "editorialStatus": "approved",
+    "publish": true,
+    "level": "fundacional",
     "estimatedStudyMinutes": 120,
-    "learningPath": [
-      "orientacion",
-      "contenido_fundacional",
-      "infografia",
-      "audio_explicativo",
-      "casos_reales",
-      "presentacion",
-      "actividad",
-      "autoevaluacion"
-    ],
-    "assets": {
-      "contentHtml": "content/modulo-01/contenido-fundacional.html",
+    "content": {
+      "foundationalHtml": "content/modulo-01/contenido-fundacional.html",
       "visualAudioHtml": "content/modulo-01/experiencia-visual-auditiva.html",
-      "infographic": "assets/images/modulo-01-infografia.png",
-      "audioMp3": "assets/audio/modulo-01-audio-explicativo.mp3",
-      "audioM4a": "assets/audio/modulo-01-audio-explicativo.m4a",
-      "audioScript": "content/modulo-01/guion-audio.txt",
-      "presentation": "assets/presentations/modulo-01-presentacion.pptx",
+      "objectives": {
+        "sectionId": "proposito",
+        "selector": "h3 + ul > li"
+      },
+      "activity": {
+        "sectionId": "actividad"
+      },
+      "selfAssessment": {
+        "sectionId": "evaluacion",
+        "questionSelector": "ol > li",
+        "questionCount": 8
+      },
+      "sources": {
+        "sectionId": "fuentes",
+        "itemSelector": "ol > li"
+      }
+    },
+    "assets": {
+      "infographic": {
+        "sourcePath": "assets/images/modulo-01-infografia.png",
+        "title": "De un modelo a un sistema inteligente",
+        "alt": "Infografía del Módulo 1 sobre el recorrido de un modelo a un sistema inteligente"
+      },
+      "audio": {
+        "mp3SourcePath": "assets/audio/modulo-01-audio-explicativo.mp3",
+        "m4aSourcePath": "assets/audio/modulo-01-audio-explicativo.m4a",
+        "transcriptSourcePath": "content/modulo-01/guion-audio.txt",
+        "title": "Audio explicativo del Módulo 1"
+      },
       "cases": [
-        "cases/caso-01-clinica.html",
-        "cases/caso-02-aprendizaje.html",
-        "cases/caso-03-desarrollo.html"
-      ]
-    }
+        {
+          "id": "caso-01-clinica",
+          "sourcePath": "cases/caso-01-clinica.html"
+        },
+        {
+          "id": "caso-02-aprendizaje",
+          "sourcePath": "cases/caso-02-aprendizaje.html"
+        },
+        {
+          "id": "caso-03-desarrollo",
+          "sourcePath": "cases/caso-03-desarrollo.html"
+        }
+      ],
+      "presentation": {
+        "sourcePath": "assets/presentations/modulo-01-presentacion.pptx",
+        "title": "Módulo 1 · De un modelo a un sistema inteligente",
+        "slidesDirectory": "assets/presentations/modulo-01-slides",
+        "slideCount": 17,
+        "slideFilePattern": "slide-{number:2}.webp",
+        "slideWidth": 1600,
+        "slideHeight": 900,
+        "slideAltTemplate": "Diapositiva {current} de {total} de la presentación del Módulo 1"
+      }
+    },
+    "sections": {
+      "casesTitle": "Tres casos reales",
+      "presentationTitle": "Material de presentación"
+    },
+    "interactions": {
+      "activity": {
+        "unitId": "actividad",
+        "responseLabel": "Tu respuesta",
+        "placeholder": "Escribe aquí tu mapa del proceso y justificación arquitectónica."
+      },
+      "selfAssessment": {
+        "unitId": "autoevaluacion"
+      }
+    },
+    "progressUnits": [
+      { "id": "orientacion", "kind": "orientation", "sectionId": "orientacion", "label": "Orientación" },
+      { "id": "contenido_fundacional", "kind": "foundational-content", "sectionId": "contenido", "label": "Contenido fundacional" },
+      { "id": "infografia", "kind": "infographic", "sectionId": "infografia", "label": "Infografía" },
+      { "id": "audio_explicativo", "kind": "audio", "sectionId": "audio", "label": "Audio explicativo" },
+      { "id": "casos_reales", "kind": "cases", "sectionId": "casos", "label": "Casos reales" },
+      { "id": "presentacion", "kind": "presentation", "sectionId": "presentacion", "label": "Presentación" },
+      { "id": "actividad", "kind": "activity", "sectionId": "actividad", "label": "Actividad" },
+      { "id": "autoevaluacion", "kind": "self-assessment", "sectionId": "autoevaluacion", "label": "Autoevaluación" }
+    ],
+    "visuals": [
+      {
+        "afterSection": "aplicacion",
+        "visualId": "modelo-frente-sistema",
+        "title": "Modelo frente a sistema inteligente",
+        "description": "Compara una capacidad de IA con el producto completo que la vuelve utilizable y controlable.",
+        "componentType": "model-vs-system"
+      },
+      {
+        "afterSection": "agente",
+        "visualId": "workflow-frente-agente",
+        "title": "Workflow frente a agente",
+        "description": "Distingue una secuencia definida de un ciclo que decide su siguiente acción.",
+        "componentType": "workflow-vs-agent"
+      },
+      {
+        "afterSection": "componentes",
+        "visualId": "mapa-componentes-sistema",
+        "title": "Mapa de componentes del sistema",
+        "description": "Ordena las piezas técnicas y humanas que rodean al modelo en un sistema inteligente.",
+        "componentType": "system-components-map"
+      },
+      {
+        "afterSection": "complejidad",
+        "visualId": "escalera-minima-complejidad",
+        "title": "Escalera de mínima complejidad suficiente",
+        "description": "Muestra cómo aumentar la arquitectura solo cuando el nivel anterior deja de ser suficiente.",
+        "componentType": "minimum-complexity-ladder"
+      },
+      {
+        "afterSection": "caso",
+        "visualId": "flujo-estudios-imagenes",
+        "title": "Flujo del caso de estudios por imágenes",
+        "description": "Resume el recorrido desde el pedido hasta la confirmación humana.",
+        "componentType": "imaging-study-flow"
+      }
+    ],
+    "keyIdeas": [
+      {
+        "afterSection": "aplicacion",
+        "ideaId": "idea-modelo-sistema",
+        "text": "El modelo produce una salida. El sistema completo controla cómo, cuándo, con qué datos y bajo qué reglas se utiliza esa capacidad."
+      },
+      {
+        "afterSection": "agente",
+        "ideaId": "idea-workflow-agente",
+        "text": "Un workflow sigue una secuencia definida. Un agente observa, decide, actúa y evalúa; no es automáticamente la mejor opción."
+      },
+      {
+        "afterSection": "complejidad",
+        "ideaId": "idea-minima-complejidad",
+        "text": "Solo se asciende al siguiente nivel cuando el anterior resulta insuficiente para resolver el problema."
+      }
+    ]
   }
 }

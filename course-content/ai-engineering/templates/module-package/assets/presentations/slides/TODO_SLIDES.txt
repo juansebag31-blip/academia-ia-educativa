@@ -1,0 +1,1 @@
+Agregar las diapositivas preexportadas con el patrón declarado en el manifiesto.

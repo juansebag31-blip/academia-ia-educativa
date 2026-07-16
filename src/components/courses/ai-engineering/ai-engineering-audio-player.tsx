@@ -13,12 +13,14 @@ export function AiEngineeringAudioPlayer({
   src,
   type,
   title,
+  unitId,
 }: {
   courseSlug: string;
   moduleSlug: string;
   src: string;
   type: string;
   title: string;
+  unitId: string;
 }) {
   const [loaded, setLoaded] = useState(false);
   const [savedPosition, setSavedPosition] = useState(0);
@@ -29,17 +31,17 @@ export function AiEngineeringAudioPlayer({
     const state = readAiEngineeringStandardUnitState(
       courseSlug,
       moduleSlug,
-      "audio_explicativo",
+      unitId,
     );
     const position = Math.max(0, state.positionSeconds ?? 0);
     setSavedPosition(position);
     lastSavedSecondRef.current = Math.floor(position);
-  }, [courseSlug, moduleSlug]);
+  }, [courseSlug, moduleSlug, unitId]);
 
   function savePosition(positionSeconds: number) {
     const roundedPosition = Math.max(0, Math.floor(positionSeconds));
     lastSavedSecondRef.current = roundedPosition;
-    patchAiEngineeringStandardUnitState(courseSlug, moduleSlug, "audio_explicativo", {
+    patchAiEngineeringStandardUnitState(courseSlug, moduleSlug, unitId, {
       status: "in-progress",
       positionSeconds: roundedPosition,
     });

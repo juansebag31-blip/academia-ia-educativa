@@ -1,7 +1,8 @@
 import { courseSeed } from "@/lib/course-seed";
-import { aiEngineeringModuleOne } from "@/lib/courses/ai-engineering/module-01";
+import { aiEngineeringModules } from "@/lib/courses/ai-engineering/modules";
 import {
   AI_ENGINEERING_COURSE_SLUG,
+  aiEngineeringCourseManifest,
   aiEngineeringManifest,
 } from "@/lib/courses/ai-engineering/manifest";
 import type {
@@ -46,13 +47,14 @@ const aiEngineeringCourse: AiEngineeringCourseDefinition = {
   kind: "ai-engineering",
   summary: {
     slug: AI_ENGINEERING_COURSE_SLUG,
-    title: aiEngineeringManifest.course,
+    title: aiEngineeringCourseManifest.title,
     theme: "ai-engineering",
     duration: `${aiEngineeringManifest.module.estimatedStudyMinutes} minutos`,
-    modules: [aiEngineeringModuleOne.summary],
+    modules: aiEngineeringModules.map((module) => module.summary),
   },
-  sourceVersion: aiEngineeringManifest.version,
-  modules: [aiEngineeringModuleOne],
+  sourceVersion: aiEngineeringManifest.sourceVersion,
+  modules: aiEngineeringModules,
+  curriculum: aiEngineeringCourseManifest.modules,
 };
 
 export const courseCatalog: CourseDefinition[] = [standardCourse, aiEngineeringCourse];

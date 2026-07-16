@@ -20,13 +20,19 @@ export function AiEngineeringActivity({
   courseSlug,
   moduleSlug,
   sourceHtml,
+  unitId,
+  responseLabel,
+  placeholder,
 }: {
   courseSlug: string;
   moduleSlug: string;
   sourceHtml: string;
+  unitId: string;
+  responseLabel: string;
+  placeholder: string;
 }) {
   const { value, status, updateValue, saveNow, saveValue } = useAiEngineeringUnitState(
-    { courseSlug, moduleSlug, unitId: "actividad" },
+    { courseSlug, moduleSlug, unitId },
     initialActivityState,
   );
 
@@ -36,7 +42,7 @@ export function AiEngineeringActivity({
       <div className="rounded-2xl border border-[#0f766e]/25 bg-[#f3f7f6] p-5 sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <label htmlFor="ai-engineering-activity-response" className="text-lg font-black text-[#0b1f33]">
-            Tu respuesta
+            {responseLabel}
           </label>
           <SaveIndicator status={status} />
         </div>
@@ -50,7 +56,7 @@ export function AiEngineeringActivity({
           })}
           rows={12}
           className="focus-ring mt-4 w-full resize-y rounded-xl border border-slate-300 bg-white p-4 leading-7 text-slate-800 shadow-inner"
-          placeholder="Escribe aquí tu mapa del proceso y justificación arquitectónica."
+          placeholder={placeholder}
         />
         <p className="mt-2 text-xs font-semibold text-slate-600">La respuesta se guarda automáticamente en este navegador y puede editarse después.</p>
         <div className="mt-5 flex flex-col gap-3 sm:flex-row">

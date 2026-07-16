@@ -23,11 +23,15 @@ export function AiEngineeringPresentationViewer({
   downloadHref,
   courseSlug,
   moduleSlug,
+  moduleNumber,
+  unitId,
 }: {
   presentation: AiEngineeringPresentationConfig;
   downloadHref: string;
   courseSlug: string;
   moduleSlug: string;
+  moduleNumber: number;
+  unitId: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -39,21 +43,21 @@ export function AiEngineeringPresentationViewer({
     const savedIndex = readAiEngineeringStandardUnitState(
       courseSlug,
       moduleSlug,
-      "presentacion",
+      unitId,
     ).slideIndex;
     if (typeof savedIndex === "number") {
       setActiveIndex(Math.min(Math.max(0, savedIndex), presentation.slides.length - 1));
     }
-  }, [courseSlug, moduleSlug, presentation.slides.length]);
+  }, [courseSlug, moduleSlug, presentation.slides.length, unitId]);
 
   const updateActiveIndex = useCallback((nextIndex: number) => {
     const boundedIndex = Math.min(Math.max(0, nextIndex), presentation.slides.length - 1);
     setActiveIndex(boundedIndex);
-    patchAiEngineeringStandardUnitState(courseSlug, moduleSlug, "presentacion", {
+    patchAiEngineeringStandardUnitState(courseSlug, moduleSlug, unitId, {
       status: "in-progress",
       slideIndex: boundedIndex,
     });
-  }, [courseSlug, moduleSlug, presentation.slides.length]);
+  }, [courseSlug, moduleSlug, presentation.slides.length, unitId]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -100,7 +104,7 @@ export function AiEngineeringPresentationViewer({
   };
 
   function openViewer() {
-    patchAiEngineeringStandardUnitState(courseSlug, moduleSlug, "presentacion", {
+    patchAiEngineeringStandardUnitState(courseSlug, moduleSlug, unitId, {
       status: "in-progress",
       slideIndex: activeIndex,
     });
@@ -148,8 +152,8 @@ export function AiEngineeringPresentationViewer({
             <FileSliders aria-hidden="true" />
           </span>
           <div>
-            <p className="font-black text-slate-950">Módulo 1 · Presentación interactiva</p>
-            <p className="mt-1 text-sm text-slate-600">17 diapositivas exportadas desde el PPTX original.</p>
+            <p className="font-black text-slate-950">Módulo {moduleNumber} · Presentación interactiva</p>
+            <p className="mt-1 text-sm text-slate-600">{presentation.slides.length} diapositivas exportadas desde el PPTX original.</p>
           </div>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">

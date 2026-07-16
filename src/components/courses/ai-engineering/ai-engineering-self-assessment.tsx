@@ -16,19 +16,21 @@ const initialSelfAssessmentState: SelfAssessmentState = {
   reviewed: false,
 };
 
-const questionNumbers = Array.from({ length: 8 }, (_, index) => index + 1);
-
 export function AiEngineeringSelfAssessment({
   courseSlug,
   moduleSlug,
   sourceHtml,
+  unitId,
+  questionCount,
 }: {
   courseSlug: string;
   moduleSlug: string;
   sourceHtml: string;
+  unitId: string;
+  questionCount: number;
 }) {
   const { value, status, updateValue, saveNow, saveValue } = useAiEngineeringUnitState(
-    { courseSlug, moduleSlug, unitId: "autoevaluacion" },
+    { courseSlug, moduleSlug, unitId },
     initialSelfAssessmentState,
   );
 
@@ -53,7 +55,7 @@ export function AiEngineeringSelfAssessment({
         </div>
 
         <div className="mt-5 space-y-4">
-          {questionNumbers.map((questionNumber) => {
+          {Array.from({ length: questionCount }, (_, index) => index + 1).map((questionNumber) => {
             const responseId = `respuesta-${questionNumber}`;
             return (
               <label key={responseId} htmlFor={`ai-engineering-${responseId}`} className="block">

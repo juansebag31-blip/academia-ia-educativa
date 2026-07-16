@@ -1,8 +1,6 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { resolveCourse } from "@/lib/courses/catalog";
-import { getAiEngineeringModulePresentation } from "@/lib/courses/ai-engineering/module-presentations";
-import { getAiEngineeringModuleVisuals } from "@/lib/courses/ai-engineering/module-visuals";
 import { AiEngineeringCases } from "./ai-engineering-cases";
 import { AiEngineeringCourseOverview } from "./ai-engineering-course-overview";
 import { AiEngineeringInfographic } from "./ai-engineering-infographic";
@@ -29,6 +27,8 @@ describe("AI Engineering visual renderer", () => {
     expect(screen.queryByRole("img")).not.toBeInTheDocument();
     expect(screen.getAllByText("Disponible")).toHaveLength(1);
     expect(screen.getAllByText("Próximamente")).toHaveLength(11);
+    expect(screen.getByText("Modelos fundacionales y selección")).toBeInTheDocument();
+    expect(screen.getByText("Producción y proyecto final")).toBeInTheDocument();
     expect(screen.getByText("JSG AI Engineering Hub v0.1")).toBeInTheDocument();
     expect(screen.queryByText("Ruta pedagógica")).not.toBeInTheDocument();
   });
@@ -50,7 +50,7 @@ describe("AI Engineering visual renderer", () => {
     expect(screen.getByText(/Anthropic.*Building effective agents/i)).toBeInTheDocument();
     expect(screen.getAllByText("Síntesis visual")).toHaveLength(5);
     expect(screen.getAllByText("Idea esencial")).toHaveLength(3);
-    expect(getAiEngineeringModuleVisuals(moduleOne.summary.slug).map((visual) => visual.afterSection)).toEqual([
+    expect(moduleOne.visuals.map((visual) => visual.afterSection)).toEqual([
       "aplicacion",
       "agente",
       "componentes",
@@ -70,8 +70,7 @@ describe("AI Engineering visual renderer", () => {
   });
 
   it("opens the 17-slide presentation and supports controls, keyboard and fullscreen", () => {
-    const presentation = getAiEngineeringModulePresentation(moduleOne.summary.slug);
-    if (!presentation) throw new Error("Presentation fixture is unavailable.");
+    const presentation = moduleOne.presentation;
 
     render(
       <AiEngineeringPresentationViewer
@@ -79,6 +78,8 @@ describe("AI Engineering visual renderer", () => {
         downloadHref={moduleOne.assets.presentation.publicPath}
         courseSlug={course.summary.slug}
         moduleSlug={moduleOne.summary.slug}
+        moduleNumber={moduleOne.summary.order}
+        unitId="presentacion"
       />,
     );
 

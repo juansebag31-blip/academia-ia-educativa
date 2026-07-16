@@ -1,154 +1,193 @@
 import { createHash } from "node:crypto";
-import { copyFile, mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { JSDOM } from "jsdom";
+import { aiEngineeringCourseManifest } from "../src/lib/courses/ai-engineering/manifest";
+import type { AiEngineeringModuleManifest } from "../src/lib/courses/ai-engineering/module-contract";
 import {
-  AI_ENGINEERING_COURSE_SLUG,
-  aiEngineeringManifest,
-} from "../src/lib/courses/ai-engineering/manifest";
-import { aiEngineeringModulePresentations } from "../src/lib/courses/ai-engineering/module-presentations";
+  canPublishAiEngineeringModule,
+  renderSlideFileName,
+  validateAiEngineeringCoursePackage,
+  validateAiEngineeringModulePackage,
+} from "../src/lib/courses/ai-engineering/module-validator";
 import type {
   AiEngineeringAssets,
   AiEngineeringPreparedHtml,
+  AiEngineeringPresentationConfig,
   PreparedAiEngineeringModule,
 } from "../src/lib/courses/types";
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 export const projectRoot = path.resolve(scriptDirectory, "..");
 export const sourceRoot = path.join(projectRoot, "course-content", "ai-engineering");
-export const generatedModulePath = path.join(
+export const generatedModulesPath = path.join(
   projectRoot,
   "src",
   "generated",
   "ai-engineering",
-  "module-01.json",
+  "modules.json",
 );
-export const publicModuleRoot = path.join(
-  projectRoot,
-  "public",
-  "ai-engineering-assets",
-  aiEngineeringManifest.module.id,
-);
-
-const publicUrlRoot = `/ai-engineering-assets/${aiEngineeringManifest.module.id}`;
-export const presentationSlides =
-  aiEngineeringModulePresentations[aiEngineeringManifest.module.id]?.slides ?? [];
-
-const publicAssets = {
-  infographic: {
-    sourcePath: aiEngineeringManifest.module.assets.infographic,
-    publicPath: `${publicUrlRoot}/modulo-01-infografia.png`,
-    mediaType: "image/png",
-  },
-  audioMp3: {
-    sourcePath: aiEngineeringManifest.module.assets.audioMp3,
-    publicPath: `${publicUrlRoot}/modulo-01-audio-explicativo.mp3`,
-    mediaType: "audio/mpeg",
-  },
-  presentation: {
-    sourcePath: aiEngineeringManifest.module.assets.presentation,
-    publicPath: `${publicUrlRoot}/modulo-01-presentacion.pptx`,
-    mediaType: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-  },
-} as const;
+export const publicCourseRoot = path.join(projectRoot, "public", "ai-engineering-assets");
 
 export async function prepareAiEngineeringContent() {
-  const assets = buildAssets();
-  await verifySourceFiles(assets);
-  await copyPublicAssets(assets);
+  const validation = await validateAiEngineeringCoursePackage(aiEngineeringCourseManifest, sourceRoot);
+  const preparedModules: PreparedAiEngineeringModule[] = [];
+  await rm(publicCourseRoot, { recursive: true, force: true });
+  await mkdir(publicCourseRoot, { recursive: true });
 
+  for (const moduleValidation of validation.modules) {
+    if (!canPublishAiEngineeringModule(moduleValidation.manifest)) continue;
+    preparedModules.push(
+      await prepareAiEngineeringModulePackage(moduleValidation.manifest, sourceRoot, publicCourseRoot),
+    );
+  }
+
+  await mkdir(path.dirname(generatedModulesPath), { recursive: true });
+  await writeFile(generatedModulesPath, `${JSON.stringify(preparedModules, null, 2)}\n`, "utf8");
+  const digest = createHash("sha256").update(JSON.stringify(preparedModules)).digest("hex");
+
+  return {
+    generatedModulesPath,
+    publicCourseRoot,
+    preparedModules,
+    digest,
+  };
+}
+
+export async function prepareAiEngineeringModulePackage(
+  manifestValue: unknown,
+  packageRoot: string,
+  publicRoot: string,
+) {
+  const validation = await validateAiEngineeringModulePackage(manifestValue, packageRoot);
+  const manifest = validation.manifest;
+  const publicModuleRoot = path.join(publicRoot, manifest.module.publicSlug);
+  const assets = buildAssets(manifest);
+  const presentation = buildPresentation(manifest);
+
+  await copyPublicAssets(packageRoot, publicModuleRoot, assets, presentation);
   const assetUrlsByFilename = new Map(
-    Object.values(publicAssets).map((asset) => [path.basename(asset.sourcePath), asset.publicPath]),
+    [assets.infographic, assets.audioMp3, assets.presentation].map((asset) => [
+      path.basename(asset.sourcePath),
+      asset.publicPath,
+    ]),
   );
+
   const prepared: PreparedAiEngineeringModule = {
-    sourceVersion: aiEngineeringManifest.version,
-    courseSlug: AI_ENGINEERING_COURSE_SLUG,
-    moduleSlug: aiEngineeringManifest.module.id,
+    sourceVersion: manifest.sourceVersion,
+    courseSlug: manifest.courseSlug,
+    moduleSlug: manifest.module.publicSlug,
+    configuration: manifest.module,
     assets,
     content: {
-      foundational: await prepareHtmlDocument(assets.contentHtml.sourcePath, assetUrlsByFilename),
-      visualAudio: await prepareHtmlDocument(assets.visualAudioHtml.sourcePath, assetUrlsByFilename),
-      audioScript: await readSourceText(assets.audioScript.sourcePath),
+      foundational: await prepareHtmlDocument(packageRoot, assets.contentHtml.sourcePath, assetUrlsByFilename),
+      visualAudio: assets.visualAudioHtml
+        ? await prepareHtmlDocument(packageRoot, assets.visualAudioHtml.sourcePath, assetUrlsByFilename)
+        : undefined,
+      audioScript: await readSourceText(packageRoot, assets.audioScript.sourcePath),
       cases: await Promise.all(
         assets.cases.map(async (caseAsset) => ({
           id: caseAsset.id,
-          ...(await prepareHtmlDocument(caseAsset.sourcePath, assetUrlsByFilename)),
+          ...(await prepareHtmlDocument(packageRoot, caseAsset.sourcePath, assetUrlsByFilename)),
         })),
       ),
     },
+    presentation,
   };
 
-  await mkdir(path.dirname(generatedModulePath), { recursive: true });
-  await writeFile(generatedModulePath, `${JSON.stringify(prepared, null, 2)}\n`, "utf8");
+  return prepared;
+}
 
+function buildAssets(manifest: AiEngineeringModuleManifest): AiEngineeringAssets {
+  const moduleConfig = manifest.module;
+  const publicUrlRoot = `/ai-engineering-assets/${moduleConfig.publicSlug}`;
   return {
-    generatedModulePath,
-    publicModuleRoot,
-    digest: createHash("sha256").update(JSON.stringify(prepared)).digest("hex"),
+    contentHtml: { sourcePath: moduleConfig.content.foundationalHtml },
+    visualAudioHtml: moduleConfig.content.visualAudioHtml
+      ? { sourcePath: moduleConfig.content.visualAudioHtml }
+      : undefined,
+    infographic: {
+      sourcePath: moduleConfig.assets.infographic.sourcePath,
+      publicPath: `${publicUrlRoot}/${path.basename(moduleConfig.assets.infographic.sourcePath)}`,
+      mediaType: mediaTypeFor(moduleConfig.assets.infographic.sourcePath),
+    },
+    audioMp3: {
+      sourcePath: moduleConfig.assets.audio.mp3SourcePath,
+      publicPath: `${publicUrlRoot}/${path.basename(moduleConfig.assets.audio.mp3SourcePath)}`,
+      mediaType: "audio/mpeg",
+    },
+    audioM4a: moduleConfig.assets.audio.m4aSourcePath
+      ? { sourcePath: moduleConfig.assets.audio.m4aSourcePath }
+      : undefined,
+    audioScript: { sourcePath: moduleConfig.assets.audio.transcriptSourcePath },
+    presentation: {
+      sourcePath: moduleConfig.assets.presentation.sourcePath,
+      publicPath: `${publicUrlRoot}/${path.basename(moduleConfig.assets.presentation.sourcePath)}`,
+      mediaType: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    },
+    cases: moduleConfig.assets.cases.map((item) => ({ ...item })),
   };
 }
 
-function buildAssets(): AiEngineeringAssets {
+function buildPresentation(manifest: AiEngineeringModuleManifest): AiEngineeringPresentationConfig {
+  const moduleConfig = manifest.module;
+  const config = moduleConfig.assets.presentation;
+  const publicUrlRoot = `/ai-engineering-assets/${moduleConfig.publicSlug}/slides`;
   return {
-    contentHtml: { sourcePath: aiEngineeringManifest.module.assets.contentHtml },
-    visualAudioHtml: { sourcePath: aiEngineeringManifest.module.assets.visualAudioHtml },
-    infographic: { ...publicAssets.infographic },
-    audioMp3: { ...publicAssets.audioMp3 },
-    audioM4a: { sourcePath: aiEngineeringManifest.module.assets.audioM4a },
-    audioScript: { sourcePath: aiEngineeringManifest.module.assets.audioScript },
-    presentation: { ...publicAssets.presentation },
-    cases: aiEngineeringManifest.module.assets.cases.map((sourcePath) => ({
-      id: path.basename(sourcePath, path.extname(sourcePath)),
-      sourcePath,
-    })),
+    title: config.title,
+    slides: Array.from({ length: config.slideCount }, (_, index) => {
+      const current = index + 1;
+      const fileName = renderSlideFileName(config.slideFilePattern, current);
+      return {
+        id: `slide-${String(current).padStart(2, "0")}`,
+        sourcePath: path.posix.join(config.slidesDirectory.replaceAll("\\", "/"), fileName),
+        publicPath: `${publicUrlRoot}/${fileName}`,
+        alt: config.slideAltTemplate
+          .replaceAll("{current}", String(current))
+          .replaceAll("{total}", String(config.slideCount)),
+        width: config.slideWidth,
+        height: config.slideHeight,
+      };
+    }),
   };
 }
 
-async function verifySourceFiles(assets: AiEngineeringAssets) {
-  const sourcePaths = [
-    assets.contentHtml.sourcePath,
-    assets.visualAudioHtml.sourcePath,
-    assets.infographic.sourcePath,
-    assets.audioMp3.sourcePath,
-    assets.audioM4a.sourcePath,
-    assets.audioScript.sourcePath,
-    assets.presentation.sourcePath,
-    ...assets.cases.map((item) => item.sourcePath),
-    ...presentationSlides.map((slide) => slide.sourcePath),
-  ];
-
-  for (const sourcePath of sourcePaths) {
-    const absolutePath = resolveSourcePath(sourcePath);
-    const sourceStat = await stat(absolutePath);
-    if (!sourceStat.isFile()) throw new Error(`Required AI Engineering source is not a file: ${sourcePath}`);
-  }
-}
-
-async function copyPublicAssets(assets: AiEngineeringAssets) {
-  assertInside(path.join(projectRoot, "public", "ai-engineering-assets"), publicModuleRoot);
+async function copyPublicAssets(
+  packageRoot: string,
+  publicModuleRoot: string,
+  assets: AiEngineeringAssets,
+  presentation: AiEngineeringPresentationConfig,
+) {
+  assertInside(publicCourseRootFor(publicModuleRoot), publicModuleRoot);
   await rm(publicModuleRoot, { recursive: true, force: true });
   await mkdir(publicModuleRoot, { recursive: true });
 
   for (const asset of [assets.infographic, assets.audioMp3, assets.presentation]) {
-    const destination = path.join(projectRoot, "public", asset.publicPath.replace(/^\//, ""));
-    assertInside(publicModuleRoot, destination);
-    await copyFile(resolveSourcePath(asset.sourcePath), destination);
-  }
-
-  for (const slide of presentationSlides) {
-    const destination = path.join(projectRoot, "public", slide.publicPath.replace(/^\//, ""));
+    const destination = path.join(publicCourseRootFor(publicModuleRoot), asset.publicPath.replace(/^\/ai-engineering-assets\//, ""));
     assertInside(publicModuleRoot, destination);
     await mkdir(path.dirname(destination), { recursive: true });
-    await copyFile(resolveSourcePath(slide.sourcePath), destination);
+    await copyFile(resolveSourcePath(packageRoot, asset.sourcePath), destination);
+  }
+
+  for (const slide of presentation.slides) {
+    const destination = path.join(publicCourseRootFor(publicModuleRoot), slide.publicPath.replace(/^\/ai-engineering-assets\//, ""));
+    assertInside(publicModuleRoot, destination);
+    await mkdir(path.dirname(destination), { recursive: true });
+    await copyFile(resolveSourcePath(packageRoot, slide.sourcePath), destination);
   }
 }
 
+function publicCourseRootFor(publicModuleRoot: string) {
+  return path.dirname(publicModuleRoot);
+}
+
 async function prepareHtmlDocument(
+  packageRoot: string,
   sourcePath: string,
   assetUrlsByFilename: Map<string, string>,
 ): Promise<AiEngineeringPreparedHtml> {
-  const source = await readSourceText(sourcePath);
+  const source = await readSourceText(packageRoot, sourcePath);
   const dom = new JSDOM(source);
   const document = dom.window.document;
 
@@ -159,14 +198,12 @@ async function prepareHtmlDocument(
         element.removeAttribute(attribute.name);
       }
     }
-
     for (const attributeName of ["href", "src"] as const) {
       const value = element.getAttribute(attributeName);
       if (!value) continue;
       const publicPath = assetUrlsByFilename.get(path.basename(value));
       if (publicPath) element.setAttribute(attributeName, publicPath);
     }
-
     if (element.getAttribute("target") === "_blank") {
       element.setAttribute("rel", "noopener noreferrer");
     }
@@ -176,14 +213,11 @@ async function prepareHtmlDocument(
     .map((element) => element.outerHTML.trim())
     .filter(Boolean)
     .join("\n");
-
-  const sections = Array.from(document.querySelectorAll<HTMLElement>("main section[id]")).map(
-    (section) => ({
-      id: section.id,
-      title: section.querySelector("h2, h3")?.textContent?.trim() ?? section.id,
-      html: section.innerHTML.trim(),
-    }),
-  );
+  const sections = Array.from(document.querySelectorAll<HTMLElement>("main section[id]")).map((section) => ({
+    id: section.id,
+    title: section.querySelector("h2, h3")?.textContent?.trim() ?? section.id,
+    html: section.innerHTML.trim(),
+  }));
 
   return {
     title: document.title.trim(),
@@ -194,13 +228,13 @@ async function prepareHtmlDocument(
   };
 }
 
-async function readSourceText(sourcePath: string) {
-  return readFile(resolveSourcePath(sourcePath), "utf8");
+async function readSourceText(packageRoot: string, sourcePath: string) {
+  return readFile(resolveSourcePath(packageRoot, sourcePath), "utf8");
 }
 
-function resolveSourcePath(sourcePath: string) {
-  const absolutePath = path.resolve(sourceRoot, sourcePath);
-  assertInside(sourceRoot, absolutePath);
+function resolveSourcePath(packageRoot: string, sourcePath: string) {
+  const absolutePath = path.resolve(packageRoot, sourcePath);
+  assertInside(packageRoot, absolutePath);
   return absolutePath;
 }
 
@@ -211,14 +245,22 @@ function assertInside(parent: string, target: string) {
   }
 }
 
+function mediaTypeFor(sourcePath: string) {
+  const extension = path.extname(sourcePath).toLowerCase();
+  if (extension === ".webp") return "image/webp";
+  if (extension === ".jpg" || extension === ".jpeg") return "image/jpeg";
+  return "image/png";
+}
+
 const isMainModule = process.argv[1]
   ? path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
   : false;
 
 if (isMainModule) {
   prepareAiEngineeringContent()
-    .then(({ generatedModulePath: outputPath, publicModuleRoot: publicPath, digest }) => {
-      console.log(`AI Engineering content prepared: ${path.relative(projectRoot, outputPath)}`);
+    .then(({ generatedModulesPath: outputPath, publicCourseRoot: publicPath, preparedModules, digest }) => {
+      console.log(`AI Engineering modules prepared: ${preparedModules.length}`);
+      console.log(`AI Engineering data generated: ${path.relative(projectRoot, outputPath)}`);
       console.log(`AI Engineering media copied: ${path.relative(projectRoot, publicPath)}`);
       console.log(`AI Engineering digest: ${digest}`);
     })

@@ -4,11 +4,10 @@ import type { AiEngineeringCourseDefinition } from "@/lib/courses/types";
 import { AiEngineeringCourseProgressCta } from "./ai-engineering-progress";
 import { AiEngineeringSystemVisual } from "./ai-engineering-system-visual";
 
-const moduleSlots = Array.from({ length: 12 }, (_, index) => index + 1);
-
 export function AiEngineeringCourseOverview({ course }: { course: AiEngineeringCourseDefinition }) {
   const firstModule = course.modules[0];
   const moduleHref = `/courses/${course.summary.slug}/modules/${firstModule.summary.slug}`;
+  const availableCount = course.curriculum.filter((module) => module.editorialStatus === "approved" && module.publish).length;
 
   return (
     <div className="space-y-7">
@@ -45,6 +44,8 @@ export function AiEngineeringCourseOverview({ course }: { course: AiEngineeringC
             <AiEngineeringCourseProgressCta
               courseSlug={course.summary.slug}
               moduleSlug={firstModule.summary.slug}
+              moduleNumber={firstModule.summary.order}
+              units={firstModule.configuration.progressUnits}
               moduleHref={moduleHref}
             />
           </div>
@@ -72,29 +73,35 @@ export function AiEngineeringCourseOverview({ course }: { course: AiEngineeringC
             <p className="text-xs font-black uppercase tracking-[0.18em] text-[#0f766e]">Programa</p>
             <h2 className="mt-1 text-2xl font-black text-[#0b1f33]">Recorrido de 12 módulos</h2>
           </div>
-          <p className="text-sm font-semibold text-slate-500">1 disponible · 11 próximamente</p>
+          <p className="text-sm font-semibold text-slate-500">{availableCount} disponible · {course.curriculum.length - availableCount} próximamente</p>
         </div>
 
         <ol className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {moduleSlots.map((moduleNumber) => {
-            const isAvailable = moduleNumber === 1;
+          {course.curriculum.map((modulePlan) => {
+            const publicModule = modulePlan.publicSlug
+              ? course.modules.find((module) => module.summary.slug === modulePlan.publicSlug)
+              : undefined;
+            const isAvailable = modulePlan.editorialStatus === "approved" && modulePlan.publish && Boolean(publicModule);
+            const publicHref = publicModule
+              ? `/courses/${course.summary.slug}/modules/${publicModule.summary.slug}`
+              : undefined;
             const content = (
               <>
                 <div className="flex items-center justify-between gap-3">
-                  <span className="font-mono text-xs font-black text-[#0f766e]">{String(moduleNumber).padStart(2, "0")}</span>
+                  <span className="font-mono text-xs font-black text-[#0f766e]">{String(modulePlan.number).padStart(2, "0")}</span>
                   <span className={`rounded-full px-2.5 py-1 text-[11px] font-black ${isAvailable ? "bg-emerald-100 text-emerald-800" : "bg-slate-100 text-slate-600"}`}>
                     {isAvailable ? "Disponible" : "Próximamente"}
                   </span>
                 </div>
-                <p className="mt-4 font-black text-[#0b1f33]">Módulo {moduleNumber}</p>
-                {isAvailable ? <p className="mt-1 text-sm leading-6 text-slate-600">{firstModule.summary.title}</p> : null}
+                <p className="mt-4 font-black text-[#0b1f33]">Módulo {modulePlan.number}</p>
+                <p className="mt-1 text-sm leading-6 text-slate-600">{modulePlan.title}</p>
               </>
             );
 
             return (
-              <li key={moduleNumber}>
-                {isAvailable ? (
-                  <Link href={moduleHref} className="focus-ring block min-h-32 rounded-2xl border border-[#0f766e]/30 bg-[#f3f7f6] p-4 transition hover:border-[#0f766e] hover:bg-[#e8f5f2] motion-reduce:transition-none">
+              <li key={modulePlan.editorialSlug}>
+                {isAvailable && publicHref ? (
+                  <Link href={publicHref} className="focus-ring block min-h-32 rounded-2xl border border-[#0f766e]/30 bg-[#f3f7f6] p-4 transition hover:border-[#0f766e] hover:bg-[#e8f5f2] motion-reduce:transition-none">
                     {content}
                   </Link>
                 ) : (

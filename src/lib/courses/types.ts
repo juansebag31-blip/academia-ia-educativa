@@ -1,4 +1,11 @@
 import type { CourseModule, CourseSeed } from "@/lib/course";
+import type {
+  AiEngineeringCourseModulePlan,
+  AiEngineeringModuleManifest,
+  AiEngineeringProgressKind,
+  AiEngineeringVisualPlacement,
+  AiEngineeringKeyIdea,
+} from "@/lib/courses/ai-engineering/module-contract";
 
 export type CourseTheme = "academia-ia" | "ai-engineering";
 
@@ -6,6 +13,9 @@ export type ProgressUnit = {
   id: string;
   order: number;
   sourceKey: string;
+  sectionId?: string;
+  label?: string;
+  kind?: AiEngineeringProgressKind;
 };
 
 export type ModuleSummary = {
@@ -43,10 +53,10 @@ export type AiEngineeringCaseAsset = AiEngineeringSourceAsset & {
 
 export type AiEngineeringAssets = {
   contentHtml: AiEngineeringSourceAsset;
-  visualAudioHtml: AiEngineeringSourceAsset;
+  visualAudioHtml?: AiEngineeringSourceAsset;
   infographic: AiEngineeringPublicAsset;
   audioMp3: AiEngineeringPublicAsset;
-  audioM4a: AiEngineeringSourceAsset;
+  audioM4a?: AiEngineeringSourceAsset;
   audioScript: AiEngineeringSourceAsset;
   presentation: AiEngineeringPublicAsset;
   cases: AiEngineeringCaseAsset[];
@@ -72,26 +82,49 @@ export type AiEngineeringPreparedCase = AiEngineeringPreparedHtml & {
 
 export type AiEngineeringContent = {
   foundational: AiEngineeringPreparedHtml;
-  visualAudio: AiEngineeringPreparedHtml;
+  visualAudio?: AiEngineeringPreparedHtml;
   audioScript: string;
   cases: AiEngineeringPreparedCase[];
 };
 
 export type AiEngineeringModule = {
   summary: ModuleSummary;
-  status: string;
+  editorialSlug: string;
+  editorialStatus: AiEngineeringModuleManifest["module"]["editorialStatus"];
+  publish: boolean;
+  level: string;
   estimatedStudyMinutes: number;
   learningPath: ProgressUnit[];
   assets: AiEngineeringAssets;
   content: AiEngineeringContent;
+  configuration: AiEngineeringModuleManifest["module"];
+  presentation: AiEngineeringPresentationConfig;
+  visuals: AiEngineeringVisualPlacement[];
+  keyIdeas: AiEngineeringKeyIdea[];
 };
 
 export type PreparedAiEngineeringModule = {
   sourceVersion: string;
   courseSlug: string;
   moduleSlug: string;
+  configuration: AiEngineeringModuleManifest["module"];
   assets: AiEngineeringAssets;
   content: AiEngineeringContent;
+  presentation: AiEngineeringPresentationConfig;
+};
+
+export type AiEngineeringPresentationSlide = {
+  id: string;
+  sourcePath: string;
+  publicPath: string;
+  alt: string;
+  width: number;
+  height: number;
+};
+
+export type AiEngineeringPresentationConfig = {
+  title: string;
+  slides: AiEngineeringPresentationSlide[];
 };
 
 export type StandardCourseDefinition = {
@@ -106,6 +139,7 @@ export type AiEngineeringCourseDefinition = {
   summary: CourseSummary;
   sourceVersion: string;
   modules: AiEngineeringModule[];
+  curriculum: AiEngineeringCourseModulePlan[];
 };
 
 export type CourseDefinition = StandardCourseDefinition | AiEngineeringCourseDefinition;

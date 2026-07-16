@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 2,
+  "sourceVersion": "TODO_SOURCE_VERSION",
+  "courseSlug": "ai-engineering-aplicado",
+  "module": {
+    "editorialSlug": "TODO_EDITORIAL_SLUG",
+    "publicSlug": "TODO_PUBLIC_SLUG",
+    "number": 1,
+    "title": "TODO_TITLE",
+    "editorialStatus": "draft",
+    "publish": false,
+    "level": "TODO_LEVEL",
+    "estimatedStudyMinutes": 1,
+    "content": {
+      "foundationalHtml": "content/contenido-fundacional.html",
+      "objectives": { "sectionId": "proposito", "selector": "ul > li" },
+      "activity": { "sectionId": "actividad" },
+      "selfAssessment": {
+        "sectionId": "evaluacion",
+        "questionSelector": "ol > li",
+        "questionCount": 1
+      },
+      "sources": { "sectionId": "fuentes", "itemSelector": "ol > li" }
+    },
+    "assets": {
+      "infographic": {
+        "sourcePath": "assets/images/TODO_INFOGRAPHIC.png",
+        "title": "TODO_INFOGRAPHIC_TITLE",
+        "alt": "TODO_INFOGRAPHIC_ALT"
+      },
+      "audio": {
+        "mp3SourcePath": "assets/audio/TODO_AUDIO.mp3",
+        "transcriptSourcePath": "content/transcripcion.txt",
+        "title": "TODO_AUDIO_TITLE"
+      },
+      "cases": [
+        { "id": "caso-01", "sourcePath": "cases/caso-01.html" }
+      ],
+      "presentation": {
+        "sourcePath": "assets/presentations/TODO_PRESENTATION.pptx",
+        "title": "TODO_PRESENTATION_TITLE",
+        "slidesDirectory": "assets/presentations/slides",
+        "slideCount": 1,
+        "slideFilePattern": "slide-{number:2}.webp",
+        "slideWidth": 1600,
+        "slideHeight": 900,
+        "slideAltTemplate": "Diapositiva {current} de {total} de TODO_PRESENTATION_ALT"
+      }
+    },
+    "sections": {
+      "casesTitle": "TODO_CASES_TITLE",
+      "presentationTitle": "TODO_PRESENTATION_SECTION_TITLE"
+    },
+    "interactions": {
+      "activity": {
+        "unitId": "actividad",
+        "responseLabel": "Tu respuesta",
+        "placeholder": "TODO_ACTIVITY_PLACEHOLDER"
+      },
+      "selfAssessment": { "unitId": "autoevaluacion" }
+    },
+    "progressUnits": [
+      { "id": "orientacion", "kind": "orientation", "sectionId": "orientacion", "label": "Orientación" },
+      { "id": "contenido_fundacional", "kind": "foundational-content", "sectionId": "contenido", "label": "Contenido fundacional" },
+      { "id": "infografia", "kind": "infographic", "sectionId": "infografia", "label": "Infografía" },
+      { "id": "audio_explicativo", "kind": "audio", "sectionId": "audio", "label": "Audio explicativo" },
+      { "id": "casos_reales", "kind": "cases", "sectionId": "casos", "label": "Casos reales" },
+      { "id": "presentacion", "kind": "presentation", "sectionId": "presentacion", "label": "Presentación" },
+      { "id": "actividad", "kind": "activity", "sectionId": "actividad", "label": "Actividad" },
+      { "id": "autoevaluacion", "kind": "self-assessment", "sectionId": "autoevaluacion", "label": "Autoevaluación" }
+    ],
+    "visuals": [],
+    "keyIdeas": []
+  }
+}

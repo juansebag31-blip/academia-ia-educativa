@@ -12,11 +12,7 @@ import {
   PencilLine,
   Presentation,
 } from "lucide-react";
-import { getAiEngineeringModulePresentation } from "@/lib/courses/ai-engineering/module-presentations";
-import {
-  getAiEngineeringModuleKeyIdeas,
-  getAiEngineeringModuleVisuals,
-} from "@/lib/courses/ai-engineering/module-visuals";
+import type { AiEngineeringProgressKind } from "@/lib/courses/ai-engineering/module-contract";
 import type { AiEngineeringCourseDefinition, AiEngineeringModule } from "@/lib/courses/types";
 import { AiEngineeringActivity } from "./ai-engineering-activity";
 import { AiEngineeringAudioPlayer } from "./ai-engineering-audio-player";
@@ -44,19 +40,24 @@ export function AiEngineeringModulePage({
   module: AiEngineeringModule;
 }) {
   const foundationalSections = module.content.foundational.sections.filter(
-    (section) => !["actividad", "evaluacion", "fuentes"].includes(section.id),
+    (section) => ![
+      module.configuration.content.activity.sectionId,
+      module.configuration.content.selfAssessment.sectionId,
+      module.configuration.content.sources.sectionId,
+    ].includes(section.id),
   );
-  const activity = findSection(module, "actividad");
-  const evaluation = findSection(module, "evaluacion");
-  const sources = findSection(module, "fuentes");
-  const learningVisuals = getAiEngineeringModuleVisuals(module.summary.slug);
-  const keyIdeas = getAiEngineeringModuleKeyIdeas(module.summary.slug);
-  const presentation = getAiEngineeringModulePresentation(module.summary.slug);
+  const activity = findSection(module, module.configuration.content.activity.sectionId);
+  const evaluation = findSection(module, module.configuration.content.selfAssessment.sectionId);
+  const sources = findSection(module, module.configuration.content.sources.sectionId);
+  const learningVisuals = module.visuals;
+  const keyIdeas = module.keyIdeas;
 
   return (
     <AiEngineeringProgressProvider
       courseSlug={course.summary.slug}
       moduleSlug={module.summary.slug}
+      moduleNumber={module.summary.order}
+      units={module.configuration.progressUnits}
     >
     <div className="space-y-7 pb-12">
       <section id="orientacion" className="scroll-mt-28 relative overflow-hidden rounded-3xl border border-[#0f766e]/20 bg-[linear-gradient(135deg,#ffffff_0%,#f3f7f6_62%,#e8f5f2_100%)] shadow-[0_20px_60px_rgba(11,31,51,0.10)]">
@@ -74,7 +75,7 @@ export function AiEngineeringModulePage({
               <div className="flex flex-wrap gap-2 text-xs font-black uppercase tracking-[0.14em] text-[#0f766e]">
                 <span>Módulo {module.summary.order}</span>
                 <span aria-hidden="true">·</span>
-                <span>Nivel fundacional</span>
+                 <span>Nivel {module.level}</span>
               </div>
               <h1 className="mt-3 max-w-4xl text-3xl font-black leading-[1.08] tracking-tight text-[#0b1f33] sm:text-4xl lg:text-5xl">
                 {module.summary.title}
@@ -94,7 +95,7 @@ export function AiEngineeringModulePage({
               <ArrowRight size={18} />
             </a>
           </div>
-          <AiEngineeringUnitCompletion unitId="orientacion" />
+           <ConfiguredUnitCompletion module={module} kind="orientation" />
         </div>
       </section>
 
@@ -132,16 +133,16 @@ export function AiEngineeringModulePage({
               );
             })}
           </div>
-          <AiEngineeringUnitCompletion unitId="contenido_fundacional" />
+          <ConfiguredUnitCompletion module={module} kind="foundational-content" />
         </div>
       </section>
 
-      <ModuleSection id="infografia" icon={<FileImage />} eyebrow="Infografía" title="De un modelo a un sistema inteligente">
+      <ModuleSection id="infografia" icon={<FileImage />} eyebrow="Infografía" title={module.configuration.assets.infographic.title}>
         <AiEngineeringInfographic
           src={module.assets.infographic.publicPath}
-          alt="Infografía del Módulo 1 sobre el recorrido de un modelo a un sistema inteligente"
+          alt={module.configuration.assets.infographic.alt}
         />
-        <AiEngineeringUnitCompletion unitId="infografia" />
+        <ConfiguredUnitCompletion module={module} kind="infographic" />
       </ModuleSection>
 
       <ModuleSection id="audio" icon={<FileAudio />} eyebrow="Audio" title="Audio explicativo">
@@ -151,7 +152,8 @@ export function AiEngineeringModulePage({
             moduleSlug={module.summary.slug}
             src={module.assets.audioMp3.publicPath}
             type={module.assets.audioMp3.mediaType}
-            title="Audio explicativo del Módulo 1"
+            title={module.configuration.assets.audio.title}
+            unitId={requireUnitId(module, "audio")}
           />
         </div>
         <details className="group mt-4 rounded-2xl border border-slate-200 bg-slate-50">
@@ -165,24 +167,24 @@ export function AiEngineeringModulePage({
             {module.content.audioScript}
           </pre>
         </details>
-        <AiEngineeringUnitCompletion unitId="audio_explicativo" />
+        <ConfiguredUnitCompletion module={module} kind="audio" />
       </ModuleSection>
 
-      <ModuleSection id="casos" icon={<BriefcaseBusiness />} eyebrow="Casos" title="Tres casos reales">
+      <ModuleSection id="casos" icon={<BriefcaseBusiness />} eyebrow="Casos" title={module.configuration.sections.casesTitle}>
         <AiEngineeringCases cases={module.content.cases} />
-        <AiEngineeringUnitCompletion unitId="casos_reales" />
+        <ConfiguredUnitCompletion module={module} kind="cases" />
       </ModuleSection>
 
-      <ModuleSection id="presentacion" icon={<Presentation />} eyebrow="Presentación" title="Material de presentación">
-        {presentation ? (
+      <ModuleSection id="presentacion" icon={<Presentation />} eyebrow="Presentación" title={module.configuration.sections.presentationTitle}>
           <AiEngineeringPresentationViewer
-            presentation={presentation}
+            presentation={module.presentation}
             downloadHref={module.assets.presentation.publicPath}
             courseSlug={course.summary.slug}
             moduleSlug={module.summary.slug}
+            moduleNumber={module.summary.order}
+            unitId={requireUnitId(module, "presentation")}
           />
-        ) : null}
-        <AiEngineeringUnitCompletion unitId="presentacion" />
+        <ConfiguredUnitCompletion module={module} kind="presentation" />
       </ModuleSection>
 
       <ModuleSection id="actividad" icon={<PencilLine />} eyebrow="Actividad">
@@ -190,6 +192,9 @@ export function AiEngineeringModulePage({
           courseSlug={course.summary.slug}
           moduleSlug={module.summary.slug}
           sourceHtml={activity.html}
+          unitId={module.configuration.interactions.activity.unitId}
+          responseLabel={module.configuration.interactions.activity.responseLabel}
+          placeholder={module.configuration.interactions.activity.placeholder}
         />
       </ModuleSection>
 
@@ -198,6 +203,8 @@ export function AiEngineeringModulePage({
           courseSlug={course.summary.slug}
           moduleSlug={module.summary.slug}
           sourceHtml={evaluation.html}
+          unitId={module.configuration.interactions.selfAssessment.unitId}
+          questionCount={module.configuration.content.selfAssessment.questionCount}
         />
       </ModuleSection>
 
@@ -213,6 +220,23 @@ export function AiEngineeringModulePage({
     </div>
     </AiEngineeringProgressProvider>
   );
+}
+
+function ConfiguredUnitCompletion({
+  module,
+  kind,
+}: {
+  module: AiEngineeringModule;
+  kind: AiEngineeringProgressKind;
+}) {
+  const unitId = module.configuration.progressUnits.find((unit) => unit.kind === kind)?.id;
+  return unitId ? <AiEngineeringUnitCompletion unitId={unitId} /> : null;
+}
+
+function requireUnitId(module: AiEngineeringModule, kind: AiEngineeringProgressKind) {
+  const unitId = module.configuration.progressUnits.find((unit) => unit.kind === kind)?.id;
+  if (!unitId) throw new Error(`Missing AI Engineering progress unit for ${kind}.`);
+  return unitId;
 }
 
 function findSection(module: AiEngineeringModule, id: string) {
