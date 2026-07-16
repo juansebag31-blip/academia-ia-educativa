@@ -38,7 +38,7 @@ describe("AI Engineering visual renderer", () => {
 
     const navigation = screen.getByRole("navigation", { name: "Navegación interna del módulo", hidden: true });
     expect(within(navigation).getAllByRole("link", { hidden: true })).toHaveLength(8);
-    expect(within(navigation).getByRole("link", { name: "07 Autoevaluación", hidden: true })).toHaveAttribute(
+    expect(within(navigation).getByRole("link", { name: /^08 Autoevaluación/, hidden: true })).toHaveAttribute(
       "href",
       "#autoevaluacion",
     );
@@ -77,6 +77,8 @@ describe("AI Engineering visual renderer", () => {
       <AiEngineeringPresentationViewer
         presentation={presentation}
         downloadHref={moduleOne.assets.presentation.publicPath}
+        courseSlug={course.summary.slug}
+        moduleSlug={moduleOne.summary.slug}
       />,
     );
 

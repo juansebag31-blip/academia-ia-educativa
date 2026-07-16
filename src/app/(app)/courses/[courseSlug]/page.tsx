@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArrowRight, Download, FileText, GraduationCap } from "lucide-react";
 import { ModuleCard } from "@/components/module-card";
@@ -9,6 +10,21 @@ import { getCourseRouteParams, resolveCourse } from "@/lib/courses/catalog";
 
 export function generateStaticParams() {
   return getCourseRouteParams();
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ courseSlug: string }>;
+}): Promise<Metadata> {
+  const { courseSlug } = await params;
+  const courseDefinition = resolveCourse(courseSlug);
+  if (!courseDefinition) return {};
+
+  return {
+    title: courseDefinition.summary.title,
+    description: courseDefinition.summary.description ?? courseDefinition.summary.title,
+  };
 }
 
 export default async function CoursePage({ params }: { params: Promise<{ courseSlug: string }> }) {

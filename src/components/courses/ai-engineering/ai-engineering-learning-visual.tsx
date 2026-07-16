@@ -261,7 +261,7 @@ function ImagingStudyFlow() {
             <span className="flex size-10 items-center justify-center rounded-xl bg-[#dff3ef] text-[#0f766e]">
               <Icon size={20} aria-hidden="true" />
             </span>
-            <span className="font-mono text-xs font-black text-slate-400">{String(index + 1).padStart(2, "0")}</span>
+            <span className="font-mono text-xs font-black text-slate-600">{String(index + 1).padStart(2, "0")}</span>
           </div>
           <p className="mt-4 text-sm font-black leading-5 text-[#0b1f33]">{label}</p>
           {index < steps.length - 1 ? (

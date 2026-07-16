@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { buildAiEngineeringUnitStorageKey } from "@/lib/courses/ai-engineering/unit-storage";
 import { AiEngineeringActivity } from "./ai-engineering-activity";
+import { AiEngineeringAudioPlayer } from "./ai-engineering-audio-player";
 import { AiEngineeringSelfAssessment } from "./ai-engineering-self-assessment";
 
 const courseSlug = "ai-engineering-aplicado";
@@ -73,5 +74,36 @@ describe("AI Engineering unit interactions", () => {
       expect(window.localStorage.getItem(key)).toContain('"reviewed":true');
     });
     expect(screen.getByText(/No hay puntuación/i)).toBeInTheDocument();
+  });
+
+  it("stores and restores the audio position without changing completion", async () => {
+    const audioProps = {
+      courseSlug,
+      moduleSlug,
+      src: "/audio-prueba.mp3",
+      type: "audio/mpeg",
+      title: "Audio de prueba",
+    };
+    const { container, unmount } = render(<AiEngineeringAudioPlayer {...audioProps} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Reproducir Audio de prueba" }));
+    const audio = container.querySelector("audio");
+    if (!audio) throw new Error("The audio element was not rendered.");
+    Object.defineProperty(audio, "currentTime", { configurable: true, value: 12 });
+    fireEvent.timeUpdate(audio);
+
+    const key = buildAiEngineeringUnitStorageKey({
+      courseSlug,
+      moduleSlug,
+      unitId: "audio_explicativo",
+    });
+    expect(window.localStorage.getItem(key)).toContain('"positionSeconds":12');
+    expect(window.localStorage.getItem(key)).toContain('"status":"in-progress"');
+
+    unmount();
+    render(<AiEngineeringAudioPlayer {...audioProps} />);
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: "Continuar Audio de prueba" })).toBeInTheDocument();
+    });
   });
 });

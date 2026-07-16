@@ -12,7 +12,6 @@ import {
   PencilLine,
   Presentation,
 } from "lucide-react";
-import { DeferredAudio } from "@/components/deferred-media";
 import { getAiEngineeringModulePresentation } from "@/lib/courses/ai-engineering/module-presentations";
 import {
   getAiEngineeringModuleKeyIdeas,
@@ -20,6 +19,7 @@ import {
 } from "@/lib/courses/ai-engineering/module-visuals";
 import type { AiEngineeringCourseDefinition, AiEngineeringModule } from "@/lib/courses/types";
 import { AiEngineeringActivity } from "./ai-engineering-activity";
+import { AiEngineeringAudioPlayer } from "./ai-engineering-audio-player";
 import { AiEngineeringCases } from "./ai-engineering-cases";
 import { AiEngineeringInfographic } from "./ai-engineering-infographic";
 import {
@@ -27,19 +27,14 @@ import {
   AiEngineeringLearningVisual,
 } from "./ai-engineering-learning-visual";
 import { AiEngineeringPresentationViewer } from "./ai-engineering-presentation-viewer";
+import {
+  AiEngineeringModuleCompletion,
+  AiEngineeringProgressNavigation,
+  AiEngineeringProgressProvider,
+  AiEngineeringUnitCompletion,
+} from "./ai-engineering-progress";
 import { AiEngineeringSelfAssessment } from "./ai-engineering-self-assessment";
 import { SanitizedHtml } from "./sanitized-html";
-
-const navigation = [
-  ["contenido", "Contenido"],
-  ["infografia", "Infografía"],
-  ["audio", "Audio"],
-  ["casos", "Casos"],
-  ["presentacion", "Presentación"],
-  ["actividad", "Actividad"],
-  ["autoevaluacion", "Autoevaluación"],
-  ["fuentes", "Fuentes"],
-] as const;
 
 export function AiEngineeringModulePage({
   course,
@@ -59,8 +54,12 @@ export function AiEngineeringModulePage({
   const presentation = getAiEngineeringModulePresentation(module.summary.slug);
 
   return (
+    <AiEngineeringProgressProvider
+      courseSlug={course.summary.slug}
+      moduleSlug={module.summary.slug}
+    >
     <div className="space-y-7 pb-12">
-      <section className="relative overflow-hidden rounded-3xl border border-[#0f766e]/20 bg-[linear-gradient(135deg,#ffffff_0%,#f3f7f6_62%,#e8f5f2_100%)] shadow-[0_20px_60px_rgba(11,31,51,0.10)]">
+      <section id="orientacion" className="scroll-mt-28 relative overflow-hidden rounded-3xl border border-[#0f766e]/20 bg-[linear-gradient(135deg,#ffffff_0%,#f3f7f6_62%,#e8f5f2_100%)] shadow-[0_20px_60px_rgba(11,31,51,0.10)]">
         <div className="absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,#0b1f33,#0f766e,#2dd4bf)]" />
         <div className="relative p-6 sm:p-8 lg:p-10">
           <Link
@@ -95,29 +94,11 @@ export function AiEngineeringModulePage({
               <ArrowRight size={18} />
             </a>
           </div>
+          <AiEngineeringUnitCompletion unitId="orientacion" />
         </div>
       </section>
 
-      <details className="group sticky top-3 z-30 rounded-2xl border border-slate-200 bg-white/95 shadow-card backdrop-blur">
-        <summary className="focus-ring cursor-pointer list-none rounded-2xl px-5 py-4 font-black text-[#0b1f33] marker:content-none">
-          <span className="flex items-center justify-between gap-4">
-            Recorrido del módulo · 8 etapas
-            <span aria-hidden="true" className="text-xl text-[#0f766e] group-open:rotate-45 motion-reduce:transition-none">+</span>
-          </span>
-        </summary>
-        <nav aria-label="Navegación interna del módulo" className="border-t border-slate-200 p-3">
-          <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-            {navigation.map(([href, label], index) => (
-              <li key={href}>
-                <a href={`#${href}`} className="focus-ring flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-black text-slate-600 hover:bg-[#e8f5f2] hover:text-[#0f766e]">
-                  <span className="font-mono text-xs text-[#0f766e]">{String(index + 1).padStart(2, "0")}</span>
-                  {label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </details>
+      <AiEngineeringProgressNavigation />
 
       <section id="contenido" className="scroll-mt-28 rounded-3xl border border-slate-200 bg-white shadow-card">
         <SectionHeading icon={<BookOpen />} eyebrow="Contenido" title="Documento fundacional" />
@@ -151,6 +132,7 @@ export function AiEngineeringModulePage({
               );
             })}
           </div>
+          <AiEngineeringUnitCompletion unitId="contenido_fundacional" />
         </div>
       </section>
 
@@ -159,11 +141,14 @@ export function AiEngineeringModulePage({
           src={module.assets.infographic.publicPath}
           alt="Infografía del Módulo 1 sobre el recorrido de un modelo a un sistema inteligente"
         />
+        <AiEngineeringUnitCompletion unitId="infografia" />
       </ModuleSection>
 
       <ModuleSection id="audio" icon={<FileAudio />} eyebrow="Audio" title="Audio explicativo">
         <div className="rounded-2xl bg-[#0b1f33] p-5 text-white sm:p-6">
-          <DeferredAudio
+          <AiEngineeringAudioPlayer
+            courseSlug={course.summary.slug}
+            moduleSlug={module.summary.slug}
             src={module.assets.audioMp3.publicPath}
             type={module.assets.audioMp3.mediaType}
             title="Audio explicativo del Módulo 1"
@@ -180,10 +165,12 @@ export function AiEngineeringModulePage({
             {module.content.audioScript}
           </pre>
         </details>
+        <AiEngineeringUnitCompletion unitId="audio_explicativo" />
       </ModuleSection>
 
       <ModuleSection id="casos" icon={<BriefcaseBusiness />} eyebrow="Casos" title="Tres casos reales">
         <AiEngineeringCases cases={module.content.cases} />
+        <AiEngineeringUnitCompletion unitId="casos_reales" />
       </ModuleSection>
 
       <ModuleSection id="presentacion" icon={<Presentation />} eyebrow="Presentación" title="Material de presentación">
@@ -191,8 +178,11 @@ export function AiEngineeringModulePage({
           <AiEngineeringPresentationViewer
             presentation={presentation}
             downloadHref={module.assets.presentation.publicPath}
+            courseSlug={course.summary.slug}
+            moduleSlug={module.summary.slug}
           />
         ) : null}
+        <AiEngineeringUnitCompletion unitId="presentacion" />
       </ModuleSection>
 
       <ModuleSection id="actividad" icon={<PencilLine />} eyebrow="Actividad">
@@ -219,7 +209,9 @@ export function AiEngineeringModulePage({
           </div>
         ) : null}
       </ModuleSection>
+      <AiEngineeringModuleCompletion courseHref={`/courses/${course.summary.slug}`} />
     </div>
+    </AiEngineeringProgressProvider>
   );
 }
 

@@ -1,4 +1,5 @@
 const AI_ENGINEERING_UNIT_STORAGE_PREFIX = "academia-ia-ai-engineering-unit-v1";
+export const AI_ENGINEERING_UNIT_STATE_EVENT = "ai-engineering-unit-state-change";
 
 export type AiEngineeringUnitCoordinates = {
   courseSlug: string;
@@ -52,6 +53,9 @@ export function writeAiEngineeringUnitState<T>(
       buildAiEngineeringUnitStorageKey(coordinates),
       JSON.stringify(stored),
     );
+    window.dispatchEvent(new CustomEvent(AI_ENGINEERING_UNIT_STATE_EVENT, {
+      detail: coordinates,
+    }));
     return true;
   } catch {
     return false;

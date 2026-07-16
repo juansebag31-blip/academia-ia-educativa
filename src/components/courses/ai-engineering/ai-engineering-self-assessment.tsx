@@ -7,6 +7,8 @@ import { useAiEngineeringUnitState } from "./use-ai-engineering-unit-state";
 type SelfAssessmentState = {
   responses: Record<string, string>;
   reviewed: boolean;
+  status?: "not-started" | "in-progress" | "completed";
+  completedAt?: string;
 };
 
 const initialSelfAssessmentState: SelfAssessmentState = {
@@ -41,9 +43,11 @@ export function AiEngineeringSelfAssessment({
           </div>
           <span
             role="status"
+            aria-live="polite"
+            aria-atomic="true"
             className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-black ${status === "saved" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"}`}
           >
-            <span className={`size-2 rounded-full ${status === "saved" ? "bg-emerald-500" : "bg-amber-500"}`} />
+            <span aria-hidden="true" className={`size-2 rounded-full ${status === "saved" ? "bg-emerald-500" : "bg-amber-500"}`} />
             {status === "saved" ? "Guardado" : "Cambios pendientes"}
           </span>
         </div>
@@ -60,6 +64,7 @@ export function AiEngineeringSelfAssessment({
                   onChange={(event) => updateValue({
                     ...value,
                     responses: { ...value.responses, [responseId]: event.target.value },
+                    status: value.reviewed ? "completed" : "in-progress",
                   })}
                   rows={4}
                   className="focus-ring mt-2 w-full resize-y rounded-xl border border-slate-300 bg-white p-4 leading-7 text-slate-800 shadow-inner"
@@ -69,7 +74,7 @@ export function AiEngineeringSelfAssessment({
           })}
         </div>
 
-        <p className="mt-4 text-xs font-semibold text-slate-500">No hay puntuación ni respuestas correctas automáticas. Puedes volver y editar tus respuestas.</p>
+        <p className="mt-4 text-xs font-semibold text-slate-600">No hay puntuación ni respuestas correctas automáticas. Puedes volver y editar tus respuestas.</p>
         <div className="mt-5 flex flex-col gap-3 sm:flex-row">
           <button
             type="button"
@@ -81,7 +86,12 @@ export function AiEngineeringSelfAssessment({
           </button>
           <button
             type="button"
-            onClick={() => saveValue({ ...value, reviewed: true })}
+            onClick={() => saveValue({
+              ...value,
+              reviewed: true,
+              status: "completed",
+              completedAt: value.completedAt ?? new Date().toISOString(),
+            })}
             className="focus-ring inline-flex items-center justify-center gap-2 rounded-xl bg-[#0f766e] px-4 py-3 text-sm font-black text-white hover:bg-[#0b5f59] disabled:cursor-default disabled:bg-emerald-700"
             disabled={value.reviewed}
           >
@@ -89,6 +99,9 @@ export function AiEngineeringSelfAssessment({
             {value.reviewed ? "Respuestas revisadas" : "He revisado mis respuestas"}
           </button>
         </div>
+        <p aria-live="polite" className="sr-only">
+          {value.reviewed ? "Autoevaluación completada." : "Autoevaluación pendiente de revisar."}
+        </p>
       </div>
     </div>
   );

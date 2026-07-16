@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArrowRight, Award, FileText, Video } from "lucide-react";
 import { ActiveLearningPanel } from "@/components/active-learning-panel";
@@ -17,6 +18,23 @@ import { getModuleResourceBundle } from "@/lib/module-resource-bundles";
 
 export function generateStaticParams() {
   return getModuleRouteParams();
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ courseSlug: string; moduleSlug: string }>;
+}): Promise<Metadata> {
+  const { courseSlug, moduleSlug } = await params;
+  const resolvedModule = resolveCourseModule(courseSlug, moduleSlug);
+  if (!resolvedModule) return {};
+
+  return {
+    title: resolvedModule.summary.title,
+    description: resolvedModule.kind === "standard"
+      ? resolvedModule.module.purpose
+      : resolvedModule.summary.title,
+  };
 }
 
 export default async function ModulePage({ params }: { params: Promise<{ courseSlug: string; moduleSlug: string }> }) {

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -13,18 +13,47 @@ import {
   X,
 } from "lucide-react";
 import type { AiEngineeringPresentationConfig } from "@/lib/courses/ai-engineering/module-presentations";
+import {
+  patchAiEngineeringStandardUnitState,
+  readAiEngineeringStandardUnitState,
+} from "@/lib/courses/ai-engineering/progress";
 
 export function AiEngineeringPresentationViewer({
   presentation,
   downloadHref,
+  courseSlug,
+  moduleSlug,
 }: {
   presentation: AiEngineeringPresentationConfig;
   downloadHref: string;
+  courseSlug: string;
+  moduleSlug: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const viewerRef = useRef<HTMLDivElement>(null);
+  const openerRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const savedIndex = readAiEngineeringStandardUnitState(
+      courseSlug,
+      moduleSlug,
+      "presentacion",
+    ).slideIndex;
+    if (typeof savedIndex === "number") {
+      setActiveIndex(Math.min(Math.max(0, savedIndex), presentation.slides.length - 1));
+    }
+  }, [courseSlug, moduleSlug, presentation.slides.length]);
+
+  const updateActiveIndex = useCallback((nextIndex: number) => {
+    const boundedIndex = Math.min(Math.max(0, nextIndex), presentation.slides.length - 1);
+    setActiveIndex(boundedIndex);
+    patchAiEngineeringStandardUnitState(courseSlug, moduleSlug, "presentacion", {
+      status: "in-progress",
+      slideIndex: boundedIndex,
+    });
+  }, [courseSlug, moduleSlug, presentation.slides.length]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -32,11 +61,11 @@ export function AiEngineeringPresentationViewer({
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "ArrowRight") {
         event.preventDefault();
-        setActiveIndex((current) => Math.min(current + 1, presentation.slides.length - 1));
+        updateActiveIndex(activeIndex + 1);
       }
       if (event.key === "ArrowLeft") {
         event.preventDefault();
-        setActiveIndex((current) => Math.max(current - 1, 0));
+        updateActiveIndex(activeIndex - 1);
       }
       if (event.key === "Escape") {
         if (isFullscreen) setIsFullscreen(false);
@@ -46,13 +75,20 @@ export function AiEngineeringPresentationViewer({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isFullscreen, isOpen, presentation.slides.length]);
+  }, [activeIndex, isFullscreen, isOpen, updateActiveIndex]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const opener = openerRef.current;
+    window.requestAnimationFrame(() => viewerRef.current?.focus());
+    return () => opener?.focus();
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isFullscreen) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    viewerRef.current?.focus();
+    window.requestAnimationFrame(() => viewerRef.current?.focus());
     return () => {
       document.body.style.overflow = previousOverflow;
     };
@@ -63,14 +99,41 @@ export function AiEngineeringPresentationViewer({
     setIsOpen(false);
   };
 
+  function openViewer() {
+    patchAiEngineeringStandardUnitState(courseSlug, moduleSlug, "presentacion", {
+      status: "in-progress",
+      slideIndex: activeIndex,
+    });
+    setIsOpen(true);
+  }
+
+  function handleDialogKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    if (event.key !== "Tab") return;
+    const focusable = Array.from(
+      event.currentTarget.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])',
+      ),
+    );
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
   const viewer = (
     <PresentationSurface
       ref={viewerRef}
       presentation={presentation}
       activeIndex={activeIndex}
       isFullscreen={isFullscreen}
-      onPrevious={() => setActiveIndex((current) => Math.max(current - 1, 0))}
-      onNext={() => setActiveIndex((current) => Math.min(current + 1, presentation.slides.length - 1))}
+      onPrevious={() => updateActiveIndex(activeIndex - 1)}
+      onNext={() => updateActiveIndex(activeIndex + 1)}
       onFullscreen={() => setIsFullscreen((current) => !current)}
       onClose={closeViewer}
       downloadHref={downloadHref}
@@ -91,8 +154,9 @@ export function AiEngineeringPresentationViewer({
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
           <button
+            ref={openerRef}
             type="button"
-            onClick={() => setIsOpen(true)}
+            onClick={openViewer}
             className="focus-ring inline-flex items-center justify-center gap-2 rounded-xl bg-[#0f766e] px-5 py-3 text-sm font-black text-white hover:bg-[#0b5f59]"
           >
             <Play size={18} aria-hidden="true" />
@@ -115,6 +179,7 @@ export function AiEngineeringPresentationViewer({
           role="dialog"
           aria-modal="true"
           aria-label="Presentación en pantalla completa"
+          onKeyDown={handleDialogKeyDown}
           className="fixed inset-0 z-[110] flex items-center justify-center bg-[#061423]/95 p-2 sm:p-5"
         >
           {viewer}

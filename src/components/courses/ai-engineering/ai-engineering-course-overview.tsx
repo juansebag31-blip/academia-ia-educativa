@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ArrowRight, Clock3, FolderKanban, GraduationCap, Layers3 } from "lucide-react";
+import { Clock3, FolderKanban, GraduationCap, Layers3 } from "lucide-react";
 import type { AiEngineeringCourseDefinition } from "@/lib/courses/types";
+import { AiEngineeringCourseProgressCta } from "./ai-engineering-progress";
 import { AiEngineeringSystemVisual } from "./ai-engineering-system-visual";
 
 const moduleSlots = Array.from({ length: 12 }, (_, index) => index + 1);
@@ -41,13 +42,11 @@ export function AiEngineeringCourseOverview({ course }: { course: AiEngineeringC
               </span>
             </div>
 
-            <Link
-              href={moduleHref}
-              className="focus-ring mt-8 inline-flex items-center gap-2 rounded-xl bg-[#0f766e] px-5 py-3.5 text-sm font-black text-white shadow-lg shadow-emerald-950/15 hover:bg-[#0b5f59]"
-            >
-              Comenzar Módulo 1
-              <ArrowRight size={18} />
-            </Link>
+            <AiEngineeringCourseProgressCta
+              courseSlug={course.summary.slug}
+              moduleSlug={firstModule.summary.slug}
+              moduleHref={moduleHref}
+            />
           </div>
 
           <AiEngineeringSystemVisual />
@@ -83,7 +82,7 @@ export function AiEngineeringCourseOverview({ course }: { course: AiEngineeringC
               <>
                 <div className="flex items-center justify-between gap-3">
                   <span className="font-mono text-xs font-black text-[#0f766e]">{String(moduleNumber).padStart(2, "0")}</span>
-                  <span className={`rounded-full px-2.5 py-1 text-[11px] font-black ${isAvailable ? "bg-emerald-100 text-emerald-800" : "bg-slate-100 text-slate-500"}`}>
+                  <span className={`rounded-full px-2.5 py-1 text-[11px] font-black ${isAvailable ? "bg-emerald-100 text-emerald-800" : "bg-slate-100 text-slate-600"}`}>
                     {isAvailable ? "Disponible" : "Próximamente"}
                   </span>
                 </div>
