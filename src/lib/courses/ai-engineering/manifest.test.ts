@@ -85,7 +85,9 @@ describe("AI Engineering course contract", () => {
   it("prepares and resolves Module 2 with all manifest-declared resources", () => {
     expect(preparedModuleTwo.configuration.progressUnits).toHaveLength(8);
     expect(preparedModuleTwo.content.cases).toHaveLength(3);
-    expect(preparedModuleTwo.presentation.slides).toHaveLength(17);
+    expect(preparedModuleTwo.presentation.slides).toHaveLength(
+      preparedModuleTwo.configuration.assets.presentation.slideCount,
+    );
     expect(preparedModuleTwo.configuration.visuals).toHaveLength(5);
     expect(preparedModuleTwo.configuration.keyIdeas).toHaveLength(3);
     expect(preparedModuleTwo.configuration.content.selfAssessment.questionCount).toBe(10);
@@ -144,7 +146,9 @@ describe("AI Engineering manifest preparation", () => {
     );
     const copiedFiles = await readdir(publicDirectory, { recursive: true });
 
-    expect(copiedFiles.filter((fileName) => fileName.endsWith(".webp"))).toHaveLength(17);
+    expect(copiedFiles.filter((fileName) => fileName.endsWith(".webp"))).toHaveLength(
+      preparedModuleTwo.configuration.assets.presentation.slideCount,
+    );
     expect(copiedFiles.filter((fileName) => fileName.endsWith(".png"))).toHaveLength(6);
     expect(copiedFiles.filter((fileName) => fileName.endsWith(".mp3"))).toHaveLength(1);
     expect(copiedFiles.filter((fileName) => fileName.endsWith(".pptx"))).toHaveLength(1);

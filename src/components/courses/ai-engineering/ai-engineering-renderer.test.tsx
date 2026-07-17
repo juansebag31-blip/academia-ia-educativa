@@ -90,7 +90,9 @@ describe("AI Engineering visual renderer", () => {
       .toBeInTheDocument();
     expect(moduleTwo.configuration.progressUnits).toHaveLength(8);
     expect(moduleTwo.content.cases).toHaveLength(3);
-    expect(moduleTwo.presentation.slides).toHaveLength(17);
+    expect(moduleTwo.presentation.slides).toHaveLength(
+      moduleTwo.configuration.assets.presentation.slideCount,
+    );
     expect(moduleTwo.visuals).toHaveLength(5);
     expect(moduleTwo.keyIdeas).toHaveLength(3);
     expect(screen.getAllByLabelText(/Respuesta \d/)).toHaveLength(10);

@@ -60,7 +60,7 @@
         "sourcePath": "assets/presentations/modulo-02-presentacion.pptx",
         "title": "Modelos fundacionales y selección",
         "slidesDirectory": "assets/presentations/slides",
-        "slideCount": 17,
+        "slideCount": 15,
         "slideFilePattern": "slide-{number:2}.webp",
         "slideWidth": 1600,
         "slideHeight": 900,
