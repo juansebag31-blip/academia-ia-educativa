@@ -36,6 +36,9 @@ Generated application data belongs under `src/generated/ai-engineering/`. Genera
 - `interactions`: activity and self-assessment storage units and labels.
 - `progressUnits`: variable ordered collection of IDs, kinds, anchors, and labels.
 - `visuals`, `keyIdeas`: optional declarative placements after real source sections.
+  - Programmatic visuals use `visualId`, `title`, `description`, and a supported `componentType`.
+  - Image visuals use `visualId`, `sourcePath`, `alt`, `width`, and `height`; preparation copies them under the module's public `visuals/` directory.
+  - Key ideas may include an optional editorial `title` in addition to `ideaId` and `text`.
 
 ## Human approval points
 

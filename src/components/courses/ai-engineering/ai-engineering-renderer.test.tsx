@@ -4,6 +4,7 @@ import { resolveCourse } from "@/lib/courses/catalog";
 import { AiEngineeringCases } from "./ai-engineering-cases";
 import { AiEngineeringCourseOverview } from "./ai-engineering-course-overview";
 import { AiEngineeringInfographic } from "./ai-engineering-infographic";
+import { AiEngineeringLearningVisual } from "./ai-engineering-learning-visual";
 import { AiEngineeringModulePage } from "./ai-engineering-module-page";
 import { AiEngineeringPresentationViewer } from "./ai-engineering-presentation-viewer";
 
@@ -12,8 +13,53 @@ if (!course || course.kind !== "ai-engineering") {
   throw new Error("AI Engineering fixture is unavailable.");
 }
 const moduleOne = course.modules[0];
+const moduleTwo = course.modules.find(
+  (module) => module.summary.slug === "modulo-02-modelos-fundacionales-seleccion",
+);
+if (!moduleTwo) {
+  throw new Error("AI Engineering Module 2 fixture is unavailable.");
+}
 
 describe("AI Engineering visual renderer", () => {
+  it("renders declarative image visuals with their approved alternative text", () => {
+    render(
+      <AiEngineeringLearningVisual
+        visual={{
+          afterSection: "proposito",
+          visualId: "visual-prueba-imagen",
+          sourcePath: "assets/images/visual.png",
+          publicPath: "/ai-engineering-assets/modulo-prueba/visuals/visual.png",
+          alt: "Visual pedagógico de prueba",
+          width: 1600,
+          height: 900,
+        }}
+      />,
+    );
+
+    const opener = screen.getByRole("button", {
+      name: "Ampliar visual pedagógico: Visual pedagógico de prueba",
+    });
+    expect(opener.tagName).toBe("BUTTON");
+    const image = screen.getByRole("img", { name: "Visual pedagógico de prueba" });
+    expect(image).toHaveAttribute("width", "1600");
+    expect(image).toHaveAttribute("height", "900");
+
+    opener.focus();
+    fireEvent.click(opener);
+    const dialog = screen.getByRole("dialog", { name: "Visual pedagógico ampliado" });
+    expect(within(dialog).getByRole("img", { name: "Visual pedagógico de prueba" })).toHaveClass("object-contain");
+    const closeButton = within(dialog).getByRole("button", { name: "Cerrar" });
+    expect(closeButton).toHaveFocus();
+    expect(document.body).toHaveStyle({ overflow: "hidden" });
+
+    fireEvent.keyDown(dialog, { key: "Tab" });
+    expect(closeButton).toHaveFocus();
+    fireEvent.keyDown(dialog, { key: "Escape" });
+    expect(screen.queryByRole("dialog", { name: "Visual pedagógico ampliado" })).not.toBeInTheDocument();
+    expect(opener).toHaveFocus();
+    expect(document.body).not.toHaveStyle({ overflow: "hidden" });
+  });
+
   it("renders the course cover from the multicourse catalog", () => {
     render(<AiEngineeringCourseOverview course={course} />);
 
@@ -25,12 +71,39 @@ describe("AI Engineering visual renderer", () => {
     expect(screen.getByText("Arquitectura de un sistema inteligente")).toBeInTheDocument();
     expect(screen.getByText("Modelo / RAG / Herramientas")).toBeInTheDocument();
     expect(screen.queryByRole("img")).not.toBeInTheDocument();
-    expect(screen.getAllByText("Disponible")).toHaveLength(1);
-    expect(screen.getAllByText("Próximamente")).toHaveLength(11);
+    expect(screen.getAllByText("Disponible")).toHaveLength(2);
+    expect(screen.getAllByText("Próximamente")).toHaveLength(10);
     expect(screen.getByText("Modelos fundacionales y selección")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /02 Disponible Módulo 2 Modelos fundacionales y selección/ })).toHaveAttribute(
+      "href",
+      "/courses/ai-engineering-aplicado/modules/modulo-02-modelos-fundacionales-seleccion",
+    );
     expect(screen.getByText("Producción y proyecto final")).toBeInTheDocument();
     expect(screen.getByText("JSG AI Engineering Hub v0.1")).toBeInTheDocument();
     expect(screen.queryByText("Ruta pedagógica")).not.toBeInTheDocument();
+  });
+
+  it("renders Module 2 from its manifest-derived quantities", () => {
+    const { container } = render(<AiEngineeringModulePage course={course} module={moduleTwo} />);
+
+    expect(screen.getAllByRole("heading", { level: 1, name: "Modelos fundacionales y selección" })[0])
+      .toBeInTheDocument();
+    expect(moduleTwo.configuration.progressUnits).toHaveLength(8);
+    expect(moduleTwo.content.cases).toHaveLength(3);
+    expect(moduleTwo.presentation.slides).toHaveLength(17);
+    expect(moduleTwo.visuals).toHaveLength(5);
+    expect(moduleTwo.keyIdeas).toHaveLength(3);
+    expect(screen.getAllByLabelText(/Respuesta \d/)).toHaveLength(10);
+    expect(screen.getAllByRole("button", { name: /Ampliar visual pedagógico/ })).toHaveLength(5);
+    expect(screen.getByRole("link", { name: "Descargar PPTX" })).toHaveAttribute(
+      "href",
+      moduleTwo.assets.presentation.publicPath,
+    );
+    expect(container.querySelector("audio")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", {
+      name: `Cargar y reproducir audio: ${moduleTwo.configuration.assets.audio.title}`,
+    }));
+    expect(container.querySelector("audio source")).toHaveAttribute("src", moduleTwo.assets.audioMp3.publicPath);
   });
 
   it("renders the complete module structure and approved assets", () => {
@@ -65,7 +138,9 @@ describe("AI Engineering visual renderer", () => {
     expect(screen.getAllByLabelText(/Respuesta \d/)).toHaveLength(8);
     expect(container.querySelector("audio")).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Reproducir Audio explicativo del Módulo 1" }));
+    fireEvent.click(screen.getByRole("button", {
+      name: "Cargar y reproducir audio: Audio explicativo del Módulo 1",
+    }));
     expect(container.querySelector("audio source")).toHaveAttribute("src", moduleOne.assets.audioMp3.publicPath);
   });
 
@@ -113,7 +188,7 @@ describe("AI Engineering visual renderer", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Ampliar infografía a pantalla completa" }));
+    fireEvent.click(screen.getByRole("button", { name: "Ver a pantalla completa: Infografía de prueba" }));
     const dialog = screen.getByRole("dialog", { name: "Infografía ampliada" });
     expect(dialog).toBeInTheDocument();
     expect(within(dialog).getByRole("link", { name: "Descargar" })).toHaveAttribute("download");

@@ -47,7 +47,7 @@ export type AiEngineeringProgressUnitConfig = {
   label: string;
 };
 
-export type AiEngineeringVisualPlacement = {
+export type AiEngineeringComponentVisualPlacement = {
   afterSection: string;
   visualId: string;
   title: string;
@@ -55,9 +55,24 @@ export type AiEngineeringVisualPlacement = {
   componentType: AiEngineeringVisualComponentType;
 };
 
+export type AiEngineeringImageVisualPlacement = {
+  afterSection: string;
+  visualId: string;
+  sourcePath: string;
+  publicPath?: string;
+  alt: string;
+  width: number;
+  height: number;
+};
+
+export type AiEngineeringVisualPlacement =
+  | AiEngineeringComponentVisualPlacement
+  | AiEngineeringImageVisualPlacement;
+
 export type AiEngineeringKeyIdea = {
   afterSection: string;
   ideaId: string;
+  title?: string;
   text: string;
 };
 
@@ -276,9 +291,17 @@ function validateVisuals(value: unknown) {
     const visual = requireRecord(entry, `module.visuals[${index}]`);
     requireSlug(visual.afterSection, `module.visuals[${index}].afterSection`);
     requireSlug(visual.visualId, `module.visuals[${index}].visualId`);
-    requireString(visual.title, `module.visuals[${index}].title`);
-    requireString(visual.description, `module.visuals[${index}].description`);
-    requireEnum(visual.componentType, AI_ENGINEERING_VISUAL_COMPONENT_TYPES, `module.visuals[${index}].componentType`);
+    if (visual.sourcePath !== undefined) {
+      requireString(visual.sourcePath, `module.visuals[${index}].sourcePath`);
+      requireOptionalString(visual.publicPath, `module.visuals[${index}].publicPath`);
+      requireString(visual.alt, `module.visuals[${index}].alt`);
+      requirePositiveInteger(visual.width, `module.visuals[${index}].width`);
+      requirePositiveInteger(visual.height, `module.visuals[${index}].height`);
+    } else {
+      requireString(visual.title, `module.visuals[${index}].title`);
+      requireString(visual.description, `module.visuals[${index}].description`);
+      requireEnum(visual.componentType, AI_ENGINEERING_VISUAL_COMPONENT_TYPES, `module.visuals[${index}].componentType`);
+    }
   });
   assertUnique(visuals.map((entry) => requireRecord(entry, "visual").visualId), "visual ids");
 }
@@ -290,6 +313,7 @@ function validateKeyIdeas(value: unknown) {
     const idea = requireRecord(entry, `module.keyIdeas[${index}]`);
     requireSlug(idea.afterSection, `module.keyIdeas[${index}].afterSection`);
     requireSlug(idea.ideaId, `module.keyIdeas[${index}].ideaId`);
+    requireOptionalString(idea.title, `module.keyIdeas[${index}].title`);
     requireString(idea.text, `module.keyIdeas[${index}].text`);
   });
   assertUnique(ideas.map((entry) => requireRecord(entry, "idea").ideaId), "key idea ids");

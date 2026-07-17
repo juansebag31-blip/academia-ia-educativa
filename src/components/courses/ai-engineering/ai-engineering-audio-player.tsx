@@ -52,7 +52,7 @@ export function AiEngineeringAudioPlayer({
       <button
         type="button"
         onClick={() => setLoaded(true)}
-        aria-label={`${savedPosition > 0 ? "Continuar" : "Reproducir"} ${title}`}
+        aria-label={`${savedPosition > 0 ? "Continuar audio" : "Cargar y reproducir audio"}: ${title}`}
         className="focus-ring inline-flex w-full items-center justify-center gap-2 border border-white/20 bg-white/10 px-4 py-3 text-sm font-black text-white transition hover:bg-white/15 motion-reduce:transition-none"
       >
         <Headphones size={20} aria-hidden="true" />

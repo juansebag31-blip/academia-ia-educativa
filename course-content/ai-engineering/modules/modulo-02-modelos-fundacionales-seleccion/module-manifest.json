@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 2,
+  "sourceVersion": "1.0",
+  "courseSlug": "ai-engineering-aplicado",
+  "module": {
+    "editorialSlug": "modulo-02-modelos-fundacionales-seleccion",
+    "publicSlug": "modulo-02-modelos-fundacionales-seleccion",
+    "number": 2,
+    "title": "Modelos fundacionales y selección",
+    "editorialStatus": "approved",
+    "publish": true,
+    "level": "fundacional-intermedio",
+    "estimatedStudyMinutes": 150,
+    "content": {
+      "foundationalHtml": "content/contenido-fundacional.html",
+      "objectives": {
+        "sectionId": "proposito",
+        "selector": "ul.checklist > li"
+      },
+      "activity": {
+        "sectionId": "actividad"
+      },
+      "selfAssessment": {
+        "sectionId": "autoevaluacion",
+        "questionSelector": "ol > li",
+        "questionCount": 10
+      },
+      "sources": {
+        "sectionId": "fuentes",
+        "itemSelector": "ol.ref-list > li"
+      }
+    },
+    "assets": {
+      "infographic": {
+        "sourcePath": "assets/images/infografia-modulo-02.png",
+        "alt": "Infografía sobre selección profesional de modelos fundacionales",
+        "title": "Modelos fundacionales y selección"
+      },
+      "audio": {
+        "mp3SourcePath": "assets/audio/modulo-02-audio-explicativo.mp3",
+        "m4aSourcePath": "assets/audio/modulo-02-audio-explicativo.m4a",
+        "transcriptSourcePath": "content/transcripcion.txt",
+        "title": "Cómo elegir el modelo de IA adecuado"
+      },
+      "cases": [
+        {
+          "id": "caso-clinica",
+          "sourcePath": "cases/caso-01-clinica-seleccion-modelos.html"
+        },
+        {
+          "id": "caso-educacion",
+          "sourcePath": "cases/caso-02-educacion-seleccion-modelos.html"
+        },
+        {
+          "id": "caso-desarrollo",
+          "sourcePath": "cases/caso-03-desarrollo-software-seleccion-modelos.html"
+        }
+      ],
+      "presentation": {
+        "sourcePath": "assets/presentations/modulo-02-presentacion.pptx",
+        "title": "Modelos fundacionales y selección",
+        "slidesDirectory": "assets/presentations/slides",
+        "slideCount": 17,
+        "slideFilePattern": "slide-{number:2}.webp",
+        "slideWidth": 1600,
+        "slideHeight": 900,
+        "slideAltTemplate": "Diapositiva {current} de {total} — Módulo 2, modelos fundacionales y selección"
+      }
+    },
+    "sections": {
+      "casesTitle": "Casos reales",
+      "presentationTitle": "Presentación"
+    },
+    "interactions": {
+      "activity": {
+        "unitId": "actividad",
+        "responseLabel": "Tu matriz de selección",
+        "placeholder": "Describe la tarea, candidatos, criterios, evaluación y decisión provisional."
+      },
+      "selfAssessment": {
+        "unitId": "autoevaluacion"
+      }
+    },
+    "progressUnits": [
+      { "id": "orientacion", "kind": "orientation", "sectionId": "orientacion", "label": "Orientación" },
+      { "id": "contenido", "kind": "foundational-content", "sectionId": "contenido", "label": "Contenido fundacional" },
+      { "id": "infografia", "kind": "infographic", "sectionId": "infografia", "label": "Infografía" },
+      { "id": "audio", "kind": "audio", "sectionId": "audio", "label": "Audio explicativo" },
+      { "id": "casos", "kind": "cases", "sectionId": "casos", "label": "Casos reales" },
+      { "id": "presentacion", "kind": "presentation", "sectionId": "presentacion", "label": "Presentación" },
+      { "id": "actividad", "kind": "activity", "sectionId": "actividad", "label": "Actividad" },
+      { "id": "autoevaluacion", "kind": "self-assessment", "sectionId": "autoevaluacion", "label": "Autoevaluación" }
+    ],
+    "visuals": [
+      {
+        "visualId": "proceso-seleccion",
+        "sourcePath": "assets/images/visuals/visual-01-proceso-seleccion.png",
+        "afterSection": "proposito",
+        "alt": "Proceso profesional desde el problema real hasta la decisión documentada del modelo.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "familias-modalidades",
+        "sourcePath": "assets/images/visuals/visual-02-familias-modalidades.png",
+        "afterSection": "familias",
+        "alt": "Mapa de familias de modelos de lenguaje, multimodales, embeddings, audio, imagen y moderación.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "matriz-seleccion",
+        "sourcePath": "assets/images/visuals/visual-03-matriz-seleccion.png",
+        "afterSection": "matriz",
+        "alt": "Matriz profesional que compara calidad, operación, economía y riesgo.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "model-routing",
+        "sourcePath": "assets/images/visuals/visual-04-model-routing.png",
+        "afterSection": "routing",
+        "alt": "Cascada de routing entre reglas, modelo rápido, modelo avanzado y revisión humana.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "jsg-hub-v02",
+        "sourcePath": "assets/images/visuals/visual-05-jsg-hub-v02.png",
+        "afterSection": "arquitectura",
+        "alt": "Arquitectura multimodelo del JSG AI Engineering Hub versión 0.2.",
+        "width": 1600,
+        "height": 900
+      }
+    ],
+    "keyIdeas": [
+      {
+        "afterSection": "fundacional",
+        "ideaId": "idea-modelo-fundacional",
+        "title": "Un modelo fundacional es una base",
+        "text": "Necesita contexto, herramientas, evaluación y supervisión para convertirse en producto."
+      },
+      {
+        "afterSection": "evaluacion",
+        "ideaId": "idea-evaluacion-propia",
+        "title": "El benchmark sugiere",
+        "text": "La evaluación propia decide qué modelo funciona realmente en producción."
+      },
+      {
+        "afterSection": "routing",
+        "ideaId": "idea-model-routing",
+        "title": "No todo va al modelo más capaz",
+        "text": "La arquitectura asigna capacidad según tarea, complejidad, modalidad y riesgo."
+      }
+    ]
+  }
+}

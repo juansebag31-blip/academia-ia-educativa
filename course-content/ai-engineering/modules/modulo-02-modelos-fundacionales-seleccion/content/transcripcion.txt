@@ -1,0 +1,403 @@
+GUION DE AUDIO SINCRONIZADO — MÓDULO 2
+MODELOS FUNDACIONALES Y SELECCIÓN
+
+Duración estimada: 18 a 24 minutos
+Objetivo: acompañar visualmente la infografía del Módulo 2, siguiendo exactamente su orden de lectura y explicando cada bloque con lenguaje claro, profesional y pedagógico.
+
+INTRODUCCIÓN
+
+Bienvenido al Módulo 2 del curso AI Engineering Aplicado.
+
+En esta infografía vamos a estudiar cómo seleccionar modelos para sistemas reales de inteligencia artificial.
+
+La idea central del módulo es que no existe un modelo universalmente mejor. Existe un modelo más adecuado para una tarea, unos datos, un nivel de riesgo, una experiencia de usuario y un presupuesto concretos.
+
+Mientras escuchas, mantén la infografía abierta. Vamos a recorrerla de arriba hacia abajo, siguiendo sus trece bloques numerados.
+
+Comenzaremos con la pregunta central. Después veremos qué es un modelo fundacional, qué familias y modalidades existen, cómo distinguir distintos tipos de acceso, cuándo conviene un modelo generalista o especializado, qué factores profesionales deben evaluarse y por qué los benchmarks no bastan.
+
+Luego analizaremos la ventana de contexto, el model routing, un caso aplicado a estudios por imágenes, la evolución del JSG AI Engineering Hub y, finalmente, las ideas esenciales y las fuentes base del módulo.
+
+BLOQUE 1. PREGUNTA CENTRAL
+
+Dirige la mirada hacia la parte superior izquierda, al bloque número uno, titulado Pregunta central.
+
+Aquí aparece un recorrido de cinco pasos.
+
+El primer paso es el problema real.
+
+Antes de pensar en modelos, debemos describir con claridad qué proceso queremos mejorar, qué resultado esperamos y qué personas utilizarán la solución.
+
+El segundo paso son las restricciones.
+
+Las restricciones pueden incluir privacidad, latencia, presupuesto, disponibilidad regional, modalidad de entrada, volumen de uso y gravedad de los errores.
+
+El tercer paso son los candidatos.
+
+En lugar de elegir directamente el modelo más conocido, seleccionamos un conjunto reducido de opciones que puedan cumplir los requisitos mínimos.
+
+El cuarto paso es la evaluación propia.
+
+Los candidatos deben probarse con datos, documentos y tareas reales del proyecto.
+
+El quinto paso es la decisión documentada.
+
+La elección final debe registrar por qué se seleccionó un modelo, con qué versión, bajo qué límites y cuándo deberá reevaluarse.
+
+La frase central de este bloque resume todo el módulo:
+
+No existe un mejor modelo absoluto. Existe un modelo más adecuado para una tarea concreta.
+
+BLOQUE 2. ¿QUÉ ES UN MODELO FUNDACIONAL?
+
+Ahora dirige la mirada hacia la parte superior derecha, al bloque número dos.
+
+Un modelo fundacional es un modelo entrenado a gran escala sobre datos amplios y adaptable a múltiples tareas.
+
+Puede utilizarse mediante instrucciones, ejemplos, contexto, recuperación aumentada, herramientas o ajuste adicional.
+
+La palabra fundacional no significa que el modelo sea un producto completo.
+
+Significa que puede servir como base para construir aplicaciones diferentes.
+
+Por eso, la frase destacada del bloque dice:
+
+Es una capacidad amplia, no un producto completo.
+
+Un modelo fundacional puede redactar, clasificar, resumir, analizar documentos, generar código o relacionar información.
+
+Pero todavía necesita una interfaz, reglas, datos, seguridad, evaluación y supervisión para convertirse en una solución confiable.
+
+BLOQUE 3. FAMILIAS Y MODALIDADES
+
+Bajamos ahora hacia el bloque número tres, ubicado en la columna izquierda.
+
+Aquí aparecen seis familias o modalidades.
+
+La primera es lenguaje.
+
+Los modelos de lenguaje reciben texto e instrucciones y producen texto, código o datos estructurados.
+
+La segunda es multimodal.
+
+Un modelo multimodal puede integrar texto, imágenes, documentos, audio y, según el sistema, video.
+
+La tercera es embeddings.
+
+Los embeddings convierten información en representaciones numéricas que permiten medir similitud semántica. Son fundamentales para búsqueda, recuperación y sistemas RAG.
+
+La cuarta es voz y audio.
+
+Aquí encontramos reconocimiento de voz, transcripción, síntesis y análisis de audio.
+
+La quinta es imagen y video.
+
+Estos modelos pueden comprender o generar imágenes, escenas y secuencias visuales.
+
+La sexta es moderación.
+
+Su función es detectar contenido riesgoso, inseguro o incompatible con determinadas políticas.
+
+La conclusión es importante:
+
+No debemos preguntar solamente qué modelo queremos usar.
+
+Primero debemos preguntar qué modalidad necesita realmente la tarea.
+
+BLOQUE 4. TIPOS DE ACCESO
+
+Dirige ahora la mirada hacia el bloque número cuatro.
+
+Aquí se comparan tres formas de acceder o controlar un modelo.
+
+La primera es una API propietaria.
+
+La ventaja principal es la rapidez de adopción. El proveedor opera el modelo, mantiene la infraestructura y ofrece una interfaz lista para usar.
+
+La limitación es que el equipo tiene menos control sobre pesos, versiones, operación interna y condiciones del servicio.
+
+La segunda opción es open-weight.
+
+En este caso, los pesos del modelo están disponibles y pueden ejecutarse o adaptarse con mayor control.
+
+Pero esa libertad también aumenta la responsabilidad operativa: infraestructura, seguridad, actualizaciones y evaluación pasan a depender del equipo.
+
+La tercera opción es Open Source AI.
+
+Aquí se requieren libertades más amplias de uso, estudio, modificación y distribución.
+
+La advertencia destacada en la parte inferior es fundamental:
+
+Open-weight no es lo mismo que Open Source AI.
+
+Disponer de pesos no garantiza acceso suficiente al código, a la información de entrenamiento o a las libertades necesarias para estudiar y modificar todo el sistema.
+
+BLOQUE 5. GENERALISTA FRENTE A ESPECIALIZADO
+
+Seguimos hacia el bloque número cinco.
+
+A la izquierda aparece el modelo generalista.
+
+Su fortaleza es la flexibilidad. Resulta útil para prototipos, tareas cambiantes, razonamiento amplio y experiencias conversacionales.
+
+A la derecha aparece el modelo especializado.
+
+Puede ser mejor cuando existe un volumen alto, una función bien delimitada, un presupuesto ajustado o una necesidad clara de baja latencia.
+
+La idea más importante aparece en la parte inferior:
+
+Un modelo más pequeño puede ser mejor si supera la evaluación requerida.
+
+Elegir un modelo especializado no significa reducir calidad.
+
+Significa utilizar la capacidad necesaria para una tarea concreta sin pagar complejidad innecesaria.
+
+BLOQUE 6. FACTORES DE SELECCIÓN
+
+Dirige ahora la mirada hacia el gran bloque número seis, ubicado en el centro.
+
+Aquí aparecen diez factores profesionales.
+
+El primero es la calidad de tarea.
+
+Debemos medir si el modelo resuelve nuestros casos reales, no si obtiene una buena puntuación general.
+
+El segundo es la modalidad requerida.
+
+La solución puede necesitar texto, imágenes, audio, documentos o embeddings.
+
+El tercero es la ventana de contexto.
+
+Debemos comprobar si puede procesar la evidencia necesaria y mantener calidad con esa cantidad de información.
+
+El cuarto es la latencia.
+
+Una respuesta correcta puede ser inútil si llega demasiado tarde para la experiencia requerida.
+
+El quinto es el coste por tarea exitosa.
+
+No basta con mirar el precio por token. Debemos calcular cuánto cuesta obtener un resultado aceptado.
+
+El sexto es la disponibilidad.
+
+Incluye regiones, cuotas, concurrencia, estabilidad y soporte.
+
+El séptimo es privacidad y residencia.
+
+Debemos saber dónde se procesan los datos, cuánto se retienen y qué controles existen.
+
+El octavo es control de versión.
+
+En producción conviene saber qué modelo exacto se utiliza y cómo se gestionarán actualizaciones o deprecaciones.
+
+El noveno es tool calling y fiabilidad.
+
+Un modelo puede redactar muy bien y, sin embargo, fallar al utilizar herramientas o producir formatos estructurados.
+
+El décimo es licencia y portabilidad.
+
+Debemos comprender qué podemos ejecutar, modificar, redistribuir o trasladar a otra infraestructura.
+
+La advertencia inferior resume la lógica de este bloque:
+
+El precio por token no basta para decidir.
+
+BLOQUE 7. BENCHMARKS FRENTE A EVALUACIÓN PROPIA
+
+Bajamos al bloque número siete.
+
+A la izquierda aparece el benchmark.
+
+Un benchmark propone candidatos y compara modelos bajo condiciones estándar.
+
+Es útil para obtener una primera orientación.
+
+Pero no conoce nuestros documentos, usuarios, reglas ni riesgos.
+
+A la derecha aparece la evaluación propia.
+
+La evaluación propia utiliza casos reales, mide errores críticos, incorpora coste y latencia y finalmente decide qué opción funciona en producción.
+
+La frase destacada dice:
+
+El benchmark sugiere. La evaluación propia decide.
+
+Un modelo puede liderar una tabla pública y fallar en nuestra terminología, nuestros formatos o nuestras herramientas.
+
+Por eso, la decisión profesional siempre necesita un conjunto de evaluación específico del producto.
+
+BLOQUE 8. CONTEXTO Y LÍMITES REALES
+
+Dirige la mirada hacia el bloque número ocho.
+
+La ventana de contexto es un presupuesto de tokens.
+
+No debe confundirse con memoria permanente ni con calidad garantizada.
+
+Un contexto máximo muy grande no significa que el modelo mantendrá la misma precisión en toda la información.
+
+Además, enviar demasiado contexto aumenta coste y latencia y puede introducir ruido.
+
+La idea de context engineering aparece al final:
+
+Context engineering significa enviar solamente la evidencia relevante para cada paso.
+
+En lugar de incluir toda la documentación, toda la conversación o todo el repositorio, el sistema selecciona, resume y organiza la información necesaria.
+
+BLOQUE 9. MODEL ROUTING Y ESTRATEGIAS HÍBRIDAS
+
+Ahora observa el bloque número nueve, ubicado a la derecha.
+
+En la parte superior aparece una cascada.
+
+Primero, una regla o filtro.
+
+Después, un modelo rápido.
+
+Luego, un modelo avanzado.
+
+Finalmente, una revisión humana.
+
+Esta arquitectura permite reservar la mayor capacidad para los casos donde realmente es necesaria.
+
+Debajo aparecen cinco criterios de routing.
+
+El primero es la tarea.
+
+El segundo es la complejidad.
+
+El tercero es la modalidad.
+
+El cuarto es la sensibilidad.
+
+El quinto es el fallback, es decir, qué hacer cuando una ruta o proveedor no está disponible.
+
+La frase destacada resume la estrategia:
+
+No todo debe ir al modelo más capaz.
+
+Un sistema profesional puede combinar reglas, modelos rápidos, modelos avanzados y revisión humana sin convertirse automáticamente en un sistema multiagente.
+
+BLOQUE 10. CASO APLICADO
+
+Dirige la mirada hacia el bloque número diez.
+
+El caso es un asistente documental para estudios por imágenes.
+
+El flujo comienza con un pedido.
+
+Luego, un modelo interpreta el lenguaje y detecta modalidad, región y posibles ambigüedades.
+
+Después, un sistema RAG recupera la evidencia desde la base maestra.
+
+A continuación, reglas deterministas calculan y validan códigos, valores o condiciones.
+
+La aplicación controla permisos y vigencia.
+
+Finalmente, una persona confirma el resultado cuando el caso lo requiere.
+
+La frase inferior explica el resultado:
+
+La solución es una combinación de modelos, recuperación, reglas y supervisión.
+
+La enseñanza es que seleccionar un modelo no significa entregarle todo el proceso.
+
+Cada capacidad debe asignarse al mecanismo más confiable.
+
+BLOQUE 11. JSG AI ENGINEERING HUB VERSIÓN 0.2
+
+Ahora observa el bloque número once.
+
+El proyecto transversal evoluciona.
+
+La primera capacidad es un modelo rápido para clasificación y extracción.
+
+La segunda es un modelo avanzado para planificación y síntesis.
+
+La tercera son embeddings para recuperación semántica.
+
+La cuarta es un modelo multimodal para imágenes, PDFs y capturas.
+
+La quinta es una ruta privada para información sensible.
+
+La frase destacada es importante:
+
+Un sistema profesional puede usar varios modelos sin ser automáticamente multiagente.
+
+Aquí todavía no estamos distribuyendo responsabilidades entre agentes autónomos.
+
+Estamos asignando tareas a distintos modelos o mecanismos según necesidad.
+
+BLOQUE 12. IDEAS ESENCIALES
+
+Bajamos al bloque número doce.
+
+Aquí aparecen cuatro ideas de repaso.
+
+Primera:
+
+Un modelo fundacional es una base, no el producto final.
+
+Segunda:
+
+Más grande no siempre es mejor.
+
+Tercera:
+
+El coste relevante es el coste por tarea exitosa.
+
+Cuarta:
+
+Solo se escala la arquitectura cuando la evaluación lo justifica.
+
+Estas cuatro frases pueden utilizarse como guía para revisar cualquier decisión de modelos.
+
+BLOQUE 13. FUENTES BASE DEL MÓDULO
+
+Finalmente, dirige la mirada hacia el bloque número trece.
+
+Las fuentes incluyen Stanford CRFM, OpenAI, Anthropic, Google AI, Open Source Initiative, HELM, NIST y Hugging Face.
+
+Estas fuentes cumplen funciones diferentes.
+
+Stanford CRFM aporta el marco conceptual de modelos fundacionales.
+
+OpenAI, Anthropic y Google muestran cómo los proveedores organizan familias por capacidad, velocidad, modalidad y coste.
+
+La Open Source Initiative permite distinguir Open Source AI de la simple disponibilidad de pesos.
+
+HELM aporta una visión multidimensional de evaluación.
+
+NIST introduce gobernanza y gestión del riesgo.
+
+Hugging Face aporta documentación y descubrimiento de modelos.
+
+CIERRE
+
+Hemos recorrido los trece bloques de la infografía.
+
+Comenzamos con una pregunta de negocio y terminamos con una decisión arquitectónica documentada.
+
+La idea principal del módulo es que seleccionar un modelo no consiste en elegir una marca ni seguir una tabla pública.
+
+Consiste en definir la tarea, reconocer las restricciones, seleccionar candidatos, evaluar sobre casos reales y documentar la decisión.
+
+Un modelo puede ser más rápido, otro más capaz, otro más privado y otro más apropiado para embeddings o visión.
+
+La arquitectura profesional combina esas capacidades cuando existe una ventaja verificable.
+
+Antes de continuar, intenta responder con tus propias palabras:
+
+¿Por qué no existe un mejor modelo absoluto?
+
+¿Qué diferencia existe entre un benchmark y una evaluación propia?
+
+¿Por qué la ventana máxima de contexto no indica cuánto contexto deberíamos enviar?
+
+¿En qué situaciones utilizarías un modelo rápido, uno avanzado, embeddings o una ruta privada?
+
+¿Y qué criterios utilizarías para justificar una decisión de model routing?
+
+Si puedes responder estas preguntas y defender tu selección con evidencia, habrás comprendido el fundamento profesional del Módulo 2.
+
+FIN DEL GUION

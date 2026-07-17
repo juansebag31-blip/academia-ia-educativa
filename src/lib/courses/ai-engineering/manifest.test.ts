@@ -21,9 +21,13 @@ import {
   aiEngineeringCourseManifest,
   aiEngineeringManifest,
 } from "./manifest";
-import { validateAiEngineeringModulePackage } from "./module-validator";
+import {
+  validateAiEngineeringCoursePackage,
+  validateAiEngineeringModulePackage,
+} from "./module-validator";
 
 let prepared: PreparedAiEngineeringModule;
+let preparedModuleTwo: PreparedAiEngineeringModule;
 let fixtureRoot = "";
 let fixturePublicRoot = "";
 let fixtureManifest: AiEngineeringModuleManifest;
@@ -32,6 +36,10 @@ beforeAll(async () => {
   await prepareAiEngineeringContent();
   const preparedModules = JSON.parse(await readFile(generatedModulesPath, "utf8")) as PreparedAiEngineeringModule[];
   prepared = preparedModules[0];
+  preparedModuleTwo = preparedModules.find(
+    (module) => module.moduleSlug === "modulo-02-modelos-fundacionales-seleccion",
+  ) as PreparedAiEngineeringModule;
+  if (!preparedModuleTwo) throw new Error("Prepared AI Engineering Module 2 is unavailable.");
   fixtureRoot = await mkdtemp(path.join(tmpdir(), "ai-engineering-module-fixture-"));
   fixturePublicRoot = path.join(fixtureRoot, "public");
   fixtureManifest = await createValidPrivateFixture(fixtureRoot);
@@ -64,7 +72,27 @@ describe("AI Engineering course contract", () => {
       editorialStatus: "approved",
       publish: true,
     });
-    expect(aiEngineeringCourseManifest.modules.slice(1).every((module) => !module.publish)).toBe(true);
+    expect(aiEngineeringCourseManifest.modules[1]).toMatchObject({
+      editorialSlug: "modulo-02-modelos-fundacionales-seleccion",
+      publicSlug: "modulo-02-modelos-fundacionales-seleccion",
+      editorialStatus: "approved",
+      publish: true,
+      manifestPath: "modules/modulo-02-modelos-fundacionales-seleccion/module-manifest.json",
+    });
+    expect(aiEngineeringCourseManifest.modules.slice(2).every((module) => !module.publish)).toBe(true);
+  });
+
+  it("prepares and resolves Module 2 with all manifest-declared resources", () => {
+    expect(preparedModuleTwo.configuration.progressUnits).toHaveLength(8);
+    expect(preparedModuleTwo.content.cases).toHaveLength(3);
+    expect(preparedModuleTwo.presentation.slides).toHaveLength(17);
+    expect(preparedModuleTwo.configuration.visuals).toHaveLength(5);
+    expect(preparedModuleTwo.configuration.keyIdeas).toHaveLength(3);
+    expect(preparedModuleTwo.configuration.content.selfAssessment.questionCount).toBe(10);
+    expect(resolveCourseModule(
+      "ai-engineering-aplicado",
+      "modulo-02-modelos-fundacionales-seleccion",
+    )?.summary.title).toBe("Modelos fundacionales y selección");
   });
 
   it("keeps Module 1 public route and derives declared quantities", () => {
@@ -107,6 +135,22 @@ describe("AI Engineering manifest preparation", () => {
     expect(copiedNames.some((fileName) => fileName.toLowerCase().endsWith(".m4a"))).toBe(false);
   });
 
+  it("copies Module 2 public assets while keeping its M4A private", async () => {
+    const publicDirectory = path.join(
+      projectRoot,
+      "public",
+      "ai-engineering-assets",
+      preparedModuleTwo.moduleSlug,
+    );
+    const copiedFiles = await readdir(publicDirectory, { recursive: true });
+
+    expect(copiedFiles.filter((fileName) => fileName.endsWith(".webp"))).toHaveLength(17);
+    expect(copiedFiles.filter((fileName) => fileName.endsWith(".png"))).toHaveLength(6);
+    expect(copiedFiles.filter((fileName) => fileName.endsWith(".mp3"))).toHaveLength(1);
+    expect(copiedFiles.filter((fileName) => fileName.endsWith(".pptx"))).toHaveLength(1);
+    expect(copiedFiles.some((fileName) => fileName.toLowerCase().endsWith(".m4a"))).toBe(false);
+  });
+
   it("removes wrappers, global styles, scripts and inline handlers", () => {
     const documents = [prepared.content.foundational, prepared.content.visualAudio, ...prepared.content.cases]
       .filter((document): document is NonNullable<typeof document> => Boolean(document));
@@ -135,6 +179,36 @@ describe("AI Engineering manifest preparation", () => {
 });
 
 describe("controlled non-public module fixture", () => {
+  it("resolves nested module assets from the manifest directory", async () => {
+    const courseRoot = path.join(fixtureRoot, "nested-course");
+    const packageRoot = path.join(courseRoot, "modules", "modulo-prueba");
+    const manifest = await createValidPrivateFixture(packageRoot);
+    await writeFile(
+      path.join(packageRoot, "module-manifest.json"),
+      `${JSON.stringify(manifest, null, 2)}\n`,
+      "utf8",
+    );
+
+    const validation = await validateAiEngineeringCoursePackage({
+      schemaVersion: 1,
+      courseSlug: manifest.courseSlug,
+      title: "Curso ficticio de prueba",
+      modules: [{
+        number: manifest.module.number,
+        title: manifest.module.title,
+        editorialSlug: manifest.module.editorialSlug,
+        publicSlug: manifest.module.publicSlug,
+        editorialStatus: manifest.module.editorialStatus,
+        publish: manifest.module.publish,
+        manifestPath: "modules/modulo-prueba/module-manifest.json",
+      }],
+    }, courseRoot);
+
+    expect(validation.modules).toHaveLength(1);
+    expect(validation.modules[0].packageRoot).toBe(packageRoot);
+    expect(validation.modules[0].sourceFiles).toContain("visual.png");
+  });
+
   it("validates and prepares variable cases, questions, slides and progress without public registration", async () => {
     const validation = await validateAiEngineeringModulePackage(fixtureManifest, fixtureRoot);
     expect(validation.caseCount).toBe(1);
@@ -145,6 +219,11 @@ describe("controlled non-public module fixture", () => {
     const fixture = await prepareAiEngineeringModulePackage(fixtureManifest, fixtureRoot, fixturePublicRoot);
     expect(fixture.presentation.slides).toHaveLength(2);
     expect(fixture.content.cases).toHaveLength(1);
+    const imageVisual = fixture.configuration.visuals?.find((visual) => "sourcePath" in visual);
+    expect(imageVisual && "publicPath" in imageVisual ? imageVisual.publicPath : undefined)
+      .toBe("/ai-engineering-assets/modulo-prueba-no-publicable/visuals/visual.png");
+    expect(await readFile(path.join(fixturePublicRoot, "modulo-prueba-no-publicable", "visuals", "visual.png"), "utf8"))
+      .toBe("ASSET FICTICIO DE PRUEBA: visual.png");
     expect(resolveCourseModule("ai-engineering-aplicado", fixture.moduleSlug)).toBeNull();
   });
 
@@ -226,8 +305,20 @@ async function createValidPrivateFixture(root: string): Promise<AiEngineeringMod
       { id: "actividad", kind: "activity", sectionId: "actividad", label: "Actividad" },
       { id: "autoevaluacion", kind: "self-assessment", sectionId: "autoevaluacion", label: "Autoevaluación" },
     ],
-    visuals: [],
-    keyIdeas: [],
+    visuals: [{
+      afterSection: "proposito",
+      visualId: "visual-prueba-imagen",
+      sourcePath: "visual.png",
+      alt: "Visual ficticio de prueba",
+      width: 16,
+      height: 9,
+    }],
+    keyIdeas: [{
+      afterSection: "proposito",
+      ideaId: "idea-prueba",
+      title: "Idea de prueba",
+      text: "Texto ficticio de prueba.",
+    }],
   };
 
   await mkdir(path.join(root, "slides"), { recursive: true });
@@ -239,7 +330,7 @@ async function createValidPrivateFixture(root: string): Promise<AiEngineeringMod
   </main></body></html>`, "utf8");
   await writeFile(path.join(root, "caso.html"), "<html><body><main><section id=\"caso\"><h2>Caso ficticio de prueba</h2></section></main></body></html>", "utf8");
   await writeFile(path.join(root, "transcripcion.txt"), "Transcripción ficticia de prueba.", "utf8");
-  for (const fileName of ["infografia.png", "audio.mp3", "presentacion.pptx", "slides/slide-01.webp", "slides/slide-02.webp"]) {
+  for (const fileName of ["infografia.png", "visual.png", "audio.mp3", "presentacion.pptx", "slides/slide-01.webp", "slides/slide-02.webp"]) {
     await writeFile(path.join(root, fileName), `ASSET FICTICIO DE PRUEBA: ${fileName}`, "utf8");
   }
   return parseAiEngineeringModuleManifest(manifest);

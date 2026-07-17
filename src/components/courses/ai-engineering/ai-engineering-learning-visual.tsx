@@ -21,6 +21,7 @@ import type {
   AiEngineeringVisualComponentType,
   AiEngineeringVisualPlacement,
 } from "@/lib/courses/ai-engineering/module-visuals";
+import { AiEngineeringExpandableVisual } from "./ai-engineering-expandable-visual";
 
 export function AiEngineeringKeyIdeaCard({ idea }: { idea: AiEngineeringKeyIdea }) {
   return (
@@ -32,7 +33,10 @@ export function AiEngineeringKeyIdeaCard({ idea }: { idea: AiEngineeringKeyIdea 
       <span className="inline-flex shrink-0 rounded-full bg-[#0b1f33] px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-[#5eead4]">
         Idea esencial
       </span>
-      <p className="mt-3 text-sm font-bold leading-6 text-[#0b1f33] sm:mt-0">{idea.text}</p>
+      <div className="mt-3 sm:mt-0">
+        {idea.title ? <p className="font-black text-[#0b1f33]">{idea.title}</p> : null}
+        <p className="text-sm font-bold leading-6 text-[#0b1f33]">{idea.text}</p>
+      </div>
     </aside>
   );
 }
@@ -42,6 +46,18 @@ export function AiEngineeringLearningVisual({
 }: {
   visual: AiEngineeringVisualPlacement;
 }) {
+  if ("sourcePath" in visual) {
+    return (
+      <AiEngineeringExpandableVisual
+        id={visual.visualId}
+        src={visual.publicPath ?? visual.sourcePath}
+        alt={visual.alt}
+        width={visual.width}
+        height={visual.height}
+      />
+    );
+  }
+
   return (
     <figure
       id={visual.visualId}

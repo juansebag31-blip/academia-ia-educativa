@@ -16,8 +16,10 @@
       "number": 2,
       "title": "Modelos fundacionales y selección",
       "editorialSlug": "modulo-02-modelos-fundacionales-seleccion",
-      "editorialStatus": "draft",
-      "publish": false
+      "editorialStatus": "approved",
+      "publish": true,
+      "publicSlug": "modulo-02-modelos-fundacionales-seleccion",
+      "manifestPath": "modules/modulo-02-modelos-fundacionales-seleccion/module-manifest.json"
     },
     {
       "number": 3,

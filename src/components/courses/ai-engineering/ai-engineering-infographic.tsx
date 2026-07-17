@@ -62,7 +62,7 @@ export function AiEngineeringInfographic({ src, alt }: AiEngineeringInfographicP
           type="button"
           onClick={() => setOpen(true)}
           className="focus-ring group relative mx-auto aspect-[1055/1491] w-full max-w-sm overflow-hidden rounded-2xl border border-[#0f766e]/25 bg-[#0b1f33] shadow-xl"
-          aria-label="Ampliar infografía a pantalla completa"
+          aria-label={`Ver a pantalla completa: ${alt}`}
         >
           <Image
             src={src}
@@ -139,7 +139,6 @@ export function AiEngineeringInfographic({ src, alt }: AiEngineeringInfographicP
                 alt={alt}
                 width={1055}
                 height={1491}
-                priority
                 className="mx-auto h-auto w-full max-w-[1055px]"
               />
             </div>

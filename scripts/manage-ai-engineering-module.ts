@@ -64,9 +64,11 @@ async function integratePackage(packageRoot: string, editorialSlug: string, repo
 
   const destination = path.join(modulesRoot, editorialSlug);
   assertInside(modulesRoot, destination);
+  let destinationCreated = false;
   try {
     await mkdir(modulesRoot, { recursive: true });
     await cp(packageRoot, destination, { recursive: true, errorOnExist: true, force: false });
+    destinationCreated = true;
     courseManifest.modules[planIndex] = {
       ...plan,
       publicSlug: moduleConfig.publicSlug,
@@ -75,11 +77,19 @@ async function integratePackage(packageRoot: string, editorialSlug: string, repo
       manifestPath: path.posix.join("modules", editorialSlug, "module-manifest.json"),
     };
     await writeFile(courseManifestPath, `${JSON.stringify(courseManifest, null, 2)}\n`, "utf8");
-    await prepareAiEngineeringContent();
+    await prepareAiEngineeringContent(courseManifest);
     return { ...report, integratedPath: destination, courseManifestPath };
   } catch (error) {
     await writeFile(courseManifestPath, originalCourseManifest, "utf8");
-    await rm(destination, { recursive: true, force: true });
+    if (destinationCreated) await rm(destination, { recursive: true, force: true });
+    try {
+      await prepareAiEngineeringContent(JSON.parse(originalCourseManifest));
+    } catch (rollbackError) {
+      throw new AggregateError(
+        [error, rollbackError],
+        "AI Engineering integration failed and the generated public state could not be restored.",
+      );
+    }
     throw error;
   }
 }

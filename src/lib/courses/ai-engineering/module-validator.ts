@@ -23,6 +23,7 @@ const rendererAnchors = new Set([
 
 export type AiEngineeringPackageValidation = {
   manifest: AiEngineeringModuleManifest;
+  packageRoot: string;
   sectionIds: string[];
   caseCount: number;
   questionCount: number;
@@ -39,8 +40,9 @@ export async function validateAiEngineeringCoursePackage(
 
   for (const plan of courseManifest.modules) {
     if (!plan.manifestPath) continue;
-    const manifestValue = JSON.parse(await readSafeText(sourceRoot, plan.manifestPath));
-    const validation = await validateAiEngineeringModulePackage(manifestValue, sourceRoot);
+    const manifestPath = resolveInside(sourceRoot, plan.manifestPath);
+    const manifestValue = JSON.parse(await readFile(manifestPath, "utf8"));
+    const validation = await validateAiEngineeringModulePackage(manifestValue, path.dirname(manifestPath));
     const manifest = validation.manifest;
     if (manifest.courseSlug !== courseManifest.courseSlug) throw new Error(`Module ${plan.number} uses a different courseSlug.`);
     if (manifest.module.number !== plan.number) throw new Error(`Module ${plan.number} number differs from the course manifest.`);
@@ -72,6 +74,11 @@ export async function validateAiEngineeringModulePackage(
   if (moduleConfig.assets.audio.m4aSourcePath) requireExtension(moduleConfig.assets.audio.m4aSourcePath, [".m4a"], "source audio");
   requireExtension(moduleConfig.assets.presentation.sourcePath, [".pptx"], "presentation");
   moduleConfig.assets.cases.forEach((item) => requireExtension(item.sourcePath, [".html"], `case ${item.id}`));
+  moduleConfig.visuals?.forEach((visual) => {
+    if ("sourcePath" in visual) {
+      requireExtension(visual.sourcePath, [".png", ".webp", ".jpg", ".jpeg"], `visual ${visual.visualId}`);
+    }
+  });
 
   const foundationalSource = await readSafeText(sourceRoot, moduleConfig.content.foundationalHtml);
   assertNoTodoPlaceholders(foundationalSource, "foundational HTML");
@@ -135,6 +142,7 @@ export async function validateAiEngineeringModulePackage(
   await validateSlides(sourceRoot, manifest);
   return {
     manifest,
+    packageRoot: path.resolve(sourceRoot),
     sectionIds,
     caseCount: moduleConfig.assets.cases.length,
     questionCount: questions.length,
@@ -170,6 +178,9 @@ function collectSourceFiles(manifest: AiEngineeringModuleManifest) {
     moduleConfig.assets.audio.transcriptSourcePath,
     moduleConfig.assets.presentation.sourcePath,
     ...moduleConfig.assets.cases.map((item) => item.sourcePath),
+    ...(moduleConfig.visuals ?? []).flatMap((visual) =>
+      "sourcePath" in visual ? [visual.sourcePath] : [],
+    ),
     ...slideFiles,
   ].filter((value): value is string => Boolean(value));
 }

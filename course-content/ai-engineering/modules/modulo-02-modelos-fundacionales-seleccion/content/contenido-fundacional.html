@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Módulo 2 — Modelos fundacionales y selección</title>
+<meta name="description" content="Contenido fundacional del curso AI Engineering Aplicado. Módulo 2: Modelos fundacionales y selección profesional.">
+<style>
+:root{
+  --navy:#0B1F33; --navy2:#16324a; --petrol:#0F766E; --cyan:#16b8b0;
+  --ink:#172033; --muted:#5d687b; --paper:#ffffff; --bg:#f3f7f6;
+  --line:#d8e5e2; --soft:#f8fbfa; --green:#0b8f64; --orange:#c96a00;
+  --violet:#6d45c8; --red:#c74343; --blue:#1769e0;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  line-height:1.72;
+}
+a{color:var(--petrol)}
+.cover{
+  min-height:92vh;padding:72px 7vw;display:flex;align-items:center;
+  background:
+    radial-gradient(circle at 78% 20%,rgba(22,184,176,.22),transparent 26%),
+    radial-gradient(circle at 16% 82%,rgba(15,118,110,.18),transparent 30%),
+    linear-gradient(135deg,var(--navy),#123a4b 68%,#145d59);
+  color:white;
+}
+.cover-inner{max-width:1080px}
+.kicker{
+  display:inline-block;border:1px solid rgba(255,255,255,.35);border-radius:999px;
+  padding:7px 14px;letter-spacing:.08em;font-weight:700;text-transform:uppercase;font-size:.82rem;
+}
+h1{font-size:clamp(2.8rem,7vw,5.7rem);line-height:1.02;margin:.28em 0 .25em;max-width:980px}
+.cover p{font-size:1.25rem;max-width:800px;color:#dbeff0}
+.meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.meta span{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.2);padding:9px 13px;border-radius:10px}
+.layout{display:grid;grid-template-columns:300px minmax(0,920px);gap:34px;max-width:1290px;margin:0 auto;padding:34px 24px 90px}
+aside{
+  position:sticky;top:20px;align-self:start;background:var(--navy);color:white;border-radius:18px;
+  padding:22px;box-shadow:0 12px 30px rgba(7,26,51,.18)
+}
+aside h2{font-size:1rem;margin:0 0 12px;color:#8fe1da}
+aside a{display:block;color:#dce9f0;text-decoration:none;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:.92rem}
+aside a:hover{color:white}
+main{background:var(--paper);border-radius:20px;padding:clamp(24px,5vw,64px);box-shadow:0 12px 35px rgba(14,39,75,.10)}
+h2{font-size:2rem;line-height:1.2;margin:2.2em 0 .5em;color:var(--navy)}
+h3{font-size:1.35rem;line-height:1.3;margin:1.7em 0 .35em;color:var(--navy2)}
+h4{font-size:1.08rem;color:var(--petrol);margin:1.4em 0 .25em}
+.lead{font-size:1.14rem;color:#36445a}
+.callout,.case,.interview,.decision,.warning,.example{
+  border-radius:14px;padding:20px 22px;margin:24px 0;border-left:5px solid var(--petrol);background:#eff9f7
+}
+.case{border-color:var(--green);background:#effaf6}
+.interview{border-color:var(--violet);background:#f6f2ff}
+.decision{border-color:var(--orange);background:#fff7ec}
+.warning{border-color:var(--red);background:#fff2f2}
+.example{border-color:var(--blue);background:#f1f7ff}
+.callout strong,.case strong,.interview strong,.decision strong,.warning strong,.example strong{display:block;margin-bottom:5px}
+.definition{
+  display:grid;grid-template-columns:170px 1fr;gap:16px;align-items:start;
+  border:1px solid var(--line);border-radius:14px;padding:18px;margin:16px 0;background:var(--soft)
+}
+.term{font-weight:800;color:var(--petrol);font-size:1.05rem}
+.flow{
+  display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:18px;background:var(--navy);
+  color:white;border-radius:14px;margin:18px 0
+}
+.flow span{background:#163a50;border:1px solid #2c6370;padding:9px 12px;border-radius:9px}
+.flow b{color:#78ddd5}
+table{width:100%;border-collapse:collapse;margin:22px 0;font-size:.94rem}
+th,td{border:1px solid var(--line);padding:12px 13px;vertical-align:top}
+th{background:#eaf6f4;text-align:left;color:var(--navy)}
+.matrix td:first-child,.matrix th:first-child{font-weight:700}
+ul,ol{padding-left:1.25rem}
+li{margin:.38rem 0}
+hr{border:0;border-top:1px solid var(--line);margin:42px 0}
+.small{font-size:.9rem;color:var(--muted)}
+.ref-list li{margin-bottom:12px}
+.checklist{list-style:none;padding:0}
+.checklist li{padding-left:30px;position:relative}
+.checklist li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:900}
+.score-card{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0
+}
+.score-card div{border:1px solid var(--line);background:var(--soft);padding:16px;border-radius:12px}
+.score-card strong{display:block;color:var(--petrol);margin-bottom:4px}
+.footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  aside{position:relative;top:0}
+  main{padding:26px}
+  .definition{grid-template-columns:1fr}
+  .score-card{grid-template-columns:1fr 1fr}
+}
+@media(max-width:580px){.score-card{grid-template-columns:1fr}}
+@media print{
+  body{background:white}.cover{min-height:auto;page-break-after:always}.layout{display:block;max-width:none;padding:0}
+  aside{display:none}main{box-shadow:none;border-radius:0;padding:16mm}a{color:#111;text-decoration:none}
+}
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-inner">
+    <span class="kicker">AI Engineering Aplicado · Módulo 2</span>
+    <h1>Modelos fundacionales y selección</h1>
+    <p>Cómo elegir el modelo adecuado para un problema real sin confundir popularidad, tamaño o resultados de benchmark con utilidad productiva.</p>
+    <div class="meta">
+      <span>Versión 0.9 · borrador pedagógico</span>
+      <span>Nivel fundacional–intermedio</span>
+      <span>Lectura estimada: 65–85 min</span>
+      <span>Incluye matriz profesional y proyecto transversal</span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+<aside>
+  <h2>Contenido del módulo</h2>
+  <a href="#proposito">1. Propósito</a>
+  <a href="#fundacional">2. Modelo fundacional</a>
+  <a href="#familias">3. Familias y modalidades</a>
+  <a href="#acceso">4. Propietarios, abiertos y open-weight</a>
+  <a href="#general-especializado">5. General vs. especializado</a>
+  <a href="#capacidad">6. Tamaño, capacidad y razonamiento</a>
+  <a href="#contexto">7. Ventana de contexto</a>
+  <a href="#operacion">8. Latencia, coste y disponibilidad</a>
+  <a href="#evaluacion">9. Benchmarks y evaluación propia</a>
+  <a href="#privacidad">10. Privacidad y control</a>
+  <a href="#routing">11. Model routing</a>
+  <a href="#matriz">12. Matriz de selección</a>
+  <a href="#caso">13. Caso aplicado</a>
+  <a href="#arquitectura">14. Architecture Canvas</a>
+  <a href="#entrevista">15. Cápsula de entrevista</a>
+  <a href="#actividad">16. Actividad</a>
+  <a href="#autoevaluacion">17. Autoevaluación</a>
+  <a href="#fuentes">18. Fuentes</a>
+</aside>
+
+<main>
+
+<section id="proposito">
+<h2>1. Propósito del módulo</h2>
+<p class="lead">En el Módulo 1 aprendimos que un modelo es una capacidad dentro de un sistema. Ahora debemos responder una pregunta decisiva para cualquier producto de IA: <strong>¿qué modelo conviene utilizar para cada función?</strong></p>
+<p>La elección no se resuelve preguntando cuál es “el modelo más inteligente”. En producción, una solución puede fracasar aun usando un modelo excelente si responde demasiado lento, resulta demasiado caro, no admite la modalidad necesaria, tiene condiciones de uso incompatibles, cambia de versión sin control o no alcanza el nivel de privacidad requerido.</p>
+<p>Del mismo modo, una solución puede ser profesional utilizando modelos pequeños o especializados si estos cumplen con precisión una tarea limitada. En AI Engineering, seleccionar un modelo significa equilibrar capacidades técnicas, restricciones operativas, riesgos y valor de negocio.</p>
+
+<div class="callout">
+<strong>Idea central</strong>
+No existe un mejor modelo en términos absolutos. Existe un modelo más adecuado para una tarea, unos datos, un nivel de riesgo, una experiencia de usuario y un presupuesto concretos.
+</div>
+
+<h3>Objetivos de aprendizaje</h3>
+<ul class="checklist">
+<li>Explicar qué convierte a un modelo en modelo fundacional.</li>
+<li>Distinguir modelos generales, especializados, propietarios, abiertos y open-weight.</li>
+<li>Evaluar modalidades, contexto, latencia, coste, disponibilidad, privacidad y gobernanza.</li>
+<li>Interpretar benchmarks sin convertirlos en una decisión automática.</li>
+<li>Diseñar evaluaciones propias basadas en tareas reales.</li>
+<li>Construir una matriz profesional de selección.</li>
+<li>Asignar modelos distintos a capacidades diferentes del JSG AI Engineering Hub.</li>
+</ul>
+</section>
+
+<section id="fundacional">
+<h2>2. Qué es un modelo fundacional</h2>
+<p>El término <em>foundation model</em> fue popularizado para describir modelos entrenados con datos amplios y adaptables a numerosas tareas posteriores. La palabra “fundacional” no indica que el modelo sea un producto terminado; señala que puede servir de base para construir muchas aplicaciones y especializaciones.<sup><a href="#ref1">[1]</a></sup></p>
+
+<div class="definition">
+<div class="term">Modelo fundacional</div>
+<div>Modelo entrenado sobre datos amplios, normalmente a gran escala, que puede adaptarse mediante instrucciones, ejemplos, recuperación de información, herramientas o ajuste adicional para resolver múltiples tareas.</div>
+</div>
+
+<h3>2.1 Una capacidad amplia, pero incompleta</h3>
+<p>Un modelo fundacional puede redactar, clasificar, resumir, interpretar imágenes, generar código o relacionar información. Sin embargo, sigue siendo un activo intermedio. Para convertirse en una solución necesita datos del dominio, controles, evaluación y una experiencia de uso.</p>
+<p>La amplitud trae una ventaja y un riesgo. La ventaja es la reutilización: una sola familia puede sostener numerosas aplicaciones. El riesgo es la homogeneización: si muchas soluciones dependen del mismo modelo, sus limitaciones, sesgos o fallas pueden propagarse a todos los productos construidos sobre él.<sup><a href="#ref1">[1]</a></sup></p>
+
+<h3>2.2 Preentrenamiento, adaptación e inferencia</h3>
+<div class="flow">
+<span>Preentrenamiento amplio</span><b>→</b><span>Adaptación al uso</span><b>→</b><span>Inferencia en producción</span>
+</div>
+<ul>
+<li><strong>Preentrenamiento:</strong> el modelo aprende patrones generales a partir de grandes conjuntos de datos.</li>
+<li><strong>Adaptación:</strong> el sistema lo orienta mediante prompts, ejemplos, fine-tuning, RAG, herramientas o políticas.</li>
+<li><strong>Inferencia:</strong> el modelo procesa solicitudes reales dentro de una aplicación.</li>
+</ul>
+
+<div class="decision">
+<strong>Decisión de arquitectura</strong>
+En la mayoría de los proyectos, el equipo no necesita entrenar un modelo fundacional. Necesita seleccionar uno, adaptarlo de forma controlada y evaluar su comportamiento dentro del sistema completo.
+</div>
+</section>
+
+<section id="familias">
+<h2>3. Familias de modelos y modalidades</h2>
+<p>El mercado actual no contiene únicamente “modelos de texto”. Existen familias y servicios orientados a modalidades y tareas diferentes. La primera decisión es determinar qué tipo de información entra al sistema y qué salida debe producir.</p>
+
+<table>
+<thead><tr><th>Familia o modalidad</th><th>Entrada</th><th>Salida</th><th>Aplicaciones típicas</th></tr></thead>
+<tbody>
+<tr><td>Lenguaje</td><td>Texto</td><td>Texto o datos estructurados</td><td>Redacción, clasificación, extracción, soporte, código</td></tr>
+<tr><td>Multimodal</td><td>Texto, imágenes, documentos, audio o video</td><td>Texto, análisis o contenido multimodal</td><td>Comprensión documental, inspección visual, asistentes ricos</td></tr>
+<tr><td>Embeddings</td><td>Texto, imagen u otras modalidades</td><td>Vectores</td><td>Búsqueda semántica, RAG, agrupamiento y similitud</td></tr>
+<tr><td>Voz y audio</td><td>Audio o texto</td><td>Transcripción, voz o audio</td><td>Asistentes de voz, accesibilidad, traducción y narración</td></tr>
+<tr><td>Imagen y video generativo</td><td>Texto, imágenes o video</td><td>Imagen o video</td><td>Diseño, educación, publicidad y prototipado visual</td></tr>
+<tr><td>Moderación o seguridad</td><td>Contenido</td><td>Clasificación de riesgo</td><td>Controles de contenido y políticas</td></tr>
+<tr><td>Modelos especializados</td><td>Dominio o tarea concreta</td><td>Resultado especializado</td><td>Código, investigación, robótica, clasificación o extracción</td></tr>
+</tbody>
+</table>
+
+<p>Los catálogos oficiales de los proveedores muestran esta especialización: modelos rápidos y económicos, modelos de razonamiento, modelos de audio, embeddings, visión y agentes gestionados pueden coexistir dentro de un mismo ecosistema.<sup><a href="#ref2">[2]</a> <a href="#ref3">[3]</a> <a href="#ref4">[4]</a></sup></p>
+
+<h3>3.1 Modalidad requerida frente a modalidad disponible</h3>
+<p>Que un modelo acepte imágenes no significa que sea ideal para análisis clínico de imágenes, ni que un modelo acepte audio significa que sea adecuado para transcripción en ambientes ruidosos. La modalidad es una condición necesaria, no una garantía de calidad.</p>
+
+<div class="example">
+<strong>Ejemplo</strong>
+Un sistema que recibe pedidos médicos escaneados puede requerir OCR o visión para extraer texto, un modelo de lenguaje para interpretar variantes, embeddings para recuperar códigos y reglas deterministas para calcular valores. Una sola llamada multimodal no necesariamente sustituye esa arquitectura.
+</div>
+</section>
+
+<section id="acceso">
+<h2>4. Modelos propietarios, abiertos y open-weight</h2>
+<p>La selección también depende del nivel de acceso y control que ofrece el proveedor o la comunidad.</p>
+
+<h3>4.1 Modelos propietarios mediante API</h3>
+<p>El proveedor opera el modelo y expone una interfaz de uso. El equipo consumidor no administra pesos ni infraestructura de inferencia.</p>
+<ul>
+<li><strong>Ventajas:</strong> acceso rápido, modelos de frontera, operación administrada, escalabilidad y herramientas integradas.</li>
+<li><strong>Limitaciones:</strong> dependencia del proveedor, costes variables, cambios de versión, restricciones contractuales y menor control técnico.</li>
+</ul>
+
+<h3>4.2 Modelos open-weight</h3>
+<p>Los pesos pueden descargarse o ejecutarse en infraestructura propia, aunque la licencia y la información disponible no siempre conceden todas las libertades de un sistema plenamente abierto. Por eso “pesos disponibles” y “open source” no son sinónimos.</p>
+<ul>
+<li><strong>Ventajas:</strong> despliegue privado, personalización, control de versiones y posibilidad de optimización.</li>
+<li><strong>Limitaciones:</strong> infraestructura, seguridad, mantenimiento, evaluación y operación pasan a ser responsabilidad del equipo.</li>
+</ul>
+
+<h3>4.3 Open Source AI</h3>
+<p>La definición de Open Source AI de la Open Source Initiative exige libertades para usar, estudiar, modificar y compartir, además del acceso a la forma preferida para modificar el sistema, que incluye información suficiente sobre datos, código y parámetros.<sup><a href="#ref5">[5]</a></sup></p>
+
+<table>
+<thead><tr><th>Tipo de acceso</th><th>Pesos</th><th>Operación propia</th><th>Control</th><th>Responsabilidad operativa</th></tr></thead>
+<tbody>
+<tr><td>API propietaria</td><td>No</td><td>No</td><td>Limitado por contrato y API</td><td>Compartida con el proveedor</td></tr>
+<tr><td>Open-weight</td><td>Sí</td><td>Posible</td><td>Alto sobre inferencia y versión</td><td>Alta para el equipo</td></tr>
+<tr><td>Open Source AI</td><td>Sí, junto con elementos exigidos por la definición</td><td>Posible</td><td>Mayor capacidad de estudio y modificación</td><td>Alta para el equipo</td></tr>
+</tbody>
+</table>
+
+<div class="warning">
+<strong>Error frecuente</strong>
+Elegir un modelo local “por privacidad” sin calcular quién actualizará dependencias, controlará vulnerabilidades, medirá calidad, administrará GPU, registrará incidentes y garantizará disponibilidad.
+</div>
+</section>
+
+<section id="general-especializado">
+<h2>5. Modelos generales frente a modelos especializados</h2>
+<p>Un modelo generalista cubre muchas tareas y facilita el prototipado. Un modelo especializado puede ofrecer mejor relación entre calidad, coste y control cuando la función está bien delimitada.</p>
+
+<h3>5.1 Cuándo conviene un modelo general</h3>
+<ul>
+<li>La tarea cambia con frecuencia.</li>
+<li>Se necesita razonamiento entre dominios.</li>
+<li>El producto aún está en descubrimiento.</li>
+<li>Se requiere una experiencia conversacional amplia.</li>
+<li>La misma llamada debe combinar texto, visión, código o herramientas.</li>
+</ul>
+
+<h3>5.2 Cuándo conviene un modelo especializado</h3>
+<ul>
+<li>La tarea es estrecha y repetitiva.</li>
+<li>Existe un criterio de salida claro.</li>
+<li>El volumen es alto y el coste importa.</li>
+<li>La latencia debe ser mínima.</li>
+<li>La evaluación demuestra que un modelo menor alcanza el umbral requerido.</li>
+</ul>
+
+<div class="callout">
+<strong>Principio profesional</strong>
+Usar un modelo más pequeño no es “bajar la calidad” si la tarea está bien definida y el resultado supera la evaluación exigida.
+</div>
+
+<h3>5.3 Especialización por función, no por moda</h3>
+<p>En un producto puede haber un modelo de clasificación, otro para planificación, un modelo de embeddings y un modelo multimodal. La especialización debe surgir de la arquitectura y de mediciones, no de la cantidad de marcas que queremos exhibir.</p>
+</section>
+
+<section id="capacidad">
+<h2>6. Tamaño, capacidad y razonamiento</h2>
+<p>Durante años, el número de parámetros se utilizó como señal indirecta de capacidad. Hoy resulta insuficiente. Distintos métodos de entrenamiento, arquitecturas, mezcla de expertos, datos, herramientas y técnicas de inferencia hacen que dos modelos de tamaño similar se comporten de manera muy diferente.</p>
+
+<h3>6.1 “Más grande” no es una especificación de producto</h3>
+<p>Un equipo debe preguntar:</p>
+<ul>
+<li>¿Resuelve nuestras tareas?</li>
+<li>¿Sigue instrucciones y formatos?</li>
+<li>¿Utiliza herramientas con estabilidad?</li>
+<li>¿Mantiene calidad en español y en nuestro vocabulario?</li>
+<li>¿Produce respuestas verificables?</li>
+<li>¿Cuál es su tasa de error en casos difíciles?</li>
+</ul>
+
+<h3>6.2 Modelos de razonamiento</h3>
+<p>Algunos modelos emplean mayor cómputo de inferencia para tareas complejas. Pueden ser útiles en planificación, matemáticas, código o análisis con múltiples restricciones, pero suelen aumentar latencia y coste. No es eficiente asignarlos automáticamente a saludos, extracción simple o clasificación rutinaria.</p>
+
+<div class="decision">
+<strong>Regla de asignación</strong>
+Reserva la mayor capacidad para los pasos donde el error o la ambigüedad lo justifican. Utiliza modelos rápidos o código determinista en pasos simples.
+</div>
+
+<h3>6.3 Capacidad efectiva dentro del sistema</h3>
+<p>La calidad observable no depende solo del modelo. Depende de instrucciones, contexto, recuperación, herramientas, formato de salida y evaluación. Un modelo moderado con contexto correcto puede superar a uno más capaz que trabaja sin evidencia o con un prompt deficiente.</p>
+</section>
+
+<section id="contexto">
+<h2>7. Ventana de contexto y límites reales</h2>
+<p>La ventana de contexto indica la cantidad máxima aproximada de información que puede procesarse en una interacción. Incluye instrucciones, mensajes, documentos, resultados de herramientas y la salida generada.</p>
+
+<div class="definition">
+<div class="term">Ventana de contexto</div>
+<div>Presupuesto de tokens disponible para la información de entrada, el estado de la conversación y, según el proveedor, parte o toda la salida.</div>
+</div>
+
+<h3>7.1 Capacidad máxima no equivale a calidad constante</h3>
+<p>Un modelo puede aceptar un contexto muy largo y aun así perder precisión al localizar detalles, relacionar fragmentos distantes o distinguir información relevante de ruido. La ventana anunciada es un límite técnico; la calidad útil debe medirse con documentos y preguntas reales.</p>
+
+<h3>7.2 Coste de enviar demasiado contexto</h3>
+<ul>
+<li>Más tokens y mayor coste.</li>
+<li>Mayor latencia.</li>
+<li>Más información irrelevante.</li>
+<li>Riesgo de instrucciones contradictorias.</li>
+<li>Dificultad para observar qué evidencia influyó.</li>
+</ul>
+
+<h3>7.3 Context engineering</h3>
+<p>La ingeniería de contexto consiste en seleccionar y organizar la información necesaria para cada paso. En lugar de enviar todo el repositorio, toda la conversación o todos los documentos, el sistema recupera solo lo relevante, resume estado y conserva trazabilidad.</p>
+
+<div class="example">
+<strong>Aplicación al curso</strong>
+Codex pudo continuar el proyecto entre hilos porque el repositorio, Git, AGENTS.md y los manifiestos conservaron el estado. No fue necesario mantener toda la conversación original dentro de cada contexto.
+</div>
+</section>
+
+<section id="operacion">
+<h2>8. Latencia, coste, disponibilidad y ciclo de vida</h2>
+<p>Los proveedores suelen presentar familias diferenciadas por capacidad, velocidad y coste. Esa segmentación confirma que la selección es una decisión multidimensional, no una clasificación única de “mejor a peor”.<sup><a href="#ref2">[2]</a> <a href="#ref3">[3]</a> <a href="#ref4">[4]</a></sup></p>
+
+<h3>8.1 Latencia</h3>
+<p>Debemos distinguir:</p>
+<ul>
+<li><strong>Tiempo hasta el primer token:</strong> cuánto tarda el usuario en percibir respuesta.</li>
+<li><strong>Velocidad de generación:</strong> cuánto tarda la salida completa.</li>
+<li><strong>Latencia del workflow:</strong> suma de modelo, RAG, herramientas, red y validaciones.</li>
+</ul>
+<p>Un modelo excelente puede producir una mala experiencia si el usuario espera demasiado. En procesos no interactivos, en cambio, la calidad puede importar más que la respuesta inmediata.</p>
+
+<h3>8.2 Coste total</h3>
+<p>El precio por token es solo una parte. El coste total incluye:</p>
+<ul>
+<li>entradas y salidas;</li>
+<li>reintentos;</li>
+<li>contextos demasiado grandes;</li>
+<li>embeddings y almacenamiento;</li>
+<li>herramientas externas;</li>
+<li>observabilidad y evaluación;</li>
+<li>infraestructura local;</li>
+<li>tiempo humano de supervisión;</li>
+<li>coste de los errores.</li>
+</ul>
+
+<h3>8.3 Disponibilidad, límites y regiones</h3>
+<p>La decisión debe revisar disponibilidad geográfica, cuotas, rate limits, concurrencia, acuerdos de servicio, soporte y posibilidad de operar en las regiones requeridas.</p>
+
+<h3>8.4 Versiones estables, preview y deprecaciones</h3>
+<p>Los proveedores pueden ofrecer versiones estables, preview, experimentales o alias que cambian con el tiempo. Para producción conviene fijar versiones cuando sea posible, registrar evaluaciones por versión y preparar migraciones. La documentación de Gemini, por ejemplo, distingue versiones estables, preview, latest y experimentales y recomienda versiones estables específicas para la mayoría de aplicaciones de producción.<sup><a href="#ref4">[4]</a></sup></p>
+
+<div class="warning">
+<strong>Riesgo de producción</strong>
+Usar un alias “latest” sin evaluaciones automáticas puede cambiar el comportamiento del producto aunque el equipo no haya modificado su código.
+</div>
+</section>
+
+<section id="evaluacion">
+<h2>9. Benchmarks, leaderboards y evaluación propia</h2>
+<p>Los benchmarks permiten comparar modelos en condiciones estandarizadas. Son útiles para descubrir candidatos, pero no sustituyen la evaluación de la aplicación.</p>
+
+<h3>9.1 Qué puede decir un benchmark</h3>
+<ul>
+<li>Rendimiento relativo en una tarea definida.</li>
+<li>Capacidades generales de razonamiento, lenguaje, código o visión.</li>
+<li>Evolución entre versiones.</li>
+<li>Fortalezas y debilidades preliminares.</li>
+</ul>
+
+<h3>9.2 Qué no garantiza</h3>
+<ul>
+<li>Calidad en tus documentos y usuarios.</li>
+<li>Cumplimiento de formato.</li>
+<li>Estabilidad en tool calling.</li>
+<li>Precisión con terminología local.</li>
+<li>Coste total del workflow.</li>
+<li>Seguridad en un contexto sensible.</li>
+</ul>
+
+<p>El informe de Stanford sobre modelos fundacionales sostiene que la evaluación debe ir más allá de exactitud e incluir robustez, equidad, eficiencia y otros factores. HELM fue creado precisamente para una evaluación más amplia y transparente.<sup><a href="#ref1">[1]</a> <a href="#ref6">[6]</a></sup></p>
+
+<h3>9.3 Evaluación basada en tareas reales</h3>
+<p>Un conjunto de evaluación profesional debe incluir:</p>
+<ol>
+<li>Casos representativos del uso diario.</li>
+<li>Casos límite y ambiguos.</li>
+<li>Resultados esperados o criterios de aceptación.</li>
+<li>Errores críticos diferenciados de errores menores.</li>
+<li>Medición de coste y latencia.</li>
+<li>Revisión humana donde no exista una respuesta única.</li>
+<li>Repetición por versión de modelo y prompt.</li>
+</ol>
+
+<div class="score-card">
+<div><strong>Calidad</strong>Exactitud, utilidad, formato y consistencia.</div>
+<div><strong>Operación</strong>Latencia, disponibilidad y throughput.</div>
+<div><strong>Economía</strong>Coste por tarea exitosa, no solo por token.</div>
+<div><strong>Riesgo</strong>Privacidad, seguridad, sesgos y control.</div>
+</div>
+
+<h3>9.4 El coste por tarea exitosa</h3>
+<p>Un modelo barato puede resultar caro si obliga a repetir solicitudes o genera errores. Una métrica útil es:</p>
+<div class="flow"><span>Coste total de intentos</span><b>÷</b><span>Tareas aceptadas</span><b>=</b><span>Coste por tarea exitosa</span></div>
+</section>
+
+<section id="privacidad">
+<h2>10. Privacidad, residencia y control de datos</h2>
+<p>La selección debe considerar qué información recibirá el modelo y qué obligaciones tiene la organización. La pregunta correcta no es solo “¿el proveedor usa mis datos para entrenar?”, sino un conjunto más amplio de controles.</p>
+
+<h3>10.1 Preguntas necesarias</h3>
+<ul>
+<li>¿Dónde se procesan y almacenan los datos?</li>
+<li>¿Cuánto tiempo se retienen?</li>
+<li>¿Se utilizan para mejorar modelos?</li>
+<li>¿Qué configuraciones contractuales existen?</li>
+<li>¿Hay cifrado y aislamiento adecuados?</li>
+<li>¿Se pueden auditar accesos?</li>
+<li>¿Qué subprocesadores intervienen?</li>
+<li>¿Existe opción regional, privada o local?</li>
+</ul>
+
+<h3>10.2 Datos sensibles y minimización</h3>
+<p>Antes de cambiar de proveedor o ejecutar un modelo local, debemos reducir la información enviada. La minimización, anonimización, control de permisos y separación de funciones son decisiones de arquitectura.</p>
+
+<h3>10.3 Gobierno del riesgo</h3>
+<p>El AI Risk Management Framework de NIST propone tratar el riesgo de IA mediante funciones de gobernanza, identificación, medición y gestión. La selección del modelo debe integrarse a ese proceso y no quedar como una decisión aislada del desarrollador.<sup><a href="#ref7">[7]</a></sup></p>
+
+<div class="case">
+<strong>Aplicación clínica</strong>
+Un sistema administrativo puede usar un modelo externo para interpretar un pedido anonimizado y reglas locales para calcular valores. No necesita enviar nombre, documento, historia clínica ni otros datos personales si esos elementos no son necesarios para la tarea.
+</div>
+</section>
+
+<section id="routing">
+<h2>11. Model routing y estrategias híbridas</h2>
+<p>Un sistema profesional no necesita utilizar el mismo modelo para todas las solicitudes. El <em>routing</em> asigna cada tarea al modelo o mecanismo más adecuado según criterios definidos.</p>
+
+<h3>11.1 Tipos de routing</h3>
+<ul>
+<li><strong>Por tarea:</strong> clasificación, extracción, planificación o generación.</li>
+<li><strong>Por complejidad:</strong> modelo rápido para casos simples y modelo avanzado para ambiguos.</li>
+<li><strong>Por modalidad:</strong> texto, visión, audio o embeddings.</li>
+<li><strong>Por sensibilidad:</strong> local o privado para datos restringidos.</li>
+<li><strong>Por disponibilidad:</strong> fallback cuando un proveedor falla.</li>
+<li><strong>Por coste:</strong> presupuesto máximo por tarea.</li>
+</ul>
+
+<h3>11.2 Arquitectura en cascada</h3>
+<div class="flow">
+<span>Regla determinista</span><b>→</b><span>Modelo rápido</span><b>→</b><span>Modelo avanzado</span><b>→</b><span>Revisión humana</span>
+</div>
+<p>La cascada evita pagar el nivel más caro para todos los casos. El escalamiento debe basarse en señales observables: baja confianza, formato inválido, conflicto documental o riesgo elevado.</p>
+
+<h3>11.3 Fallback no significa equivalencia</h3>
+<p>Un proveedor alternativo puede usar prompts, formatos y herramientas diferentes. La conmutación requiere una capa de abstracción, evaluaciones y adaptación. No basta con cambiar el nombre del modelo.</p>
+
+<div class="decision">
+<strong>Principio</strong>
+La estrategia multimodelo aporta resiliencia y eficiencia solo cuando el coste de coordinación es menor que el beneficio obtenido.
+</div>
+</section>
+
+<section id="matriz">
+<h2>12. Matriz profesional de selección</h2>
+<p>La matriz convierte preferencias generales en una decisión documentada. Antes de comparar proveedores, define el umbral mínimo de cada criterio.</p>
+
+<table class="matrix">
+<thead><tr><th>Criterio</th><th>Pregunta</th><th>Métrica o evidencia</th><th>Peso sugerido</th></tr></thead>
+<tbody>
+<tr><td>Calidad de tarea</td><td>¿Resuelve casos reales?</td><td>Evaluación propia, tasa de aceptación</td><td>20–30 %</td></tr>
+<tr><td>Fiabilidad</td><td>¿Respeta formato y herramientas?</td><td>Errores de esquema, tool calls correctas</td><td>10–20 %</td></tr>
+<tr><td>Latencia</td><td>¿Cumple la experiencia?</td><td>P50, P95 y tiempo total</td><td>5–15 %</td></tr>
+<tr><td>Coste</td><td>¿Es sostenible?</td><td>Coste por tarea exitosa</td><td>5–15 %</td></tr>
+<tr><td>Contexto</td><td>¿Procesa la evidencia necesaria?</td><td>Pruebas de recuperación y lectura larga</td><td>5–10 %</td></tr>
+<tr><td>Modalidad</td><td>¿Acepta entradas requeridas?</td><td>Texto, visión, audio, documentos</td><td>Obligatorio</td></tr>
+<tr><td>Privacidad</td><td>¿Cumple la política?</td><td>Contrato, retención, región y controles</td><td>Obligatorio o 10–25 %</td></tr>
+<tr><td>Disponibilidad</td><td>¿Puede operar al volumen esperado?</td><td>Cuotas, SLA, regiones y fallback</td><td>5–10 %</td></tr>
+<tr><td>Control de versión</td><td>¿Podemos reproducir resultados?</td><td>Versionado, deprecación y migración</td><td>5–10 %</td></tr>
+<tr><td>Licencia y portabilidad</td><td>¿Podemos desplegar o modificar?</td><td>Licencia, pesos, código y dependencia</td><td>Según estrategia</td></tr>
+</tbody>
+</table>
+
+<h3>12.1 Proceso de decisión</h3>
+<ol>
+<li>Define la tarea y el resultado aceptable.</li>
+<li>Identifica restricciones obligatorias.</li>
+<li>Selecciona tres a cinco candidatos.</li>
+<li>Construye un conjunto de evaluación.</li>
+<li>Mide calidad, coste, latencia y errores.</li>
+<li>Documenta la decisión y sus supuestos.</li>
+<li>Define cuándo reevaluar.</li>
+</ol>
+
+<div class="callout">
+<strong>Documento de decisión</strong>
+La matriz no debe terminar en “ganó el modelo X”. Debe registrar por qué ganó, en qué versión, con qué prompts, sobre qué casos y bajo qué límites.
+</div>
+</section>
+
+<section id="caso">
+<h2>13. Caso aplicado: selección para un asistente documental</h2>
+<p>Consideremos un asistente que recibe una consulta sobre un estudio por imágenes y debe identificar modalidad, región, contraste, financiador, código y valor vigente.</p>
+
+<h3>13.1 Descomposición de capacidades</h3>
+<table>
+<thead><tr><th>Capacidad</th><th>Opción adecuada</th><th>Justificación</th></tr></thead>
+<tbody>
+<tr><td>Detectar modalidad y región</td><td>Modelo rápido o clasificador</td><td>Tarea limitada, alto volumen y salida estructurada</td></tr>
+<tr><td>Interpretar solicitud ambigua</td><td>Modelo general más capaz</td><td>Requiere lenguaje, contexto y aclaraciones</td></tr>
+<tr><td>Recuperar códigos y reglas</td><td>Embeddings + RAG</td><td>La evidencia debe venir de la base maestra</td></tr>
+<tr><td>Calcular valores</td><td>Código determinista</td><td>La aritmética y reglas deben ser reproducibles</td></tr>
+<tr><td>Procesar documento escaneado</td><td>OCR o modelo multimodal</td><td>La entrada no está disponible como texto limpio</td></tr>
+<tr><td>Información sensible</td><td>Minimización o modelo privado</td><td>Reducir exposición y cumplir políticas</td></tr>
+</tbody>
+</table>
+
+<h3>13.2 Selección inicial</h3>
+<p>El equipo puede comenzar con un modelo general de velocidad media para interpretar consultas y un modelo de embeddings para recuperación. Solo incorporará un modelo de razonamiento avanzado si las evaluaciones muestran que los casos ambiguos no alcanzan el umbral.</p>
+
+<h3>13.3 Qué medir</h3>
+<ul>
+<li>Exactitud al identificar estudio y región.</li>
+<li>Capacidad para solicitar aclaraciones.</li>
+<li>Uso correcto de las fuentes recuperadas.</li>
+<li>Errores críticos de código o valor.</li>
+<li>Latencia total.</li>
+<li>Coste por consulta aceptada.</li>
+<li>Porcentaje derivado a revisión humana.</li>
+</ul>
+
+<div class="case">
+<strong>Resultado arquitectónico</strong>
+La selección no produce “un modelo ganador”. Produce una combinación: modelo rápido, modelo de escalamiento, embeddings, código determinista y supervisión humana.
+</div>
+</section>
+
+<section id="arquitectura">
+<h2>14. Architecture Canvas — JSG AI Engineering Hub v0.2</h2>
+<p>En este módulo, el proyecto transversal deja de pensar en “qué modelo usar” y comienza a asignar capacidades.</p>
+
+<table>
+<tbody>
+<tr><th>Problema</th><td>Proyectos, documentos, aprendizajes y tareas distribuidos entre diferentes plataformas.</td></tr>
+<tr><th>Usuario inicial</th><td>Juan, como estudiante, creador de productos y administrador de proyectos.</td></tr>
+<tr><th>Modelo rápido</th><td>Clasificación, etiquetado, extracción de metadatos y respuestas breves.</td></tr>
+<tr><th>Modelo avanzado</th><td>Planificación, análisis de arquitectura y síntesis compleja.</td></tr>
+<tr><th>Embeddings</th><td>Recuperación semántica de documentos, notas y repositorios.</td></tr>
+<tr><th>Modelo multimodal</th><td>Interpretación de capturas, diagramas, PDFs e imágenes del curso.</td></tr>
+<tr><th>Ruta privada</th><td>Procesamiento local o restringido para información sensible.</td></tr>
+<tr><th>Routing</th><td>Asignación por tarea, complejidad, modalidad y sensibilidad.</td></tr>
+<tr><th>Evaluación</th><td>Conjunto propio de preguntas, documentos y tareas del proyecto.</td></tr>
+<tr><th>Control humano</th><td>Obligatorio antes de enviar, modificar, publicar o eliminar información.</td></tr>
+</tbody>
+</table>
+
+<h3>14.1 Hipótesis de arquitectura</h3>
+<div class="flow">
+<span>Entrada</span><b>→</b><span>Clasificador</span><b>→</b><span>Router</span><b>→</b><span>Modelo o herramienta adecuada</span><b>→</b><span>Evaluación</span><b>→</b><span>Validación humana</span>
+</div>
+
+<div class="decision">
+<strong>Versión 0.2</strong>
+El Hub no utilizará un único modelo para todo. La arquitectura asignará capacidad según la tarea y conservará la posibilidad de reemplazar proveedores.
+</div>
+</section>
+
+<section id="entrevista">
+<h2>15. Cápsula de entrevista técnica</h2>
+
+<div class="interview">
+<strong>Pregunta: ¿Cómo seleccionas un modelo para producción?</strong>
+Primero defino la tarea, los datos, el riesgo y el umbral de aceptación. Después comparo candidatos mediante evaluaciones propias y mido calidad, latencia, coste por tarea exitosa, privacidad, disponibilidad y estabilidad de versión. No decido únicamente por benchmarks.
+</div>
+
+<div class="interview">
+<strong>Pregunta: ¿Por qué no usar siempre el modelo más capaz?</strong>
+Porque muchas tareas no necesitan esa capacidad. Un modelo mayor puede aumentar coste y latencia sin mejorar el resultado. Conviene asignar modelos según la complejidad y escalar solo cuando una evaluación demuestra que es necesario.
+</div>
+
+<div class="interview">
+<strong>Pregunta: ¿Qué diferencia existe entre open-weight y open source?</strong>
+Open-weight significa que los parámetros pueden estar disponibles, pero no garantiza acceso suficiente a datos, código, proceso de entrenamiento y libertades de modificación. La definición Open Source AI exige condiciones más amplias.
+</div>
+
+<div class="interview">
+<strong>Pregunta: ¿Qué es model routing?</strong>
+Es la capa que decide qué modelo, herramienta o ruta debe atender cada solicitud según tarea, complejidad, modalidad, sensibilidad, coste o disponibilidad.
+</div>
+
+<h3>Frases clave</h3>
+<ul>
+<li>“El benchmark propone candidatos; la evaluación propia toma la decisión”.</li>
+<li>“La ventana máxima de contexto no es la cantidad de contexto que deberíamos enviar”.</li>
+<li>“El coste relevante es el coste por tarea exitosa”.</li>
+<li>“Un sistema profesional puede usar varios modelos sin convertirse en un sistema multiagente”.</li>
+</ul>
+</section>
+
+<section id="actividad">
+<h2>16. Actividad práctica — Matriz de selección</h2>
+<p>Selecciona un proceso real que conozcas. Puede ser administrativo, educativo, clínico o de desarrollo de software.</p>
+
+<h3>Parte A. Definición</h3>
+<ol>
+<li>Describe el resultado final esperado.</li>
+<li>Enumera las entradas y modalidades.</li>
+<li>Indica qué datos son sensibles.</li>
+<li>Define el tiempo máximo aceptable.</li>
+<li>Identifica errores críticos.</li>
+</ol>
+
+<h3>Parte B. Descomposición</h3>
+<p>Separa el proceso en capacidades:</p>
+<ul>
+<li>clasificación;</li>
+<li>extracción;</li>
+<li>recuperación;</li>
+<li>razonamiento;</li>
+<li>generación;</li>
+<li>cálculo;</li>
+<li>validación;</li>
+<li>acción externa.</li>
+</ul>
+
+<h3>Parte C. Candidatos</h3>
+<p>Propón al menos dos arquitecturas:</p>
+<ul>
+<li><strong>Arquitectura simple:</strong> un modelo general y código.</li>
+<li><strong>Arquitectura optimizada:</strong> routing entre modelos o funciones especializadas.</li>
+</ul>
+
+<h3>Parte D. Matriz</h3>
+<p>Asigna pesos a calidad, latencia, coste, privacidad, disponibilidad y control. Describe qué evidencia utilizarías para puntuar cada opción.</p>
+
+<h3>Entregable</h3>
+<div class="callout">
+<strong>Documento de decisión de modelo</strong>
+Una página con tarea, restricciones, candidatos, evaluación, matriz, decisión provisional, riesgos, fallback y fecha de reevaluación.
+</div>
+</section>
+
+<section id="autoevaluacion">
+<h2>17. Autoevaluación abierta</h2>
+<ol>
+<li>¿Por qué un modelo fundacional no es un producto terminado?</li>
+<li>¿Qué diferencia existe entre modelo propietario, open-weight y Open Source AI?</li>
+<li>¿Cuándo un modelo especializado puede ser mejor que uno generalista?</li>
+<li>¿Por qué la ventana de contexto anunciada no garantiza calidad sobre documentos largos?</li>
+<li>¿Qué métricas incluirías además de la exactitud?</li>
+<li>¿Qué significa coste por tarea exitosa?</li>
+<li>¿Qué criterios pueden utilizarse para model routing?</li>
+<li>¿Qué datos evitarías enviar en el caso de estudios por imágenes?</li>
+<li>¿Por qué es conveniente fijar versiones de modelo en producción?</li>
+<li>¿Qué combinación de modelos propondrías para el JSG AI Engineering Hub y por qué?</li>
+</ol>
+</section>
+
+<section id="fuentes">
+<h2>18. Fuentes base</h2>
+<ol class="ref-list">
+<li id="ref1"><strong>Stanford Center for Research on Foundation Models.</strong> <em>On the Opportunities and Risks of Foundation Models</em>. Definición, adaptación, evaluación, riesgos y carácter incompleto de los modelos fundacionales. <a href="https://crfm.stanford.edu/report.html" target="_blank" rel="noopener">Fuente oficial</a>.</li>
+<li id="ref2"><strong>OpenAI Developers.</strong> Catálogo y guía de selección de modelos. Muestra familias diferenciadas por capacidad, coste, modalidades y tareas especializadas. <a href="https://developers.openai.com/api/docs/models" target="_blank" rel="noopener">Documentación oficial</a>.</li>
+<li id="ref3"><strong>Anthropic.</strong> Models overview y comparación por capacidad, velocidad, contexto y coste. <a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank" rel="noopener">Documentación oficial</a>.</li>
+<li id="ref4"><strong>Google AI for Developers.</strong> Modelos de Gemini, modalidades, especialización y políticas de versionado estable, preview y experimental. <a href="https://ai.google.dev/gemini-api/docs/models" target="_blank" rel="noopener">Documentación oficial</a>.</li>
+<li id="ref5"><strong>Open Source Initiative.</strong> <em>The Open Source AI Definition 1.0</em>. Libertades, datos, código, parámetros y diferencia entre modelo y pesos. <a href="https://opensource.org/ai/open-source-ai-definition" target="_blank" rel="noopener">Definición oficial</a>.</li>
+<li id="ref6"><strong>Stanford CRFM.</strong> <em>Holistic Evaluation of Language Models — HELM</em>. Evaluación multidimensional y transparente. <a href="https://crfm.stanford.edu/helm/latest/" target="_blank" rel="noopener">Proyecto oficial</a>.</li>
+<li id="ref7"><strong>National Institute of Standards and Technology.</strong> <em>AI Risk Management Framework</em>. Marco para gobernar, identificar, medir y gestionar riesgos. <a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">Fuente oficial</a>.</li>
+<li id="ref8"><strong>Hugging Face.</strong> Model Hub y Model Cards. Descubrimiento, documentación, checkpoints, evaluaciones y uso de modelos. <a href="https://huggingface.co/docs/hub/models-the-hub" target="_blank" rel="noopener">Documentación oficial</a>.</li>
+</ol>
+
+<p class="small">Nota editorial: los catálogos, nombres, precios, ventanas de contexto y disponibilidad cambian con frecuencia. El contenido conceptual del módulo permanece estable, pero las comparaciones concretas deberán actualizarse al ejecutar la actividad.</p>
+</section>
+
+<div class="footer">
+<strong>AI Engineering Aplicado — Módulo 2</strong><br>
+Documento base para revisión pedagógica. Versión 0.9 · 16 de julio de 2026.
+</div>
+
+</main>
+</div>
+</body>
+</html>

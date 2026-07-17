@@ -1,0 +1,28 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Selección de modelos para un copiloto de desarrollo</title><style>
+:root{--navy:#0B1F33;--petrol:#0F766E;--ink:#172033;--muted:#5d687b;--line:#d8e5e2;--bg:#f3f7f6}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;line-height:1.7}
+header{padding:48px 24px;background:linear-gradient(135deg,var(--navy),#145d59);color:#fff}
+header div,main{max-width:980px;margin:auto}.kicker{text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:#8fe1da}
+h1{font-size:clamp(2rem,5vw,4rem);line-height:1.08;margin:.2em 0}main{background:white;margin:24px auto 70px;padding:clamp(24px,5vw,56px);border-radius:18px;box-shadow:0 12px 30px rgba(11,31,51,.1)}
+h2{color:var(--navy);font-size:1.75rem;margin-top:2em}h3{color:#16324a}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.box{border:1px solid var(--line);border-radius:14px;padding:18px;background:#fbfdfc}.box strong{display:block;color:var(--petrol);margin-bottom:6px}
+.flow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:var(--navy);color:white;border-radius:14px;padding:16px;margin:20px 0}.flow span{background:#163a50;border:1px solid #2c6370;padding:9px 12px;border-radius:9px}.flow b{color:#78ddd5}
+.callout{border-left:5px solid var(--petrol);background:#eff9f7;border-radius:12px;padding:18px;margin:22px 0}
+.warning{border-left-color:#c74343;background:#fff2f2}.decision{border-left-color:#c96a00;background:#fff7ec}.success{border-left-color:#0b8f64;background:#effaf6}
+table{width:100%;border-collapse:collapse;margin:20px 0}th,td{border:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}th{background:#eaf6f4}
+ul,ol{padding-left:1.25rem}.footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;color:var(--muted);font-size:.9rem}
+@media(max-width:760px){.grid{grid-template-columns:1fr}main{margin:14px;border-radius:16px}}
+</style></head><body><header><div><div class="kicker">AI Engineering Aplicado · Módulo 2 · Caso real</div><h1>Selección de modelos para un copiloto de desarrollo</h1></div></header><main>
+<p>Este caso analiza un sistema que comprende repositorios, planifica cambios, genera código, ejecuta pruebas y revisa resultados.</p>
+<h2>1. Asignación</h2>
+<table><tr><th>Tarea</th><th>Selección</th><th>Justificación</th></tr>
+<tr><td>Clasificar issue</td><td>Modelo rápido</td><td>Salida simple.</td></tr>
+<tr><td>Plan arquitectónico</td><td>Modelo avanzado</td><td>Contexto y razonamiento.</td></tr>
+<tr><td>Búsqueda semántica</td><td>Embeddings</td><td>Localiza código y documentación.</td></tr>
+<tr><td>Generar código</td><td>Modelo de código</td><td>Sigue estructura del repositorio.</td></tr>
+<tr><td>Verificar</td><td>Tests, linters y humano</td><td>La calidad no depende solo del modelo.</td></tr></table>
+<h2>2. Context engineering</h2><p>No se envía todo el repositorio. El sistema recupera archivos relevantes, convenciones y estado del proyecto.</p>
+<h2>3. Routing</h2><div class="flow"><span>Tarea simple</span><b>→</b><span>Modelo rápido</span><b>→</b><span>Si falla</span><b>→</b><span>Modelo avanzado</span><b>→</b><span>Pruebas</span></div>
+<h2>4. Métricas</h2><ul><li>Cambios que pasan pruebas.</li><li>Retrabajo.</li><li>Coste por pull request aceptado.</li><li>Latencia hasta un plan útil.</li><li>Errores de contexto.</li></ul>
+<div class="callout decision"><strong>Decisión</strong>La combinación de modelos solo aporta valor si routing y verificación mejoran calidad y coste total.</div>
+<div class="footer">AI Engineering Aplicado · Módulo 2 · Caso real independiente</div></main></body></html>

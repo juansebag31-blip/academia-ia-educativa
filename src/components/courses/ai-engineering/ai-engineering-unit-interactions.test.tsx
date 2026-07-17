@@ -95,7 +95,7 @@ describe("AI Engineering unit interactions", () => {
     };
     const { container, unmount } = render(<AiEngineeringAudioPlayer {...audioProps} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Reproducir Audio de prueba" }));
+    fireEvent.click(screen.getByRole("button", { name: "Cargar y reproducir audio: Audio de prueba" }));
     const audio = container.querySelector("audio");
     if (!audio) throw new Error("The audio element was not rendered.");
     Object.defineProperty(audio, "currentTime", { configurable: true, value: 12 });
@@ -112,7 +112,7 @@ describe("AI Engineering unit interactions", () => {
     unmount();
     render(<AiEngineeringAudioPlayer {...audioProps} />);
     await waitFor(() => {
-      expect(screen.getByRole("button", { name: "Continuar Audio de prueba" })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "Continuar audio: Audio de prueba" })).toBeInTheDocument();
     });
   });
 });

@@ -4,7 +4,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { JSDOM } from "jsdom";
 import { aiEngineeringCourseManifest } from "../src/lib/courses/ai-engineering/manifest";
-import type { AiEngineeringModuleManifest } from "../src/lib/courses/ai-engineering/module-contract";
+import type {
+  AiEngineeringModuleManifest,
+  AiEngineeringVisualPlacement,
+} from "../src/lib/courses/ai-engineering/module-contract";
 import {
   canPublishAiEngineeringModule,
   renderSlideFileName,
@@ -30,8 +33,8 @@ export const generatedModulesPath = path.join(
 );
 export const publicCourseRoot = path.join(projectRoot, "public", "ai-engineering-assets");
 
-export async function prepareAiEngineeringContent() {
-  const validation = await validateAiEngineeringCoursePackage(aiEngineeringCourseManifest, sourceRoot);
+export async function prepareAiEngineeringContent(courseManifestValue: unknown = aiEngineeringCourseManifest) {
+  const validation = await validateAiEngineeringCoursePackage(courseManifestValue, sourceRoot);
   const preparedModules: PreparedAiEngineeringModule[] = [];
   await rm(publicCourseRoot, { recursive: true, force: true });
   await mkdir(publicCourseRoot, { recursive: true });
@@ -39,7 +42,11 @@ export async function prepareAiEngineeringContent() {
   for (const moduleValidation of validation.modules) {
     if (!canPublishAiEngineeringModule(moduleValidation.manifest)) continue;
     preparedModules.push(
-      await prepareAiEngineeringModulePackage(moduleValidation.manifest, sourceRoot, publicCourseRoot),
+      await prepareAiEngineeringModulePackage(
+        moduleValidation.manifest,
+        moduleValidation.packageRoot,
+        publicCourseRoot,
+      ),
     );
   }
 
@@ -65,8 +72,9 @@ export async function prepareAiEngineeringModulePackage(
   const publicModuleRoot = path.join(publicRoot, manifest.module.publicSlug);
   const assets = buildAssets(manifest);
   const presentation = buildPresentation(manifest);
+  const visuals = buildVisuals(manifest);
 
-  await copyPublicAssets(packageRoot, publicModuleRoot, assets, presentation);
+  await copyPublicAssets(packageRoot, publicModuleRoot, assets, presentation, visuals);
   const assetUrlsByFilename = new Map(
     [assets.infographic, assets.audioMp3, assets.presentation].map((asset) => [
       path.basename(asset.sourcePath),
@@ -78,7 +86,7 @@ export async function prepareAiEngineeringModulePackage(
     sourceVersion: manifest.sourceVersion,
     courseSlug: manifest.courseSlug,
     moduleSlug: manifest.module.publicSlug,
-    configuration: manifest.module,
+    configuration: { ...manifest.module, visuals },
     assets,
     content: {
       foundational: await prepareHtmlDocument(packageRoot, assets.contentHtml.sourcePath, assetUrlsByFilename),
@@ -97,6 +105,18 @@ export async function prepareAiEngineeringModulePackage(
   };
 
   return prepared;
+}
+
+function buildVisuals(manifest: AiEngineeringModuleManifest): AiEngineeringVisualPlacement[] {
+  const publicUrlRoot = `/ai-engineering-assets/${manifest.module.publicSlug}/visuals`;
+  return (manifest.module.visuals ?? []).map((visual) =>
+    "sourcePath" in visual
+      ? {
+          ...visual,
+          publicPath: `${publicUrlRoot}/${path.basename(visual.sourcePath)}`,
+        }
+      : visual,
+  );
 }
 
 function buildAssets(manifest: AiEngineeringModuleManifest): AiEngineeringAssets {
@@ -158,6 +178,7 @@ async function copyPublicAssets(
   publicModuleRoot: string,
   assets: AiEngineeringAssets,
   presentation: AiEngineeringPresentationConfig,
+  visuals: AiEngineeringVisualPlacement[],
 ) {
   assertInside(publicCourseRootFor(publicModuleRoot), publicModuleRoot);
   await rm(publicModuleRoot, { recursive: true, force: true });
@@ -175,6 +196,17 @@ async function copyPublicAssets(
     assertInside(publicModuleRoot, destination);
     await mkdir(path.dirname(destination), { recursive: true });
     await copyFile(resolveSourcePath(packageRoot, slide.sourcePath), destination);
+  }
+
+  for (const visual of visuals) {
+    if (!("sourcePath" in visual) || !visual.publicPath) continue;
+    const destination = path.join(
+      publicCourseRootFor(publicModuleRoot),
+      visual.publicPath.replace(/^\/ai-engineering-assets\//, ""),
+    );
+    assertInside(publicModuleRoot, destination);
+    await mkdir(path.dirname(destination), { recursive: true });
+    await copyFile(resolveSourcePath(packageRoot, visual.sourcePath), destination);
   }
 }
 

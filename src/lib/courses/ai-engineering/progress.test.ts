@@ -7,7 +7,7 @@ import {
   readAiEngineeringModuleProgress,
   recordAiEngineeringLastUnit,
 } from "./progress";
-import { writeAiEngineeringUnitState } from "./unit-storage";
+import { buildAiEngineeringUnitStorageKey, writeAiEngineeringUnitState } from "./unit-storage";
 
 const courseSlug = "ai-engineering-aplicado";
 const moduleSlug = "modulo-01";
@@ -16,6 +16,23 @@ const units = aiEngineeringModuleOne.configuration.progressUnits;
 beforeEach(() => window.localStorage.clear());
 
 describe("AI Engineering module progress", () => {
+  it("isolates Module 1 and Module 2 storage coordinates", () => {
+    const moduleOneKey = buildAiEngineeringUnitStorageKey({
+      courseSlug,
+      moduleSlug,
+      unitId: "contenido",
+    });
+    const moduleTwoKey = buildAiEngineeringUnitStorageKey({
+      courseSlug,
+      moduleSlug: "modulo-02-modelos-fundacionales-seleccion",
+      unitId: "contenido",
+    });
+
+    expect(moduleOneKey).not.toBe(moduleTwoKey);
+    expect(moduleOneKey).toContain(encodeURIComponent(moduleSlug));
+    expect(moduleTwoKey).toContain(encodeURIComponent("modulo-02-modelos-fundacionales-seleccion"));
+  });
+
   it("keeps a visited unit in progress until the student confirms completion", () => {
     const infographic = units.find((unit) => unit.kind === "infographic");
     if (!infographic) throw new Error("Infographic unit is unavailable.");
