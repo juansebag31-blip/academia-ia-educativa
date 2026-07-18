@@ -28,6 +28,7 @@ import {
 
 let prepared: PreparedAiEngineeringModule;
 let preparedModuleTwo: PreparedAiEngineeringModule;
+let preparedModuleThree: PreparedAiEngineeringModule;
 let fixtureRoot = "";
 let fixturePublicRoot = "";
 let fixtureManifest: AiEngineeringModuleManifest;
@@ -40,6 +41,10 @@ beforeAll(async () => {
     (module) => module.moduleSlug === "modulo-02-modelos-fundacionales-seleccion",
   ) as PreparedAiEngineeringModule;
   if (!preparedModuleTwo) throw new Error("Prepared AI Engineering Module 2 is unavailable.");
+  preparedModuleThree = preparedModules.find(
+    (module) => module.moduleSlug === "modulo-03-contexto-estado-memoria",
+  ) as PreparedAiEngineeringModule;
+  if (!preparedModuleThree) throw new Error("Prepared AI Engineering Module 3 is unavailable.");
   fixtureRoot = await mkdtemp(path.join(tmpdir(), "ai-engineering-module-fixture-"));
   fixturePublicRoot = path.join(fixtureRoot, "public");
   fixtureManifest = await createValidPrivateFixture(fixtureRoot);
@@ -79,7 +84,14 @@ describe("AI Engineering course contract", () => {
       publish: true,
       manifestPath: "modules/modulo-02-modelos-fundacionales-seleccion/module-manifest.json",
     });
-    expect(aiEngineeringCourseManifest.modules.slice(2).every((module) => !module.publish)).toBe(true);
+    expect(aiEngineeringCourseManifest.modules[2]).toMatchObject({
+      editorialSlug: "modulo-03-contexto-estado-memoria",
+      publicSlug: "modulo-03-contexto-estado-memoria",
+      editorialStatus: "approved",
+      publish: true,
+      manifestPath: "modules/modulo-03-contexto-estado-memoria/module-manifest.json",
+    });
+    expect(aiEngineeringCourseManifest.modules.slice(3).every((module) => !module.publish)).toBe(true);
   });
 
   it("prepares and resolves Module 2 with all manifest-declared resources", () => {
@@ -95,6 +107,19 @@ describe("AI Engineering course contract", () => {
       "ai-engineering-aplicado",
       "modulo-02-modelos-fundacionales-seleccion",
     )?.summary.title).toBe("Modelos fundacionales y selección");
+  });
+
+  it("prepares and resolves Module 3 with all manifest-declared resources", () => {
+    expect(preparedModuleThree.configuration.progressUnits).toHaveLength(8);
+    expect(preparedModuleThree.content.cases).toHaveLength(3);
+    expect(preparedModuleThree.presentation.slides).toHaveLength(15);
+    expect(preparedModuleThree.configuration.visuals).toHaveLength(5);
+    expect(preparedModuleThree.configuration.keyIdeas).toHaveLength(3);
+    expect(preparedModuleThree.configuration.content.selfAssessment.questionCount).toBe(12);
+    expect(resolveCourseModule(
+      "ai-engineering-aplicado",
+      "modulo-03-contexto-estado-memoria",
+    )?.summary.title).toBe("Contexto, estado y memoria");
   });
 
   it("keeps Module 1 public route and derives declared quantities", () => {
@@ -137,22 +162,24 @@ describe("AI Engineering manifest preparation", () => {
     expect(copiedNames.some((fileName) => fileName.toLowerCase().endsWith(".m4a"))).toBe(false);
   });
 
-  it("copies Module 2 public assets while keeping its M4A private", async () => {
-    const publicDirectory = path.join(
-      projectRoot,
-      "public",
-      "ai-engineering-assets",
-      preparedModuleTwo.moduleSlug,
-    );
-    const copiedFiles = await readdir(publicDirectory, { recursive: true });
+  it("copies Modules 2 and 3 public assets while keeping their M4A sources private", async () => {
+    for (const preparedModule of [preparedModuleTwo, preparedModuleThree]) {
+      const publicDirectory = path.join(
+        projectRoot,
+        "public",
+        "ai-engineering-assets",
+        preparedModule.moduleSlug,
+      );
+      const copiedFiles = await readdir(publicDirectory, { recursive: true });
 
-    expect(copiedFiles.filter((fileName) => fileName.endsWith(".webp"))).toHaveLength(
-      preparedModuleTwo.configuration.assets.presentation.slideCount,
-    );
-    expect(copiedFiles.filter((fileName) => fileName.endsWith(".png"))).toHaveLength(6);
-    expect(copiedFiles.filter((fileName) => fileName.endsWith(".mp3"))).toHaveLength(1);
-    expect(copiedFiles.filter((fileName) => fileName.endsWith(".pptx"))).toHaveLength(1);
-    expect(copiedFiles.some((fileName) => fileName.toLowerCase().endsWith(".m4a"))).toBe(false);
+      expect(copiedFiles.filter((fileName) => fileName.endsWith(".webp"))).toHaveLength(
+        preparedModule.configuration.assets.presentation.slideCount,
+      );
+      expect(copiedFiles.filter((fileName) => fileName.endsWith(".png"))).toHaveLength(6);
+      expect(copiedFiles.filter((fileName) => fileName.endsWith(".mp3"))).toHaveLength(1);
+      expect(copiedFiles.filter((fileName) => fileName.endsWith(".pptx"))).toHaveLength(1);
+      expect(copiedFiles.some((fileName) => fileName.toLowerCase().endsWith(".m4a"))).toBe(false);
+    }
   });
 
   it("removes wrappers, global styles, scripts and inline handlers", () => {

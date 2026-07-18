@@ -1,0 +1,484 @@
+GUION DE AUDIO SINCRONIZADO — MÓDULO 3
+CONTEXTO, ESTADO Y MEMORIA
+
+Duración estimada: 20 a 28 minutos
+Objetivo: acompañar visualmente la infografía del Módulo 3, siguiendo su orden de lectura y explicando cada bloque con lenguaje claro, profesional y pedagógico.
+
+INTRODUCCIÓN
+
+Bienvenido al Módulo 3 del curso AI Engineering Aplicado.
+
+En esta infografía vamos a estudiar tres conceptos que suelen confundirse, pero que cumplen funciones distintas dentro de un sistema de inteligencia artificial: contexto, estado y memoria.
+
+La idea principal del módulo es sencilla:
+
+El contexto es lo que el modelo puede ver ahora.
+El estado describe la ejecución actual.
+La memoria conserva información seleccionada más allá de esa ejecución.
+
+Mientras escuchas este audio, mantén la infografía abierta. Vamos a recorrerla de arriba hacia abajo, siguiendo sus bloques numerados.
+
+Comenzaremos con la idea central. Después diferenciaremos contexto, estado y memoria; veremos cómo circula la información; analizaremos sesiones, memoria persistente, escritura, recuperación, compactación, privacidad, evaluación y patrones de arquitectura. Finalmente aplicaremos todo al JSG AI Engineering Hub versión 0.3.
+
+BLOQUE 1. IDEA CENTRAL
+
+Dirige la mirada hacia la parte superior izquierda, al bloque número uno.
+
+Aquí aparecen tres afirmaciones esenciales.
+
+Primera:
+
+El contexto es lo que el modelo puede ver ahora.
+
+Esto incluye instrucciones, mensajes, documentos recuperados y resultados de herramientas disponibles durante una llamada.
+
+Segunda:
+
+El estado describe la ejecución actual.
+
+El estado permite saber qué ocurrió, en qué paso está el proceso y qué debería suceder a continuación.
+
+Tercera:
+
+La memoria conserva información seleccionada más allá de esa ejecución.
+
+La palabra seleccionada es fundamental. Una memoria profesional no guarda todo. Guarda únicamente aquello que puede aportar continuidad, personalización o aprendizaje futuro.
+
+BLOQUE 2. TRES CONCEPTOS DISTINTOS
+
+Ahora observa el bloque número dos, ubicado en la parte superior derecha.
+
+La primera columna corresponde al contexto.
+
+La pregunta que responde es:
+
+¿Qué puede ver el modelo ahora?
+
+Su duración suele ser una llamada o un turno.
+
+La segunda columna corresponde al estado.
+
+La pregunta es:
+
+¿En qué punto está el proceso?
+
+Puede durar durante una ejecución o un workflow.
+
+La tercera columna corresponde a la memoria.
+
+La pregunta es:
+
+¿Qué debe conservarse después?
+
+Su duración puede extenderse entre sesiones.
+
+Esta distinción evita un error frecuente: asumir que una conversación larga es igual a memoria.
+
+BLOQUE 3. FLUJO DE INFORMACIÓN
+
+Dirige ahora la mirada hacia el bloque número tres.
+
+Aquí aparece un flujo de cinco pasos.
+
+Primero, memoria persistente.
+
+Después, recuperación selectiva.
+
+Luego, contexto actual.
+
+A continuación, el modelo.
+
+Finalmente, un nuevo estado.
+
+La memoria no entra completa dentro del modelo. El sistema recupera solo los elementos relevantes y los convierte en contexto.
+
+Después de responder o actuar, el sistema puede actualizar el estado y, si existe una razón válida, proponer una nueva memoria.
+
+BLOQUE 4. CONTEXTO DEL MODELO Y CONTEXTO LOCAL
+
+Ahora observa el bloque número cuatro.
+
+A la izquierda aparece el contexto visible para el modelo.
+
+Incluye instrucciones, mensajes recientes, documentos recuperados, resultados de herramientas y resúmenes.
+
+A la derecha aparece el contexto local de la aplicación.
+
+Incluye identidad, permisos, conexiones, servicios y dependencias.
+
+La diferencia es importante.
+
+El código puede necesitar una conexión de base de datos o un identificador de usuario para ejecutar una herramienta, pero eso no significa que deba incluir esa información en el prompt.
+
+La advertencia inferior resume el riesgo:
+
+Convertir todo el estado interno en texto de prompt es un error.
+
+Aumenta tokens, expone información innecesaria y mezcla responsabilidades.
+
+BLOQUE 5. ESTADO DE EJECUCIÓN
+
+Dirige la mirada hacia el bloque número cinco.
+
+El estado es una representación estructurada del proceso.
+
+Puede incluir cuatro áreas.
+
+Conversación:
+
+intercambios, intención activa y aclaraciones.
+
+Workflow:
+
+pasos, tareas, transiciones y condiciones.
+
+Interfaz:
+
+vistas, entradas, formularios y estado visual.
+
+Aprobación humana:
+
+decisiones, revisiones y validaciones.
+
+El estado debe ser preferentemente estructurado.
+
+Por ejemplo:
+
+paso actual;
+resultado de herramienta;
+aprobación pendiente;
+error;
+siguiente acción.
+
+Así el sistema puede pausar, reanudar o auditar un proceso.
+
+BLOQUE 6. SESIONES Y CONTINUIDAD
+
+Ahora observa el bloque número seis.
+
+Aquí aparecen ejemplos de identificadores de sesión:
+
+user_123;
+thread_abc;
+ticket_456;
+project_module_3.
+
+Cada identificador define un ámbito de continuidad.
+
+Una sesión puede representar un usuario, una conversación, un ticket o un proyecto.
+
+Pero una sesión no equivale automáticamente a memoria permanente.
+
+Puede conservar mensajes recientes y luego cerrarse, resumirse o eliminarse.
+
+El riesgo principal es usar una clave demasiado amplia y mezclar usuarios, proyectos o permisos.
+
+BLOQUE 7. MEMORIA PERSISTENTE
+
+Dirige la mirada hacia el bloque número siete.
+
+Aquí aparecen varios tipos de memoria.
+
+Memoria episódica:
+
+conserva eventos concretos.
+
+Memoria semántica:
+
+conserva hechos y conceptos.
+
+Memoria procedimental:
+
+conserva cómo ejecutar tareas.
+
+Preferencias:
+
+conserva elecciones estables del usuario.
+
+Decisiones:
+
+conserva elecciones fundamentadas.
+
+Estado resumido:
+
+conserva una síntesis del progreso de un proyecto.
+
+La memoria útil no es simplemente un historial completo.
+
+Es una estructura seleccionada, actualizable y gobernada.
+
+BLOQUE 8. ESCRITURA Y RECUPERACIÓN
+
+Ahora observa el bloque número ocho.
+
+A la izquierda aparecen criterios para guardar.
+
+Reutilización.
+
+Estabilidad.
+
+Impacto futuro.
+
+Consentimiento y sensibilidad.
+
+Confianza.
+
+Expiración.
+
+A la derecha aparecen criterios de recuperación.
+
+Identidad.
+
+Ámbito.
+
+Relevancia.
+
+Vigencia.
+
+Autoridad.
+
+En la parte inferior aparece el ciclo de vida:
+
+Crear.
+Leer.
+Actualizar.
+Consolidar.
+Eliminar.
+
+Esto muestra que la memoria no es un depósito pasivo.
+
+Es un sistema con reglas para crear, corregir y borrar información.
+
+BLOQUE 9. RESUMEN Y COMPACTACIÓN
+
+Dirige la mirada hacia el bloque número nueve.
+
+Aquí aparecen tres estrategias.
+
+Recorte:
+
+elimina lo menos importante.
+
+Reduce ruido, pero puede perder información antigua.
+
+Resumen:
+
+conserva ideas clave.
+
+Reduce longitud, pero debe mantener decisiones y pendientes.
+
+Compactación:
+
+fusiona y reestructura.
+
+Optimiza el contexto para el trabajo futuro.
+
+La frase destacada es:
+
+Contexto largo no equivale a memoria.
+
+Una ventana de contexto extensa puede contener más información, pero no crea persistencia entre sesiones.
+
+BLOQUE 10. PATRONES DE ARQUITECTURA
+
+Ahora observa el bloque número diez.
+
+El primer patrón es historial completo.
+
+Es simple, pero costoso y poco escalable.
+
+El segundo es ventana reciente más resumen.
+
+Equilibra continuidad y coste.
+
+El tercero es estado con checkpoints.
+
+Permite guardar hitos y reanudar procesos de forma confiable.
+
+El cuarto es memoria con recuperación.
+
+Busca únicamente lo relevante cuando la tarea lo necesita.
+
+A la derecha aparece una arquitectura híbrida recomendada:
+
+context builder;
+session store;
+workflow state;
+long-term memory;
+retriever;
+memory writer;
+governance.
+
+Esta combinación separa responsabilidades y permite evolucionar el sistema.
+
+BLOQUE 11. PRIVACIDAD Y GOBERNANZA
+
+Dirige la mirada hacia el bloque número once.
+
+Aquí aparecen principios de protección.
+
+Minimización.
+
+Aislamiento por usuario.
+
+Consentimiento.
+
+Cifrado.
+
+Retención limitada.
+
+Corrección y eliminación.
+
+Procedencia.
+
+Control de acceso.
+
+La advertencia inferior resume la decisión ética y técnica:
+
+Que el sistema pueda recordar un dato no significa que deba hacerlo.
+
+Una memoria acumula información y también riesgo.
+
+BLOQUE 12. EVALUACIÓN
+
+Ahora observa el bloque número doce.
+
+La memoria debe evaluarse.
+
+Recuerdo correcto:
+
+¿trae lo adecuado?
+
+Ruido:
+
+¿evita información irrelevante?
+
+Actualización:
+
+¿refleja datos recientes?
+
+Aislamiento:
+
+¿evita mezclar usuarios?
+
+Continuidad:
+
+¿permite sostener procesos?
+
+Fidelidad del resumen:
+
+¿conserva decisiones y pendientes?
+
+Coste:
+
+¿resulta eficiente?
+
+La memoria no se valida porque parezca útil en una demostración. Se valida con casos reales, casos negativos y pruebas de aislamiento.
+
+BLOQUE 13. CASO APLICADO
+
+Dirige la mirada hacia el bloque número trece.
+
+El caso es el proyecto educativo del curso AI Engineering.
+
+El contexto actual contiene mensajes, documentos, resultados y resúmenes necesarios para la tarea presente.
+
+El estado contiene pasos del módulo, variables, errores y pendientes.
+
+La sesión identifica el hilo o el proyecto.
+
+La memoria semántica conserva conceptos del curso y mejores prácticas.
+
+La memoria procedimental conserva cómo configurar RAG, desplegar, probar y validar.
+
+Los artefactos incluyen plan de trabajo, código, reportes y documentación.
+
+La enseñanza es que la continuidad no depende de una conversación infinita.
+
+Depende de artefactos, estado explícito, memoria seleccionada y recuperación adecuada.
+
+BLOQUE 14. JSG AI ENGINEERING HUB V0.3
+
+Ahora observa los bloques del JSG AI Engineering Hub versión 0.3.
+
+La primera representación muestra:
+
+Entrada.
+Sesión.
+Recuperación.
+Context builder.
+Modelo.
+Long-term memory.
+Compactación.
+Governance.
+
+La segunda representación muestra un flujo más detallado:
+
+Entrada.
+Sesión.
+Estado.
+Recuperación.
+Context builder.
+Modelo.
+
+La arquitectura versión 0.3 incorpora continuidad explícita.
+
+El sistema ya no depende de recordar por casualidad.
+
+Utiliza sesiones, estado, memoria, recuperación y gobernanza como componentes diferenciados.
+
+BLOQUE 15. IDEAS CLAVE
+
+Finalmente, observa la franja inferior.
+
+Primera idea:
+
+Contexto, estado y memoria no son sinónimos.
+
+Segunda:
+
+No todo debe guardarse.
+
+Tercera:
+
+La continuidad profesional depende de selección, recuperación y gobernanza.
+
+Estas tres ideas resumen el módulo.
+
+CIERRE
+
+Hemos recorrido la infografía completa.
+
+Un sistema de IA profesional necesita distinguir:
+
+qué información ve el modelo ahora;
+qué está ocurriendo en el proceso;
+qué debe conservarse para después.
+
+El contexto debe construirse.
+
+El estado debe estructurarse.
+
+La memoria debe seleccionarse y gobernarse.
+
+La continuidad no surge de enviar todo el historial.
+
+Surge de combinar sesiones, checkpoints, resúmenes, artefactos, recuperación selectiva y políticas de memoria.
+
+Antes de terminar, intenta responder:
+
+¿Qué diferencia existe entre contexto y memoria?
+
+¿Qué datos deberían formar parte del estado de un workflow?
+
+¿Qué información guardarías como memoria procedimental?
+
+¿Por qué una ventana de contexto larga no reemplaza una memoria persistente?
+
+¿Cómo evitarías que dos usuarios compartan recuerdos por error?
+
+¿Qué recuerdos deberían expirar o requerir confirmación?
+
+Si puedes responder estas preguntas y diseñar una política de memoria explícita, habrás comprendido el fundamento profesional del Módulo 3.
+
+FIN DEL GUION

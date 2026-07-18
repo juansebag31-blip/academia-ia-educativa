@@ -19,6 +19,12 @@ const moduleTwo = course.modules.find(
 if (!moduleTwo) {
   throw new Error("AI Engineering Module 2 fixture is unavailable.");
 }
+const moduleThree = course.modules.find(
+  (module) => module.summary.slug === "modulo-03-contexto-estado-memoria",
+);
+if (!moduleThree) {
+  throw new Error("AI Engineering Module 3 fixture is unavailable.");
+}
 
 describe("AI Engineering visual renderer", () => {
   it("renders declarative image visuals with their approved alternative text", () => {
@@ -71,12 +77,16 @@ describe("AI Engineering visual renderer", () => {
     expect(screen.getByText("Arquitectura de un sistema inteligente")).toBeInTheDocument();
     expect(screen.getByText("Modelo / RAG / Herramientas")).toBeInTheDocument();
     expect(screen.queryByRole("img")).not.toBeInTheDocument();
-    expect(screen.getAllByText("Disponible")).toHaveLength(2);
-    expect(screen.getAllByText("Próximamente")).toHaveLength(10);
+    expect(screen.getAllByText("Disponible")).toHaveLength(3);
+    expect(screen.getAllByText("Próximamente")).toHaveLength(9);
     expect(screen.getByText("Modelos fundacionales y selección")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /02 Disponible Módulo 2 Modelos fundacionales y selección/ })).toHaveAttribute(
       "href",
       "/courses/ai-engineering-aplicado/modules/modulo-02-modelos-fundacionales-seleccion",
+    );
+    expect(screen.getByRole("link", { name: /03 Disponible Módulo 3 Contexto, estado y memoria/ })).toHaveAttribute(
+      "href",
+      "/courses/ai-engineering-aplicado/modules/modulo-03-contexto-estado-memoria",
     );
     expect(screen.getByText("Producción y proyecto final")).toBeInTheDocument();
     expect(screen.getByText("JSG AI Engineering Hub v0.1")).toBeInTheDocument();
@@ -106,6 +116,29 @@ describe("AI Engineering visual renderer", () => {
       name: `Cargar y reproducir audio: ${moduleTwo.configuration.assets.audio.title}`,
     }));
     expect(container.querySelector("audio source")).toHaveAttribute("src", moduleTwo.assets.audioMp3.publicPath);
+  });
+
+  it("renders Module 3 from its manifest-derived quantities", () => {
+    const { container } = render(<AiEngineeringModulePage course={course} module={moduleThree} />);
+
+    expect(screen.getAllByRole("heading", { level: 1, name: "Contexto, estado y memoria" })[0])
+      .toBeInTheDocument();
+    expect(moduleThree.configuration.progressUnits).toHaveLength(8);
+    expect(moduleThree.content.cases).toHaveLength(3);
+    expect(moduleThree.presentation.slides).toHaveLength(15);
+    expect(moduleThree.visuals).toHaveLength(5);
+    expect(moduleThree.keyIdeas).toHaveLength(3);
+    expect(screen.getAllByLabelText(/Respuesta \d/)).toHaveLength(12);
+    expect(screen.getAllByRole("button", { name: /Ampliar visual pedagógico/ })).toHaveLength(5);
+    expect(screen.getByRole("link", { name: "Descargar PPTX" })).toHaveAttribute(
+      "href",
+      moduleThree.assets.presentation.publicPath,
+    );
+    expect(container.querySelector("audio")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", {
+      name: `Cargar y reproducir audio: ${moduleThree.configuration.assets.audio.title}`,
+    }));
+    expect(container.querySelector("audio source")).toHaveAttribute("src", moduleThree.assets.audioMp3.publicPath);
   });
 
   it("renders the complete module structure and approved assets", () => {

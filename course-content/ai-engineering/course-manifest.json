@@ -25,8 +25,10 @@
       "number": 3,
       "title": "Contexto, estado y memoria",
       "editorialSlug": "modulo-03-contexto-estado-memoria",
-      "editorialStatus": "draft",
-      "publish": false
+      "editorialStatus": "approved",
+      "publish": true,
+      "publicSlug": "modulo-03-contexto-estado-memoria",
+      "manifestPath": "modules/modulo-03-contexto-estado-memoria/module-manifest.json"
     },
     {
       "number": 4,

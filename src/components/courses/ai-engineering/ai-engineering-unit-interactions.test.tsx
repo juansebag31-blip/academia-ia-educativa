@@ -1,8 +1,13 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { buildAiEngineeringUnitStorageKey } from "@/lib/courses/ai-engineering/unit-storage";
+import { getAiEngineeringModule } from "@/lib/courses/ai-engineering/modules";
+import {
+  buildAiEngineeringUnitStorageKey,
+  writeAiEngineeringUnitState,
+} from "@/lib/courses/ai-engineering/unit-storage";
 import { AiEngineeringActivity } from "./ai-engineering-activity";
 import { AiEngineeringAudioPlayer } from "./ai-engineering-audio-player";
+import { AiEngineeringPresentationViewer } from "./ai-engineering-presentation-viewer";
 import { AiEngineeringSelfAssessment } from "./ai-engineering-self-assessment";
 
 const courseSlug = "ai-engineering-aplicado";
@@ -114,5 +119,32 @@ describe("AI Engineering unit interactions", () => {
     await waitFor(() => {
       expect(screen.getByRole("button", { name: "Continuar audio: Audio de prueba" })).toBeInTheDocument();
     });
+  });
+
+  it("clamps a persisted Module 3 slide index to its 15-slide presentation", async () => {
+    const moduleThreeSlug = "modulo-03-contexto-estado-memoria";
+    const moduleThree = getAiEngineeringModule(moduleThreeSlug);
+    if (!moduleThree) throw new Error("AI Engineering Module 3 fixture is unavailable.");
+    writeAiEngineeringUnitState(
+      { courseSlug, moduleSlug: moduleThreeSlug, unitId: "presentacion" },
+      { status: "in-progress", slideIndex: 99 },
+    );
+
+    render(
+      <AiEngineeringPresentationViewer
+        presentation={moduleThree.presentation}
+        downloadHref={moduleThree.assets.presentation.publicPath}
+        courseSlug={courseSlug}
+        moduleSlug={moduleThreeSlug}
+        moduleNumber={3}
+        unitId="presentacion"
+      />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Abrir presentación" }));
+
+    await waitFor(() => {
+      expect(screen.getByText("Diapositiva 15 de 15")).toBeInTheDocument();
+    });
+    expect(screen.getByRole("button", { name: "Diapositiva siguiente" })).toBeDisabled();
   });
 });

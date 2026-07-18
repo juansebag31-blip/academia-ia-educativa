@@ -1,0 +1,197 @@
+{
+  "schemaVersion": 2,
+  "sourceVersion": "1.0",
+  "courseSlug": "ai-engineering-aplicado",
+  "module": {
+    "editorialSlug": "modulo-03-contexto-estado-memoria",
+    "publicSlug": "modulo-03-contexto-estado-memoria",
+    "number": 3,
+    "title": "Contexto, estado y memoria",
+    "editorialStatus": "approved",
+    "publish": true,
+    "level": "intermedio",
+    "estimatedStudyMinutes": 180,
+    "content": {
+      "foundationalHtml": "content/contenido-fundacional.html",
+      "objectives": {
+        "sectionId": "proposito",
+        "selector": "ul > li"
+      },
+      "activity": {
+        "sectionId": "actividad"
+      },
+      "selfAssessment": {
+        "sectionId": "autoevaluacion",
+        "questionSelector": "ol > li",
+        "questionCount": 12
+      },
+      "sources": {
+        "sectionId": "fuentes",
+        "itemSelector": "ol.refs > li"
+      }
+    },
+    "assets": {
+      "infographic": {
+        "sourcePath": "assets/images/infografia-modulo-03.png",
+        "alt": "Infografía educativa sobre contexto, estado y memoria en sistemas de inteligencia artificial",
+        "title": "Contexto, estado y memoria"
+      },
+      "audio": {
+        "mp3SourcePath": "assets/audio/modulo-03-audio-explicativo.mp3",
+        "m4aSourcePath": "assets/audio/modulo-03-audio-explicativo.m4a",
+        "transcriptSourcePath": "content/transcripcion.txt",
+        "title": "Diferencias entre contexto, estado y memoria"
+      },
+      "cases": [
+        {
+          "id": "caso-proyecto-educativo",
+          "sourcePath": "cases/caso-01-proyecto-educativo.html"
+        },
+        {
+          "id": "caso-asistente-clinico",
+          "sourcePath": "cases/caso-02-asistente-clinico.html"
+        },
+        {
+          "id": "caso-copiloto-desarrollo",
+          "sourcePath": "cases/caso-03-copiloto-desarrollo.html"
+        }
+      ],
+      "presentation": {
+        "sourcePath": "assets/presentations/modulo-03-presentacion.pptx",
+        "title": "Contexto, estado y memoria",
+        "slidesDirectory": "assets/presentations/slides",
+        "slideCount": 15,
+        "slideFilePattern": "slide-{number:2}.webp",
+        "slideWidth": 1600,
+        "slideHeight": 900,
+        "slideAltTemplate": "Diapositiva {current} de {total}"
+      }
+    },
+    "sections": {
+      "casesTitle": "Casos reales",
+      "presentationTitle": "Presentación"
+    },
+    "interactions": {
+      "activity": {
+        "unitId": "actividad",
+        "responseLabel": "Tu diseño de contexto, estado y memoria",
+        "placeholder": "Define contexto, estado, sesiones, memoria, recuperación, privacidad y métricas."
+      },
+      "selfAssessment": {
+        "unitId": "autoevaluacion"
+      }
+    },
+    "progressUnits": [
+      {
+        "id": "orientacion",
+        "kind": "orientation",
+        "sectionId": "orientacion",
+        "label": "Orientación"
+      },
+      {
+        "id": "contenido",
+        "kind": "foundational-content",
+        "sectionId": "contenido",
+        "label": "Contenido fundacional"
+      },
+      {
+        "id": "infografia",
+        "kind": "infographic",
+        "sectionId": "infografia",
+        "label": "Infografía"
+      },
+      {
+        "id": "audio",
+        "kind": "audio",
+        "sectionId": "audio",
+        "label": "Audio explicativo"
+      },
+      {
+        "id": "casos",
+        "kind": "cases",
+        "sectionId": "casos",
+        "label": "Casos reales"
+      },
+      {
+        "id": "presentacion",
+        "kind": "presentation",
+        "sectionId": "presentacion",
+        "label": "Presentación"
+      },
+      {
+        "id": "actividad",
+        "kind": "activity",
+        "sectionId": "actividad",
+        "label": "Actividad"
+      },
+      {
+        "id": "autoevaluacion",
+        "kind": "self-assessment",
+        "sectionId": "autoevaluacion",
+        "label": "Autoevaluación"
+      }
+    ],
+    "visuals": [
+      {
+        "visualId": "flujo-contexto-memoria",
+        "sourcePath": "assets/images/visuals/visual-01-flujo-contexto-memoria.png",
+        "afterSection": "tres-conceptos",
+        "alt": "Flujo desde memoria persistente hasta contexto, modelo y nuevo estado.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "estado-ejecucion",
+        "sourcePath": "assets/images/visuals/visual-02-estado-ejecucion.png",
+        "afterSection": "estado",
+        "alt": "Representación estructurada del estado de ejecución y sus componentes.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "escritura-recuperacion",
+        "sourcePath": "assets/images/visuals/visual-03-escritura-recuperacion.png",
+        "afterSection": "escritura",
+        "alt": "Ciclo de escritura, lectura, actualización, consolidación y eliminación de memoria.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "contexto-largo-compactacion",
+        "sourcePath": "assets/images/visuals/visual-04-contexto-largo-compactacion.png",
+        "afterSection": "compactacion",
+        "alt": "Comparación entre recorte, resumen, compactación y contexto largo.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "jsg-hub-v03",
+        "sourcePath": "assets/images/visuals/visual-05-jsg-hub-v03.png",
+        "afterSection": "canvas",
+        "alt": "Arquitectura híbrida del JSG AI Engineering Hub versión 0.3.",
+        "width": 1600,
+        "height": 900
+      }
+    ],
+    "keyIdeas": [
+      {
+        "afterSection": "tres-conceptos",
+        "ideaId": "idea-no-son-sinonimos",
+        "title": "No son sinónimos",
+        "text": "Contexto, estado y memoria tienen duraciones y responsabilidades diferentes."
+      },
+      {
+        "afterSection": "long-context",
+        "ideaId": "idea-contexto-largo-no-es-memoria",
+        "title": "Contexto largo no es memoria",
+        "text": "Más información en una llamada no crea persistencia entre sesiones."
+      },
+      {
+        "afterSection": "privacidad",
+        "ideaId": "idea-no-todo-debe-guardarse",
+        "title": "No todo debe guardarse",
+        "text": "La memoria acumula valor, pero también riesgo y obligaciones de gobernanza."
+      }
+    ]
+  }
+}
