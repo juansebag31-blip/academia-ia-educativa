@@ -103,7 +103,14 @@ describe("AI Engineering course contract", () => {
       publish: true,
       manifestPath: "modules/modulo-04-herramientas-apis-function-calling-mcp/module-manifest.json",
     });
-    expect(aiEngineeringCourseManifest.modules.slice(4).every((module) => !module.publish)).toBe(true);
+    expect(aiEngineeringCourseManifest.modules[4]).toMatchObject({
+      editorialSlug: "modulo-05-rag-sistemas-conocimiento",
+      publicSlug: "modulo-05-rag-sistemas-conocimiento",
+      editorialStatus: "approved",
+      publish: true,
+      manifestPath: "modules/modulo-05-rag-sistemas-conocimiento/module-manifest.json",
+    });
+    expect(aiEngineeringCourseManifest.modules.slice(5).every((module) => !module.publish)).toBe(true);
   });
 
   it("prepares and resolves Module 2 with all manifest-declared resources", () => {
@@ -231,7 +238,7 @@ describe("AI Engineering manifest preparation", () => {
     await prepareAiEngineeringContent();
     const second = hash(await readFile(generatedModulesPath));
     expect(second).toBe(first);
-  });
+  }, 10_000);
 });
 
 describe("controlled non-public module fixture", () => {

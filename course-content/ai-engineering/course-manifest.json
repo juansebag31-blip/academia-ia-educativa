@@ -43,8 +43,10 @@
       "number": 5,
       "title": "RAG y sistemas de conocimiento",
       "editorialSlug": "modulo-05-rag-sistemas-conocimiento",
-      "editorialStatus": "draft",
-      "publish": false
+      "editorialStatus": "approved",
+      "publish": true,
+      "publicSlug": "modulo-05-rag-sistemas-conocimiento",
+      "manifestPath": "modules/modulo-05-rag-sistemas-conocimiento/module-manifest.json"
     },
     {
       "number": 6,

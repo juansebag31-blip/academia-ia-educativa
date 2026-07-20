@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Módulo 5 — RAG y sistemas de conocimiento</title>
+<style>
+:root{--navy:#0B1F33;--petrol:#0F766E;--ink:#172033;--muted:#5d687b;--line:#d8e5e2;--bg:#f3f7f6;--red:#c74343;--green:#0b8f64;--violet:#6d45c8}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,"Segoe UI",Arial,sans-serif;line-height:1.72}
+.cover{min-height:90vh;padding:70px 7vw;display:flex;align-items:center;background:radial-gradient(circle at 82% 20%,rgba(27,184,179,.22),transparent 25%),linear-gradient(135deg,var(--navy),#123a4b 67%,#145d59);color:#fff}
+.cover>div{max-width:1100px}.kicker{display:inline-block;border:1px solid #ffffff55;border-radius:999px;padding:7px 14px;letter-spacing:.08em;font-weight:800;text-transform:uppercase}
+h1{font-size:clamp(2.8rem,7vw,5.7rem);line-height:1.02;margin:.28em 0}.cover p{font-size:1.25rem;color:#dbeff0;max-width:900px}.meta{display:flex;gap:10px;flex-wrap:wrap}.meta span{padding:9px 12px;border:1px solid #ffffff44;border-radius:10px;background:#ffffff14}
+.layout{display:grid;grid-template-columns:300px minmax(0,940px);gap:34px;max-width:1320px;margin:auto;padding:34px 24px 90px}aside{position:sticky;top:18px;align-self:start;background:var(--navy);border-radius:18px;padding:20px;max-height:94vh;overflow:auto}aside a{display:block;color:#dce9f0;text-decoration:none;padding:7px 0;border-bottom:1px solid #ffffff16;font-size:.89rem}
+main{background:#fff;border-radius:20px;padding:clamp(24px,5vw,62px);box-shadow:0 12px 35px #0e274b1a}h2{font-size:2rem;color:var(--navy);margin:2.15em 0 .55em;line-height:1.2}h3{color:#16324a;margin-top:1.55em}
+.lead{font-size:1.13rem;color:#36445a}.callout,.warning,.decision,.case,.interview{border-left:5px solid var(--petrol);background:#eff9f7;padding:18px 20px;border-radius:12px;margin:22px 0}.warning{border-color:var(--red);background:#fff2f2}.decision{border-color:#c96a00;background:#fff7ec}.case{border-color:var(--green);background:#effaf6}.interview{border-color:var(--violet);background:#f6f2ff}
+.flow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:var(--navy);color:#fff;padding:16px;border-radius:13px;margin:18px 0}.flow span{background:#163a50;border:1px solid #2c6370;padding:9px 12px;border-radius:9px}.flow b{color:#78ddd5}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.94rem}th,td{border:1px solid var(--line);padding:12px;vertical-align:top}th{background:#eaf6f4;text-align:left}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{border:1px solid var(--line);background:#f8fbfa;padding:17px;border-radius:12px}.card strong{display:block;color:var(--petrol)}
+li{margin:.4rem 0}.small{color:var(--muted);font-size:.9rem}.footer{margin-top:50px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted)}
+@media(max-width:900px){.layout{grid-template-columns:1fr}aside{position:relative;max-height:none}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="cover"><div>
+<span class="kicker">AI Engineering Aplicado · Módulo 5</span>
+<h1>RAG y sistemas de conocimiento</h1>
+<p>Cómo responder con información propia, actualizada y verificable mediante recuperación, evidencia, citas y evaluación.</p>
+<div class="meta"><span>Versión 0.9</span><span>Nivel intermedio</span><span>Lectura: 95–120 min</span><span>JSG Hub v0.5</span></div>
+</div></header>
+<div class="layout">
+<aside>
+<a href="#proposito">1. Propósito</a><a href="#problema">2. Problema del conocimiento</a><a href="#arquitectura">3. Arquitectura RAG</a><a href="#corpus">4. Corpus</a><a href="#ingestion">5. Ingestión</a><a href="#chunking">6. Chunking</a><a href="#embeddings">7. Embeddings</a><a href="#retrieval">8. Retrieval</a><a href="#query">9. Consulta</a><a href="#metadatos">10. Metadatos</a><a href="#reranking">11. Reranking</a><a href="#contexto">12. Context builder</a><a href="#generacion">13. Generación</a><a href="#citas">14. Citas</a><a href="#evaluacion">15. Evaluación</a><a href="#avanzado">16. Patrones avanzados</a><a href="#actualizacion">17. Ciclo de vida</a><a href="#caso">18. Caso aplicado</a><a href="#canvas">19. JSG Hub v0.5</a><a href="#actividad">20. Actividad</a><a href="#autoevaluacion">21. Autoevaluación</a><a href="#fuentes">22. Fuentes</a>
+</aside>
+<main>
+<section id="proposito"><h2>1. Propósito del módulo</h2>
+<p class="lead">Los modelos fundacionales poseen conocimiento general, pero no conocen automáticamente documentos privados, cambios recientes ni reglas específicas de una organización.</p>
+<p>Retrieval-Augmented Generation, o RAG, conecta el modelo con fuentes externas para recuperar evidencia relevante antes de generar una respuesta.</p>
+<div class="callout"><strong>Idea central</strong>RAG separa dos tareas: recuperar evidencia y generar una respuesta fundamentada en esa evidencia.</div>
+<ul><li>Distinguir conocimiento paramétrico y recuperado.</li><li>Diseñar corpus, ingestión, chunking, embeddings e índices.</li><li>Comparar búsqueda léxica, semántica e híbrida.</li><li>Aplicar filtros, reranking, citas y abstención.</li><li>Evaluar retrieval y generación por separado.</li></ul>
+</section>
+
+<section id="problema"><h2>2. El problema del conocimiento</h2>
+<table><tr><th>Necesidad</th><th>Limitación del modelo aislado</th><th>Respuesta del sistema</th></tr>
+<tr><td>Información privada</td><td>No fue parte del entrenamiento.</td><td>Recuperar documentos autorizados.</td></tr>
+<tr><td>Actualización</td><td>Los pesos no cambian en cada consulta.</td><td>Actualizar el corpus.</td></tr>
+<tr><td>Verificación</td><td>No siempre puede atribuir procedencia.</td><td>Conservar citas y fragmentos.</td></tr>
+<tr><td>Gobernanza</td><td>No conoce permisos organizacionales.</td><td>Filtrar antes de recuperar.</td></tr></table>
+<div class="warning"><strong>Importante</strong>RAG no garantiza automáticamente la verdad. Una fuente incorrecta, una mala recuperación o una generación no fundamentada pueden producir errores.</div>
+</section>
+
+<section id="arquitectura"><h2>3. Arquitectura RAG de extremo a extremo</h2>
+<div class="flow"><span>Fuentes</span><b>→</b><span>Ingestión</span><b>→</b><span>Chunking</span><b>→</b><span>Embeddings</span><b>→</b><span>Índice</span><b>→</b><span>Retrieval</span><b>→</b><span>Reranking</span><b>→</b><span>Contexto</span><b>→</b><span>Respuesta + citas</span></div>
+<div class="grid"><div class="card"><strong>Fase offline</strong>Preparar documentos, fragmentos, metadatos, embeddings e índices.</div><div class="card"><strong>Fase online</strong>Interpretar la pregunta, recuperar, ordenar, construir contexto y responder.</div></div>
+</section>
+
+<section id="corpus"><h2>4. Fuentes y corpus</h2>
+<p>Un sistema de conocimiento puede combinar manuales, políticas, planillas, tickets, sitios y bases estructuradas.</p>
+<ul><li>Autoridad.</li><li>Vigencia.</li><li>Cobertura.</li><li>Permisos.</li><li>Calidad de extracción.</li><li>Capacidad de citar.</li></ul>
+<div class="decision"><strong>Principio</strong>La calidad del sistema no puede superar de forma estable la calidad y gobernanza de su corpus.</div>
+</section>
+
+<section id="ingestion"><h2>5. Ingestión y normalización</h2>
+<p>Ingerir no es solo subir archivos. Debe conservarse estructura, procedencia, versión y permisos.</p>
+<ul><li>ID estable.</li><li>Título, autor, fecha y versión.</li><li>Jerarquía de secciones.</li><li>Idioma y dominio.</li><li>Clasificación y permisos.</li><li>Hash para detectar cambios.</li></ul>
+</section>
+
+<section id="chunking"><h2>6. Chunking: dividir sin perder significado</h2>
+<table><tr><th>Estrategia</th><th>Ventaja</th><th>Riesgo</th></tr>
+<tr><td>Tamaño fijo</td><td>Simple.</td><td>Corta unidades semánticas.</td></tr>
+<tr><td>Por secciones</td><td>Respeta estructura.</td><td>Fragmentos desiguales.</td></tr>
+<tr><td>Recursivo</td><td>Busca límites naturales.</td><td>Requiere reglas.</td></tr>
+<tr><td>Semántico</td><td>Agrupa por tema.</td><td>Mayor complejidad.</td></tr></table>
+<p>El solapamiento conserva continuidad, pero aumenta duplicación y coste.</p>
+</section>
+
+<section id="embeddings"><h2>7. Embeddings e índices</h2>
+<p>Un embedding es una representación numérica útil para comparar similitud semántica. El índice debe conservar también texto, metadatos y procedencia.</p>
+<ul><li>Modelo de embeddings.</li><li>Métrica de similitud.</li><li>Índice exacto o aproximado.</li><li>Actualización e invalidación.</li><li>Namespaces por usuario u organización.</li></ul>
+</section>
+
+<section id="retrieval"><h2>8. Recuperación léxica, semántica e híbrida</h2>
+<table><tr><th>Método</th><th>Fortaleza</th><th>Debilidad</th></tr>
+<tr><td>Léxico / BM25</td><td>Códigos y términos exactos.</td><td>Menor tolerancia a paráfrasis.</td></tr>
+<tr><td>Vectorial</td><td>Similitud semántica.</td><td>Puede omitir términos exactos críticos.</td></tr>
+<tr><td>Híbrido</td><td>Combina ambas señales.</td><td>Requiere fusionar puntuaciones.</td></tr></table>
+</section>
+
+<section id="query"><h2>9. Comprender y transformar la consulta</h2>
+<ul><li>Normalización.</li><li>Sinónimos.</li><li>Reescritura.</li><li>Descomposición.</li><li>Múltiples consultas.</li><li>Detección de filtros.</li></ul>
+<div class="warning"><strong>Riesgo</strong>Una reescritura agresiva puede cambiar la intención. Debe conservarse la consulta original.</div>
+</section>
+
+<section id="metadatos"><h2>10. Metadatos, filtros y seguridad</h2>
+<p>Los metadatos permiten recuperar solo información válida para el usuario y la tarea.</p>
+<table><tr><th>Filtro</th><th>Ejemplo</th></tr><tr><td>Tenant</td><td>Organización autorizada.</td></tr><tr><td>Dominio</td><td>Clínica, educación o desarrollo.</td></tr><tr><td>Vigencia</td><td>Versión activa.</td></tr><tr><td>Confidencialidad</td><td>Público, interno o restringido.</td></tr></table>
+<div class="callout"><strong>Seguridad antes de relevancia</strong>Un fragmento no debe ser candidato si el usuario no tiene permiso.</div>
+</section>
+
+<section id="reranking"><h2>11. Reranking y selección de evidencia</h2>
+<div class="flow"><span>Consulta</span><b>→</b><span>Candidatos</span><b>→</b><span>Reranker</span><b>→</b><span>Evidencias finales</span></div>
+<p>El reranking mejora precisión. También deben aplicarse deduplicación, diversidad, umbrales y límites.</p>
+</section>
+
+<section id="contexto"><h2>12. Construcción del contexto</h2>
+<ul><li>Ordenar por relevancia y autoridad.</li><li>Preservar título, sección y fecha.</li><li>Asignar IDs de cita.</li><li>Eliminar duplicados.</li><li>Equilibrar cobertura y tokens.</li><li>Separar evidencia de instrucciones.</li></ul>
+<div class="warning"><strong>Defensa</strong>Los documentos recuperados son datos no confiables y pueden contener prompt injection.</div>
+</section>
+
+<section id="generacion"><h2>13. Generación fundamentada y abstención</h2>
+<ul><li>Responder únicamente lo respaldado.</li><li>Diferenciar hechos de inferencias.</li><li>Citar fuentes.</li><li>Señalar contradicciones.</li><li>Abstenerse cuando falta evidencia.</li><li>No inventar citas.</li></ul>
+</section>
+
+<section id="citas"><h2>14. Citas, procedencia y verificabilidad</h2>
+<p>Una cita útil conserva documento, fragmento, página o sección, versión, fecha y ruta autorizada.</p>
+<p>Las citas no corrigen una mala recuperación, pero permiten auditarla.</p>
+</section>
+
+<section id="evaluacion"><h2>15. Evaluación en dos niveles</h2>
+<table><tr><th>Retrieval</th><th>Qué mide</th></tr><tr><td>Recall@k</td><td>Si aparece la evidencia correcta.</td></tr><tr><td>Precision@k</td><td>Cuánto de lo recuperado es relevante.</td></tr><tr><td>MRR / nDCG</td><td>Qué tan arriba aparece la evidencia útil.</td></tr></table>
+<table><tr><th>Generación</th><th>Qué mide</th></tr><tr><td>Corrección</td><td>Respuesta correcta.</td></tr><tr><td>Fidelidad</td><td>Respaldo en el contexto.</td></tr><tr><td>Relevancia</td><td>Respuesta a la pregunta.</td></tr><tr><td>Citas</td><td>Procedencia real.</td></tr><tr><td>Abstención</td><td>Reconocimiento de falta de evidencia.</td></tr></table>
+</section>
+
+<section id="avanzado"><h2>16. Patrones avanzados</h2>
+<div class="grid"><div class="card"><strong>Multi-query</strong>Varias búsquedas.</div><div class="card"><strong>Decomposition</strong>Divide preguntas.</div><div class="card"><strong>Parent-child</strong>Busca pequeño, entrega contexto mayor.</div><div class="card"><strong>Agentic RAG</strong>Decide cuándo buscar.</div><div class="card"><strong>Graph RAG</strong>Entidades y relaciones.</div><div class="card"><strong>Corrective RAG</strong>Repite búsqueda si la evidencia es débil.</div></div>
+<div class="warning"><strong>Regla</strong>No adoptar complejidad avanzada sin demostrar qué fallo del baseline resuelve.</div>
+</section>
+
+<section id="actualizacion"><h2>17. Actualización y ciclo de vida</h2>
+<div class="flow"><span>Detectar cambio</span><b>→</b><span>Reprocesar</span><b>→</b><span>Versionar</span><b>→</b><span>Reindexar</span><b>→</b><span>Invalidar anterior</span><b>→</b><span>Evaluar</span></div>
+</section>
+
+<section id="caso"><h2>18. Caso aplicado: Base Maestra Inteligente</h2>
+<table><tr><th>Capa</th><th>Diseño</th></tr><tr><td>Corpus</td><td>Planillas aprobadas por financiador y versión.</td></tr><tr><td>Ingestión</td><td>Códigos, prácticas, valores y sinónimos.</td></tr><tr><td>Chunking</td><td>Registro o grupo de prácticas.</td></tr><tr><td>Retrieval</td><td>Híbrido: código exacto + similitud.</td></tr><tr><td>Filtros</td><td>Financiador, modalidad, vigencia y área.</td></tr><tr><td>Respuesta</td><td>Código, práctica, valor, fuente y advertencias.</td></tr></table>
+<div class="case"><strong>Aprendizaje</strong>RAG funciona si la base maestra, los filtros y la procedencia están controlados.</div>
+</section>
+
+<section id="canvas"><h2>19. JSG AI Engineering Hub v0.5</h2>
+<table><tr><th>Componente</th><th>Responsabilidad</th></tr><tr><td>Source registry</td><td>Fuentes, versiones y permisos.</td></tr><tr><td>Ingestion pipeline</td><td>Extrae y segmenta.</td></tr><tr><td>Embedding service</td><td>Genera vectores.</td></tr><tr><td>Hybrid index</td><td>Búsqueda léxica y vectorial.</td></tr><tr><td>Query processor</td><td>Interpreta y filtra.</td></tr><tr><td>Retriever</td><td>Recupera candidatos.</td></tr><tr><td>Reranker</td><td>Ordena evidencia.</td></tr><tr><td>Context builder</td><td>Construye contexto con citas.</td></tr><tr><td>Grounded generator</td><td>Responde o se abstiene.</td></tr><tr><td>Evaluation suite</td><td>Mide calidad y seguridad.</td></tr></table>
+</section>
+
+<section id="actividad"><h2>20. Actividad práctica</h2>
+<p>Diseña un Knowledge System Canvas para educación, clínica, soporte, legal o desarrollo.</p>
+<ul><li>Usuarios y preguntas.</li><li>Fuentes y autoridad.</li><li>Ingestión y actualización.</li><li>Chunking y metadatos.</li><li>Retrieval y filtros.</li><li>Reranking.</li><li>Citas y abstención.</li><li>Dataset de evaluación.</li></ul>
+</section>
+
+<section id="autoevaluacion"><h2>21. Autoevaluación</h2>
+<ol><li>¿Qué diferencia existe entre conocimiento paramétrico y recuperado?</li><li>¿Cuáles son las dos fases de RAG?</li><li>¿Por qué importa el chunking?</li><li>¿Qué representa un embedding?</li><li>¿Cuándo conviene búsqueda léxica?</li><li>¿Qué aporta la búsqueda híbrida?</li><li>¿Por qué filtrar antes de recuperar?</li><li>¿Qué hace un reranker?</li><li>¿Qué debe contener una cita?</li><li>¿Qué diferencia hay entre corrección y fidelidad?</li><li>¿Cómo probarías la abstención?</li><li>¿Qué riesgo introduce prompt injection?</li></ol>
+</section>
+
+<section id="fuentes"><h2>22. Fuentes base</h2>
+<ol>
+<li><a href="https://arxiv.org/abs/2005.11401" target="_blank" rel="noopener noreferrer">Lewis et al. — Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</a>.</li>
+<li><a href="https://platform.openai.com/docs/api-reference/vector-stores" target="_blank" rel="noopener noreferrer">OpenAI API — Vector stores y búsqueda</a>.</li>
+<li><a href="https://openai.github.io/openai-agents-python/tools/" target="_blank" rel="noopener noreferrer">OpenAI Agents SDK — File Search Tool</a>.</li>
+<li><a href="https://arxiv.org/abs/2112.08688" target="_blank" rel="noopener noreferrer">Asai et al. — Evidentiality-guided Generation</a>.</li>
+<li><a href="https://arxiv.org/abs/2112.09924" target="_blank" rel="noopener noreferrer">Piktus et al. — Knowledge-Intensive NLP against a Very Large Web Corpus</a>.</li>
+<li><a href="https://arxiv.org/abs/2504.03616" target="_blank" rel="noopener noreferrer">Ranaldi et al. — Multilingual Retrieval-Augmented Generation</a>.</li>
+</ol>
+</section>
+
+<div class="footer"><strong>AI Engineering Aplicado — Módulo 5</strong><br>Documento fundacional · 20 de julio de 2026.</div>
+</main></div></body></html>

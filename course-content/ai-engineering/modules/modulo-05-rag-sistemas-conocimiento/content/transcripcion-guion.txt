@@ -1,0 +1,20 @@
+GUION SINCRONIZADO — MÓDULO 5
+
+RAG separa recuperación y generación.
+
+Recorrido visual:
+1. Problema del conocimiento.
+2. Arquitectura end-to-end.
+3. Corpus e ingestión.
+4. Chunking.
+5. Embeddings e índices.
+6. Retrieval léxico, semántico e híbrido.
+7. Consulta, filtros y permisos.
+8. Reranking y context builder.
+9. Respuesta fundamentada, citas y abstención.
+10. Evaluación.
+11. Caso Base Maestra Inteligente.
+12. JSG AI Engineering Hub v0.5.
+
+Idea de cierre:
+RAG no es simplemente buscar texto. Es construir un sistema de conocimiento gobernado, evaluable y verificable.

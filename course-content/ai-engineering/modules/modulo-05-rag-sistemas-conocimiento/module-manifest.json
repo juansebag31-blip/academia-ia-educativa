@@ -1,0 +1,197 @@
+{
+  "schemaVersion": 2,
+  "sourceVersion": "1.0",
+  "courseSlug": "ai-engineering-aplicado",
+  "module": {
+    "editorialSlug": "modulo-05-rag-sistemas-conocimiento",
+    "publicSlug": "modulo-05-rag-sistemas-conocimiento",
+    "number": 5,
+    "title": "RAG y sistemas de conocimiento",
+    "editorialStatus": "approved",
+    "publish": true,
+    "level": "intermedio",
+    "estimatedStudyMinutes": 240,
+    "content": {
+      "foundationalHtml": "content/contenido-fundacional.html",
+      "objectives": {
+        "sectionId": "proposito",
+        "selector": "ul > li"
+      },
+      "activity": {
+        "sectionId": "actividad"
+      },
+      "selfAssessment": {
+        "sectionId": "autoevaluacion",
+        "questionSelector": "ol > li",
+        "questionCount": 12
+      },
+      "sources": {
+        "sectionId": "fuentes",
+        "itemSelector": "ol > li"
+      }
+    },
+    "assets": {
+      "infographic": {
+        "sourcePath": "assets/images/infografia-modulo-05.png",
+        "alt": "Infografía sobre RAG y sistemas de conocimiento.",
+        "title": "RAG y sistemas de conocimiento"
+      },
+      "audio": {
+        "mp3SourcePath": "assets/audio/modulo-05-audio-explicativo.mp3",
+        "m4aSourcePath": "assets/audio/modulo-05-audio-explicativo.m4a",
+        "transcriptSourcePath": "content/transcripcion-guion.txt",
+        "title": "Arquitectura de sistemas de conocimiento RAG"
+      },
+      "cases": [
+        {
+          "id": "caso-base-maestra",
+          "sourcePath": "cases/caso-01-base-maestra.html"
+        },
+        {
+          "id": "caso-curso",
+          "sourcePath": "cases/caso-02-curso-ai-engineering.html"
+        },
+        {
+          "id": "caso-desarrollo",
+          "sourcePath": "cases/caso-03-soporte-desarrollo.html"
+        }
+      ],
+      "presentation": {
+        "sourcePath": "assets/presentations/modulo-05-presentacion.pptx",
+        "title": "RAG y sistemas de conocimiento",
+        "slidesDirectory": "assets/presentations/slides",
+        "slideCount": 15,
+        "slideFilePattern": "slide-{number:2}.webp",
+        "slideWidth": 1600,
+        "slideHeight": 900,
+        "slideAltTemplate": "Diapositiva {current} de {total}"
+      }
+    },
+    "sections": {
+      "casesTitle": "Casos reales",
+      "presentationTitle": "Presentación"
+    },
+    "interactions": {
+      "activity": {
+        "unitId": "actividad",
+        "responseLabel": "Actividad práctica",
+        "placeholder": "Diseña un Knowledge System Canvas para educación, clínica, soporte, legal o desarrollo."
+      },
+      "selfAssessment": {
+        "unitId": "autoevaluacion"
+      }
+    },
+    "progressUnits": [
+      {
+        "id": "orientacion",
+        "kind": "orientation",
+        "sectionId": "orientacion",
+        "label": "Orientación"
+      },
+      {
+        "id": "contenido",
+        "kind": "foundational-content",
+        "sectionId": "contenido",
+        "label": "Contenido fundacional"
+      },
+      {
+        "id": "infografia",
+        "kind": "infographic",
+        "sectionId": "infografia",
+        "label": "Infografía"
+      },
+      {
+        "id": "audio",
+        "kind": "audio",
+        "sectionId": "audio",
+        "label": "Audio explicativo"
+      },
+      {
+        "id": "casos",
+        "kind": "cases",
+        "sectionId": "casos",
+        "label": "Casos reales"
+      },
+      {
+        "id": "presentacion",
+        "kind": "presentation",
+        "sectionId": "presentacion",
+        "label": "Presentación"
+      },
+      {
+        "id": "actividad",
+        "kind": "activity",
+        "sectionId": "actividad",
+        "label": "Actividad"
+      },
+      {
+        "id": "autoevaluacion",
+        "kind": "self-assessment",
+        "sectionId": "autoevaluacion",
+        "label": "Autoevaluación"
+      }
+    ],
+    "visuals": [
+      {
+        "visualId": "arquitectura-rag",
+        "sourcePath": "assets/images/visuals/visual-01-arquitectura-rag.png",
+        "afterSection": "arquitectura",
+        "alt": "Arquitectura RAG de extremo a extremo.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "ingestion-chunking",
+        "sourcePath": "assets/images/visuals/visual-02-ingestion-chunking.png",
+        "afterSection": "chunking",
+        "alt": "Ingestión y chunking de documentos.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "busqueda-hibrida",
+        "sourcePath": "assets/images/visuals/visual-03-busqueda-hibrida.png",
+        "afterSection": "retrieval",
+        "alt": "Búsqueda léxica, semántica e híbrida.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "evaluacion-dos-niveles",
+        "sourcePath": "assets/images/visuals/visual-04-evaluacion-dos-niveles.png",
+        "afterSection": "evaluacion",
+        "alt": "Evaluación de recuperación y generación.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "jsg-hub-v05",
+        "sourcePath": "assets/images/visuals/visual-05-jsg-hub-v05.png",
+        "afterSection": "canvas",
+        "alt": "Arquitectura JSG AI Engineering Hub v0.5.",
+        "width": 1600,
+        "height": 900
+      }
+    ],
+    "keyIdeas": [
+      {
+        "afterSection": "arquitectura",
+        "ideaId": "idea-separacion",
+        "title": "Recuperar no es generar",
+        "text": "RAG funciona cuando la evidencia se recupera y luego se usa de manera disciplinada."
+      },
+      {
+        "afterSection": "metadatos",
+        "ideaId": "idea-seguridad",
+        "title": "Seguridad antes de relevancia",
+        "text": "Un fragmento sin permiso no debe llegar al ranking."
+      },
+      {
+        "afterSection": "evaluacion",
+        "ideaId": "idea-evaluacion",
+        "title": "Evaluar en dos niveles",
+        "text": "Retrieval y generación pueden fallar por motivos diferentes."
+      }
+    ]
+  }
+}
