@@ -147,4 +147,31 @@ describe("AI Engineering unit interactions", () => {
     });
     expect(screen.getByRole("button", { name: "Diapositiva siguiente" })).toBeDisabled();
   });
+
+  it("clamps a persisted Module 4 slide index to its 21-slide presentation", async () => {
+    const moduleFourSlug = "modulo-04-herramientas-apis-function-calling-mcp";
+    const moduleFour = getAiEngineeringModule(moduleFourSlug);
+    if (!moduleFour) throw new Error("AI Engineering Module 4 fixture is unavailable.");
+    writeAiEngineeringUnitState(
+      { courseSlug, moduleSlug: moduleFourSlug, unitId: "presentacion" },
+      { status: "in-progress", slideIndex: 99 },
+    );
+
+    render(
+      <AiEngineeringPresentationViewer
+        presentation={moduleFour.presentation}
+        downloadHref={moduleFour.assets.presentation.publicPath}
+        courseSlug={courseSlug}
+        moduleSlug={moduleFourSlug}
+        moduleNumber={4}
+        unitId="presentacion"
+      />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Abrir presentación" }));
+
+    await waitFor(() => {
+      expect(screen.getByText("Diapositiva 21 de 21")).toBeInTheDocument();
+    });
+    expect(screen.getByRole("button", { name: "Diapositiva siguiente" })).toBeDisabled();
+  });
 });

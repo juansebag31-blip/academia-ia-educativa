@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Módulo 4 — Herramientas, APIs, function calling y MCP</title>
+<style>
+:root{--navy:#0B1F33;--petrol:#0F766E;--ink:#172033;--muted:#5d687b;--line:#d8e5e2;--bg:#f3f7f6;--blue:#1769e0;--orange:#c96a00;--red:#c74343;--green:#0b8f64;--violet:#6d45c8}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.72}
+.cover{min-height:90vh;padding:70px 7vw;display:flex;align-items:center;background:radial-gradient(circle at 82% 20%,rgba(27,184,179,.22),transparent 25%),linear-gradient(135deg,var(--navy),#123a4b 67%,#145d59);color:#fff}
+.cover>div{max-width:1100px}.kicker{display:inline-block;border:1px solid #ffffff55;border-radius:999px;padding:7px 14px;letter-spacing:.08em;font-weight:800;text-transform:uppercase}
+h1{font-size:clamp(2.8rem,7vw,5.7rem);line-height:1.02;margin:.28em 0}.cover p{font-size:1.25rem;color:#dbeff0;max-width:880px}.meta{display:flex;gap:10px;flex-wrap:wrap}.meta span{padding:9px 12px;border:1px solid #ffffff44;border-radius:10px;background:#ffffff14}
+.layout{display:grid;grid-template-columns:300px minmax(0,940px);gap:34px;max-width:1320px;margin:auto;padding:34px 24px 90px}aside{position:sticky;top:18px;align-self:start;background:var(--navy);border-radius:18px;padding:20px;max-height:94vh;overflow:auto}aside a{display:block;color:#dce9f0;text-decoration:none;padding:7px 0;border-bottom:1px solid #ffffff16;font-size:.89rem}
+main{background:#fff;border-radius:20px;padding:clamp(24px,5vw,62px);box-shadow:0 12px 35px #0e274b1a}h2{font-size:2rem;color:var(--navy);margin:2.15em 0 .55em;line-height:1.2}h3{color:#16324a;margin-top:1.55em}
+.lead{font-size:1.13rem;color:#36445a}.callout,.warning,.decision,.case,.interview,.example{border-left:5px solid var(--petrol);background:#eff9f7;padding:18px 20px;border-radius:12px;margin:22px 0}.warning{border-color:var(--red);background:#fff2f2}.decision{border-color:var(--orange);background:#fff7ec}.case{border-color:var(--green);background:#effaf6}.interview{border-color:var(--violet);background:#f6f2ff}.example{border-color:var(--blue);background:#f1f7ff}
+.definition{display:grid;grid-template-columns:180px 1fr;gap:15px;border:1px solid var(--line);background:#f8fbfa;padding:18px;border-radius:13px;margin:16px 0}.definition strong{color:var(--petrol)}
+.flow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:var(--navy);color:#fff;padding:16px;border-radius:13px;margin:18px 0}.flow span{background:#163a50;border:1px solid #2c6370;padding:9px 12px;border-radius:9px}.flow b{color:#78ddd5}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.94rem}th,td{border:1px solid var(--line);padding:12px;vertical-align:top}th{background:#eaf6f4;text-align:left}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{border:1px solid var(--line);background:#f8fbfa;padding:17px;border-radius:12px}.card strong{display:block;color:var(--petrol)}
+code{background:#edf3f5;padding:.15em .35em;border-radius:5px}pre{background:#0b1f33;color:#e9f7f6;padding:18px;border-radius:12px;overflow:auto;line-height:1.5}li{margin:.4rem 0}.small{color:var(--muted);font-size:.9rem}.footer{margin-top:50px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted)}
+@media(max-width:900px){.layout{grid-template-columns:1fr}aside{position:relative;max-height:none}.grid{grid-template-columns:1fr}.definition{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="cover"><div>
+<span class="kicker">AI Engineering Aplicado · Módulo 4</span>
+<h1>Herramientas, APIs, function calling y MCP</h1>
+<p>Cómo conectar el razonamiento de un modelo con servicios, datos y acciones reales mediante contratos, permisos y protocolos interoperables.</p>
+<div class="meta"><span>Versión 0.9</span><span>Nivel intermedio</span><span>Lectura: 85–105 min</span><span>JSG Hub v0.4</span></div>
+</div></header>
+<div class="layout">
+<aside>
+<a href="#proposito">1. Propósito</a><a href="#mapa">2. Del modelo al mundo exterior</a><a href="#conceptos">3. Conceptos</a><a href="#function-calling">4. Function calling</a><a href="#contrato">5. Contrato de tool</a><a href="#seleccion">6. Selección de herramientas</a><a href="#ejecucion">7. Ejecución confiable</a><a href="#aprobacion">8. Aprobación humana</a><a href="#apis">9. APIs directas</a><a href="#mcp">10. Qué es MCP</a><a href="#primitivas">11. Primitivas MCP</a><a href="#transporte">12. Transporte y autorización</a><a href="#comparacion">13. Function calling vs MCP</a><a href="#seguridad">14. Seguridad</a><a href="#evaluacion">15. Evaluación</a><a href="#caso">16. Caso aplicado</a><a href="#canvas">17. JSG Hub v0.4</a><a href="#entrevista">18. Entrevista</a><a href="#actividad">19. Actividad</a><a href="#autoevaluacion">20. Autoevaluación</a><a href="#fuentes">21. Fuentes</a>
+</aside>
+<main>
+<section id="proposito"><h2>1. Propósito del módulo</h2>
+<p class="lead">Un modelo puede razonar y generar texto, pero no puede consultar un calendario, crear un registro, leer una base privada o enviar una notificación sin una integración que conecte el razonamiento con el mundo exterior.</p>
+<p>Este módulo estudia cómo convertir capacidades externas en herramientas seguras y comprensibles para un sistema de IA. Diferenciaremos una API tradicional, una herramienta, el ciclo de <em>function calling</em> y el Model Context Protocol.</p>
+<div class="callout"><strong>Idea central</strong>El modelo no ejecuta directamente una API. Propone una llamada estructurada; la aplicación valida, autoriza, ejecuta y devuelve el resultado.</div>
+<h3>Objetivos</h3><ul><li>Distinguir modelo, herramienta, función, API, conector y servidor MCP.</li><li>Comprender el ciclo completo de function calling.</li><li>Diseñar contratos de herramientas mediante JSON Schema.</li><li>Decidir cuándo usar integración directa y cuándo MCP.</li><li>Aplicar validación, permisos, idempotencia, timeouts y aprobación humana.</li><li>Diseñar la capa de herramientas del JSG AI Engineering Hub v0.4.</li></ul>
+</section>
+
+<section id="mapa"><h2>2. Del modelo al mundo exterior</h2>
+<p>Una aplicación inteligente combina razonamiento probabilístico con ejecución determinista.</p>
+<div class="flow"><span>Usuario</span><b>→</b><span>Modelo decide</span><b>→</b><span>Llamada estructurada</span><b>→</b><span>Aplicación valida</span><b>→</b><span>API o servicio</span><b>→</b><span>Resultado</span><b>→</b><span>Modelo responde</span></div>
+<div class="warning"><strong>Error frecuente</strong>Confundir “el modelo pidió una acción” con “la acción ya fue ejecutada”. Entre ambos eventos debe existir una capa de control.</div>
+</section>
+
+<section id="conceptos"><h2>3. Herramienta, función, API y conector</h2>
+<table><tr><th>Concepto</th><th>Función</th><th>Ejemplo</th></tr>
+<tr><td><strong>API</strong></td><td>Contrato técnico para comunicarse con un servicio.</td><td>Consultar eventos de un calendario.</td></tr>
+<tr><td><strong>Función</strong></td><td>Unidad de código ejecutable dentro de la aplicación.</td><td><code>buscar_turnos(fecha)</code>.</td></tr>
+<tr><td><strong>Herramienta</strong></td><td>Capacidad descrita al modelo con nombre, propósito y esquema.</td><td>Buscar disponibilidad.</td></tr>
+<tr><td><strong>Conector</strong></td><td>Integración empaquetada con autenticación y acceso.</td><td>Drive, correo o CRM.</td></tr>
+<tr><td><strong>Servidor MCP</strong></td><td>Servicio que expone herramientas, recursos y prompts mediante un protocolo estándar.</td><td>Servidor para GitHub.</td></tr></table>
+<div class="decision"><strong>Principio</strong>Una API está diseñada para programas. Una herramienta debe estar diseñada también para que el modelo comprenda cuándo usarla y con qué argumentos.</div>
+</section>
+
+<section id="function-calling"><h2>4. El ciclo de function calling</h2>
+<p><em>Function calling</em> es un patrón de orquestación: el modelo produce una solicitud estructurada; el runtime ejecuta código y devuelve el resultado para que el modelo continúe.</p>
+<ol><li>La aplicación declara herramientas.</li><li>El usuario solicita una tarea.</li><li>El modelo selecciona una herramienta y genera argumentos.</li><li>La aplicación valida esquema y permisos.</li><li>El runtime ejecuta la función o API.</li><li>El resultado vuelve al modelo.</li><li>El modelo responde o solicita otra herramienta.</li></ol>
+<div class="flow"><span>tools</span><b>+</b><span>prompt</span><b>→</b><span>tool call</span><b>→</b><span>execute</span><b>→</b><span>tool result</span><b>→</b><span>final answer</span></div>
+</section>
+
+<section id="contrato"><h2>5. El contrato de una herramienta</h2>
+<table><tr><th>Elemento</th><th>Pregunta</th></tr><tr><td>Nombre</td><td>¿Es único, estable y específico?</td></tr><tr><td>Descripción</td><td>¿Explica qué hace y cuándo usarla?</td></tr><tr><td>Parámetros</td><td>¿El JSON Schema representa tipos y restricciones?</td></tr><tr><td>Salida</td><td>¿Es estructurada y comprensible?</td></tr><tr><td>Errores</td><td>¿Permiten corregir y reintentar?</td></tr><tr><td>Efectos</td><td>¿Se distingue lectura, escritura y eliminación?</td></tr></table>
+<pre>{
+  "name": "buscar_disponibilidad",
+  "description": "Busca horarios disponibles por fecha y especialidad.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "fecha": {"type": "string", "format": "date"},
+      "especialidad": {"type": "string"}
+    },
+    "required": ["fecha", "especialidad"],
+    "additionalProperties": false
+  }
+}</pre>
+</section>
+
+<section id="seleccion"><h2>6. Selección y carga de herramientas</h2>
+<p>Dar al modelo demasiadas herramientas aumenta tokens y ambigüedad. Conviene conservar un conjunto relevante, agrupar por namespaces y cargar herramientas bajo demanda cuando el catálogo es grande.</p>
+<ul><li>Agrupar por dominio.</li><li>Evitar funciones superpuestas.</li><li>Describir límites y efectos.</li><li>Usar carga diferida.</li><li>Medir selección correcta.</li></ul>
+</section>
+
+<section id="ejecucion"><h2>7. Ejecución confiable</h2>
+<div class="grid"><div class="card"><strong>Validación</strong>Rechazar argumentos mal formados.</div><div class="card"><strong>Timeouts</strong>Evitar bloqueos indefinidos.</div><div class="card"><strong>Reintentos</strong>Solo para errores transitorios.</div><div class="card"><strong>Idempotencia</strong>Evitar acciones duplicadas.</div><div class="card"><strong>Rate limits</strong>Proteger servicios y costes.</div><div class="card"><strong>Observabilidad</strong>Registrar herramienta, duración, resultado y error.</div></div>
+</section>
+
+<section id="aprobacion"><h2>8. Lectura, escritura y aprobación humana</h2>
+<table><tr><th>Tipo</th><th>Ejemplo</th><th>Política</th></tr><tr><td>Lectura de bajo riesgo</td><td>Clima o catálogo público.</td><td>Automática.</td></tr><tr><td>Lectura sensible</td><td>Correo o historia privada.</td><td>Permiso explícito.</td></tr><tr><td>Escritura reversible</td><td>Crear borrador.</td><td>Automática con auditoría.</td></tr><tr><td>Acción externa</td><td>Enviar correo.</td><td>Confirmación según contexto.</td></tr><tr><td>Destructiva</td><td>Eliminar archivo.</td><td>Aprobación explícita.</td></tr></table>
+<div class="warning"><strong>Regla</strong>La autonomía debe ser proporcional al riesgo, la reversibilidad y el impacto.</div>
+</section>
+
+<section id="apis"><h2>9. Integración directa con APIs</h2>
+<p>Es apropiada cuando la aplicación controla proveedor, contrato y runtime. Ofrece menor complejidad para pocas herramientas, pero aumenta mantenimiento y acoplamiento cuando crece el número de proveedores.</p>
+</section>
+
+<section id="mcp"><h2>10. Qué es MCP</h2>
+<p>Model Context Protocol es un protocolo abierto que estandariza cómo una aplicación de IA se conecta con fuentes de datos y capacidades externas.</p>
+<div class="definition"><strong>Host</strong><span>Aplicación de IA que administra conexiones, permisos y experiencia.</span></div>
+<div class="definition"><strong>Cliente MCP</strong><span>Componente del host que mantiene una conexión con un servidor.</span></div>
+<div class="definition"><strong>Servidor MCP</strong><span>Servicio que expone capacidades y contexto.</span></div>
+<p>MCP utiliza JSON-RPC 2.0, negociación de versión y capacidades. No decide cómo razona el modelo; estandariza el intercambio.</p>
+</section>
+
+<section id="primitivas"><h2>11. Tools, resources y prompts</h2>
+<table><tr><th>Primitiva</th><th>Propósito</th><th>Ejemplo</th></tr><tr><td><strong>Tools</strong></td><td>Acciones ejecutables.</td><td>Crear issue.</td></tr><tr><td><strong>Resources</strong></td><td>Datos contextuales por URI.</td><td>Archivo o esquema.</td></tr><tr><td><strong>Prompts</strong></td><td>Plantillas reutilizables.</td><td>Revisión de código.</td></tr></table>
+<div class="callout"><strong>Diferencia</strong>Una tool ejecuta. Un resource aporta datos. Un prompt estructura una interacción.</div>
+</section>
+
+<section id="transporte"><h2>12. Transporte, ciclo de vida y autorización</h2>
+<ul><li><strong>stdio:</strong> comunicación entre procesos locales.</li><li><strong>Streamable HTTP:</strong> comunicación remota mediante HTTP y streaming opcional.</li></ul>
+<div class="flow"><span>Inicialización</span><b>→</b><span>Negociar versión</span><b>→</b><span>Declarar capacidades</span><b>→</b><span>Operar</span><b>→</b><span>Cerrar</span></div>
+<p>Para servidores HTTP protegidos, MCP define autorización basada en OAuth 2.1. Los servidores locales por stdio suelen obtener credenciales del entorno.</p>
+</section>
+
+<section id="comparacion"><h2>13. Function calling frente a MCP</h2>
+<table><tr><th>Dimensión</th><th>Function calling directo</th><th>MCP</th></tr><tr><td>Alcance</td><td>Patrón dentro de una aplicación.</td><td>Protocolo entre host, cliente y servidor.</td></tr><tr><td>Contrato</td><td>Definido por aplicación o SDK.</td><td>Estandarizado.</td></tr><tr><td>Descubrimiento</td><td>La aplicación declara herramientas.</td><td>El cliente descubre primitivas.</td></tr><tr><td>Reutilización</td><td>Más acoplado.</td><td>Más interoperable.</td></tr></table>
+<div class="decision"><strong>No son rivales absolutos</strong>Un host puede presentar herramientas MCP al modelo mediante el mismo bucle de tool calling.</div>
+</section>
+
+<section id="seguridad"><h2>14. Seguridad</h2>
+<ul><li>Validar entradas.</li><li>Aplicar mínimo privilegio.</li><li>No confiar ciegamente en servidores externos.</li><li>Mostrar acciones sensibles.</li><li>Sanear resultados.</li><li>Aplicar límites, timeouts y auditoría.</li><li>Evitar passthrough inseguro de tokens.</li><li>Separar secretos del contexto.</li><li>Protegerse contra prompt injection y exfiltración.</li></ul>
+<div class="warning"><strong>Superficie de ataque</strong>Una herramienta convierte texto generado por un modelo en una posible acción real. La seguridad debe estar en el runtime y en el servicio, no solo en el prompt.</div>
+</section>
+
+<section id="evaluacion"><h2>15. Evaluación de herramientas</h2>
+<table><tr><th>Dimensión</th><th>Métrica</th></tr><tr><td>Selección</td><td>Precisión de herramienta.</td></tr><tr><td>Argumentos</td><td>Tasa de validación.</td></tr><tr><td>Ejecución</td><td>Éxito end-to-end.</td></tr><tr><td>Seguridad</td><td>Violaciones de política.</td></tr><tr><td>Recuperación</td><td>Éxito tras error.</td></tr><tr><td>Coste</td><td>Llamadas y latencia.</td></tr><tr><td>Trazabilidad</td><td>Cobertura de logs.</td></tr></table>
+</section>
+
+<section id="caso"><h2>16. Caso aplicado</h2>
+<p>“Busca disponibilidad para una resonancia y prepara un correo, pero no lo envíes”.</p>
+<ol><li>El sistema identifica consulta y borrador.</li><li>Usa <code>buscar_disponibilidad</code>.</li><li>Valida fecha y permisos.</li><li>Recibe horarios.</li><li>Usa <code>crear_borrador_correo</code>.</li><li>No usa <code>enviar_correo</code>.</li><li>Registra la traza.</li></ol>
+<div class="case"><strong>Aprendizaje</strong>Una tarea útil requiere selección, contrato, permisos y control de efectos; no solo acceso a una API.</div>
+</section>
+
+<section id="canvas"><h2>17. JSG AI Engineering Hub v0.4</h2>
+<table><tr><th>Componente</th><th>Responsabilidad</th></tr><tr><td>Tool registry</td><td>Catálogo versionado.</td></tr><tr><td>Tool router</td><td>Selecciona namespace, función o MCP.</td></tr><tr><td>Schema validator</td><td>Valida argumentos y salidas.</td></tr><tr><td>Policy engine</td><td>Evalúa permisos y riesgo.</td></tr><tr><td>Execution runtime</td><td>Ejecuta funciones, APIs y MCP.</td></tr><tr><td>Credential broker</td><td>Entrega credenciales sin exponerlas.</td></tr><tr><td>Approval gate</td><td>Pausa acciones sensibles.</td></tr><tr><td>Trace collector</td><td>Registra llamadas y errores.</td></tr><tr><td>MCP client manager</td><td>Conecta servidores MCP.</td></tr></table>
+<div class="flow"><span>Modelo</span><b>→</b><span>Tool router</span><b>→</b><span>Policy + validation</span><b>→</b><span>API / función / MCP</span><b>→</b><span>Resultado</span><b>→</b><span>Traza</span></div>
+</section>
+
+<section id="entrevista"><h2>18. Cápsula de entrevista</h2>
+<div class="interview"><strong>¿El modelo ejecuta una función?</strong>No. Produce una llamada estructurada y el runtime decide si la ejecuta.</div>
+<div class="interview"><strong>¿Qué aporta JSON Schema?</strong>Un contrato validable de argumentos.</div>
+<div class="interview"><strong>¿Cuándo usar MCP?</strong>Cuando se busca interoperabilidad y reutilización entre hosts.</div>
+<div class="interview"><strong>¿Tool o resource?</strong>La tool ejecuta; el resource aporta datos.</div>
+<div class="interview"><strong>¿Dónde se aplica la seguridad?</strong>En runtime, políticas y servicio externo.</div>
+</section>
+
+<section id="actividad"><h2>19. Actividad práctica</h2>
+<p>Diseña una capa de herramientas para educación, clínica, ventas, soporte o desarrollo.</p>
+<ul><li>Objetivo.</li><li>4–6 herramientas.</li><li>Nombre, descripción, esquema y salida.</li><li>Lectura, escritura o destrucción.</li><li>Permisos y aprobación.</li><li>Errores, timeouts e idempotencia.</li><li>Integración directa o MCP.</li><li>Métricas y trazabilidad.</li></ul>
+</section>
+
+<section id="autoevaluacion"><h2>20. Autoevaluación</h2>
+<ol><li>¿Qué diferencia existe entre API, función y herramienta?</li><li>¿Quién ejecuta realmente una tool call?</li><li>¿Por qué el esquema es parte de la seguridad?</li><li>¿Qué hace una llamada idempotente?</li><li>¿Cuándo solicitarías aprobación?</li><li>¿Qué problema resuelve MCP?</li><li>¿Qué son host, cliente y servidor?</li><li>¿Qué diferencia hay entre tools, resources y prompts?</li><li>¿Cuándo usarías stdio?</li><li>¿Cuándo usarías Streamable HTTP?</li><li>¿Por qué function calling y MCP pueden convivir?</li><li>¿Cómo evaluarías la selección de herramientas?</li></ol>
+</section>
+
+<section id="fuentes"><h2>21. Fuentes base</h2>
+<ol>
+<li><a href="https://openai.github.io/openai-agents-python/tools/" target="_blank" rel="noopener noreferrer">OpenAI Agents SDK — Tools y function tools</a></li>
+<li><a href="https://openai.github.io/openai-agents-python/mcp/" target="_blank" rel="noopener noreferrer">OpenAI Agents SDK — MCP integration</a></li>
+<li><a href="https://openai.github.io/openai-agents-python/" target="_blank" rel="noopener noreferrer">OpenAI Agents SDK — documentación general y agent loop</a></li>
+<li><a href="https://modelcontextprotocol.io/docs/learn/architecture" target="_blank" rel="noopener noreferrer">Model Context Protocol — Architecture overview</a></li>
+<li><a href="https://modelcontextprotocol.io/specification/2025-11-25" target="_blank" rel="noopener noreferrer">Model Context Protocol Specification — revisión 2025-11-25</a></li>
+<li><a href="https://modelcontextprotocol.io/specification/2025-11-25/server/tools" target="_blank" rel="noopener noreferrer">MCP — Tools</a></li>
+<li><a href="https://modelcontextprotocol.io/specification/2025-11-25/server/resources" target="_blank" rel="noopener noreferrer">MCP — Resources</a></li>
+<li><a href="https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization" target="_blank" rel="noopener noreferrer">MCP — Authorization</a></li>
+<li><a href="https://modelcontextprotocol.io/specification/2025-11-25/basic/transports" target="_blank" rel="noopener noreferrer">MCP — Transports</a></li>
+</ol>
+<p class="small">El módulo prioriza principios arquitectónicos estables. Las clases y capacidades concretas deben verificarse al implementar.</p>
+</section>
+
+<div class="footer"><strong>AI Engineering Aplicado — Módulo 4</strong><br>Documento fundacional para revisión pedagógica · 20 de julio de 2026.</div>
+</main></div></body></html>

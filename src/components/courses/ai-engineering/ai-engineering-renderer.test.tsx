@@ -25,6 +25,12 @@ const moduleThree = course.modules.find(
 if (!moduleThree) {
   throw new Error("AI Engineering Module 3 fixture is unavailable.");
 }
+const moduleFour = course.modules.find(
+  (module) => module.summary.slug === "modulo-04-herramientas-apis-function-calling-mcp",
+);
+if (!moduleFour) {
+  throw new Error("AI Engineering Module 4 fixture is unavailable.");
+}
 
 describe("AI Engineering visual renderer", () => {
   it("renders declarative image visuals with their approved alternative text", () => {
@@ -77,8 +83,8 @@ describe("AI Engineering visual renderer", () => {
     expect(screen.getByText("Arquitectura de un sistema inteligente")).toBeInTheDocument();
     expect(screen.getByText("Modelo / RAG / Herramientas")).toBeInTheDocument();
     expect(screen.queryByRole("img")).not.toBeInTheDocument();
-    expect(screen.getAllByText("Disponible")).toHaveLength(3);
-    expect(screen.getAllByText("Próximamente")).toHaveLength(9);
+    expect(screen.getAllByText("Disponible")).toHaveLength(4);
+    expect(screen.getAllByText("Próximamente")).toHaveLength(8);
     expect(screen.getByText("Modelos fundacionales y selección")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /02 Disponible Módulo 2 Modelos fundacionales y selección/ })).toHaveAttribute(
       "href",
@@ -87,6 +93,10 @@ describe("AI Engineering visual renderer", () => {
     expect(screen.getByRole("link", { name: /03 Disponible Módulo 3 Contexto, estado y memoria/ })).toHaveAttribute(
       "href",
       "/courses/ai-engineering-aplicado/modules/modulo-03-contexto-estado-memoria",
+    );
+    expect(screen.getByText("Herramientas, APIs, function calling y MCP").closest("a")).toHaveAttribute(
+      "href",
+      "/courses/ai-engineering-aplicado/modules/modulo-04-herramientas-apis-function-calling-mcp",
     );
     expect(screen.getByText("Producción y proyecto final")).toBeInTheDocument();
     expect(screen.getByText("JSG AI Engineering Hub v0.1")).toBeInTheDocument();
@@ -139,6 +149,36 @@ describe("AI Engineering visual renderer", () => {
       name: `Cargar y reproducir audio: ${moduleThree.configuration.assets.audio.title}`,
     }));
     expect(container.querySelector("audio source")).toHaveAttribute("src", moduleThree.assets.audioMp3.publicPath);
+  });
+
+  it("renders Module 4 from its manifest-derived quantities and official sources", () => {
+    const { container } = render(<AiEngineeringModulePage course={course} module={moduleFour} />);
+
+    expect(screen.getAllByRole("heading", { level: 1, name: "Herramientas, APIs, function calling y MCP" })[0])
+      .toBeInTheDocument();
+    expect(moduleFour.configuration.progressUnits).toHaveLength(8);
+    expect(moduleFour.content.cases).toHaveLength(3);
+    expect(moduleFour.presentation.slides).toHaveLength(21);
+    expect(moduleFour.visuals).toHaveLength(5);
+    expect(moduleFour.keyIdeas).toHaveLength(3);
+    expect(screen.getAllByLabelText(/Respuesta \d/)).toHaveLength(12);
+    expect(screen.getAllByRole("button", { name: /Ampliar visual pedagógico/ })).toHaveLength(5);
+    expect(screen.getByRole("link", { name: "Descargar PPTX" })).toHaveAttribute(
+      "href",
+      moduleFour.assets.presentation.publicPath,
+    );
+
+    const officialSourceLinks = Array.from(container.querySelectorAll<HTMLAnchorElement>("a[href^='https://']"))
+      .filter((link) => ["openai.github.io", "modelcontextprotocol.io"].includes(new URL(link.href).hostname));
+    expect(officialSourceLinks).toHaveLength(9);
+    expect(officialSourceLinks.every((link) => link.target === "_blank")).toBe(true);
+    expect(officialSourceLinks.every((link) => link.rel === "noopener noreferrer")).toBe(true);
+
+    expect(container.querySelector("audio")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", {
+      name: `Cargar y reproducir audio: ${moduleFour.configuration.assets.audio.title}`,
+    }));
+    expect(container.querySelector("audio source")).toHaveAttribute("src", moduleFour.assets.audioMp3.publicPath);
   });
 
   it("renders the complete module structure and approved assets", () => {

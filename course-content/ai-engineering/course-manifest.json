@@ -34,8 +34,10 @@
       "number": 4,
       "title": "Herramientas, APIs, function calling y MCP",
       "editorialSlug": "modulo-04-herramientas-apis-function-calling-mcp",
-      "editorialStatus": "draft",
-      "publish": false
+      "editorialStatus": "approved",
+      "publish": true,
+      "publicSlug": "modulo-04-herramientas-apis-function-calling-mcp",
+      "manifestPath": "modules/modulo-04-herramientas-apis-function-calling-mcp/module-manifest.json"
     },
     {
       "number": 5,

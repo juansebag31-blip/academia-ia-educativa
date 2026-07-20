@@ -1,0 +1,197 @@
+{
+  "schemaVersion": 2,
+  "sourceVersion": "1.0",
+  "courseSlug": "ai-engineering-aplicado",
+  "module": {
+    "editorialSlug": "modulo-04-herramientas-apis-function-calling-mcp",
+    "publicSlug": "modulo-04-herramientas-apis-function-calling-mcp",
+    "number": 4,
+    "title": "Herramientas, APIs, function calling y MCP",
+    "editorialStatus": "approved",
+    "publish": true,
+    "level": "intermedio",
+    "estimatedStudyMinutes": 210,
+    "content": {
+      "foundationalHtml": "content/contenido-fundacional.html",
+      "objectives": {
+        "sectionId": "proposito",
+        "selector": "h3 + ul > li"
+      },
+      "activity": {
+        "sectionId": "actividad"
+      },
+      "selfAssessment": {
+        "sectionId": "autoevaluacion",
+        "questionSelector": "ol > li",
+        "questionCount": 12
+      },
+      "sources": {
+        "sectionId": "fuentes",
+        "itemSelector": "ol > li"
+      }
+    },
+    "assets": {
+      "infographic": {
+        "sourcePath": "assets/images/infografia-modulo-04.png",
+        "alt": "Infografía sobre herramientas, APIs, function calling y MCP.",
+        "title": "Herramientas, APIs, function calling y MCP"
+      },
+      "audio": {
+        "mp3SourcePath": "assets/audio/modulo-04-audio-explicativo.mp3",
+        "m4aSourcePath": "assets/audio/modulo-04-audio-explicativo.m4a",
+        "transcriptSourcePath": "content/transcripcion-guion.txt",
+        "title": "Dar manos a la inteligencia artificial"
+      },
+      "cases": [
+        {
+          "id": "caso-clinica",
+          "sourcePath": "cases/caso-01-clinica-function-calling.html"
+        },
+        {
+          "id": "caso-educacion",
+          "sourcePath": "cases/caso-02-educacion-mcp.html"
+        },
+        {
+          "id": "caso-desarrollo",
+          "sourcePath": "cases/caso-03-desarrollo-herramientas.html"
+        }
+      ],
+      "presentation": {
+        "sourcePath": "assets/presentations/modulo-04-presentacion.pptx",
+        "title": "Herramientas, APIs, function calling y MCP",
+        "slidesDirectory": "assets/presentations/slides",
+        "slideCount": 21,
+        "slideFilePattern": "slide-{number:2}.webp",
+        "slideWidth": 1600,
+        "slideHeight": 900,
+        "slideAltTemplate": "Diapositiva {current} de {total}"
+      }
+    },
+    "sections": {
+      "casesTitle": "Casos reales",
+      "presentationTitle": "Presentación"
+    },
+    "interactions": {
+      "activity": {
+        "unitId": "actividad",
+        "responseLabel": "Actividad práctica",
+        "placeholder": "Diseña una capa de herramientas para educación, clínica, ventas, soporte o desarrollo."
+      },
+      "selfAssessment": {
+        "unitId": "autoevaluacion"
+      }
+    },
+    "progressUnits": [
+      {
+        "id": "orientacion",
+        "kind": "orientation",
+        "sectionId": "orientacion",
+        "label": "Orientación"
+      },
+      {
+        "id": "contenido",
+        "kind": "foundational-content",
+        "sectionId": "contenido",
+        "label": "Contenido fundacional"
+      },
+      {
+        "id": "infografia",
+        "kind": "infographic",
+        "sectionId": "infografia",
+        "label": "Infografía"
+      },
+      {
+        "id": "audio",
+        "kind": "audio",
+        "sectionId": "audio",
+        "label": "Audio explicativo"
+      },
+      {
+        "id": "casos",
+        "kind": "cases",
+        "sectionId": "casos",
+        "label": "Casos reales"
+      },
+      {
+        "id": "presentacion",
+        "kind": "presentation",
+        "sectionId": "presentacion",
+        "label": "Presentación"
+      },
+      {
+        "id": "actividad",
+        "kind": "activity",
+        "sectionId": "actividad",
+        "label": "Actividad"
+      },
+      {
+        "id": "autoevaluacion",
+        "kind": "self-assessment",
+        "sectionId": "autoevaluacion",
+        "label": "Autoevaluación"
+      }
+    ],
+    "visuals": [
+      {
+        "visualId": "ciclo-function-calling",
+        "sourcePath": "assets/images/visuals/visual-01-ciclo-function-calling.png",
+        "afterSection": "function-calling",
+        "alt": "Ciclo completo de function calling.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "ejecucion-confiable",
+        "sourcePath": "assets/images/visuals/visual-02-ejecucion-confiable.png",
+        "afterSection": "ejecucion",
+        "alt": "Controles para una ejecución confiable.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "arquitectura-mcp",
+        "sourcePath": "assets/images/visuals/visual-03-arquitectura-mcp.png",
+        "afterSection": "mcp",
+        "alt": "Arquitectura host, cliente y servidor MCP.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "seguridad-prompt-injection",
+        "sourcePath": "assets/images/visuals/visual-04-seguridad-prompt-injection.png",
+        "afterSection": "seguridad",
+        "alt": "Capas de defensa contra prompt injection en herramientas.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "caso-aplicado",
+        "sourcePath": "assets/images/visuals/visual-05-caso-aplicado.png",
+        "afterSection": "caso",
+        "alt": "Flujo aplicado con intención, acción y límite.",
+        "width": 1600,
+        "height": 900
+      }
+    ],
+    "keyIdeas": [
+      {
+        "afterSection": "mapa",
+        "ideaId": "idea-modelo-propone",
+        "title": "El modelo propone",
+        "text": "La aplicación valida, autoriza y ejecuta."
+      },
+      {
+        "afterSection": "comparacion",
+        "ideaId": "idea-function-mcp",
+        "title": "Function calling y MCP conviven",
+        "text": "Uno organiza llamadas; el otro estandariza interoperabilidad."
+      },
+      {
+        "afterSection": "seguridad",
+        "ideaId": "idea-seguridad-runtime",
+        "title": "La seguridad vive en el runtime",
+        "text": "El prompt no reemplaza permisos, validación y control de efectos."
+      }
+    ]
+  }
+}

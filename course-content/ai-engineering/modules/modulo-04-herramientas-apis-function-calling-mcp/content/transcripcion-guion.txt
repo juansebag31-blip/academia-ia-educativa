@@ -1,0 +1,153 @@
+GUION SINCRONIZADO — INFOGRAFÍA MÓDULO 4
+Herramientas, APIs, Function Calling y MCP
+
+Objetivo:
+Acompañar visualmente la infografía explicando cómo un modelo de inteligencia artificial pasa de generar respuestas a participar en sistemas capaces de ejecutar acciones reales de manera segura.
+
+INTRODUCCIÓN
+
+En este módulo vamos a comprender un cambio fundamental en la inteligencia artificial aplicada.
+
+Un modelo de lenguaje por sí solo puede razonar, generar texto y analizar información, pero no puede modificar sistemas externos, consultar bases de datos o ejecutar acciones reales por iniciativa propia.
+
+Para eso necesita herramientas.
+
+SECCIÓN 1 — DEL MODELO A LA ACCIÓN
+
+La primera idea clave es diferenciar pensamiento de ejecución.
+
+El modelo interpreta una intención del usuario y propone una acción.
+
+La aplicación recibe esa propuesta, valida los permisos, controla los parámetros y decide si realmente debe ejecutarla.
+
+El modelo propone.
+El sistema controla.
+La herramienta ejecuta.
+
+Esta separación es fundamental para construir sistemas confiables.
+
+SECCIÓN 2 — CONCEPTOS FUNDAMENTALES
+
+Una API es una interfaz que permite comunicarse con un servicio externo.
+
+Una herramienta o tool es una capacidad que un sistema de inteligencia artificial puede utilizar.
+
+Function calling es el mecanismo mediante el cual el modelo genera una llamada estructurada hacia una función definida por el desarrollador.
+
+MCP, Model Context Protocol, busca estandarizar cómo los modelos descubren y utilizan herramientas, recursos y prompts de diferentes sistemas.
+
+SECCIÓN 3 — FUNCTION CALLING
+
+El ciclo completo funciona de esta manera:
+
+Primero el usuario realiza una petición.
+
+Luego el modelo identifica que necesita una capacidad externa.
+
+Después genera una llamada estructurada con nombre y parámetros.
+
+La aplicación valida esa información.
+
+Si cumple las políticas, ejecuta la función.
+
+Finalmente devuelve el resultado al modelo para generar la respuesta final.
+
+El modelo nunca debería ejecutar directamente una acción sensible.
+
+SECCIÓN 4 — ESQUEMAS Y CONTRATOS
+
+Los esquemas permiten definir exactamente qué información necesita una herramienta.
+
+Un buen contrato establece:
+
+nombre claro;
+descripción precisa;
+tipos de datos;
+campos obligatorios;
+límites;
+permisos.
+
+Esto reduce errores y hace que los sistemas sean más previsibles.
+
+SECCIÓN 5 — MCP
+
+MCP aparece como una capa de interoperabilidad.
+
+En lugar de crear integraciones diferentes para cada modelo y cada aplicación, permite que los sistemas expongan capacidades mediante un protocolo común.
+
+Su arquitectura incluye:
+
+Host:
+la aplicación donde vive la experiencia del usuario.
+
+Cliente MCP:
+la conexión que permite comunicarse.
+
+Servidor MCP:
+el proveedor que ofrece herramientas, recursos o prompts.
+
+SECCIÓN 6 — TOOLS, RESOURCES Y PROMPTS
+
+MCP organiza tres capacidades principales.
+
+Tools:
+acciones que el sistema puede ejecutar.
+
+Resources:
+información que el modelo puede consultar.
+
+Prompts:
+plantillas reutilizables para tareas frecuentes.
+
+Esta separación ayuda a diseñar sistemas más ordenados.
+
+SECCIÓN 7 — SEGURIDAD Y GOBERNANZA
+
+Cuando una inteligencia artificial puede actuar, aparecen nuevos riesgos.
+
+Por eso debemos aplicar:
+
+validación de entradas;
+autorizaciones;
+mínimo privilegio;
+aprobación humana;
+registro de acciones;
+trazabilidad.
+
+Un agente profesional no solo debe ser inteligente.
+Debe ser controlable.
+
+SECCIÓN 8 — FUNCTION CALLING VS MCP
+
+Function calling es una técnica para conectar un modelo con funciones concretas.
+
+MCP es un protocolo más amplio para descubrir y gestionar capacidades.
+
+No son tecnologías enemigas.
+
+Pueden convivir dentro de una arquitectura profesional.
+
+SECCIÓN 9 — JSG AI ENGINEERING HUB v0.4
+
+En nuestro sistema de referencia, el flujo es:
+
+Modelo.
+Tool Router.
+Validación y políticas.
+Ejecución mediante API o MCP.
+Resultado.
+Trazabilidad.
+
+El objetivo no es darle más poder al modelo sin límites.
+
+El objetivo es construir una arquitectura donde la inteligencia pueda actuar de forma segura.
+
+CIERRE
+
+La idea esencial del módulo es:
+
+La inteligencia artificial aplicada no termina cuando el modelo responde.
+
+Comienza cuando puede interactuar con el mundo real mediante herramientas diseñadas, validadas y supervisadas.
+
+Las herramientas convierten un modelo en un componente de un sistema inteligente.

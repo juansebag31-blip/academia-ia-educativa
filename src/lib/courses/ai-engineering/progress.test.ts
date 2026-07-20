@@ -16,11 +16,14 @@ const units = aiEngineeringModuleOne.configuration.progressUnits;
 const moduleThreeSlug = "modulo-03-contexto-estado-memoria";
 const moduleThreeUnits = getAiEngineeringModule(moduleThreeSlug)?.configuration.progressUnits;
 if (!moduleThreeUnits) throw new Error("AI Engineering Module 3 progress units are unavailable.");
+const moduleFourSlug = "modulo-04-herramientas-apis-function-calling-mcp";
+const moduleFourUnits = getAiEngineeringModule(moduleFourSlug)?.configuration.progressUnits;
+if (!moduleFourUnits) throw new Error("AI Engineering Module 4 progress units are unavailable.");
 
 beforeEach(() => window.localStorage.clear());
 
 describe("AI Engineering module progress", () => {
-  it("isolates Module 1, Module 2 and Module 3 storage coordinates", () => {
+  it("isolates Module 1, Module 2, Module 3 and Module 4 storage coordinates", () => {
     const moduleOneKey = buildAiEngineeringUnitStorageKey({
       courseSlug,
       moduleSlug,
@@ -36,13 +39,17 @@ describe("AI Engineering module progress", () => {
       moduleSlug: "modulo-03-contexto-estado-memoria",
       unitId: "contenido",
     });
+    const moduleFourKey = buildAiEngineeringUnitStorageKey({
+      courseSlug,
+      moduleSlug: moduleFourSlug,
+      unitId: "contenido",
+    });
 
-    expect(moduleOneKey).not.toBe(moduleTwoKey);
-    expect(moduleOneKey).not.toBe(moduleThreeKey);
-    expect(moduleTwoKey).not.toBe(moduleThreeKey);
+    expect(new Set([moduleOneKey, moduleTwoKey, moduleThreeKey, moduleFourKey]).size).toBe(4);
     expect(moduleOneKey).toContain(encodeURIComponent(moduleSlug));
     expect(moduleTwoKey).toContain(encodeURIComponent("modulo-02-modelos-fundacionales-seleccion"));
     expect(moduleThreeKey).toContain(encodeURIComponent("modulo-03-contexto-estado-memoria"));
+    expect(moduleFourKey).toContain(encodeURIComponent(moduleFourSlug));
   });
 
   it("keeps a visited unit in progress until the student confirms completion", () => {
@@ -136,5 +143,33 @@ describe("AI Engineering module progress", () => {
       "modulo-02-modelos-fundacionales-seleccion",
       moduleThreeUnits,
     ).percentage).toBe(0);
+  });
+
+  it("allows Module 4 to reach 100% without changing other module progress", () => {
+    for (const unit of moduleFourUnits) {
+      if (unit.kind === "activity") {
+        writeAiEngineeringUnitState(
+          { courseSlug, moduleSlug: moduleFourSlug, unitId: unit.id },
+          { response: "Mapa", completed: true, status: "completed" },
+        );
+      } else if (unit.kind === "self-assessment") {
+        writeAiEngineeringUnitState(
+          { courseSlug, moduleSlug: moduleFourSlug, unitId: unit.id },
+          { responses: {}, reviewed: true, status: "completed" },
+        );
+      } else {
+        completeAiEngineeringStandardUnit(courseSlug, moduleFourSlug, unit.id);
+      }
+    }
+
+    expect(moduleFourUnits).toHaveLength(8);
+    expect(readAiEngineeringModuleProgress(courseSlug, moduleFourSlug, moduleFourUnits).percentage).toBe(100);
+    expect(readAiEngineeringModuleProgress(courseSlug, moduleSlug, units).percentage).toBe(0);
+    expect(readAiEngineeringModuleProgress(
+      courseSlug,
+      "modulo-02-modelos-fundacionales-seleccion",
+      moduleFourUnits,
+    ).percentage).toBe(0);
+    expect(readAiEngineeringModuleProgress(courseSlug, moduleThreeSlug, moduleThreeUnits).percentage).toBe(0);
   });
 });

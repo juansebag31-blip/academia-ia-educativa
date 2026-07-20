@@ -184,6 +184,12 @@
   width: max-content;
 }
 
+.content pre {
+  max-width: 100%;
+  overflow-wrap: normal;
+  overflow-x: auto;
+}
+
 .content th,
 .content td {
   border: 1px solid #cbd5e1;

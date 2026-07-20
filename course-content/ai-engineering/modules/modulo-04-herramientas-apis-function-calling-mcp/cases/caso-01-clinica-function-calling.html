@@ -1,0 +1,19 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Clínica: consultar disponibilidad sin reservar</title><style>
+:root{--navy:#0B1F33;--petrol:#0F766E;--ink:#172033;--line:#d8e5e2;--bg:#f3f7f6}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;line-height:1.7}
+header{padding:48px 24px;background:linear-gradient(135deg,var(--navy),#145d59);color:white}header div,main{max-width:980px;margin:auto}
+h1{font-size:clamp(2rem,5vw,4rem);line-height:1.08}main{background:white;margin:24px auto 70px;padding:clamp(24px,5vw,56px);border-radius:18px;box-shadow:0 12px 30px rgba(11,31,51,.1)}
+h2{color:var(--navy);margin-top:2em}.flow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:var(--navy);color:white;border-radius:14px;padding:16px}.flow span{background:#163a50;padding:9px 12px;border-radius:9px}.flow b{color:#78ddd5}
+.callout{border-left:5px solid var(--petrol);background:#eff9f7;border-radius:12px;padding:18px;margin:22px 0}.warning{border-left-color:#c74343;background:#fff2f2}
+table{width:100%;border-collapse:collapse;margin:20px 0}th,td{border:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}th{background:#eaf6f4}
+</style></head><body><header><div><p>AI Engineering Aplicado · Módulo 4 · Caso real</p><h1>Clínica: consultar disponibilidad sin reservar</h1></div></header><main>
+<p>El usuario solicita horarios para una resonancia y pide preparar un mensaje, pero no autoriza una reserva ni un envío.</p>
+<h2>Diseño de herramientas</h2>
+<table><tr><th>Herramienta</th><th>Efecto</th><th>Política</th></tr>
+<tr><td>buscar_disponibilidad</td><td>Lectura</td><td>Automática con permisos.</td></tr>
+<tr><td>crear_borrador_correo</td><td>Escritura reversible</td><td>Automática y auditable.</td></tr>
+<tr><td>reservar_turno</td><td>Acción externa</td><td>No utilizar sin confirmación.</td></tr>
+<tr><td>enviar_correo</td><td>Acción externa</td><td>Bloqueada hasta aprobación.</td></tr></table>
+<div class="flow"><span>Intención</span><b>→</b><span>Buscar</span><b>→</b><span>Validar</span><b>→</b><span>Crear borrador</span><b>→</b><span>Esperar aprobación</span></div>
+<div class="callout"><strong>Aprendizaje</strong>El sistema debe respetar el límite expresado por el usuario: preparar no significa ejecutar.</div>
+</main></body></html>

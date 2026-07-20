@@ -29,6 +29,7 @@ import {
 let prepared: PreparedAiEngineeringModule;
 let preparedModuleTwo: PreparedAiEngineeringModule;
 let preparedModuleThree: PreparedAiEngineeringModule;
+let preparedModuleFour: PreparedAiEngineeringModule;
 let fixtureRoot = "";
 let fixturePublicRoot = "";
 let fixtureManifest: AiEngineeringModuleManifest;
@@ -45,6 +46,10 @@ beforeAll(async () => {
     (module) => module.moduleSlug === "modulo-03-contexto-estado-memoria",
   ) as PreparedAiEngineeringModule;
   if (!preparedModuleThree) throw new Error("Prepared AI Engineering Module 3 is unavailable.");
+  preparedModuleFour = preparedModules.find(
+    (module) => module.moduleSlug === "modulo-04-herramientas-apis-function-calling-mcp",
+  ) as PreparedAiEngineeringModule;
+  if (!preparedModuleFour) throw new Error("Prepared AI Engineering Module 4 is unavailable.");
   fixtureRoot = await mkdtemp(path.join(tmpdir(), "ai-engineering-module-fixture-"));
   fixturePublicRoot = path.join(fixtureRoot, "public");
   fixtureManifest = await createValidPrivateFixture(fixtureRoot);
@@ -91,7 +96,14 @@ describe("AI Engineering course contract", () => {
       publish: true,
       manifestPath: "modules/modulo-03-contexto-estado-memoria/module-manifest.json",
     });
-    expect(aiEngineeringCourseManifest.modules.slice(3).every((module) => !module.publish)).toBe(true);
+    expect(aiEngineeringCourseManifest.modules[3]).toMatchObject({
+      editorialSlug: "modulo-04-herramientas-apis-function-calling-mcp",
+      publicSlug: "modulo-04-herramientas-apis-function-calling-mcp",
+      editorialStatus: "approved",
+      publish: true,
+      manifestPath: "modules/modulo-04-herramientas-apis-function-calling-mcp/module-manifest.json",
+    });
+    expect(aiEngineeringCourseManifest.modules.slice(4).every((module) => !module.publish)).toBe(true);
   });
 
   it("prepares and resolves Module 2 with all manifest-declared resources", () => {
@@ -120,6 +132,19 @@ describe("AI Engineering course contract", () => {
       "ai-engineering-aplicado",
       "modulo-03-contexto-estado-memoria",
     )?.summary.title).toBe("Contexto, estado y memoria");
+  });
+
+  it("prepares and resolves Module 4 with all manifest-declared resources", () => {
+    expect(preparedModuleFour.configuration.progressUnits).toHaveLength(8);
+    expect(preparedModuleFour.content.cases).toHaveLength(3);
+    expect(preparedModuleFour.presentation.slides).toHaveLength(21);
+    expect(preparedModuleFour.configuration.visuals).toHaveLength(5);
+    expect(preparedModuleFour.configuration.keyIdeas).toHaveLength(3);
+    expect(preparedModuleFour.configuration.content.selfAssessment.questionCount).toBe(12);
+    expect(resolveCourseModule(
+      "ai-engineering-aplicado",
+      "modulo-04-herramientas-apis-function-calling-mcp",
+    )?.summary.title).toBe("Herramientas, APIs, function calling y MCP");
   });
 
   it("keeps Module 1 public route and derives declared quantities", () => {
@@ -162,8 +187,8 @@ describe("AI Engineering manifest preparation", () => {
     expect(copiedNames.some((fileName) => fileName.toLowerCase().endsWith(".m4a"))).toBe(false);
   });
 
-  it("copies Modules 2 and 3 public assets while keeping their M4A sources private", async () => {
-    for (const preparedModule of [preparedModuleTwo, preparedModuleThree]) {
+  it("copies Modules 2, 3 and 4 public assets while keeping their M4A sources private", async () => {
+    for (const preparedModule of [preparedModuleTwo, preparedModuleThree, preparedModuleFour]) {
       const publicDirectory = path.join(
         projectRoot,
         "public",
