@@ -52,8 +52,10 @@
       "number": 6,
       "title": "Workflows y automatización",
       "editorialSlug": "modulo-06-workflows-automatizacion",
-      "editorialStatus": "draft",
-      "publish": false
+      "editorialStatus": "approved",
+      "publish": true,
+      "publicSlug": "modulo-06-workflows-automatizacion",
+      "manifestPath": "modules/modulo-06-workflows-automatizacion/module-manifest.json"
     },
     {
       "number": 7,

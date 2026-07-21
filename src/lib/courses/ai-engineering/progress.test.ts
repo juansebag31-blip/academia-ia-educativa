@@ -23,7 +23,7 @@ if (!moduleFourUnits) throw new Error("AI Engineering Module 4 progress units ar
 beforeEach(() => window.localStorage.clear());
 
 describe("AI Engineering module progress", () => {
-  it("isolates Module 1, Module 2, Module 3 and Module 4 storage coordinates", () => {
+  it("isolates Module 1 through Module 6 storage coordinates", () => {
     const moduleOneKey = buildAiEngineeringUnitStorageKey({
       courseSlug,
       moduleSlug,
@@ -44,12 +44,31 @@ describe("AI Engineering module progress", () => {
       moduleSlug: moduleFourSlug,
       unitId: "contenido",
     });
+    const moduleFiveKey = buildAiEngineeringUnitStorageKey({
+      courseSlug,
+      moduleSlug: "modulo-05-rag-sistemas-conocimiento",
+      unitId: "contenido",
+    });
+    const moduleSixKey = buildAiEngineeringUnitStorageKey({
+      courseSlug,
+      moduleSlug: "modulo-06-workflows-automatizacion",
+      unitId: "contenido",
+    });
 
-    expect(new Set([moduleOneKey, moduleTwoKey, moduleThreeKey, moduleFourKey]).size).toBe(4);
+    expect(new Set([
+      moduleOneKey,
+      moduleTwoKey,
+      moduleThreeKey,
+      moduleFourKey,
+      moduleFiveKey,
+      moduleSixKey,
+    ]).size).toBe(6);
     expect(moduleOneKey).toContain(encodeURIComponent(moduleSlug));
     expect(moduleTwoKey).toContain(encodeURIComponent("modulo-02-modelos-fundacionales-seleccion"));
     expect(moduleThreeKey).toContain(encodeURIComponent("modulo-03-contexto-estado-memoria"));
     expect(moduleFourKey).toContain(encodeURIComponent(moduleFourSlug));
+    expect(moduleFiveKey).toContain(encodeURIComponent("modulo-05-rag-sistemas-conocimiento"));
+    expect(moduleSixKey).toContain(encodeURIComponent("modulo-06-workflows-automatizacion"));
   });
 
   it("keeps a visited unit in progress until the student confirms completion", () => {

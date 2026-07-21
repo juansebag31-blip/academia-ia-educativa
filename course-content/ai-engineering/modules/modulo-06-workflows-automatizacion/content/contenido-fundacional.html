@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Módulo 6 de AI Engineering Aplicado: workflows y automatización con control, estado, resiliencia y supervisión humana." name="description"/>
+<title>Módulo 6 — Workflows y automatización</title>
+<style>
+:root{--navy:#0B1F33;--petrol:#0F766E;--ink:#172033;--muted:#5d687b;--line:#d8e5e2;--bg:#f3f7f6;--red:#c74343;--green:#0b8f64;--violet:#6d45c8}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,"Segoe UI",Arial,sans-serif;line-height:1.72}
+.cover{min-height:90vh;padding:70px 7vw;display:flex;align-items:center;background:radial-gradient(circle at 82% 20%,rgba(27,184,179,.22),transparent 25%),linear-gradient(135deg,var(--navy),#123a4b 67%,#145d59);color:#fff}
+.cover>div{max-width:1100px}.kicker{display:inline-block;border:1px solid #ffffff55;border-radius:999px;padding:7px 14px;letter-spacing:.08em;font-weight:800;text-transform:uppercase}
+h1{font-size:clamp(2.8rem,7vw,5.7rem);line-height:1.02;margin:.28em 0}.cover p{font-size:1.25rem;color:#dbeff0;max-width:900px}.meta{display:flex;gap:10px;flex-wrap:wrap}.meta span{padding:9px 12px;border:1px solid #ffffff44;border-radius:10px;background:#ffffff14}
+.layout{display:grid;grid-template-columns:300px minmax(0,940px);gap:34px;max-width:1320px;margin:auto;padding:34px 24px 90px}aside{position:sticky;top:18px;align-self:start;background:var(--navy);border-radius:18px;padding:20px;max-height:94vh;overflow:auto}aside a{display:block;color:#dce9f0;text-decoration:none;padding:7px 0;border-bottom:1px solid #ffffff16;font-size:.89rem}
+main{background:#fff;border-radius:20px;padding:clamp(24px,5vw,62px);box-shadow:0 12px 35px #0e274b1a}h2{font-size:2rem;color:var(--navy);margin:2.15em 0 .55em;line-height:1.2}h3{color:#16324a;margin-top:1.55em}
+.lead{font-size:1.13rem;color:#36445a}.callout,.warning,.decision,.case,.interview{border-left:5px solid var(--petrol);background:#eff9f7;padding:18px 20px;border-radius:12px;margin:22px 0}.warning{border-color:var(--red);background:#fff2f2}.decision{border-color:#c96a00;background:#fff7ec}.case{border-color:var(--green);background:#effaf6}.interview{border-color:var(--violet);background:#f6f2ff}
+.flow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:var(--navy);color:#fff;padding:16px;border-radius:13px;margin:18px 0}.flow span{background:#163a50;border:1px solid #2c6370;padding:9px 12px;border-radius:9px}.flow b{color:#78ddd5}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.94rem}th,td{border:1px solid var(--line);padding:12px;vertical-align:top}th{background:#eaf6f4;text-align:left}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{border:1px solid var(--line);background:#f8fbfa;padding:17px;border-radius:12px}.card strong{display:block;color:var(--petrol)}
+li{margin:.4rem 0}.small{color:var(--muted);font-size:.9rem}.footer{margin-top:50px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted)}
+@media(max-width:900px){.layout{grid-template-columns:1fr}aside{position:relative;max-height:none}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="cover"><div>
+<span class="kicker">AI Engineering Aplicado · Módulo 6</span>
+<h1>Workflows y automatización</h1>
+<p>Cómo convertir capacidades de IA en procesos repetibles, auditables y resistentes a fallos mediante disparadores, contratos, estado, reglas y supervisión humana.</p>
+<div class="meta">
+<span>Versión 0.9</span>
+<span>Nivel intermedio</span>
+<span>Lectura: 95–120 min</span>
+<span>JSG Hub v0.6</span>
+</div>
+</div></header>
+<div class="layout">
+<aside><a href="#proposito">1. De una acción aislada a un sistema operativo</a><a href="#objetivos">2. Qué podrá hacer el estudiante</a><a href="#frontera">3. Automatización, workflow y agente no son lo mismo</a><a href="#arquitectura">4. Siete piezas que deben verse</a><a href="#disparadores">5. El disparador define el ritmo</a><a href="#contratos">6. Sin contrato, el flujo se vuelve frágil</a><a href="#resiliencia">7. Diseñar para que algo falle</a><a href="#human-loop">8. La intervención humana es una capacidad</a><a href="#caso">9. Clasificación y resolución de solicitudes</a><a href="#patrones">10. Formas recurrentes de organizar el flujo</a><a href="#herramientas">11. Primero el problema, después la plataforma</a><a href="#errores">12. Lo que hace frágil una automatización</a><a href="#canvas">13. JSG AI Engineering Hub v0.6</a><a href="#unidades">14. Ocho unidades de progreso</a><a href="#actividad">15. Diseñar antes de automatizar</a><a href="#checklist">16. ¿Está listo para automatizarse?</a><a href="#autoevaluacion">17. Autoevaluación</a><a href="#fuentes">18. Documentación original y navegable</a></aside>
+<main>
+<section id="proposito">
+<div>
+Propósito
+<h2>1. De una acción aislada a un sistema operativo</h2>
+</div>
+<p class="section-intro">
+            Una llamada a un modelo puede producir una respuesta útil. Un workflow convierte esa capacidad
+            en un proceso repetible: sabe cuándo empezar, qué datos aceptar, qué pasos ejecutar, cómo reaccionar
+            ante errores y cuándo detenerse para solicitar aprobación.
+          </p>
+<div class="callout">
+<strong>Workflow:</strong> definición explícita de una secuencia de tareas y decisiones que transforma
+          una entrada en un resultado verificable. Puede incluir pasos deterministas, servicios externos y uno o
+          más pasos de IA, pero el control general del proceso permanece diseñado por el sistema.
+        </div>
+</section><section id="objetivos">
+<div>
+Resultados de aprendizaje
+<h2>2. Qué podrá hacer el estudiante</h2>
+</div>
+<p class="section-intro">
+            El foco no está en aprender una plataforma concreta, sino en adquirir decisiones de arquitectura
+            transferibles a herramientas visuales, código, servicios cloud y motores de ejecución durable.
+          </p>
+<div class="grid">
+<article class="card">1<h3>Modelar</h3><p>Representar un proceso como disparadores, tareas, decisiones, dependencias, estados y resultados.</p></article>
+<article class="card">2<h3>Integrar IA</h3><p>Insertar un modelo en pasos acotados, con entradas y salidas estructuradas, sin delegarle todo el control.</p></article>
+<article class="card">3<h3>Automatizar</h3><p>Elegir entre horarios, webhooks, eventos, colas y ejecución manual según la naturaleza del proceso.</p></article>
+<article class="card">4<h3>Fortalecer</h3><p>Diseñar reintentos, timeouts, idempotencia, compensaciones y rutas de error para evitar daños y duplicados.</p></article>
+<article class="card">5<h3>Supervisar</h3><p>Introducir aprobaciones humanas, umbrales de confianza y escalamiento cuando la decisión sea sensible.</p></article>
+<article class="card">6<h3>Operar</h3><p>Registrar estados, correlacionar ejecuciones y comprobar que cada resultado pueda reconstruirse y explicarse.</p></article>
+</div>
+</section><section id="frontera">
+<div>
+Distinción esencial
+<h2>3. Automatización, workflow y agente no son lo mismo</h2>
+</div>
+<p class="section-intro">
+            La diferencia principal es quién decide el siguiente paso. En un workflow, la ruta está definida por
+            código, reglas o un grafo. En un agente, el modelo dispone de mayor autonomía para planificar y elegir acciones.
+          </p>
+<div class="comparison-wrap">
+<table>
+<thead>
+<tr>
+<th>Patrón</th>
+<th>Control del flujo</th>
+<th>Variabilidad</th>
+<th>Uso de IA</th>
+<th>Cuándo conviene</th>
+<th>Riesgo principal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Automatización puntual</strong></td>
+<td>Una regla o acción</td>
+<td>Baja</td>
+<td>Opcional</td>
+<td>Tareas simples y repetitivas</td>
+<td>Crecer sin estructura</td>
+</tr>
+<tr>
+<td><strong>Workflow determinista</strong></td>
+<td>Reglas, código o grafo</td>
+<td>Controlada</td>
+<td>No necesaria</td>
+<td>Procesos auditables y predecibles</td>
+<td>Rigidez frente a casos nuevos</td>
+</tr>
+<tr>
+<td><strong>Workflow aumentado con IA</strong></td>
+<td>El sistema controla; la IA resuelve pasos acotados</td>
+<td>Moderada</td>
+<td>Clasificación, extracción, generación o evaluación</td>
+<td>Procesos variables con límites claros</td>
+<td>Confiar en texto libre sin validación</td>
+</tr>
+<tr>
+<td><strong>Agente</strong></td>
+<td>El modelo planifica o selecciona acciones</td>
+<td>Alta</td>
+<td>Central</td>
+<td>Objetivos abiertos y caminos no anticipados</td>
+<td>Autonomía excesiva o difícil de gobernar</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section><section id="arquitectura">
+<div>
+Arquitectura mínima
+<h2>4. Siete piezas que deben verse</h2>
+</div>
+<p class="section-intro">
+            Hacer visible la estructura reduce errores de diseño. Cada ejecución necesita identidad, contexto,
+            estado y una política explícita para continuar, reintentar, compensar, escalar o finalizar.
+          </p>
+<div aria-label="Arquitectura de un workflow con IA" class="grid">
+<div class="card">⚡<strong>Disparador</strong><small>Evento, horario, webhook o acción manual.</small></div>
+<div class="card">▣<strong>Validación</strong><small>Contrato, esquema, permisos y deduplicación.</small></div>
+<div class="card">◇<strong>Enrutamiento</strong><small>Reglas que seleccionan la ruta.</small></div>
+<div class="card">✦<strong>Paso de IA</strong><small>Tarea acotada con salida estructurada.</small></div>
+<div class="card">☝<strong>Aprobación</strong><small>Intervención humana cuando corresponde.</small></div>
+<div class="card">↗<strong>Acción</strong><small>API, base de datos, mensaje o sistema externo.</small></div>
+<div class="card">✓<strong>Registro</strong><small>Resultado, métricas, estado final y evidencia.</small></div>
+</div>
+</section><section id="disparadores">
+<div>
+Entrada al sistema
+<h2>5. El disparador define el ritmo</h2>
+</div>
+<p class="section-intro">
+            Un workflow no comienza “porque sí”. Su disparador establece latencia, volumen, contexto disponible,
+            tolerancia a duplicados y expectativas operativas.
+          </p>
+<div class="grid">
+<article class="card"><h3>Horario</h3><p>Ejecución periódica: reportes, sincronizaciones, mantenimiento o lotes.</p>cron / scheduler</article>
+<article class="card"><h3>Webhook</h3><p>Una petición HTTP inicia el flujo casi en tiempo real desde otra aplicación.</p>request / callback</article>
+<article class="card"><h3>Evento</h3><p>Un hecho del dominio —pedido creado, archivo subido, ticket abierto— publica una señal.</p>event-driven</article>
+<article class="card"><h3>Manual</h3><p>Una persona inicia o reanuda el proceso, útil en operaciones sensibles o excepcionales.</p>human initiated</article>
+</div>
+</section><section id="ia-controlada">
+<div id="contratos">
+Datos y estado
+<h2>6. Sin contrato, el flujo se vuelve frágil</h2>
+</div>
+<p class="section-intro">
+            Cada frontera entre pasos debe especificar qué recibe, qué produce, cómo identifica la ejecución y qué
+            información persiste. La salida de un modelo no debe circular como texto ambiguo cuando el siguiente paso
+            necesita una decisión operativa.
+          </p>
+<div class="grid">
+<article class="decision">
+<h3>Contrato de datos</h3>
+<ul class="checklist">
+<li>Esquema y tipos de entrada.</li>
+<li>Campos obligatorios y valores permitidos.</li>
+<li>Versión del contrato.</li>
+<li>Salida estructurada y validable.</li>
+<li>Tratamiento explícito de datos incompletos.</li>
+</ul>
+</article>
+<article class="case">
+<h3>Estado de ejecución</h3>
+<ul class="checklist">
+<li>Identificador único y clave de correlación.</li>
+<li>Paso actual y pasos ya completados.</li>
+<li>Intentos, errores y tiempos.</li>
+<li>Decisiones humanas o automáticas.</li>
+<li>Resultado final y evidencia asociada.</li>
+</ul>
+</article>
+</div>
+</section><section id="resiliencia">
+<div>
+Resiliencia
+<h2>7. Diseñar para que algo falle</h2>
+</div>
+<p class="section-intro">
+            APIs, redes, modelos y servicios externos fallan. Un workflow de producción no evita todos los errores:
+            los contiene, conserva el progreso y decide de forma segura qué hacer después.
+          </p>
+<div class="grid">
+<article class="card"><h3>Timeout</h3><p>Limita cuánto puede esperar un paso antes de considerarlo bloqueado o fallido.</p></article>
+<article class="card"><h3>Retry + backoff</h3><p>Reintenta fallos transitorios con pausas crecientes y un máximo definido.</p></article>
+<article class="card" id="idempotencia"><h3>Idempotencia</h3><p>Permite repetir una operación sin duplicar cobros, mensajes, registros o recursos.</p></article>
+<article class="card"><h3>Ruta de error</h3><p>Desvía el caso a una salida controlada, alerta o cola de revisión.</p></article>
+<article class="card"><h3>Compensación</h3><p>Revierte o neutraliza pasos ya completados cuando no existe una transacción global.</p></article>
+<article class="card"><h3>Reanudación</h3><p>Continúa desde un punto seguro en lugar de reiniciar todo el proceso.</p></article>
+</div>
+</section><section id="human-loop">
+<div>
+Human in the loop
+<h2>8. La intervención humana es una capacidad</h2>
+</div>
+<p class="section-intro">
+            Supervisar no significa revisar todo. Significa diseñar reglas claras para que una persona intervenga
+            cuando el impacto, la incertidumbre o la excepción superan el límite aceptable.
+          </p>
+<div class="grid">
+<div class="card">
+<h3>Automatizar</h3>
+<p>Casos rutinarios, reversibles, de bajo impacto y con datos suficientes.</p>
+</div>
+⇄
+<div class="card">
+<h3>Escalar</h3>
+<p>Baja confianza, conflicto de reglas, impacto económico, acción irreversible o información sensible.</p>
+</div>
+</div>
+<div class="grid">
+<article class="card"><h3>Aprobación previa</h3><p>El workflow prepara la acción, pero espera autorización antes de ejecutarla.</p></article>
+<article class="card"><h3>Fallback humano</h3><p>Una persona toma el caso cuando la automatización no puede resolverlo con seguridad.</p></article>
+<article class="card"><h3>Revisión posterior</h3><p>Se audita una muestra o todos los casos de alto riesgo después de la ejecución.</p></article>
+</div>
+</section><section id="caso">
+<div>
+Caso conductor
+<h2>9. Clasificación y resolución de solicitudes</h2>
+</div>
+<p class="section-intro">
+            Un mismo caso acompañará el módulo para mostrar cómo una necesidad de negocio se convierte en un workflow
+            con IA, sin saltar directamente a un agente autónomo.
+          </p>
+<div class="grid">
+<article class="decision">
+<h3>Flujo propuesto</h3>
+<ol>
+<li>Recibir una solicitud desde formulario o correo.</li>
+<li>Validar identidad, campos obligatorios y consentimiento.</li>
+<li>Deduplicar mediante una clave idempotente.</li>
+<li>Clasificar intención, urgencia y sensibilidad con IA.</li>
+<li>Validar la salida contra un esquema.</li>
+<li>Aplicar reglas de enrutamiento y umbral de confianza.</li>
+<li>Resolver automáticamente o solicitar revisión humana.</li>
+<li>Registrar resultado, tiempos, evidencia y notificación.</li>
+</ol>
+</article>
+<article class="case">
+<h3>Controles incorporados</h3>
+<ul class="checklist">
+<li>La IA no ejecuta acciones externas directamente.</li>
+<li>Las categorías válidas están cerradas.</li>
+<li>Las decisiones de alto impacto requieren aprobación.</li>
+<li>Cada acción usa clave de correlación e idempotencia.</li>
+<li>Los errores transitorios se reintentan; los permanentes se escalan.</li>
+<li>La ejecución conserva un registro reconstruible.</li>
+</ul>
+</article>
+</div>
+</section><section id="orquestacion">
+<div id="patrones">
+Patrones
+<h2>10. Formas recurrentes de organizar el flujo</h2>
+</div>
+<p class="section-intro">
+            Los motores cambian, pero los patrones permanecen. Reconocerlos permite diseñar antes de elegir herramienta.
+          </p>
+<div class="grid">
+<article class="card"><h3>Secuencia</h3><p>Un paso produce la entrada del siguiente. Útil cuando existe dependencia estricta.</p></article>
+<article class="card"><h3>Decisión</h3><p>Una regla o condición selecciona una rama según datos validados.</p></article>
+<article class="card"><h3>Paralelo</h3><p>Varias tareas independientes se ejecutan simultáneamente y luego se reúnen.</p></article>
+<article class="card"><h3>Fan-out / fan-in</h3><p>Se divide un conjunto en unidades, se procesan en paralelo y se agregan resultados.</p></article>
+<article class="card"><h3>Espera y callback</h3><p>El flujo se suspende hasta recibir una respuesta externa o aprobación.</p></article>
+<article class="card"><h3>Saga</h3><p>Una secuencia de operaciones distribuidas incorpora acciones compensatorias.</p></article>
+</div>
+</section><section id="herramientas">
+<div>
+Elección tecnológica
+<h2>11. Primero el problema, después la plataforma</h2>
+</div>
+<p class="section-intro">
+            La herramienta correcta depende de duración, volumen, criticidad, necesidad de estado, perfil del equipo,
+            integración con sistemas existentes y nivel de auditoría requerido.
+          </p>
+<div class="comparison-wrap">
+<table>
+<thead>
+<tr><th>Familia</th><th>Fortaleza</th><th>Conviene cuando</th><th>Atención</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Low-code / visual</strong></td><td>Velocidad e integración</td><td>El flujo es visible, conectivo y cambia con frecuencia</td><td>Control de versiones, pruebas y secretos</td></tr>
+<tr><td><strong>Workflows como código</strong></td><td>Flexibilidad y revisión técnica</td><td>El equipo necesita lógica compleja, repositorio y CI/CD</td><td>Disciplina operativa y mantenibilidad</td></tr>
+<tr><td><strong>Orquestadores de datos</strong></td><td>Dependencias y programación de lotes</td><td>Predominan pipelines periódicos y tareas de datos</td><td>No confundir lote con interacción en tiempo real</td></tr>
+<tr><td><strong>Motores durables</strong></td><td>Estado y recuperación prolongada</td><td>El proceso dura mucho, espera eventos o no puede perder progreso</td><td>Determinismo, versionado y complejidad inicial</td></tr>
+<tr><td><strong>State machines cloud</strong></td><td>Integración administrada</td><td>La arquitectura ya vive en un ecosistema cloud concreto</td><td>Acoplamiento, límites y costes por transición</td></tr>
+</tbody>
+</table>
+</div>
+</section><section id="errores">
+<div>
+Antipatrones
+<h2>12. Lo que hace frágil una automatización</h2>
+</div>
+<p class="section-intro">
+            La mayoría de los problemas no aparecen en la demostración feliz, sino en duplicados, reintentos,
+            cambios de esquema, permisos, concurrencia y acciones irreversibles.
+          </p>
+<div class="grid">
+<article class="warning"><h3>“Prompt y acción”</h3><p>Usar texto libre del modelo como orden directa para un sistema externo.</p></article>
+<article class="warning"><h3>Sin identidad</h3><p>No disponer de un identificador que conecte evento, ejecución, acciones y resultado.</p></article>
+<article class="warning"><h3>Retry indiscriminado</h3><p>Repetir operaciones no idempotentes y provocar efectos duplicados.</p></article>
+<article class="warning"><h3>Workflow monolítico</h3><p>Concentrar toda la lógica en un único paso difícil de probar, reanudar y observar.</p></article>
+<article class="warning"><h3>Sin ruta de excepción</h3><p>Asumir que todos los casos caben en la ruta principal.</p></article>
+<article class="warning"><h3>Automatizar el riesgo</h3><p>Eliminar la revisión humana precisamente donde el impacto es mayor.</p></article>
+</div>
+</section><section id="canvas">
+<h2>13. JSG AI Engineering Hub v0.6</h2>
+<table>
+<tr><th>Componente</th><th>Responsabilidad</th></tr>
+<tr><td>Trigger gateway</td><td>Recibe horarios, webhooks, eventos o acciones manuales.</td></tr>
+<tr><td>Contract validator</td><td>Valida esquema, permisos, versión y deduplicación.</td></tr>
+<tr><td>Workflow orchestrator</td><td>Coordina rutas, dependencias, pausas y finalización.</td></tr>
+<tr><td>State store</td><td>Persiste ejecución, checkpoints, intentos y correlación.</td></tr>
+<tr><td>AI task runner</td><td>Ejecuta pasos de IA con entradas y salidas estructuradas.</td></tr>
+<tr><td>Policy engine</td><td>Aplica reglas, umbrales y condiciones de escalamiento.</td></tr>
+<tr><td>Human approval service</td><td>Gestiona aprobación, fallback y revisión.</td></tr>
+<tr><td>Action executor</td><td>Realiza operaciones externas de forma idempotente.</td></tr>
+<tr><td>Recovery layer</td><td>Gestiona timeout, retry, backoff, reanudación y compensación.</td></tr>
+<tr><td>Execution ledger</td><td>Conserva trazas, resultados y evidencia operativa.</td></tr>
+</table>
+</section><section id="unidades">
+<div>
+Estructura pedagógica
+<h2>14. Ocho unidades de progreso</h2>
+</div>
+<p class="section-intro">
+            La secuencia avanza desde el modelo mental hasta el diseño operativo de un workflow con IA listo para evaluación.
+          </p>
+<div class="grid">
+<article class="card"><h3>De tarea a workflow</h3><p>Automatización, orquestación, ejecución y frontera con agentes.</p></article>
+<article class="card"><h3>Anatomía del proceso</h3><p>Disparadores, tareas, decisiones, dependencias, entradas, salidas y estado.</p></article>
+<article class="card"><h3>IA como paso controlado</h3><p>Salidas estructuradas, validación, confianza y rutas deterministas.</p></article>
+<article class="card"><h3>Eventos y activación</h3><p>Horarios, webhooks, eventos, colas, correlación y contratos interoperables.</p></article>
+<article class="card"><h3>Resiliencia operativa</h3><p>Timeouts, retries, backoff, idempotencia, reanudación y compensación.</p></article>
+<article class="card"><h3>Human in the loop</h3><p>Aprobación, fallback, escalamiento y diseño de excepciones.</p></article>
+<article class="card"><h3>Orquestadores y criterios</h3><p>Low-code, código, DAG, state machine y ejecución durable.</p></article>
+<article class="card"><h3>Diseño de producción</h3><p>Caso completo, checklist, evidencia y criterios de calidad.</p></article>
+</div>
+</section><section id="actividad">
+<div>
+Actividad abierta
+<h2>15. Diseñar antes de automatizar</h2>
+</div>
+<p class="section-intro">
+            El estudiante transformará un proceso real en un workflow auditable, identificando tanto la ruta feliz
+            como los fallos, duplicados, excepciones y decisiones que requieren supervisión.
+          </p>
+<div class="grid">
+<article class="decision">
+<h3>Consigna</h3>
+<p>Seleccione un proceso repetitivo de su contexto personal, profesional o comunitario. Dibuje su workflow y documente:</p>
+<ol>
+<li>disparador y objetivo;</li>
+<li>entradas y contrato;</li>
+<li>pasos deterministas y paso de IA;</li>
+<li>estado y clave de correlación;</li>
+<li>reglas de decisión;</li>
+<li>fallos y políticas de recuperación;</li>
+<li>puntos de aprobación humana;</li>
+<li>resultado y evidencia de finalización.</li>
+</ol>
+</article>
+<article class="case">
+<h3>Criterios de calidad</h3>
+<ul class="checklist">
+<li>La IA resuelve una tarea delimitada.</li>
+<li>Las entradas y salidas son verificables.</li>
+<li>Los duplicados no generan efectos repetidos.</li>
+<li>Existe una ruta de error.</li>
+<li>Las acciones sensibles tienen supervisión.</li>
+<li>La ejecución puede reconstruirse.</li>
+</ul>
+</article>
+</div>
+</section><section id="checklist">
+<div>
+Checklist final
+<h2>16. ¿Está listo para automatizarse?</h2>
+</div>
+<p class="section-intro">
+            Antes de conectar herramientas, el diseño debe responder estas preguntas sin depender de supuestos implícitos.
+          </p>
+<div class="grid">
+<article class="card"><h3>Propósito</h3><ul class="checklist"><li>Objetivo medible</li><li>Inicio y final claros</li><li>Responsable identificado</li></ul></article>
+<article class="card"><h3>Datos</h3><ul class="checklist"><li>Contrato versionado</li><li>Validación</li><li>Privacidad y permisos</li></ul></article>
+<article class="card"><h3>Control</h3><ul class="checklist"><li>Rutas explícitas</li><li>Umbrales</li><li>Aprobaciones</li></ul></article>
+<article class="card"><h3>Resiliencia</h3><ul class="checklist"><li>Timeout</li><li>Retry selectivo</li><li>Idempotencia</li></ul></article>
+<article class="card"><h3>Operación</h3><ul class="checklist"><li>Estado persistente</li><li>Correlación</li><li>Alertas y evidencia</li></ul></article>
+<article class="card"><h3>Evolución</h3><ul class="checklist"><li>Versionado</li><li>Pruebas</li><li>Rollback o compensación</li></ul></article>
+</div>
+</section><section id="autoevaluacion">
+<h2>17. Autoevaluación</h2>
+<ol>
+<li>¿Qué diferencia existe entre una automatización puntual y un workflow?</li>
+<li>¿Quién controla el siguiente paso en un workflow determinista?</li>
+<li>¿Qué elementos mínimos debe conservar el estado de una ejecución?</li>
+<li>¿Por qué una salida estructurada es preferible al texto libre?</li>
+<li>¿Qué diferencia hay entre timeout y retry?</li>
+<li>¿Qué problema resuelve la idempotencia?</li>
+<li>¿Cuándo se necesita una acción compensatoria?</li>
+<li>¿Qué significa que un workflow sea durable?</li>
+<li>¿Cuándo debe intervenir una persona?</li>
+<li>¿Qué aporta una clave de correlación?</li>
+<li>¿Qué diferencia existe entre un DAG y una máquina de estado?</li>
+<li>¿Qué evidencia debe conservarse para auditar una ejecución?</li>
+</ol>
+</section><section id="fuentes">
+<div>
+Fuentes primarias
+<h2>18. Documentación original y navegable</h2>
+</div>
+<p class="section-intro">
+            Selección consultada el 20 de julio de 2026. Se utilizan fuentes oficiales para construir principios
+            transferibles, no para convertir el módulo en un tutorial de una plataforma específica.
+          </p>
+<ol class="source-list">
+<li><strong>OpenAI Agents SDK — Agent orchestration</strong><span>Diferencia entre orquestación decidida por el modelo y orquestación definida por código.</span><a href="https://openai.github.io/openai-agents-python/multi_agent/" rel="noopener noreferrer" target="_blank">Abrir fuente oficial</a></li>
+<li><strong>OpenAI Agents SDK — Examples</strong><span>Patrones de workflows deterministas, ejecución paralela, routing y human in the loop.</span><a href="https://openai.github.io/openai-agents-python/examples/" rel="noopener noreferrer" target="_blank">Abrir fuente oficial</a></li>
+<li><strong>Temporal — Workflows</strong><span>Definición, ejecución, historial de eventos, replay y recuperación de workflows durables.</span><a href="https://docs.temporal.io/workflows" rel="noopener noreferrer" target="_blank">Abrir fuente oficial</a></li>
+<li><strong>Temporal Python SDK — Error handling</strong><span>Idempotencia, modelo at-least-once, reintentos y compensación.</span><a href="https://docs.temporal.io/develop/python/best-practices/error-handling" rel="noopener noreferrer" target="_blank">Abrir fuente oficial</a></li>
+<li><strong>AWS Step Functions — What is Step Functions?</strong><span>Workflows como máquinas de estado, tareas, decisiones, ejecución y procesos con interacción humana.</span><a href="https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html" rel="noopener noreferrer" target="_blank">Abrir fuente oficial</a></li>
+<li><strong>AWS Step Functions — Error handling</strong><span>Retry, backoff, catchers y rutas de fallback.</span><a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-error-handling.html" rel="noopener noreferrer" target="_blank">Abrir fuente oficial</a></li>
+<li><strong>Apache Airflow — DAGs</strong><span>Scheduling, tareas, dependencias, callbacks, reintentos y timeouts.</span><a href="https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html" rel="noopener noreferrer" target="_blank">Abrir fuente oficial</a></li>
+<li><strong>Prefect — Flows</strong><span>Composición de flows y tasks, estados, retries, timeouts y granularidad operativa.</span><a href="https://docs.prefect.io/v3/concepts/flows" rel="noopener noreferrer" target="_blank">Abrir fuente oficial</a></li>
+<li><strong>GitHub Actions — Workflows</strong><span>Modelo simple de eventos, jobs, steps, ejecución manual y programación.</span><a href="https://docs.github.com/en/actions/concepts/workflows-and-actions/workflows" rel="noopener noreferrer" target="_blank">Abrir fuente oficial</a></li>
+<li><strong>CloudEvents Specification</strong><span>Formato neutral para describir eventos e interoperar entre servicios, plataformas y sistemas.</span><a href="https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md" rel="noopener noreferrer" target="_blank">Abrir fuente oficial</a></li>
+<li><strong>n8n — Human in the loop for tools</strong><span>Aprobación humana antes de ejecutar herramientas dentro de workflows con IA.</span><a href="https://docs.n8n.io/build/integrate-ai/ai-examples/human-in-the-loop-for-tools/" rel="noopener noreferrer" target="_blank">Abrir fuente oficial</a></li>
+<li><strong>n8n — Human fallback for AI workflows</strong><span>Escalamiento a una persona cuando la automatización no resuelve el caso.</span><a href="https://docs.n8n.io/build/integrate-ai/ai-examples/set-a-human-fallback-for-ai-workflows/" rel="noopener noreferrer" target="_blank">Abrir fuente oficial</a></li>
+</ol>
+</section>
+<div class="footer"><strong>AI Engineering Aplicado — Módulo 6</strong><br/>Documento fundacional · 20 de julio de 2026.</div>
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,151 @@
+# Guion sincronizado de la infografía — Módulo 6
+
+Título: Workflows y automatización
+Duración objetivo del audio: 16–19 minutos
+Tono: profesional, claro, didáctico y conversacional
+Audiencia: estudiantes de nivel intermedio de AI Engineering
+
+## 0:00–1:10 — Apertura y pregunta central
+Presentar el módulo como el paso que convierte una capacidad aislada de IA en un proceso repetible, auditable y gobernado.
+
+Pregunta central:
+¿Cómo convertir una capacidad de IA en un proceso confiable, repetible y gobernado, sin delegar todo el control al modelo?
+
+Idea clave:
+Un workflow profesional define explícitamente disparadores, pasos, reglas, estado, errores y supervisión humana.
+
+## 1:10–2:40 — Automatización, workflow y agente
+Explicar la diferencia entre:
+- automatización puntual;
+- workflow con IA;
+- agente.
+
+Automatización puntual:
+una regla o acción aislada, con baja variabilidad.
+
+Workflow con IA:
+el sistema controla el recorrido; la IA aparece en pasos acotados.
+
+Agente:
+el modelo puede decidir, planificar o seleccionar acciones con mayor autonomía.
+
+Aclaración pedagógica:
+este módulo se concentra en workflows. La autonomía abierta se abordará en el Módulo 7.
+
+## 2:40–4:15 — Arquitectura básica del workflow
+Recorrer la secuencia:
+Disparador → Validación → Enrutamiento → Paso de IA → Aprobación → Acción → Registro.
+
+Plano de control:
+reglas, rutas, umbrales, políticas de error y finalización.
+
+Plano de ejecución:
+tareas, herramientas, estado y evidencia.
+
+Destacar que una salida del modelo no debe convertirse directamente en una acción irreversible.
+
+## 4:15–6:20 — Componentes esenciales
+Explicar:
+- disparadores;
+- contratos;
+- estado;
+- orquestación;
+- paso de IA;
+- aprobación humana;
+- evidencia operativa.
+
+Subrayar que cada ejecución necesita identidad, contexto, estado y trazabilidad.
+
+Ejemplo:
+una solicitud entra por formulario, se valida, se clasifica con IA, se enruta, puede requerir aprobación y finalmente ejecuta una acción registrada.
+
+## 6:20–7:45 — Patrones recurrentes
+Explicar brevemente:
+- secuencia;
+- decisión;
+- paralelo;
+- fan-out/fan-in;
+- espera y callback;
+- saga o compensación.
+
+Mostrar que los patrones sobreviven al cambio de herramientas.
+
+## 7:45–10:20 — Resiliencia operativa
+Introducir:
+- timeout;
+- retry;
+- backoff;
+- idempotencia;
+- reanudación;
+- recuperación.
+
+Explicar que no se diseña para evitar todos los fallos, sino para contenerlos y recuperarse sin perder control ni duplicar efectos.
+
+Ejemplo:
+reintentar una clasificación es seguro; reintentar un cobro sin clave idempotente puede duplicar el cargo.
+
+## 10:20–11:50 — Human in the loop
+Explicar tres patrones:
+- aprobación previa;
+- fallback humano;
+- revisión posterior.
+
+Criterios de escalamiento:
+- baja confianza;
+- conflicto de reglas;
+- impacto económico;
+- acción irreversible;
+- información sensible.
+
+Mensaje:
+la intervención humana no es una falla del sistema, sino una capacidad diseñada.
+
+## 11:50–13:50 — Caso aplicado
+Caso:
+clasificación y resolución de solicitudes.
+
+Flujo:
+entrada → validación → deduplicación → clasificación con IA → reglas → aprobación si hace falta → acción → evidencia.
+
+Aprendizaje:
+la IA resuelve una tarea concreta dentro de un sistema gobernado.
+
+## 13:50–15:25 — JSG AI Engineering Hub v0.6
+Presentar los componentes:
+- Trigger Gateway;
+- Contract Validator;
+- Workflow Orchestrator;
+- State Store;
+- AI Task Runner;
+- Policy Engine;
+- Human Approval Service;
+- Action Executor;
+- Recovery Layer;
+- Execution Ledger.
+
+Explicar cómo esta versión amplía el Hub de los módulos anteriores.
+
+## 15:25–16:45 — Antipatrones y checklist
+Antipatrones:
+- texto libre como orden directa;
+- no conservar estado;
+- reintentar acciones no idempotentes;
+- diseñar solo la ruta feliz;
+- eliminar supervisión donde hay riesgo.
+
+Checklist:
+- disparador definido;
+- contratos claros;
+- estado persistente;
+- salidas estructuradas;
+- reglas y umbrales;
+- manejo de errores;
+- supervisión humana;
+- evidencia y trazabilidad.
+
+## 16:45–18:00 — Cierre
+Síntesis:
+un workflow con IA es un proceso diseñado explícitamente, con pasos acotados, contratos, estado, resiliencia y supervisión.
+
+Cierre con transición:
+el siguiente módulo aumentará la autonomía y estudiará agentes capaces de planificar y seleccionar acciones.

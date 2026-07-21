@@ -110,7 +110,14 @@ describe("AI Engineering course contract", () => {
       publish: true,
       manifestPath: "modules/modulo-05-rag-sistemas-conocimiento/module-manifest.json",
     });
-    expect(aiEngineeringCourseManifest.modules.slice(5).every((module) => !module.publish)).toBe(true);
+    expect(aiEngineeringCourseManifest.modules[5]).toMatchObject({
+      editorialSlug: "modulo-06-workflows-automatizacion",
+      publicSlug: "modulo-06-workflows-automatizacion",
+      editorialStatus: "approved",
+      publish: true,
+      manifestPath: "modules/modulo-06-workflows-automatizacion/module-manifest.json",
+    });
+    expect(aiEngineeringCourseManifest.modules.slice(6).every((module) => !module.publish)).toBe(true);
   });
 
   it("prepares and resolves Module 2 with all manifest-declared resources", () => {

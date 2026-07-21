@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 2,
+  "sourceVersion": "1.0",
+  "courseSlug": "ai-engineering-aplicado",
+  "module": {
+    "editorialSlug": "modulo-06-workflows-automatizacion",
+    "publicSlug": "modulo-06-workflows-automatizacion",
+    "number": 6,
+    "title": "Workflows y automatización",
+    "editorialStatus": "approved",
+    "publish": true,
+    "level": "intermedio",
+    "estimatedStudyMinutes": 240,
+    "content": {
+      "foundationalHtml": "content/contenido-fundacional.html",
+      "objectives": {
+        "sectionId": "objetivos",
+        "selector": "article.card > p"
+      },
+      "activity": {
+        "sectionId": "actividad"
+      },
+      "selfAssessment": {
+        "sectionId": "autoevaluacion",
+        "questionSelector": "ol > li",
+        "questionCount": 12
+      },
+      "sources": {
+        "sectionId": "fuentes",
+        "itemSelector": "ol > li"
+      }
+    },
+    "assets": {
+      "infographic": {
+        "sourcePath": "assets/images/modulo-06-infografia.png",
+        "title": "Workflows y automatización",
+        "alt": "Infografía del Módulo 6 sobre workflows, automatización y supervisión humana."
+      },
+      "audio": {
+        "mp3SourcePath": "assets/audio/modulo-06-audio.mp3",
+        "m4aSourcePath": "assets/audio/modulo-06-audio.m4a",
+        "transcriptSourcePath": "content/transcripcion.txt",
+        "title": "Poner raíles a la inteligencia artificial"
+      },
+      "cases": [
+        {
+          "id": "clinica-solicitudes",
+          "sourcePath": "cases/caso-01-clinica-solicitudes.html"
+        },
+        {
+          "id": "educacion-feedback",
+          "sourcePath": "cases/caso-02-educacion-feedback.html"
+        },
+        {
+          "id": "software-ci",
+          "sourcePath": "cases/caso-03-software-ci.html"
+        }
+      ],
+      "presentation": {
+        "sourcePath": "assets/presentations/modulo-06-presentacion.pptx",
+        "title": "Workflows y automatización",
+        "slidesDirectory": "assets/presentations/slides",
+        "slideCount": 15,
+        "slideFilePattern": "slide-{number:2}.webp",
+        "slideWidth": 1600,
+        "slideHeight": 900,
+        "slideAltTemplate": "Diapositiva {current} de {total} del Módulo 6 — Workflows y automatización"
+      }
+    },
+    "sections": {
+      "casesTitle": "Casos reales",
+      "presentationTitle": "Presentación"
+    },
+    "interactions": {
+      "activity": {
+        "unitId": "actividad",
+        "responseLabel": "Workflow Canvas",
+        "placeholder": "Describe el disparador, contrato, pasos, estado, fallos, aprobación humana y evidencia de tu workflow."
+      },
+      "selfAssessment": {
+        "unitId": "autoevaluacion"
+      }
+    },
+    "progressUnits": [
+      {
+        "id": "orientacion",
+        "kind": "orientation",
+        "sectionId": "orientacion",
+        "label": "Orientación"
+      },
+      {
+        "id": "contenido",
+        "kind": "foundational-content",
+        "sectionId": "contenido",
+        "label": "Documento fundacional"
+      },
+      {
+        "id": "infografia",
+        "kind": "infographic",
+        "sectionId": "infografia",
+        "label": "Infografía"
+      },
+      {
+        "id": "audio",
+        "kind": "audio",
+        "sectionId": "audio",
+        "label": "Audio explicativo"
+      },
+      {
+        "id": "casos",
+        "kind": "cases",
+        "sectionId": "casos",
+        "label": "Casos reales"
+      },
+      {
+        "id": "presentacion",
+        "kind": "presentation",
+        "sectionId": "presentacion",
+        "label": "Presentación"
+      },
+      {
+        "id": "actividad",
+        "kind": "activity",
+        "sectionId": "actividad",
+        "label": "Actividad"
+      },
+      {
+        "id": "autoevaluacion",
+        "kind": "self-assessment",
+        "sectionId": "autoevaluacion",
+        "label": "Autoevaluación"
+      }
+    ],
+    "visuals": [
+      {
+        "visualId": "matriz-control-autonomia",
+        "sourcePath": "assets/images/visuals/visual-01-matriz-control-autonomia.png",
+        "afterSection": "frontera",
+        "alt": "Comparación entre automatización puntual, workflow con IA y agente.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "arquitectura-workflow",
+        "sourcePath": "assets/images/visuals/visual-02-arquitectura-workflow.png",
+        "afterSection": "arquitectura",
+        "alt": "Diagrama de una arquitectura básica de workflow con planos de control y ejecución.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "ia-paso-controlado",
+        "sourcePath": "assets/images/visuals/visual-03-ia-como-paso-controlado.png",
+        "afterSection": "ia-controlada",
+        "alt": "Diagrama de IA como paso acotado entre contrato de entrada y validación de esquema.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "resiliencia-idempotencia",
+        "sourcePath": "assets/images/visuals/visual-04-resiliencia-idempotencia.png",
+        "afterSection": "resiliencia",
+        "alt": "Diagrama sobre contener fallos con timeouts, retries, backoff y checkpoints.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "jsg-hub-v06",
+        "sourcePath": "assets/images/visuals/visual-05-jsg-hub-v06.png",
+        "afterSection": "canvas",
+        "alt": "Arquitectura del JSG AI Engineering Hub v0.6 para workflows y automatización.",
+        "width": 1600,
+        "height": 900
+      }
+    ],
+    "keyIdeas": [
+      {
+        "ideaId": "control-explicito",
+        "afterSection": "arquitectura",
+        "text": "Un workflow profesional define explícitamente disparadores, pasos, reglas, estado, errores y supervisión."
+      },
+      {
+        "ideaId": "ia-acotada",
+        "afterSection": "ia-controlada",
+        "text": "La IA aporta valor cuando resuelve tareas acotadas con entrada, salida y validación claras."
+      },
+      {
+        "ideaId": "fallos-controlados",
+        "afterSection": "resiliencia",
+        "text": "La resiliencia no elimina los fallos; evita perder control, duplicar efectos o borrar evidencia."
+      }
+    ]
+  }
+}
