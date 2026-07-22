@@ -61,8 +61,10 @@
       "number": 7,
       "title": "Agentes y sistemas multiagente",
       "editorialSlug": "modulo-07-agentes-sistemas-multiagente",
-      "editorialStatus": "draft",
-      "publish": false
+      "editorialStatus": "approved",
+      "publish": true,
+      "publicSlug": "modulo-07-agentes-sistemas-multiagente",
+      "manifestPath": "modules/modulo-07-agentes-sistemas-multiagente/module-manifest.json"
     },
     {
       "number": 8,

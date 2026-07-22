@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Módulo 7 — Agentes y sistemas multiagente</title>
+<style>
+:root{--navy:#0B1F33;--petrol:#0F766E;--ink:#172033;--muted:#5d687b;--line:#d8e5e2;--bg:#f3f7f6;--red:#c74343;--green:#0b8f64;--violet:#6d45c8}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,"Segoe UI",Arial,sans-serif;line-height:1.72}
+.cover{min-height:90vh;padding:70px 7vw;display:flex;align-items:center;background:radial-gradient(circle at 82% 20%,rgba(27,184,179,.22),transparent 25%),linear-gradient(135deg,var(--navy),#123a4b 67%,#145d59);color:#fff}
+.cover>div{max-width:1100px}.kicker{display:inline-block;border:1px solid #ffffff55;border-radius:999px;padding:7px 14px;letter-spacing:.08em;font-weight:800;text-transform:uppercase}
+h1{font-size:clamp(2.8rem,7vw,5.7rem);line-height:1.02;margin:.28em 0}.cover p{font-size:1.25rem;color:#dbeff0;max-width:900px}.meta{display:flex;gap:10px;flex-wrap:wrap}.meta span{padding:9px 12px;border:1px solid #ffffff44;border-radius:10px;background:#ffffff14}
+.layout{display:grid;grid-template-columns:300px minmax(0,940px);gap:34px;max-width:1320px;margin:auto;padding:34px 24px 90px}aside{position:sticky;top:18px;align-self:start;background:var(--navy);border-radius:18px;padding:20px;max-height:94vh;overflow:auto}aside a{display:block;color:#dce9f0;text-decoration:none;padding:7px 0;border-bottom:1px solid #ffffff16;font-size:.89rem}
+main{background:#fff;border-radius:20px;padding:clamp(24px,5vw,62px);box-shadow:0 12px 35px #0e274b1a}h2{font-size:2rem;color:var(--navy);margin:2.15em 0 .55em;line-height:1.2}h3{color:#16324a;margin-top:1.55em}
+.lead{font-size:1.13rem;color:#36445a}.callout,.warning,.decision,.case,.interview{border-left:5px solid var(--petrol);background:#eff9f7;padding:18px 20px;border-radius:12px;margin:22px 0}.warning{border-color:var(--red);background:#fff2f2}.decision{border-color:#c96a00;background:#fff7ec}.case{border-color:var(--green);background:#effaf6}.interview{border-color:var(--violet);background:#f6f2ff}
+.flow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:var(--navy);color:#fff;padding:16px;border-radius:13px;margin:18px 0}.flow span{background:#163a50;border:1px solid #2c6370;padding:9px 12px;border-radius:9px}.flow b{color:#78ddd5}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.94rem}th,td{border:1px solid var(--line);padding:12px;vertical-align:top}th{background:#eaf6f4;text-align:left}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{border:1px solid var(--line);background:#f8fbfa;padding:17px;border-radius:12px}.card strong{display:block;color:var(--petrol)}
+li{margin:.4rem 0}.small{color:var(--muted);font-size:.9rem}.footer{margin-top:50px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted)}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.layout>*{min-width:0}aside{position:relative;max-height:none}.grid{grid-template-columns:1fr}table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}}
+</style>
+</head>
+<body>
+<header class="cover"><div>
+<span class="kicker">AI Engineering Aplicado · Módulo 7</span>
+<h1>Agentes y sistemas multiagente</h1>
+<p>Cómo diseñar sistemas que planifican, usan herramientas, delegan trabajo y actúan con límites verificables.</p>
+<div class="meta"><span>Versión 0.9</span><span>Nivel intermedio</span><span>Lectura: 105–135 min</span><span>JSG Hub v0.7</span></div>
+</div></header>
+<div class="layout">
+<aside>
+<a href="#proposito">1. Propósito</a><a href="#workflow-agente">2. Del workflow al agente</a><a href="#anatomia">3. Anatomía</a><a href="#bucle">4. Bucle agente</a><a href="#autonomia">5. Autonomía</a><a href="#tools">6. Herramientas y acciones</a><a href="#estado">7. Estado, contexto y memoria</a><a href="#planificacion">8. Planificación y ejecución</a><a href="#agente-unico">9. Agente único</a><a href="#multiagente">10. Cuándo usar multiagente</a><a href="#manager-workers">11. Manager–workers</a><a href="#handoffs">12. Handoffs y routing</a><a href="#patrones">13. Patrones de coordinación</a><a href="#contratos">14. Contratos y artefactos</a><a href="#control-humano">15. Control humano y seguridad</a><a href="#confiabilidad">16. Confiabilidad y presupuestos</a><a href="#interoperabilidad">17. MCP y A2A</a><a href="#caso">18. Caso aplicado</a><a href="#canvas">19. JSG Hub v0.7</a><a href="#unidades-progreso">20. Ocho unidades de progreso</a><a href="#actividad">21. Actividad</a><a href="#autoevaluacion">22. Autoevaluación</a><a href="#fuentes">23. Fuentes</a>
+</aside>
+<main>
+<section id="proposito"><h2>1. Propósito del módulo</h2>
+<p class="lead">Un agente no es solo un modelo que conversa: es un sistema que recibe un objetivo, decide pasos, usa herramientas, observa resultados y continúa hasta terminar, detenerse o pedir intervención humana.</p>
+<p>Este módulo conecta los workflows deterministas del Módulo 6 con arquitecturas donde parte del control se delega al modelo. La meta no es maximizar autonomía, sino diseñar el nivel mínimo de autonomía que aporte valor sin perder control.</p>
+<div class="callout"><strong>Idea central</strong>La ingeniería de agentes consiste en distribuir decisiones entre código, modelos y personas, con límites explícitos sobre qué puede decidir cada parte.</div>
+<ul><li>Distinguir workflow, agente y sistema multiagente.</li><li>Diseñar el bucle objetivo → acción → observación → ajuste.</li><li>Elegir entre agente único, manager–workers, handoffs y coordinación paralela.</li><li>Definir contratos, permisos, presupuestos y criterios de finalización.</li><li>Relacionar MCP con herramientas y A2A con interoperabilidad entre agentes.</li></ul>
+</section>
+
+<section id="workflow-agente"><h2>2. Del workflow al agente</h2>
+<table><tr><th>Arquitectura</th><th>Quién decide el siguiente paso</th><th>Cuándo conviene</th></tr>
+<tr><td>Workflow determinista</td><td>El código.</td><td>Proceso conocido, repetible y auditable.</td></tr>
+<tr><td>Workflow con decisiones acotadas</td><td>El código define el flujo; el modelo clasifica, extrae o selecciona.</td><td>Hay variación semántica, pero pocas rutas válidas.</td></tr>
+<tr><td>Agente</td><td>El modelo elige acciones dentro de un entorno y un presupuesto.</td><td>Los pasos no pueden anticiparse por completo.</td></tr>
+<tr><td>Sistema multiagente</td><td>Varios agentes coordinan decisiones y subtareas.</td><td>Existe especialización, paralelismo o separación de responsabilidades real.</td></tr></table>
+<div class="decision"><strong>Regla de diseño</strong>Comenzar por el workflow más simple. Introducir autonomía únicamente donde una ruta fija deje de resolver el problema de forma razonable.</div>
+</section>
+
+<section id="anatomia"><h2>3. Anatomía de un agente</h2>
+<div class="grid"><div class="card"><strong>Objetivo e instrucciones</strong>Definen misión, alcance, prioridades y límites.</div><div class="card"><strong>Modelo</strong>Interpreta, decide y genera acciones o resultados.</div><div class="card"><strong>Herramientas</strong>Permiten leer, calcular, buscar, escribir o actuar.</div><div class="card"><strong>Estado</strong>Conserva progreso, datos y decisiones relevantes.</div><div class="card"><strong>Runtime</strong>Ejecuta turnos, herramientas, reintentos y pausas.</div><div class="card"><strong>Guardrails</strong>Validan entradas, acciones, salidas y permisos.</div></div>
+<p>El modelo es una pieza del agente, no el sistema completo. La calidad depende también del entorno, la interfaz de herramientas, el control de estado y la capacidad de detener una ejecución defectuosa.</p>
+</section>
+
+<section id="bucle"><h2>4. El bucle agente</h2>
+<div class="flow"><span>Objetivo</span><b>→</b><span>Observar estado</span><b>→</b><span>Decidir</span><b>→</b><span>Actuar</span><b>→</b><span>Validar resultado</span><b>→</b><span>Actualizar estado</span><b>↺</b></div>
+<p>ReAct formalizó la combinación de razonamiento y acción intercalados. En un sistema productivo, ese ciclo debe estar mediado por código: el runtime ejecuta herramientas, registra eventos, aplica límites y decide cuándo continuar o interrumpir.</p>
+<table><tr><th>Salida posible de un turno</th><th>Respuesta del runtime</th></tr><tr><td>Respuesta final</td><td>Validar y devolver.</td></tr><tr><td>Llamada a herramienta</td><td>Autorizar, ejecutar y devolver observación.</td></tr><tr><td>Delegación</td><td>Transferir o invocar un especialista.</td></tr><tr><td>Solicitud de aprobación</td><td>Pausar y consultar a una persona.</td></tr><tr><td>Error o límite</td><td>Reintentar, degradar o finalizar.</td></tr></table>
+</section>
+
+<section id="autonomia"><h2>5. Autonomía graduada, no binaria</h2>
+<table><tr><th>Nivel</th><th>Capacidad</th><th>Control recomendado</th></tr><tr><td>0 · Asistente</td><td>Propone; no actúa.</td><td>Revisión humana total.</td></tr><tr><td>1 · Acción confirmada</td><td>Prepara una acción reversible.</td><td>Aprobación antes de ejecutar.</td></tr><tr><td>2 · Acción acotada</td><td>Ejecuta herramientas de bajo riesgo.</td><td>Allowlist, cuotas y auditoría.</td></tr><tr><td>3 · Ejecución prolongada</td><td>Planifica y completa múltiples pasos.</td><td>Checkpoints, cancelación y límites de coste.</td></tr><tr><td>4 · Coordinación distribuida</td><td>Crea o dirige subagentes.</td><td>Presupuesto global, contratos y observabilidad.</td></tr></table>
+<div class="warning"><strong>Principio de menor autonomía</strong>La autonomía debe corresponder al riesgo, reversibilidad y valor de la tarea; no a la capacidad máxima del modelo.</div>
+</section>
+
+<section id="tools"><h2>6. Herramientas y acciones</h2>
+<p>Las herramientas transforman lenguaje en efectos reales. Su diseño debe ser tan cuidadoso como una API pública.</p>
+<ul><li>Nombre y descripción inequívocos.</li><li>Entradas tipadas y validadas.</li><li>Salida estructurada y estable.</li><li>Errores accionables, no mensajes ambiguos.</li><li>Idempotencia cuando una repetición pueda duplicar efectos.</li><li>Separación entre lectura, simulación y escritura.</li><li>Permisos mínimos por agente y por usuario.</li></ul>
+<div class="callout"><strong>Diseño seguro</strong>Preferir herramientas estrechas —por ejemplo, “crear borrador” y “enviar”— frente a una única herramienta genérica con acceso irrestricto.</div>
+</section>
+
+<section id="estado"><h2>7. Estado, contexto y memoria</h2>
+<table><tr><th>Elemento</th><th>Función</th><th>Riesgo si se mezcla</th></tr><tr><td>Contexto de turno</td><td>Información necesaria para la decisión actual.</td><td>Saturación y distracción.</td></tr><tr><td>Estado de ejecución</td><td>Plan, subtareas, resultados y checkpoints.</td><td>Repeticiones o pérdida de progreso.</td></tr><tr><td>Memoria de sesión</td><td>Preferencias y continuidad conversacional.</td><td>Arrastre de instrucciones obsoletas.</td></tr><tr><td>Artefactos externos</td><td>Archivos, reportes, código o datos producidos.</td><td>“Teléfono descompuesto” al copiar todo por mensajes.</td></tr></table>
+<p>Los subagentes no necesitan recibir la conversación completa. Deben recibir el mínimo contexto y un contrato de tarea explícito. Para resultados extensos, conviene persistir artefactos y devolver referencias.</p>
+</section>
+
+<section id="planificacion"><h2>8. Planificación y ejecución</h2>
+<div class="flow"><span>Interpretar objetivo</span><b>→</b><span>Descomponer</span><b>→</b><span>Asignar recursos</span><b>→</b><span>Ejecutar</span><b>→</b><span>Comprobar</span><b>→</b><span>Replanificar o cerrar</span></div>
+<div class="grid"><div class="card"><strong>Plan explícito</strong>Útil cuando hay dependencias, checkpoints o aprobación.</div><div class="card"><strong>Plan implícito</strong>Adecuado para tareas cortas y reversibles.</div><div class="card"><strong>Plan dinámico</strong>Se ajusta a observaciones inesperadas.</div><div class="card"><strong>Plan restringido</strong>Solo puede elegir entre rutas permitidas.</div></div>
+<div class="warning"><strong>Fallo común</strong>Planificar no garantiza ejecutar bien. Cada paso necesita una condición de éxito observable y una política frente al error.</div>
+</section>
+
+<section id="agente-unico"><h2>9. El agente único como baseline</h2>
+<p>Antes de distribuir el trabajo, un agente único puede combinar herramientas especializadas, memoria y validadores.</p>
+<table><tr><th>Patrón</th><th>Diseño</th><th>Uso</th></tr><tr><td>Router con herramientas</td><td>Selecciona una capacidad y responde.</td><td>Soporte o consulta operativa.</td></tr><tr><td>Planner–executor</td><td>Formula un plan y ejecuta pasos.</td><td>Tareas largas con dependencias.</td></tr><tr><td>Evaluator–optimizer</td><td>Genera, evalúa y mejora.</td><td>Calidad verificable por rúbrica.</td></tr><tr><td>Agente con aprobación</td><td>Pausa antes de acciones sensibles.</td><td>Correo, pagos, cambios o publicación.</td></tr></table>
+<div class="decision"><strong>Baseline obligatorio</strong>El multiagente debe demostrar una mejora frente a un agente único bien diseñado, no frente a un prototipo débil.</div>
+</section>
+
+<section id="multiagente"><h2>10. Cuándo usar un sistema multiagente</h2>
+<table><tr><th>Justificación válida</th><th>Ejemplo</th></tr><tr><td>Especialización</td><td>Investigación, análisis legal y síntesis con instrucciones distintas.</td></tr><tr><td>Paralelismo</td><td>Explorar fuentes independientes al mismo tiempo.</td></tr><tr><td>Aislamiento de contexto</td><td>Cada agente trabaja con un subconjunto relevante.</td></tr><tr><td>Separación de permisos</td><td>Un agente lee; otro puede escribir con aprobación.</td></tr><tr><td>Fronteras organizacionales</td><td>Agentes de proveedores o equipos diferentes.</td></tr></table>
+<div class="warning"><strong>No es justificación</strong>Asignar personajes o nombres distintos sin responsabilidades, herramientas, permisos o contextos realmente diferentes.</div>
+<p>Los sistemas multiagente elevan la capacidad, pero también el coste, la latencia y la complejidad de coordinación. Anthropic informó que su arquitectura de investigación multiagente consume mucho más que una interacción de chat y resulta especialmente adecuada para tareas valiosas y paralelizables.</p>
+</section>
+
+<section id="manager-workers"><h2>11. Patrón manager–workers</h2>
+<div class="flow"><span>Usuario</span><b>→</b><span>Manager</span><b>→</b><span>Worker A</span><span>Worker B</span><span>Worker C</span><b>→</b><span>Síntesis</span></div>
+<p>El manager conserva el control de la conversación, divide la tarea, invoca especialistas y combina resultados. En OpenAI Agents SDK, este patrón puede implementarse exponiendo agentes especializados como herramientas.</p>
+<ul><li>El manager define subtareas no solapadas.</li><li>Cada worker recibe objetivo, límites y formato de salida.</li><li>Los workers no toman control del usuario.</li><li>La síntesis resuelve contradicciones y vacíos.</li><li>El presupuesto total incluye todas las ramas.</li></ul>
+<div class="case"><strong>Fortaleza</strong>Una única capa conserva la responsabilidad por la respuesta final y puede aplicar reglas comunes.</div>
+</section>
+
+<section id="handoffs"><h2>12. Handoffs y routing descentralizado</h2>
+<div class="flow"><span>Triage</span><b>→</b><span>Especialista activo</span><b>→</b><span>Otro especialista</span><b>→</b><span>Resultado</span></div>
+<p>Un handoff transfiere la conducción a otro agente. Es adecuado cuando el especialista debe hablar directamente con el usuario o trabajar con instrucciones y herramientas propias.</p>
+<table><tr><th>Decisión</th><th>Manager–workers</th><th>Handoff</th></tr><tr><td>Responsable final</td><td>Manager.</td><td>Agente activo.</td></tr><tr><td>Contexto</td><td>El manager selecciona qué enviar.</td><td>Se transfiere o filtra historial.</td></tr><tr><td>Experiencia de usuario</td><td>Voz unificada.</td><td>Especialista directo.</td></tr><tr><td>Riesgo</td><td>Cuello de botella central.</td><td>Transferencias erróneas o circulares.</td></tr></table>
+</section>
+
+<section id="patrones"><h2>13. Patrones de coordinación</h2>
+<div class="grid"><div class="card"><strong>Secuencial</strong>Cada agente transforma la salida anterior; útil con dependencias claras.</div><div class="card"><strong>Paralelo</strong>Agentes independientes trabajan simultáneamente y luego se agregan.</div><div class="card"><strong>Loop</strong>Un agente ejecuta hasta alcanzar una condición de salida verificable.</div><div class="card"><strong>Group chat</strong>Varios agentes comparten mensajes; exige reglas de turno y finalización.</div><div class="card"><strong>Event-driven</strong>Agentes reaccionan a eventos y tópicos mediante un runtime.</div><div class="card"><strong>Evaluator–worker</strong>Un agente critica o valida el producto de otro.</div></div>
+<div class="decision"><strong>Determinismo selectivo</strong>La secuencia, el paralelismo y los loops pueden estar controlados por código aunque las tareas internas usen modelos. No toda coordinación debe delegarse al LLM.</div>
+</section>
+
+<section id="contratos"><h2>14. Contratos, mensajes y artefactos</h2>
+<p>La coordinación mejora cuando cada delegación funciona como una interfaz técnica, no como una conversación informal.</p>
+<table><tr><th>Campo</th><th>Contenido</th></tr><tr><td>Objetivo</td><td>Resultado concreto esperado.</td></tr><tr><td>Alcance</td><td>Qué incluye y qué queda fuera.</td></tr><tr><td>Entradas</td><td>Datos, fuentes, permisos y supuestos.</td></tr><tr><td>Salida</td><td>Esquema estructurado o artefacto.</td></tr><tr><td>Calidad</td><td>Rúbrica o condición de aceptación.</td></tr><tr><td>Presupuesto</td><td>Tiempo, tokens, herramientas y reintentos.</td></tr><tr><td>Finalización</td><td>Éxito, bloqueo, parcial o escalamiento.</td></tr></table>
+<div class="callout"><strong>Comunicación robusta</strong>Usar salidas tipadas para coordinación y artefactos persistentes para contenido extenso; reservar lenguaje libre para análisis que realmente lo requiera.</div>
+</section>
+
+<section id="control-humano"><h2>15. Control humano, permisos y seguridad</h2>
+<table><tr><th>Acción</th><th>Control mínimo</th></tr><tr><td>Lectura de datos sensibles</td><td>Autorización por identidad, propósito y tenant.</td></tr><tr><td>Escritura reversible</td><td>Registro, vista previa y capacidad de deshacer.</td></tr><tr><td>Envío, publicación o pago</td><td>Aprobación explícita o política estricta.</td></tr><tr><td>Ejecución de código</td><td>Sandbox, límites de red, CPU, tiempo y archivos.</td></tr><tr><td>Delegación remota</td><td>Autenticación, capacidades declaradas y trazabilidad.</td></tr></table>
+<ul><li>Separar datos de instrucciones para reducir prompt injection.</li><li>No transferir secretos en mensajes entre agentes.</li><li>Aplicar allowlists y permisos por herramienta.</li><li>Registrar quién solicitó, decidió, aprobó y ejecutó.</li><li>Permitir cancelar una ejecución prolongada.</li></ul>
+<div class="warning"><strong>Blast radius</strong>Un agente debe poder afectar solo los recursos necesarios para su tarea. La autonomía sin contención convierte un error semántico en un incidente operativo.</div>
+</section>
+
+<section id="confiabilidad"><h2>16. Confiabilidad, límites y fallos compuestos</h2>
+<table><tr><th>Fallo</th><th>Mitigación</th></tr><tr><td>Loop infinito</td><td>Máximo de turnos, tiempo y coste.</td></tr><tr><td>Trabajo duplicado</td><td>Contratos no solapados e IDs de subtarea.</td></tr><tr><td>Error en cascada</td><td>Validar salidas antes de pasarlas al siguiente agente.</td></tr><tr><td>Agente bloqueado</td><td>Timeout, cancelación, fallback y checkpoint.</td></tr><tr><td>Context drift</td><td>Estado externo, resúmenes controlados y artefactos.</td></tr><tr><td>Acción duplicada</td><td>Idempotency keys y confirmación de estado.</td></tr><tr><td>Explosión de recursos</td><td>Límite de subagentes y presupuesto global.</td></tr></table>
+<p>La observabilidad mínima debe registrar turnos, llamadas a herramientas, handoffs, guardrails, costes, latencia, errores y estado final. El Módulo 8 profundizará en evaluación y trazabilidad.</p>
+</section>
+
+<section id="interoperabilidad"><h2>17. Herramientas con MCP y agentes con A2A</h2>
+<table><tr><th>Protocolo</th><th>Conecta</th><th>Responsabilidad principal</th></tr><tr><td>MCP</td><td>Aplicación agente ↔ servidores de herramientas y contexto.</td><td>Descubrir y usar tools, resources y prompts con límites del host.</td></tr><tr><td>A2A</td><td>Agente cliente ↔ agente remoto.</td><td>Descubrir capacidades, gestionar tareas y intercambiar mensajes o artefactos.</td></tr></table>
+<div class="flow"><span>Usuario</span><b>→</b><span>Agente coordinador</span><b>→</b><span>MCP: herramientas</span><span>A2A: agentes remotos</span><b>→</b><span>Resultado</span></div>
+<div class="decision"><strong>Diferencia clave</strong>MCP no define cómo razona un agente ni A2A reemplaza sus herramientas. Son capas complementarias: capacidad local y colaboración entre aplicaciones agentic.</div>
+</section>
+
+<section id="caso"><h2>18. Caso aplicado: conciliación administrativa asistida</h2>
+<p>Una organización necesita comparar prestaciones registradas, reglas de financiadores, documentación y excepciones antes de preparar un expediente para revisión humana.</p>
+<table><tr><th>Componente</th><th>Responsabilidad</th></tr><tr><td>Agente coordinador</td><td>Recibe el caso, descompone y conserva el estado.</td></tr><tr><td>Agente de reglas</td><td>Consulta normas vigentes y devuelve evidencia.</td></tr><tr><td>Agente de datos</td><td>Valida códigos, importes y consistencia documental.</td></tr><tr><td>Agente de excepciones</td><td>Detecta faltantes, contradicciones y casos no cubiertos.</td></tr><tr><td>Agente redactor</td><td>Produce un borrador con citas y advertencias.</td></tr><tr><td>Persona responsable</td><td>Aprueba correcciones y cualquier envío externo.</td></tr></table>
+<div class="flow"><span>Caso</span><b>→</b><span>Plan</span><b>→</b><span>Reglas ∥ Datos ∥ Excepciones</span><b>→</b><span>Síntesis</span><b>→</b><span>Revisión humana</span></div>
+<div class="case"><strong>Aprendizaje</strong>El sistema no decide una cobertura ni envía un reclamo de forma autónoma: reúne evidencia, detecta inconsistencias y prepara una acción revisable.</div>
+</section>
+
+<section id="canvas"><h2>19. JSG AI Engineering Hub v0.7</h2>
+<table><tr><th>Componente</th><th>Responsabilidad</th></tr><tr><td>Goal intake</td><td>Normaliza intención, restricciones y criterio de éxito.</td></tr><tr><td>Policy router</td><td>Elige workflow, agente único o equipo.</td></tr><tr><td>Agent runtime</td><td>Gestiona turnos, estado, pausas y reanudación.</td></tr><tr><td>Tool registry / MCP clients</td><td>Descubre capacidades y aplica permisos.</td></tr><tr><td>Orchestrator</td><td>Descompone, delega y controla presupuesto.</td></tr><tr><td>Specialist agents</td><td>Ejecutan subtareas con contexto y permisos mínimos.</td></tr><tr><td>Artifact store</td><td>Persiste planes, evidencias y resultados.</td></tr><tr><td>Approval gateway</td><td>Pausa acciones sensibles para revisión.</td></tr><tr><td>A2A gateway</td><td>Descubre y coordina agentes remotos autorizados.</td></tr><tr><td>Trace and event log</td><td>Registra decisiones, herramientas, handoffs y estados.</td></tr><tr><td>Budget controller</td><td>Limita tiempo, tokens, llamadas y subagentes.</td></tr><tr><td>Outcome validator</td><td>Comprueba contrato final y decide cierre o escalamiento.</td></tr></table>
+</section>
+
+<section id="unidades-progreso"><h2>20. Ocho unidades de progreso</h2>
+<div class="grid"><div class="card"><strong>Unidad 1 · Del workflow al agente</strong>Distinguir procesos deterministas, decisiones acotadas, agentes y sistemas multiagente.</div><div class="card"><strong>Unidad 2 · Anatomía y bucle operativo</strong>Comprender objetivo, modelo, herramientas, estado, runtime, guardrails y ciclo de ejecución.</div><div class="card"><strong>Unidad 3 · Herramientas, estado y planificación</strong>Diseñar acciones tipadas, conservar progreso y convertir objetivos en planes verificables.</div><div class="card"><strong>Unidad 4 · Agente único como baseline</strong>Resolver primero con la arquitectura mínima antes de justificar mayor complejidad.</div><div class="card"><strong>Unidad 5 · Sistemas multiagente</strong>Reconocer cuándo la especialización, el paralelismo o el aislamiento de contexto aportan valor real.</div><div class="card"><strong>Unidad 6 · Coordinación, handoffs y contratos</strong>Elegir patrones de colaboración y definir delegaciones, entradas, salidas y artefactos.</div><div class="card"><strong>Unidad 7 · Control humano y confiabilidad</strong>Limitar autonomía, permisos, coste, turnos y blast radius con criterios de detención y escalamiento.</div><div class="card"><strong>Unidad 8 · Interoperabilidad y diseño aplicado</strong>Relacionar MCP y A2A y trasladar los principios al caso aplicado y al Agent System Canvas.</div></div>
+</section>
+
+<section id="actividad"><h2>21. Actividad práctica</h2>
+<p>Diseña un Agent System Canvas para un proceso de educación, clínica administrativa, soporte, legal o desarrollo.</p>
+<ul><li>Objetivo y resultado observable.</li><li>Qué partes siguen siendo deterministas.</li><li>Herramientas de lectura y de escritura.</li><li>Nivel de autonomía por acción.</li><li>Baseline de agente único.</li><li>Justificación de cada subagente.</li><li>Patrón de coordinación.</li><li>Contrato de delegación y formato de artefactos.</li><li>Permisos, aprobación y cancelación.</li><li>Presupuesto de tiempo, coste y turnos.</li><li>Estados de éxito, parcial, bloqueo y escalamiento.</li><li>Tres fallos previsibles y sus mitigaciones.</li></ul>
+</section>
+
+<section id="autoevaluacion"><h2>22. Autoevaluación</h2>
+<ol><li>¿Qué diferencia existe entre un workflow y un agente?</li><li>¿Cuáles son las piezas mínimas de un agente?</li><li>¿Qué función cumple el runtime?</li><li>¿Por qué conviene graduar la autonomía?</li><li>¿Cuándo un agente único es un baseline suficiente?</li><li>¿Qué justifica realmente una arquitectura multiagente?</li><li>¿En qué difieren manager–workers y handoffs?</li><li>¿Cuándo conviene paralelizar subagentes?</li><li>¿Qué debe incluir un contrato de delegación?</li><li>¿Cómo se limita el blast radius?</li><li>¿Qué diferencia existe entre MCP y A2A?</li><li>¿Cómo detectarías que el sistema debe detenerse o escalar a una persona?</li></ol>
+</section>
+
+<section id="fuentes"><h2>23. Fuentes base</h2>
+<ol>
+<li><a href="https://openai.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/" target="_blank" rel="noopener noreferrer">OpenAI — A practical guide to building agents</a>.</li>
+<li><a href="https://openai.github.io/openai-agents-python/" target="_blank" rel="noopener noreferrer">OpenAI Agents SDK — Overview</a>.</li>
+<li><a href="https://openai.github.io/openai-agents-python/multi_agent/" target="_blank" rel="noopener noreferrer">OpenAI Agents SDK — Agent orchestration</a>.</li>
+<li><a href="https://openai.github.io/openai-agents-python/handoffs/" target="_blank" rel="noopener noreferrer">OpenAI Agents SDK — Handoffs</a>.</li>
+<li><a href="https://openai.github.io/openai-agents-python/guardrails/" target="_blank" rel="noopener noreferrer">OpenAI Agents SDK — Guardrails</a>.</li>
+<li><a href="https://openai.github.io/openai-agents-python/tracing/" target="_blank" rel="noopener noreferrer">OpenAI Agents SDK — Tracing</a>.</li>
+<li><a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener noreferrer">Anthropic — Building effective agents</a>.</li>
+<li><a href="https://www.anthropic.com/engineering/multi-agent-research-system" target="_blank" rel="noopener noreferrer">Anthropic — How we built our multi-agent research system</a>.</li>
+<li><a href="https://www.anthropic.com/research/trustworthy-agents" target="_blank" rel="noopener noreferrer">Anthropic — Trustworthy agents in practice</a>.</li>
+<li><a href="https://adk.dev/workflows/patterns/" target="_blank" rel="noopener noreferrer">Google Agent Development Kit — Multi-agent workflow patterns</a>.</li>
+<li><a href="https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/core-concepts/agent-and-multi-agent-application.html" target="_blank" rel="noopener noreferrer">Microsoft AutoGen — Agent and multi-agent applications</a>.</li>
+<li><a href="https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/framework/agent-and-agent-runtime.html" target="_blank" rel="noopener noreferrer">Microsoft AutoGen — Agent and agent runtime</a>.</li>
+<li><a href="https://react-lm.github.io/" target="_blank" rel="noopener noreferrer">Yao et al. — ReAct: Synergizing Reasoning and Acting</a>.</li>
+<li><a href="https://modelcontextprotocol.io/docs/learn/architecture" target="_blank" rel="noopener noreferrer">Model Context Protocol — Architecture overview</a>.</li>
+<li><a href="https://a2a-protocol.org/latest/specification/" target="_blank" rel="noopener noreferrer">A2A Protocol — Official specification 1.0</a>.</li>
+</ol>
+</section>
+
+<div class="footer"><strong>AI Engineering Aplicado — Módulo 7</strong><br>Documento fundacional · 21 de julio de 2026.</div>
+</main></div></body></html>

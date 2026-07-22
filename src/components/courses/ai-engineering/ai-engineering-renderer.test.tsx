@@ -83,8 +83,8 @@ describe("AI Engineering visual renderer", () => {
     expect(screen.getByText("Arquitectura de un sistema inteligente")).toBeInTheDocument();
     expect(screen.getByText("Modelo / RAG / Herramientas")).toBeInTheDocument();
     expect(screen.queryByRole("img")).not.toBeInTheDocument();
-    expect(screen.getAllByText("Disponible")).toHaveLength(6);
-    expect(screen.getAllByText("Próximamente")).toHaveLength(6);
+    expect(screen.getAllByText("Disponible")).toHaveLength(7);
+    expect(screen.getAllByText("Próximamente")).toHaveLength(5);
     expect(screen.getByText("Modelos fundacionales y selección")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /02 Disponible Módulo 2 Modelos fundacionales y selección/ })).toHaveAttribute(
       "href",
@@ -105,6 +105,10 @@ describe("AI Engineering visual renderer", () => {
     expect(screen.getByText("Workflows y automatización").closest("a")).toHaveAttribute(
       "href",
       "/courses/ai-engineering-aplicado/modules/modulo-06-workflows-automatizacion",
+    );
+    expect(screen.getByText("Agentes y sistemas multiagente").closest("a")).toHaveAttribute(
+      "href",
+      "/courses/ai-engineering-aplicado/modules/modulo-07-agentes-sistemas-multiagente",
     );
     expect(screen.getByText("Producción y proyecto final")).toBeInTheDocument();
     expect(screen.getByText("JSG AI Engineering Hub v0.1")).toBeInTheDocument();

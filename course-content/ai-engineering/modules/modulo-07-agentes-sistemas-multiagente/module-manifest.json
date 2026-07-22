@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 2,
+  "sourceVersion": "1.0",
+  "courseSlug": "ai-engineering-aplicado",
+  "module": {
+    "editorialSlug": "modulo-07-agentes-sistemas-multiagente",
+    "publicSlug": "modulo-07-agentes-sistemas-multiagente",
+    "number": 7,
+    "title": "Agentes y sistemas multiagente",
+    "editorialStatus": "approved",
+    "publish": true,
+    "level": "intermedio",
+    "estimatedStudyMinutes": 270,
+    "content": {
+      "foundationalHtml": "content/contenido-fundacional.html",
+      "objectives": {
+        "sectionId": "proposito",
+        "selector": "p.lead"
+      },
+      "activity": {
+        "sectionId": "actividad"
+      },
+      "selfAssessment": {
+        "sectionId": "autoevaluacion",
+        "questionSelector": "ol > li",
+        "questionCount": 12
+      },
+      "sources": {
+        "sectionId": "fuentes",
+        "itemSelector": "ol > li"
+      }
+    },
+    "assets": {
+      "infographic": {
+        "sourcePath": "assets/images/modulo-07-infografia.png",
+        "title": "Agentes y sistemas multiagente",
+        "alt": "Infografía del Módulo 7 sobre agentes y sistemas multiagente."
+      },
+      "audio": {
+        "mp3SourcePath": "assets/audio/modulo-07-audio.mp3",
+        "m4aSourcePath": "assets/audio/modulo-07-audio.m4a",
+        "transcriptSourcePath": "content/transcripcion.txt",
+        "title": "Arquitectura y control de agentes autónomos"
+      },
+      "cases": [
+        {
+          "id": "conciliacion-administrativa",
+          "sourcePath": "cases/caso-01-conciliacion-administrativa.html"
+        },
+        {
+          "id": "educacion-equipo-tutores",
+          "sourcePath": "cases/caso-02-educacion-equipo-tutores.html"
+        },
+        {
+          "id": "desarrollo-revision-software",
+          "sourcePath": "cases/caso-03-desarrollo-revision-software.html"
+        }
+      ],
+      "presentation": {
+        "sourcePath": "assets/presentations/modulo-07-presentacion.pptx",
+        "title": "Agentes y sistemas multiagente",
+        "slidesDirectory": "assets/presentations/slides",
+        "slideCount": 21,
+        "slideFilePattern": "slide-{number:2}.webp",
+        "slideWidth": 1600,
+        "slideHeight": 900,
+        "slideAltTemplate": "Diapositiva {current} de {total} del Módulo 7 — Agentes y sistemas multiagente"
+      }
+    },
+    "sections": {
+      "casesTitle": "Casos reales",
+      "presentationTitle": "Presentación"
+    },
+    "interactions": {
+      "activity": {
+        "unitId": "actividad",
+        "responseLabel": "Agent System Canvas",
+        "placeholder": "Describe objetivo, baseline, herramientas, autonomía, agentes, coordinación, contratos, permisos, presupuesto, fallos y supervisión."
+      },
+      "selfAssessment": {
+        "unitId": "autoevaluacion"
+      }
+    },
+    "progressUnits": [
+      {
+        "id": "orientacion",
+        "kind": "orientation",
+        "sectionId": "orientacion",
+        "label": "Orientación"
+      },
+      {
+        "id": "contenido",
+        "kind": "foundational-content",
+        "sectionId": "contenido",
+        "label": "Documento fundacional"
+      },
+      {
+        "id": "infografia",
+        "kind": "infographic",
+        "sectionId": "infografia",
+        "label": "Infografía"
+      },
+      {
+        "id": "audio",
+        "kind": "audio",
+        "sectionId": "audio",
+        "label": "Audio explicativo"
+      },
+      {
+        "id": "casos",
+        "kind": "cases",
+        "sectionId": "casos",
+        "label": "Casos reales"
+      },
+      {
+        "id": "presentacion",
+        "kind": "presentation",
+        "sectionId": "presentacion",
+        "label": "Presentación"
+      },
+      {
+        "id": "actividad",
+        "kind": "activity",
+        "sectionId": "actividad",
+        "label": "Actividad"
+      },
+      {
+        "id": "autoevaluacion",
+        "kind": "self-assessment",
+        "sectionId": "autoevaluacion",
+        "label": "Autoevaluación"
+      }
+    ],
+    "visuals": [
+      {
+        "visualId": "workflow-agente-multiagente",
+        "sourcePath": "assets/images/visuals/visual-01-workflow-agente-multiagente.png",
+        "afterSection": "workflow-agente",
+        "alt": "Comparación entre workflow, agente y sistema multiagente.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "anatomia-agente",
+        "sourcePath": "assets/images/visuals/visual-02-anatomia-agente.png",
+        "afterSection": "anatomia",
+        "alt": "Modelo, herramientas, estado, runtime y guardrails.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "manager-workers",
+        "sourcePath": "assets/images/visuals/visual-03-manager-workers.png",
+        "afterSection": "manager-workers",
+        "alt": "Manager que coordina trabajadores especializados.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "mcp-a2a",
+        "sourcePath": "assets/images/visuals/visual-04-mcp-a2a.png",
+        "afterSection": "interoperabilidad",
+        "alt": "Herramientas mediante MCP y agentes remotos mediante A2A.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "jsg-hub-v07",
+        "sourcePath": "assets/images/visuals/visual-05-jsg-hub-v07.png",
+        "afterSection": "canvas",
+        "alt": "Arquitectura del JSG AI Engineering Hub v0.7.",
+        "width": 1600,
+        "height": 900
+      }
+    ],
+    "keyIdeas": [
+      {
+        "ideaId": "menor-autonomia",
+        "afterSection": "autonomia",
+        "text": "La autonomía debe corresponder al riesgo, la reversibilidad y el valor de la tarea."
+      },
+      {
+        "ideaId": "baseline-unico",
+        "afterSection": "agente-unico",
+        "text": "El multiagente debe demostrar una mejora frente a un agente único bien diseñado."
+      },
+      {
+        "ideaId": "delegacion-contrato",
+        "afterSection": "contratos",
+        "text": "Cada delegación necesita objetivo, alcance, entradas, salida, presupuesto y finalización."
+      }
+    ]
+  }
+}

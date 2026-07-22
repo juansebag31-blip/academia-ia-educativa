@@ -1,0 +1,17 @@
+Guion sincronizado — Módulo 7: Agentes y sistemas multiagente
+Duración objetivo: 17–20 minutos.
+
+0:00–1:15 Apertura: del workflow determinista a sistemas capaces de percibir, decidir, actuar y colaborar.
+1:15–2:40 Qué es un agente: objetivo, observación, decisión, herramientas, evaluación y escalamiento.
+2:40–4:10 Capacidades: autonomía, razonamiento, herramientas, memoria y mejora mediante feedback.
+4:10–5:40 Workflow, agente y multiagente: introducir autonomía solo cuando una ruta fija deja de resolver el problema.
+5:40–7:20 Anatomía y bucle: instrucciones, modelo, herramientas, estado, runtime y guardrails.
+7:20–8:50 Autonomía graduada: usar el menor nivel que produzca valor.
+8:50–10:20 Agente único como baseline: router, planner–executor, evaluator–optimizer y aprobación.
+10:20–12:10 Cuándo usar multiagente: especialización, paralelismo, aislamiento, permisos y fronteras organizacionales.
+12:10–13:50 Coordinación: manager–workers, handoffs, secuencial, paralelo, evaluator–worker y event-driven.
+13:50–15:10 Contratos y artefactos: objetivo, alcance, entradas, salida, calidad, presupuesto y finalización.
+15:10–16:20 Seguridad: permisos mínimos, allowlists, sandbox, aprobación, cancelación y blast radius.
+16:20–17:30 MCP y A2A: herramientas/contexto frente a coordinación de agentes remotos.
+17:30–19:00 Caso aplicado y JSG Hub v0.7.
+19:00–20:00 Cierre: diseñar quién decide, con qué herramientas, bajo qué presupuesto y cuándo interviene una persona.

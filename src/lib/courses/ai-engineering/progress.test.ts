@@ -23,7 +23,7 @@ if (!moduleFourUnits) throw new Error("AI Engineering Module 4 progress units ar
 beforeEach(() => window.localStorage.clear());
 
 describe("AI Engineering module progress", () => {
-  it("isolates Module 1 through Module 6 storage coordinates", () => {
+  it("isolates Module 1 through Module 7 storage coordinates", () => {
     const moduleOneKey = buildAiEngineeringUnitStorageKey({
       courseSlug,
       moduleSlug,
@@ -54,6 +54,11 @@ describe("AI Engineering module progress", () => {
       moduleSlug: "modulo-06-workflows-automatizacion",
       unitId: "contenido",
     });
+    const moduleSevenKey = buildAiEngineeringUnitStorageKey({
+      courseSlug,
+      moduleSlug: "modulo-07-agentes-sistemas-multiagente",
+      unitId: "contenido",
+    });
 
     expect(new Set([
       moduleOneKey,
@@ -62,13 +67,15 @@ describe("AI Engineering module progress", () => {
       moduleFourKey,
       moduleFiveKey,
       moduleSixKey,
-    ]).size).toBe(6);
+      moduleSevenKey,
+    ]).size).toBe(7);
     expect(moduleOneKey).toContain(encodeURIComponent(moduleSlug));
     expect(moduleTwoKey).toContain(encodeURIComponent("modulo-02-modelos-fundacionales-seleccion"));
     expect(moduleThreeKey).toContain(encodeURIComponent("modulo-03-contexto-estado-memoria"));
     expect(moduleFourKey).toContain(encodeURIComponent(moduleFourSlug));
     expect(moduleFiveKey).toContain(encodeURIComponent("modulo-05-rag-sistemas-conocimiento"));
     expect(moduleSixKey).toContain(encodeURIComponent("modulo-06-workflows-automatizacion"));
+    expect(moduleSevenKey).toContain(encodeURIComponent("modulo-07-agentes-sistemas-multiagente"));
   });
 
   it("keeps a visited unit in progress until the student confirms completion", () => {

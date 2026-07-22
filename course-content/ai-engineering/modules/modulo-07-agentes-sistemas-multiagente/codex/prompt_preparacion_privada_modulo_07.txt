@@ -1,0 +1,38 @@
+Te adjunto el paquete completo del Módulo 7 — Agentes y sistemas multiagente.
+
+Usa `$course-module-builder`.
+
+Crea la rama `feature/ai-engineering-module-07` desde `main` limpio y actualizado.
+
+Extrae directamente en:
+`course-content/ai-engineering/modules/modulo-07-agentes-sistemas-multiagente`
+
+Mantén:
+`editorialStatus: draft`
+`publish: false`
+
+Adapta el manifiesto al contrato vigente `schemaVersion: 2`, conservando `sourceVersion: "1.0"`, 8 unidades, 3 casos, 12 preguntas, 21 diapositivas, 5 visuales y 3 Ideas esenciales.
+
+Inspecciona el PPTX, sus 21 imágenes internas, los 21 WebP, los 5 visuales y la infografía. Elimina cualquier marca visible de NotebookLM, Gemini, Google o del generador. Recompón la zona periférica sin desenfoques ni parches visibles, reconstruye el PPTX y reexporta 21 WebP y 5 visuales a 1600 × 900.
+
+Revisa títulos cortados, texto pequeño, superposiciones, líneas sobre textos, elementos fuera del lienzo y diagramas desalineados. Genera montajes finales de las 21 diapositivas y los 5 visuales.
+
+Verifica HTML, infografía, MP3, M4A privado, guion/transcripción, 3 casos, PPTX, 21 WebP y 5 visuales. El M4A nunca debe copiarse a `public`.
+
+Confirma estos anclajes:
+`proposito`, `workflow-agente`, `anatomia`, `bucle`, `autonomia`, `tools`, `estado`, `planificacion`, `agente-unico`, `multiagente`, `manager-workers`, `handoffs`, `patrones`, `contratos`, `control-humano`, `confiabilidad`, `interoperabilidad`, `caso`, `canvas`, `unidades-progreso`, `actividad`, `autoevaluacion`, `fuentes`.
+
+Ubica los visuales después de `workflow-agente`, `anatomia`, `manager-workers`, `interoperabilidad` y `canvas`.
+
+Ejecuta validación oficial y preparación privada. Confirma 8 unidades, 3 casos, 12 preguntas, 21 slides, 5 visuales, 3 Ideas esenciales, sin `TODO_*`, sin duplicados y M4A preparados: 0.
+
+Ejecuta:
+`npm test`
+`npm run lint`
+`npm run build`
+
+Verifica Módulos 1–6 sin regresiones, curso original funcionando, persistencia exclusiva del slug, ruta pública del Módulo 7 todavía en 404 y ausencia de assets ajenos modificados.
+
+Entrega rama, carpeta canónica, adaptación del manifiesto, branding corregido, conteos y dimensiones, validación, preparación privada, cantidad y peso de assets, exclusión del M4A, tests, lint, build, Git, rutas de montajes y observaciones.
+
+No registres, no publiques, no hagas commit, merge ni producción. Espera revisión humana.
