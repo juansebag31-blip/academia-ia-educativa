@@ -1,0 +1,285 @@
+# Guion sincronizado de la infografía — Módulo 9
+
+## Título
+Seguridad, guardrails y supervisión
+
+## Duración objetivo
+18–22 minutos
+
+## Tono
+Profesional, claro, didáctico, técnico y conversacional.
+
+## Audiencia
+Estudiantes de nivel intermedio de AI Engineering.
+
+---
+
+## 0:00–1:20 — Apertura
+
+Presentar la idea central:
+
+La seguridad de un sistema de IA no depende de que el modelo “se comporte bien”. Depende de que la arquitectura limite qué datos puede ver, qué herramientas puede usar, qué acciones puede ejecutar y cuándo debe detenerse o pedir aprobación.
+
+Mensaje principal:
+el modelo no es una frontera de confianza. Debe operar dentro de un sistema con controles externos, verificables y reversibles.
+
+---
+
+## 1:20–3:10 — Threat modeling
+
+Recorrer:
+
+- activos;
+- actores;
+- fronteras de confianza;
+- amenazas;
+- controles;
+- riesgo residual.
+
+Explicar que una amenaza solo cobra sentido cuando se relaciona con un activo y una capacidad concreta.
+
+Ejemplos de activos:
+datos, dinero, secretos, reputación y sistemas internos.
+
+---
+
+## 3:10–5:00 — Riesgos clave
+
+Explicar:
+
+- prompt injection directa;
+- prompt injection indirecta;
+- data leakage;
+- tool abuse;
+- escalada de privilegios;
+- resource exhaustion y loops.
+
+Aclarar que no existe una defensa infalible contra prompt injection.
+
+La estrategia correcta es:
+reducir probabilidad y limitar impacto.
+
+---
+
+## 5:00–6:40 — Separar datos de instrucciones
+
+Explicar que el contenido externo:
+
+- puede informar;
+- puede aportar evidencia;
+- no debe redefinir políticas;
+- no debe conceder permisos;
+- no debe introducir nuevas instrucciones privilegiadas.
+
+Comparar:
+
+Incorrecto:
+“el documento recuperado redefine qué hacer”.
+
+Correcto:
+“el documento aporta evidencia, pero el control permanece en el sistema”.
+
+---
+
+## 6:40–8:35 — Defensa en profundidad
+
+Recorrer las capas:
+
+1. entrada;
+2. contenido externo;
+3. modelo;
+4. tool call;
+5. ejecución;
+6. salida;
+7. supervisión humana.
+
+Explicar que cada capa debe tener un control distinto:
+
+- validación;
+- clasificación;
+- policy check;
+- schema validation;
+- sandbox;
+- redacción;
+- aprobación.
+
+---
+
+## 8:35–10:25 — Herramientas, permisos y blast radius
+
+Explicar:
+
+- tools estrechas;
+- inputs tipados;
+- permisos mínimos;
+- credenciales efímeras;
+- acciones sensibles con aprobación.
+
+Definir blast radius:
+cantidad de recursos que una decisión incorrecta podría afectar antes de ser detectada.
+
+Subrayar:
+la autorización debe ejecutarse en el sistema, no dentro del modelo.
+
+---
+
+## 10:25–12:15 — Guardrails
+
+Explicar los tipos:
+
+- input guardrails;
+- output guardrails;
+- tool input guardrails;
+- tool output guardrails;
+- runtime guardrails;
+- human guardrails.
+
+Aclarar:
+
+- propiedades estructurales deben validarse con código;
+- propiedades semánticas pueden requerir clasificadores o modelos;
+- las decisiones sensibles necesitan aprobación humana.
+
+---
+
+## 12:15–14:00 — Supervisión y control
+
+Explicar el flujo:
+
+Propuesta de acción → Revisión de política → Pausa → Aprobación o rechazo → Reanudación.
+
+Añadir:
+
+- escalamiento;
+- abstención;
+- cancelación;
+- kill switch.
+
+Explicar que la aprobación debe mostrar:
+
+- acción;
+- argumentos;
+- recurso;
+- impacto esperado.
+
+---
+
+## 14:00–15:40 — Seguridad en RAG
+
+Explicar:
+
+- autorización antes del retrieval;
+- provenance de fuentes;
+- groundedness;
+- protección cross-tenant;
+- abstención ante evidencia insuficiente;
+- minimización de datos.
+
+Mensaje:
+la autorización debe ocurrir antes de que el modelo vea el documento.
+
+---
+
+## 15:40–17:20 — Seguridad en agentes y multiagentes
+
+Explicar:
+
+- subagentes con contexto mínimo;
+- tools separadas por rol;
+- handoffs controlados;
+- límites globales de coste y turnos;
+- credenciales separadas;
+- validación de agentes remotos.
+
+Aclarar que la especialización no justifica compartir toda la sesión ni todos los permisos.
+
+---
+
+## 17:20–18:45 — Sandboxing, secretos y kill switch
+
+Explicar:
+
+- red bloqueada por defecto;
+- filesystem limitado;
+- CPU, memoria y tiempo acotados;
+- credenciales scoped y efímeras;
+- redacción en logs;
+- revocación;
+- cancelación cooperativa;
+- kill switch operativo.
+
+Mensaje:
+un sistema autónomo sin una ruta probada de cancelación no está listo para producción.
+
+---
+
+## 18:45–20:10 — Pruebas adversariales y red teaming
+
+Explicar:
+
+- prompt injection;
+- tool abuse;
+- data leakage;
+- resource exhaustion;
+- approval bypass;
+- sandbox escape.
+
+Describir el ciclo:
+
+Preparación → Exploración → Explotación controlada → Reporte → Remediación → Retest.
+
+Aclarar que una campaña aprobada no demuestra seguridad permanente.
+
+---
+
+## 20:10–21:20 — Incidentes y respuesta
+
+Recorrer:
+
+Detectar → Contener → Erradicar → Recuperar → Aprender.
+
+Acciones:
+
+- desactivar tools;
+- revocar credenciales;
+- preservar trazas;
+- identificar afectados;
+- restaurar una versión estable;
+- convertir el incidente en nuevas pruebas.
+
+---
+
+## 21:20–22:40 — JSG AI Engineering Hub v0.9
+
+Presentar:
+
+- Threat Model Registry;
+- Trust Boundary Gateway;
+- Prompt Injection Scanner;
+- Policy Decision Point;
+- Tool Enforcement Layer;
+- Credential Broker;
+- Sandbox Runtime;
+- Approval Gateway;
+- Supervision Queue;
+- Kill Switch Controller;
+- Security Trace Store;
+- Incident Response Pipeline.
+
+Explicar que esta versión integra arquitectura, políticas, ejecución segura, supervisión y respuesta.
+
+---
+
+## 22:40–23:30 — Cierre
+
+Síntesis:
+
+- seguridad no es un prompt;
+- el modelo no debe decidir permisos;
+- cada tool necesita límites;
+- la supervisión debe ser real y durable;
+- el kill switch debe estar probado;
+- los incidentes deben convertirse en mejoras verificables.
+
+Transición:
+el siguiente módulo profundizará en coste, velocidad y confiabilidad.

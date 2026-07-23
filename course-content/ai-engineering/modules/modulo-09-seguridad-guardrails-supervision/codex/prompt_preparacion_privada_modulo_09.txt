@@ -1,0 +1,175 @@
+Te adjunto el paquete completo del:
+
+Módulo 9 — Seguridad, guardrails y supervisión
+
+Utiliza la skill:
+
+$course-module-builder
+
+## OBJETIVO
+
+Incorporar el módulo en preparación privada, mantener `draft / publish false`, corregir branding, validar y preparar sin publicación.
+
+## RAMA Y CARPETA
+
+Confirma `main` limpio y actualizado.
+
+Crea:
+
+`feature/ai-engineering-module-09`
+
+Extrae directamente en:
+
+`course-content/ai-engineering/modules/modulo-09-seguridad-guardrails-supervision`
+
+Mantén una única carpeta canónica.
+
+## CONTRATO
+
+Adapta el manifiesto al contrato exacto vigente de `schemaVersion: 2` y conserva:
+
+- Módulo 9;
+- slug `modulo-09-seguridad-guardrails-supervision`;
+- `sourceVersion: "1.0"`;
+- `editorialStatus: draft`;
+- `publish: false`;
+- 8 unidades;
+- 3 casos;
+- 12 preguntas;
+- 15 diapositivas;
+- 5 visuales;
+- 3 Ideas esenciales.
+
+No alteres contenido pedagógico visible sin informarlo, salvo la corrección editorial indicada en el control visual.
+
+## BRANDING, CONTROL VISUAL Y CORRECCIÓN EDITORIAL
+
+Inspecciona:
+
+- PPTX;
+- 15 imágenes internas del PPTX;
+- 15 WebP;
+- 5 visuales PNG;
+- infografía.
+
+Elimina cualquier marca visible de NotebookLM, Gemini, Google o del generador.
+
+La marca esperada aparece en una zona periférica inferior derecha. Recompón el fondo de forma limpia, sin desenfoques, manchas ni parches visibles.
+
+Corrección editorial obligatoria:
+
+- En la diapositiva 1, el título debe quedar exactamente:
+  `Módulo 9 — Seguridad, guardrails y supervisión`
+- Corrige cualquier texto defectuoso equivalente derivado de la exportación de NotebookLM.
+- Aplica la corrección también dentro del PPTX y en la WebP correspondiente.
+
+Después:
+
+- reconstruye el PPTX;
+- confirma 15 diapositivas;
+- reexporta las 15 WebP;
+- recompón los 5 visuales;
+- mantén 1600 × 900;
+- conserva nombres y rutas.
+
+Revisa:
+
+- títulos cortados;
+- superposiciones;
+- líneas atravesando textos;
+- texto demasiado pequeño;
+- elementos fuera del lienzo;
+- diagramas desalineados.
+
+Genera montajes finales de las 15 diapositivas y los 5 visuales y entrega sus rutas.
+
+## MEDIOS Y ESTRUCTURA
+
+Verifica:
+
+- HTML fundacional;
+- mapa editorial;
+- infografía;
+- MP3;
+- M4A privado;
+- guion/transcripción;
+- 3 casos;
+- PPTX;
+- 15 WebP;
+- 5 visuales.
+
+El M4A nunca debe copiarse a `public`.
+
+Confirma los anclajes principales:
+
+`proposito`, `mapa-investigacion`, `decisiones-editoriales`, `modelo-amenazas`, `activos-fronteras`, `prompt-injection`, `datos-instrucciones`, `rag-seguro`, `herramientas`, `permisos`, `entradas-salidas`, `guardrails`, `policy-enforcement`, `sandbox`, `secretos`, `aprobacion`, `supervision`, `escalamiento`, `cancelacion`, `multiagente`, `mcp`, `trazabilidad`, `pruebas-adversariales`, `red-teaming`, `incidentes`, `caso`, `hub`, `unidades`, `actividad`, `autoevaluacion`, `fuentes`.
+
+Ubica los visuales después de:
+
+- `modelo-amenazas`;
+- `datos-instrucciones`;
+- `guardrails`;
+- `cancelacion`;
+- `hub`.
+
+## VALIDACIÓN Y PREPARACIÓN PRIVADA
+
+Ejecuta validación oficial y preparación privada con `$course-module-builder`.
+
+Confirma:
+
+- 8 unidades;
+- 3 casos;
+- 12 preguntas;
+- 15 diapositivas;
+- 5 visuales;
+- 3 Ideas esenciales;
+- ausencia de `TODO_*`;
+- ausencia de IDs, slugs o anclajes duplicados;
+- M4A preparados: 0.
+
+Ejecuta:
+
+`npm test`
+`npm run lint`
+`npm run build`
+
+Verifica:
+
+- Módulos 1–8 sin regresiones;
+- curso original funcionando;
+- persistencia exclusiva del slug del Módulo 9;
+- ruta pública del Módulo 9 todavía en 404;
+- ausencia de assets ajenos modificados.
+
+## INFORME
+
+Entrega:
+
+- rama;
+- carpeta canónica;
+- adaptación del manifiesto;
+- archivos que contenían branding;
+- método de corrección;
+- corrección editorial de la diapositiva 1;
+- diapositivas y visuales reexportados;
+- dimensiones;
+- validación de la skill;
+- preparación privada;
+- cantidad y peso de assets;
+- exclusión del M4A;
+- tests, lint y build;
+- estado de Git;
+- rutas de los montajes;
+- observaciones editoriales.
+
+## DETENERSE ANTES DE
+
+- registro público;
+- preview;
+- commit;
+- push;
+- merge;
+- producción.
+
+Espera revisión humana.

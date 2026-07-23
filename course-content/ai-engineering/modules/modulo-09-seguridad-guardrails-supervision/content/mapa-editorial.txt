@@ -1,0 +1,52 @@
+# Mapa editorial — Módulo 9
+
+## Tesis central
+
+La seguridad de un sistema de IA no depende de que el modelo obedezca. Depende de que la arquitectura limite datos, permisos, tools, efectos y recuperación.
+
+## Progresión pedagógica
+
+1. Definir activos, actores, fronteras y amenazas.
+2. Entender prompt injection directa e indirecta.
+3. Separar datos de instrucciones.
+4. Proteger RAG y sistemas de conocimiento.
+5. Diseñar tools estrechas y permisos mínimos.
+6. Combinar guardrails deterministas, semánticos y humanos.
+7. Aplicar policy decision y enforcement fuera del modelo.
+8. Aislar ejecución y administrar secretos.
+9. Diseñar aprobación, supervisión y escalamiento.
+10. Preparar cancelación y kill switch.
+11. Proteger agentes, multiagentes y agentes remotos.
+12. Verificar controles mediante pruebas adversariales.
+13. Responder a incidentes.
+14. Integrar todo en JSG AI Engineering Hub v0.9.
+
+## Decisiones editoriales
+
+- El modelo no es una frontera de confianza.
+- Prompt injection es un riesgo de sistema.
+- La autorización debe ocurrir fuera del modelo.
+- La seguridad requiere defensa en profundidad.
+- Los permisos deben ser mínimos, temporales y contextuales.
+- La aprobación humana debe ser durable y auditable.
+- Un kill switch debe estar probado antes de producción.
+- Los incidentes deben alimentar nuevas pruebas y controles.
+- El módulo usa observabilidad y trazabilidad del Módulo 8 sin repetir su contenido.
+
+## Caso aplicado
+
+Agente de operaciones con aprobación:
+
+- recibe tickets;
+- consulta documentación;
+- propone cambios;
+- usa tools separadas para lectura, simulación y ejecución;
+- requiere aprobación para efectos reales;
+- opera con credenciales efímeras;
+- ejecuta código en sandbox;
+- registra decisiones sensibles;
+- puede ser cancelado y deshabilitado.
+
+## Resultado esperado
+
+El estudiante debe poder diseñar un AI Security & Supervision Canvas para un sistema RAG, workflow o agente.

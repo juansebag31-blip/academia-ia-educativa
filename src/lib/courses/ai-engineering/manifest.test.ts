@@ -71,7 +71,7 @@ describe("AI Engineering course contract", () => {
       "Workflows y automatización",
       "Agentes y sistemas multiagente",
       "Evaluación, observabilidad y trazabilidad",
-      "Seguridad, guardrails y supervisión humana",
+      "Seguridad, guardrails y supervisión",
       "Coste, velocidad y confiabilidad",
       "Producto y automatización empresarial",
       "Producción y proyecto final",
@@ -131,7 +131,14 @@ describe("AI Engineering course contract", () => {
       publish: true,
       manifestPath: "modules/modulo-08-evaluacion-observabilidad-trazabilidad/module-manifest.json",
     });
-    expect(aiEngineeringCourseManifest.modules.slice(8).every((module) => !module.publish)).toBe(true);
+    expect(aiEngineeringCourseManifest.modules[8]).toMatchObject({
+      editorialSlug: "modulo-09-seguridad-guardrails-supervision",
+      publicSlug: "modulo-09-seguridad-guardrails-supervision",
+      editorialStatus: "approved",
+      publish: true,
+      manifestPath: "modules/modulo-09-seguridad-guardrails-supervision/module-manifest.json",
+    });
+    expect(aiEngineeringCourseManifest.modules.slice(9).every((module) => !module.publish)).toBe(true);
   });
 
   it("prepares and resolves Module 2 with all manifest-declared resources", () => {

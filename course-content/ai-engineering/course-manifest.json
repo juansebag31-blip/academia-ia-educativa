@@ -77,10 +77,12 @@
     },
     {
       "number": 9,
-      "title": "Seguridad, guardrails y supervisión humana",
+      "title": "Seguridad, guardrails y supervisión",
       "editorialSlug": "modulo-09-seguridad-guardrails-supervision",
-      "editorialStatus": "draft",
-      "publish": false
+      "editorialStatus": "approved",
+      "publish": true,
+      "publicSlug": "modulo-09-seguridad-guardrails-supervision",
+      "manifestPath": "modules/modulo-09-seguridad-guardrails-supervision/module-manifest.json"
     },
     {
       "number": 10,

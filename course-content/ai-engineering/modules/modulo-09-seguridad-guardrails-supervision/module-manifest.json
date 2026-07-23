@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 2,
+  "sourceVersion": "1.0",
+  "courseSlug": "ai-engineering-aplicado",
+  "module": {
+    "editorialSlug": "modulo-09-seguridad-guardrails-supervision",
+    "publicSlug": "modulo-09-seguridad-guardrails-supervision",
+    "number": 9,
+    "title": "Seguridad, guardrails y supervisión",
+    "editorialStatus": "approved",
+    "publish": true,
+    "level": "intermedio",
+    "estimatedStudyMinutes": 285,
+    "content": {
+      "foundationalHtml": "content/contenido-fundacional.html",
+      "objectives": {
+        "sectionId": "proposito",
+        "selector": "p.lead"
+      },
+      "activity": {
+        "sectionId": "actividad"
+      },
+      "selfAssessment": {
+        "sectionId": "autoevaluacion",
+        "questionSelector": "ol > li",
+        "questionCount": 12
+      },
+      "sources": {
+        "sectionId": "fuentes",
+        "itemSelector": "ol > li"
+      }
+    },
+    "assets": {
+      "infographic": {
+        "sourcePath": "assets/images/modulo-09-infografia.png",
+        "title": "Seguridad, guardrails y supervisión",
+        "alt": "Infografía del Módulo 9 sobre seguridad, guardrails, permisos, supervisión y respuesta a incidentes."
+      },
+      "audio": {
+        "mp3SourcePath": "assets/audio/modulo-09-audio.mp3",
+        "m4aSourcePath": "assets/audio/modulo-09-audio.m4a",
+        "transcriptSourcePath": "content/transcripcion.txt",
+        "title": "Blindaje frente a la inyección de prompts"
+      },
+      "cases": [
+        {
+          "id": "agente-operaciones-aprobacion",
+          "sourcePath": "cases/caso-01-agente-operaciones-aprobacion.html"
+        },
+        {
+          "id": "rag-documentos-no-confiables",
+          "sourcePath": "cases/caso-02-rag-documentos-no-confiables.html"
+        },
+        {
+          "id": "agentes-desarrollo-sandbox",
+          "sourcePath": "cases/caso-03-agentes-desarrollo-sandbox.html"
+        }
+      ],
+      "presentation": {
+        "sourcePath": "assets/presentations/modulo-09-presentacion.pptx",
+        "title": "Seguridad, guardrails y supervisión",
+        "slidesDirectory": "assets/presentations/slides",
+        "slideCount": 15,
+        "slideFilePattern": "slide-{number:2}.webp",
+        "slideWidth": 1600,
+        "slideHeight": 900,
+        "slideAltTemplate": "Diapositiva {current} de {total} del Módulo 9 — Seguridad, guardrails y supervisión"
+      }
+    },
+    "sections": {
+      "casesTitle": "Casos reales",
+      "presentationTitle": "Presentación"
+    },
+    "interactions": {
+      "activity": {
+        "unitId": "actividad",
+        "responseLabel": "AI Security & Supervision Canvas",
+        "placeholder": "Describe activos, fronteras, amenazas, permisos, tools, guardrails, aprobación, kill switch, pruebas adversariales e incident response."
+      },
+      "selfAssessment": {
+        "unitId": "autoevaluacion"
+      }
+    },
+    "progressUnits": [
+      {
+        "id": "orientacion",
+        "kind": "orientation",
+        "sectionId": "orientacion",
+        "label": "Orientación"
+      },
+      {
+        "id": "contenido",
+        "kind": "foundational-content",
+        "sectionId": "contenido",
+        "label": "Documento fundacional"
+      },
+      {
+        "id": "infografia",
+        "kind": "infographic",
+        "sectionId": "infografia",
+        "label": "Infografía"
+      },
+      {
+        "id": "audio",
+        "kind": "audio",
+        "sectionId": "audio",
+        "label": "Audio explicativo"
+      },
+      {
+        "id": "casos",
+        "kind": "cases",
+        "sectionId": "casos",
+        "label": "Casos reales"
+      },
+      {
+        "id": "presentacion",
+        "kind": "presentation",
+        "sectionId": "presentacion",
+        "label": "Presentación"
+      },
+      {
+        "id": "actividad",
+        "kind": "activity",
+        "sectionId": "actividad",
+        "label": "Actividad"
+      },
+      {
+        "id": "autoevaluacion",
+        "kind": "self-assessment",
+        "sectionId": "autoevaluacion",
+        "label": "Autoevaluación"
+      }
+    ],
+    "visuals": [
+      {
+        "visualId": "threat-modeling",
+        "sourcePath": "assets/images/visuals/visual-01-threat-modeling.png",
+        "afterSection": "modelo-amenazas",
+        "alt": "Flujo de threat modeling con activos, actores, fronteras, amenazas, controles y riesgo residual.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "datos-instrucciones",
+        "sourcePath": "assets/images/visuals/visual-02-datos-instrucciones.png",
+        "afterSection": "datos-instrucciones",
+        "alt": "Comparación entre contenido externo como instrucciones y como evidencia sin autoridad.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "guardrails-capas",
+        "sourcePath": "assets/images/visuals/visual-03-guardrails-capas.png",
+        "afterSection": "guardrails",
+        "alt": "Capas de input, tool input, tool output, output y runtime guardrails.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "kill-switch",
+        "sourcePath": "assets/images/visuals/visual-04-kill-switch.png",
+        "afterSection": "cancelacion",
+        "alt": "Pipeline de aprobación, cancelación cooperativa y kill switch obligatorio.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "jsg-hub-v09",
+        "sourcePath": "assets/images/visuals/visual-05-jsg-hub-v09.png",
+        "afterSection": "hub",
+        "alt": "Arquitectura del JSG AI Engineering Hub v0.9 para seguridad, supervisión y respuesta.",
+        "width": 1600,
+        "height": 900
+      }
+    ],
+    "keyIdeas": [
+      {
+        "ideaId": "modelo-no-frontera",
+        "afterSection": "proposito",
+        "text": "El modelo no es una frontera de confianza: debe operar dentro de controles externos, verificables y reversibles."
+      },
+      {
+        "ideaId": "datos-no-instrucciones",
+        "afterSection": "datos-instrucciones",
+        "text": "El contenido externo puede aportar evidencia, pero no debe redefinir políticas ni permisos."
+      },
+      {
+        "ideaId": "kill-switch-probado",
+        "afterSection": "cancelacion",
+        "text": "Un sistema autónomo sin una ruta probada de cancelación no está listo para producción."
+      }
+    ]
+  }
+}
