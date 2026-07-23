@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 2,
+  "sourceVersion": "1.0",
+  "courseSlug": "ai-engineering-aplicado",
+  "module": {
+    "editorialSlug": "modulo-11-producto-automatizacion-empresarial",
+    "publicSlug": "modulo-11-producto-automatizacion-empresarial",
+    "number": 11,
+    "title": "Producto y automatización empresarial",
+    "editorialStatus": "approved",
+    "publish": true,
+    "level": "intermedio",
+    "estimatedStudyMinutes": 150,
+    "content": {
+      "foundationalHtml": "content/contenido-fundacional.html",
+      "objectives": {
+        "sectionId": "proposito",
+        "selector": "p.lead"
+      },
+      "activity": {
+        "sectionId": "actividad"
+      },
+      "selfAssessment": {
+        "sectionId": "preguntas",
+        "questionSelector": "ol > li",
+        "questionCount": 12
+      },
+      "sources": {
+        "sectionId": "fuentes",
+        "itemSelector": "ol > li"
+      }
+    },
+    "assets": {
+      "infographic": {
+        "sourcePath": "assets/images/modulo-11-infografia.png",
+        "title": "Producto y automatización empresarial",
+        "alt": "Infografía del Módulo 11 sobre producto y automatización empresarial."
+      },
+      "audio": {
+        "mp3SourcePath": "assets/audio/modulo-11-audio.mp3",
+        "m4aSourcePath": "assets/audio/modulo-11-audio.m4a",
+        "transcriptSourcePath": "content/transcripcion.txt",
+        "title": "Producto y automatización empresarial"
+      },
+      "cases": [
+        {
+          "id": "soporte-asistencia-progresiva",
+          "sourcePath": "cases/caso-01-soporte-asistencia-progresiva.html"
+        },
+        {
+          "id": "ventas-crm-gobernado",
+          "sourcePath": "cases/caso-02-ventas-crm-gobernado.html"
+        },
+        {
+          "id": "operaciones-financieras-excepciones",
+          "sourcePath": "cases/caso-03-operaciones-financieras-excepciones.html"
+        }
+      ],
+      "presentation": {
+        "sourcePath": "assets/presentations/modulo-11-presentacion.pptx",
+        "title": "Producto y automatización empresarial",
+        "slidesDirectory": "assets/presentations/slides",
+        "slideCount": 15,
+        "slideFilePattern": "slide-{number:2}.webp",
+        "slideWidth": 1600,
+        "slideHeight": 900,
+        "slideAltTemplate": "Diapositiva {current} de {total} del Módulo 11 - Producto y automatización empresarial"
+      }
+    },
+    "sections": {
+      "casesTitle": "Casos reales",
+      "presentationTitle": "Presentación"
+    },
+    "interactions": {
+      "activity": {
+        "unitId": "actividad",
+        "responseLabel": "AI Product & Automation Canvas",
+        "placeholder": "Define usuario, trabajo, línea base, fricción, resultado, intervención de IA, autonomía, workflow, sistemas, estados, handoffs, métricas, ROI, TCO, buy/build, ownership, piloto y rollout."
+      },
+      "selfAssessment": {
+        "unitId": "autoevaluacion"
+      }
+    },
+    "progressUnits": [
+      {
+        "id": "orientacion",
+        "kind": "orientation",
+        "sectionId": "orientacion",
+        "label": "Orientación"
+      },
+      {
+        "id": "contenido",
+        "kind": "foundational-content",
+        "sectionId": "contenido",
+        "label": "Documento fundacional"
+      },
+      {
+        "id": "infografia",
+        "kind": "infographic",
+        "sectionId": "infografia",
+        "label": "Infografía"
+      },
+      {
+        "id": "audio",
+        "kind": "audio",
+        "sectionId": "audio",
+        "label": "Audio explicativo"
+      },
+      {
+        "id": "casos",
+        "kind": "cases",
+        "sectionId": "casos",
+        "label": "Casos reales"
+      },
+      {
+        "id": "presentacion",
+        "kind": "presentation",
+        "sectionId": "presentacion",
+        "label": "Presentación"
+      },
+      {
+        "id": "actividad",
+        "kind": "activity",
+        "sectionId": "actividad",
+        "label": "Actividad"
+      },
+      {
+        "id": "autoevaluacion",
+        "kind": "self-assessment",
+        "sectionId": "autoevaluacion",
+        "label": "Autoevaluación"
+      }
+    ],
+    "visuals": [
+      {
+        "visualId": "seleccion-oportunidades",
+        "sourcePath": "assets/images/visuals/visual-01.png",
+        "afterSection": "problema",
+        "alt": "Selección de oportunidades según valor, factibilidad, riesgo y adopción.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "escala-autonomia",
+        "sourcePath": "assets/images/visuals/visual-02.png",
+        "afterSection": "autonomia",
+        "alt": "Escala de autonomía desde información hasta autonomía acotada.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "workflow-empresarial",
+        "sourcePath": "assets/images/visuals/visual-03.png",
+        "afterSection": "workflow",
+        "alt": "Workflow empresarial desde el evento hasta el cierre.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "metricas-roi-tco",
+        "sourcePath": "assets/images/visuals/visual-04.png",
+        "afterSection": "roi",
+        "alt": "Relación entre métricas de uso, experiencia, calidad, negocio, operación, ROI y TCO.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "jsg-hub-v11",
+        "sourcePath": "assets/images/visuals/visual-05.png",
+        "afterSection": "hub",
+        "alt": "Arquitectura del JSG AI Engineering Hub v0.11 para producto, automatización y gobernanza.",
+        "width": 1600,
+        "height": 900
+      }
+    ],
+    "keyIdeas": [
+      {
+        "ideaId": "problema-antes-plataforma",
+        "afterSection": "problema",
+        "text": "El producto comienza con un usuario, un trabajo y un resultado verificable."
+      },
+      {
+        "ideaId": "autonomia-gradual",
+        "afterSection": "autonomia",
+        "text": "La autonomía aumenta con evidencia, controles y reversibilidad."
+      },
+      {
+        "ideaId": "producto-sociotecnico",
+        "afterSection": "gobernanza",
+        "text": "UX, adopción, ownership y cambio son tan importantes como el modelo."
+      }
+    ]
+  }
+}

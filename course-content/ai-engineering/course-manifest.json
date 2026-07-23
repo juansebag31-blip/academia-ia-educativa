@@ -97,8 +97,10 @@
       "number": 11,
       "title": "Producto y automatización empresarial",
       "editorialSlug": "modulo-11-producto-automatizacion-empresarial",
-      "editorialStatus": "draft",
-      "publish": false
+      "editorialStatus": "approved",
+      "publish": true,
+      "publicSlug": "modulo-11-producto-automatizacion-empresarial",
+      "manifestPath": "modules/modulo-11-producto-automatizacion-empresarial/module-manifest.json"
     },
     {
       "number": 12,
