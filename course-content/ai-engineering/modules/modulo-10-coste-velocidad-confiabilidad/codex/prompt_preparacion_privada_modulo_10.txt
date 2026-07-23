@@ -1,0 +1,23 @@
+Usa la skill oficial `$course-module-builder` y las plantillas canónicas del repositorio.
+
+Prepara de forma privada el Módulo 10 — Coste, velocidad y confiabilidad.
+
+Base estable: `0e985ccede2594246039ee9b865f30f011cbf0ff`
+Rama exacta: `feature/ai-engineering-module-10`
+Slug: `modulo-10-coste-velocidad-confiabilidad`
+Commit reservado: `feat: integrate AI Engineering module 10`
+
+1. Crea o cambia a la rama exacta desde la base confirmada.
+2. Adapta el paquete a la estructura vigente de `schemaVersion: 2`.
+3. Mantén `editorialStatus: draft` y `publish: false`.
+4. Usa una única carpeta canónica: `course-content/ai-engineering/modules/modulo-10-coste-velocidad-confiabilidad`.
+5. Verifica 8 unidades, 3 casos, 12 preguntas, 15 diapositivas, 5 visuales y 3 Ideas esenciales.
+6. Mantén el M4A privado y fuera de `public`; el MP3 es publicable.
+7. Revisa PPTX, WebP y visuales para detectar branding de NotebookLM o Gemini, textos cortados, superposiciones, líneas sobre texto y desbordamientos. Corrige solo lo necesario sin cambiar contenido aprobado.
+8. Genera montajes finales de 15 diapositivas y 5 visuales para aprobación humana.
+9. Ejecuta validación oficial, tests, lint y build. Si aparece únicamente el timeout conocido de `manifest.test.ts`, ejecuta la suite completa con un worker y reporta ambos resultados sin alterar configuración compartida.
+10. Confirma Módulos 1–9 y curso original sin regresiones, y ruta del Módulo 10 en 404.
+
+Entrega rama, base, carpeta, estado, inventario, adaptación del manifiesto, revisión de branding, rutas de montajes, conteos y peso de assets, M4A públicos 0, pruebas, lint, build y estado exacto de Git.
+
+No registres el módulo, no crees Preview, commit, push, merge ni producción. Detente tras el informe privado.

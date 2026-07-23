@@ -88,8 +88,10 @@
       "number": 10,
       "title": "Coste, velocidad y confiabilidad",
       "editorialSlug": "modulo-10-coste-velocidad-confiabilidad",
-      "editorialStatus": "draft",
-      "publish": false
+      "editorialStatus": "approved",
+      "publish": true,
+      "publicSlug": "modulo-10-coste-velocidad-confiabilidad",
+      "manifestPath": "modules/modulo-10-coste-velocidad-confiabilidad/module-manifest.json"
     },
     {
       "number": 11,

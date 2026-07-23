@@ -1,0 +1,5 @@
+# Guía sincronizada del audio — Módulo 10
+
+Duración aproximada: 34:20.
+
+Recorrido: tesis central; economía de la tarea; tokens y modelos; routing y cascadas; caching, batching y streaming; latencia; paralelismo y presupuestos; resiliencia; queues y backpressure; degradación; SLO; RAG, workflows, agentes y JSG Hub v0.10.

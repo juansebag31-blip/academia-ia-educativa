@@ -138,7 +138,14 @@ describe("AI Engineering course contract", () => {
       publish: true,
       manifestPath: "modules/modulo-09-seguridad-guardrails-supervision/module-manifest.json",
     });
-    expect(aiEngineeringCourseManifest.modules.slice(9).every((module) => !module.publish)).toBe(true);
+    expect(aiEngineeringCourseManifest.modules[9]).toMatchObject({
+      editorialSlug: "modulo-10-coste-velocidad-confiabilidad",
+      publicSlug: "modulo-10-coste-velocidad-confiabilidad",
+      editorialStatus: "approved",
+      publish: true,
+      manifestPath: "modules/modulo-10-coste-velocidad-confiabilidad/module-manifest.json",
+    });
+    expect(aiEngineeringCourseManifest.modules.slice(10).every((module) => !module.publish)).toBe(true);
   });
 
   it("prepares and resolves Module 2 with all manifest-declared resources", () => {

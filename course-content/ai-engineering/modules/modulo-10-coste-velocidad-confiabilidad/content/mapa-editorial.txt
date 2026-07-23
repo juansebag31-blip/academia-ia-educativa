@@ -1,0 +1,17 @@
+# Mapa editorial — Módulo 10
+
+## Tesis central
+Coste, velocidad y confiabilidad se diseñan desde el inicio mediante presupuestos, selección de modelos, control de latencia y mecanismos de resiliencia.
+
+## Progresión
+1. Coste por solicitud, tarea y resultado.
+2. Tokens, contexto y selección de modelos.
+3. Routing y cascadas.
+4. Caching, batching y streaming.
+5. TTFT, end-to-end y tail latency.
+6. Paralelismo y presupuestos.
+7. Timeouts, retries, backoff, jitter e idempotencia.
+8. Circuit breakers, rate limits, queues y backpressure.
+9. Degradación, fallbacks, SLO y error budgets.
+10. Aplicación a RAG, workflows y agentes.
+11. JSG AI Engineering Hub v0.10.

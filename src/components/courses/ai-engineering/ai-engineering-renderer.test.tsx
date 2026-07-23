@@ -83,8 +83,8 @@ describe("AI Engineering visual renderer", () => {
     expect(screen.getByText("Arquitectura de un sistema inteligente")).toBeInTheDocument();
     expect(screen.getByText("Modelo / RAG / Herramientas")).toBeInTheDocument();
     expect(screen.queryByRole("img")).not.toBeInTheDocument();
-    expect(screen.getAllByText("Disponible")).toHaveLength(9);
-    expect(screen.getAllByText("Próximamente")).toHaveLength(3);
+    expect(screen.getAllByText("Disponible")).toHaveLength(10);
+    expect(screen.getAllByText("Próximamente")).toHaveLength(2);
     expect(screen.getByText("Modelos fundacionales y selección")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /02 Disponible Módulo 2 Modelos fundacionales y selección/ })).toHaveAttribute(
       "href",
@@ -117,6 +117,10 @@ describe("AI Engineering visual renderer", () => {
     expect(screen.getByText("Seguridad, guardrails y supervisión").closest("a")).toHaveAttribute(
       "href",
       "/courses/ai-engineering-aplicado/modules/modulo-09-seguridad-guardrails-supervision",
+    );
+    expect(screen.getByText("Coste, velocidad y confiabilidad").closest("a")).toHaveAttribute(
+      "href",
+      "/courses/ai-engineering-aplicado/modules/modulo-10-coste-velocidad-confiabilidad",
     );
     expect(screen.getByText("Producción y proyecto final")).toBeInTheDocument();
     expect(screen.getByText("JSG AI Engineering Hub v0.1")).toBeInTheDocument();

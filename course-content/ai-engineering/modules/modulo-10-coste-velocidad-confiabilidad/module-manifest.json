@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 2,
+  "sourceVersion": "1.0",
+  "courseSlug": "ai-engineering-aplicado",
+  "module": {
+    "editorialSlug": "modulo-10-coste-velocidad-confiabilidad",
+    "publicSlug": "modulo-10-coste-velocidad-confiabilidad",
+    "number": 10,
+    "title": "Coste, velocidad y confiabilidad",
+    "editorialStatus": "approved",
+    "publish": true,
+    "level": "intermedio",
+    "estimatedStudyMinutes": 300,
+    "content": {
+      "foundationalHtml": "content/contenido-fundacional.html",
+      "objectives": {
+        "sectionId": "proposito",
+        "selector": "p.lead"
+      },
+      "activity": {
+        "sectionId": "actividad"
+      },
+      "selfAssessment": {
+        "sectionId": "autoevaluacion",
+        "questionSelector": "ol > li",
+        "questionCount": 12
+      },
+      "sources": {
+        "sectionId": "fuentes",
+        "itemSelector": "ol > li"
+      }
+    },
+    "assets": {
+      "infographic": {
+        "sourcePath": "assets/images/modulo-10-infografia.png",
+        "title": "Coste, velocidad y confiabilidad",
+        "alt": "Infografía del Módulo 10 sobre coste, latencia, resiliencia, SLO y decisiones de arquitectura."
+      },
+      "audio": {
+        "mp3SourcePath": "assets/audio/modulo-10-audio.mp3",
+        "m4aSourcePath": "assets/audio/modulo-10-audio.m4a",
+        "transcriptSourcePath": "content/transcripcion.txt",
+        "title": "Coste, velocidad y confiabilidad"
+      },
+      "cases": [
+        {
+          "id": "soporte-empresarial-routing",
+          "sourcePath": "cases/caso-01-soporte-empresarial-routing.html"
+        },
+        {
+          "id": "pipeline-documental-asincrono",
+          "sourcePath": "cases/caso-02-pipeline-documental-asincrono.html"
+        },
+        {
+          "id": "agente-investigacion-presupuesto",
+          "sourcePath": "cases/caso-03-agente-investigacion-presupuesto.html"
+        }
+      ],
+      "presentation": {
+        "sourcePath": "assets/presentations/modulo-10-presentacion.pptx",
+        "title": "Coste, velocidad y confiabilidad",
+        "slidesDirectory": "assets/presentations/slides",
+        "slideCount": 15,
+        "slideFilePattern": "slide-{number:2}.webp",
+        "slideWidth": 1600,
+        "slideHeight": 900,
+        "slideAltTemplate": "Diapositiva {current} de {total} del Módulo 10 - Coste, velocidad y confiabilidad"
+      }
+    },
+    "sections": {
+      "casesTitle": "Casos reales",
+      "presentationTitle": "Presentación"
+    },
+    "interactions": {
+      "activity": {
+        "unitId": "actividad",
+        "responseLabel": "AI Performance & Reliability Canvas",
+        "placeholder": "Define resultado, volumen, coste, tokens, modelo, routing, cache, TTFT, p95, concurrencia, timeouts, retries, idempotencia, circuit breakers, queues, fallbacks, SLI, SLO y error budget."
+      },
+      "selfAssessment": {
+        "unitId": "autoevaluacion"
+      }
+    },
+    "progressUnits": [
+      {
+        "id": "orientacion",
+        "kind": "orientation",
+        "sectionId": "orientacion",
+        "label": "Orientación"
+      },
+      {
+        "id": "contenido",
+        "kind": "foundational-content",
+        "sectionId": "contenido",
+        "label": "Documento fundacional"
+      },
+      {
+        "id": "infografia",
+        "kind": "infographic",
+        "sectionId": "infografia",
+        "label": "Infografía"
+      },
+      {
+        "id": "audio",
+        "kind": "audio",
+        "sectionId": "audio",
+        "label": "Audio explicativo"
+      },
+      {
+        "id": "casos",
+        "kind": "cases",
+        "sectionId": "casos",
+        "label": "Casos reales"
+      },
+      {
+        "id": "presentacion",
+        "kind": "presentation",
+        "sectionId": "presentacion",
+        "label": "Presentación"
+      },
+      {
+        "id": "actividad",
+        "kind": "activity",
+        "sectionId": "actividad",
+        "label": "Actividad"
+      },
+      {
+        "id": "autoevaluacion",
+        "kind": "self-assessment",
+        "sectionId": "autoevaluacion",
+        "label": "Autoevaluación"
+      }
+    ],
+    "visuals": [
+      {
+        "visualId": "coste-por-tarea",
+        "sourcePath": "assets/images/visuals/visual-01-coste-por-tarea.png",
+        "afterSection": "coste",
+        "alt": "Anatomía del coste por tarea: entrada, modelos, retrieval, tools, retries y supervisión humana.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "presupuesto-latencia",
+        "sourcePath": "assets/images/visuals/visual-02-presupuesto-latencia.png",
+        "afterSection": "latencia",
+        "alt": "Presupuesto de latencia distribuido entre cola, TTFT, generación, tools, retries y serialización.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "resiliencia-operativa",
+        "sourcePath": "assets/images/visuals/visual-03-resiliencia-operativa.png",
+        "afterSection": "circuit",
+        "alt": "Ruta de resiliencia operativa desde timeout y clasificación del fallo hasta circuit breaker y fallback.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "queues-backpressure",
+        "sourcePath": "assets/images/visuals/visual-04-queues-backpressure.png",
+        "afterSection": "queues",
+        "alt": "Diagrama de queues y backpressure entre productores, cola y workers.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "jsg-hub-v10",
+        "sourcePath": "assets/images/visuals/visual-05-jsg-hub-v10.png",
+        "afterSection": "hub",
+        "alt": "Arquitectura del JSG AI Engineering Hub v0.10 para coste, latencia, reintentos, caché, colas y fallback.",
+        "width": 1600,
+        "height": 900
+      }
+    ],
+    "keyIdeas": [
+      {
+        "ideaId": "resultado-util",
+        "afterSection": "coste",
+        "text": "Medir por resultado útil."
+      },
+      {
+        "ideaId": "presupuestos-limites",
+        "afterSection": "presupuestos",
+        "text": "Diseñar presupuestos y límites."
+      },
+      {
+        "ideaId": "degradacion-controlada",
+        "afterSection": "degradacion",
+        "text": "Degradar de forma controlada."
+      }
+    ]
+  }
+}
