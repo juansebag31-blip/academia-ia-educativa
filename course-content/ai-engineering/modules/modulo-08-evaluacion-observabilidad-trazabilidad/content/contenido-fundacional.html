@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Módulo 8 — Evaluación, observabilidad y trazabilidad</title>
+<style>
+:root{--navy:#0B1F33;--petrol:#0F766E;--ink:#172033;--muted:#5d687b;--line:#d8e5e2;--bg:#f3f7f6;--red:#c74343;--green:#0b8f64;--violet:#6d45c8}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,"Segoe UI",Arial,sans-serif;line-height:1.72}
+.cover{min-height:90vh;padding:70px 7vw;display:flex;align-items:center;background:radial-gradient(circle at 82% 20%,rgba(27,184,179,.22),transparent 25%),linear-gradient(135deg,var(--navy),#123a4b 67%,#145d59);color:#fff}
+.cover>div{max-width:1100px}.kicker{display:inline-block;border:1px solid #ffffff55;border-radius:999px;padding:7px 14px;letter-spacing:.08em;font-weight:800;text-transform:uppercase}
+h1{font-size:clamp(2.8rem,7vw,5.7rem);line-height:1.02;margin:.28em 0}.cover p{font-size:1.25rem;color:#dbeff0;max-width:900px}.meta{display:flex;gap:10px;flex-wrap:wrap}.meta span{padding:9px 12px;border:1px solid #ffffff44;border-radius:10px;background:#ffffff14}
+.layout{display:grid;grid-template-columns:300px minmax(0,940px);gap:34px;max-width:1320px;margin:auto;padding:34px 24px 90px}aside{position:sticky;top:18px;align-self:start;background:var(--navy);border-radius:18px;padding:20px;max-height:94vh;overflow:auto}aside a{display:block;color:#dce9f0;text-decoration:none;padding:7px 0;border-bottom:1px solid #ffffff16;font-size:.89rem}
+main{background:#fff;border-radius:20px;padding:clamp(24px,5vw,62px);box-shadow:0 12px 35px #0e274b1a}h2{font-size:2rem;color:var(--navy);margin:2.15em 0 .55em;line-height:1.2}h3{color:#16324a;margin-top:1.55em}
+.lead{font-size:1.13rem;color:#36445a}.callout,.warning,.decision,.case,.interview{border-left:5px solid var(--petrol);background:#eff9f7;padding:18px 20px;border-radius:12px;margin:22px 0}.warning{border-color:var(--red);background:#fff2f2}.decision{border-color:#c96a00;background:#fff7ec}.case{border-color:var(--green);background:#effaf6}.interview{border-color:var(--violet);background:#f6f2ff}
+.flow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:var(--navy);color:#fff;padding:16px;border-radius:13px;margin:18px 0}.flow span{background:#163a50;border:1px solid #2c6370;padding:9px 12px;border-radius:9px}.flow b{color:#78ddd5}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.94rem}th,td{border:1px solid var(--line);padding:12px;vertical-align:top}th{background:#eaf6f4;text-align:left}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{border:1px solid var(--line);background:#f8fbfa;padding:17px;border-radius:12px}.card strong{display:block;color:var(--petrol)}
+li{margin:.4rem 0}.small{color:var(--muted);font-size:.9rem}.footer{margin-top:50px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted)}
+code{background:#edf4f3;padding:.15em .35em;border-radius:5px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.layout>*{min-width:0}aside{position:relative;max-height:none}.grid{grid-template-columns:1fr}table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}}
+</style>
+</head>
+<body>
+<header class="cover"><div>
+<span class="kicker">AI Engineering Aplicado · Módulo 8</span>
+<h1>Evaluación, observabilidad y trazabilidad</h1>
+<p>Cómo demostrar que un sistema de IA funciona, entender por qué falla y decidir con evidencia cuándo lanzar, corregir o revertir.</p>
+<div class="meta"><span>Versión 0.8</span><span>Nivel intermedio</span><span>Lectura: 110–140 min</span><span>JSG Hub v0.8</span></div>
+</div></header>
+<div class="layout">
+<aside>
+<a href="#proposito">1. Propósito</a>
+<a href="#mapa-investigacion">2. Mapa de investigación</a>
+<a href="#decisiones-editoriales">3. Decisiones editoriales</a>
+<a href="#evaluar-observar">4. Evaluar vs observar</a>
+<a href="#ciclo">5. Ciclo de calidad</a>
+<a href="#offline-online">6. Offline y online</a>
+<a href="#datasets">7. Datasets y casos</a>
+<a href="#metricas">8. Métricas y graders</a>
+<a href="#dimensiones">9. Dimensiones de calidad</a>
+<a href="#respuestas">10. Evaluar respuestas</a>
+<a href="#herramientas">11. Evaluar herramientas</a>
+<a href="#agentes">12. Evaluar agentes</a>
+<a href="#trayectorias">13. Trayectorias agentic</a>
+<a href="#trazas">14. Trazas, spans y eventos</a>
+<a href="#correlacion">15. Correlación</a>
+<a href="#telemetria">16. Telemetría operativa</a>
+<a href="#experimentos">17. Experimentos y versiones</a>
+<a href="#regresiones">18. Regresiones</a>
+<a href="#produccion">19. Monitorización</a>
+<a href="#feedback">20. Feedback humano</a>
+<a href="#drift">21. Drift y fallos</a>
+<a href="#release">22. Lanzamiento y rollback</a>
+<a href="#privacidad">23. Privacidad de trazas</a>
+<a href="#caso">24. Caso aplicado</a>
+<a href="#hub">25. JSG Hub v0.8</a>
+<a href="#unidades">26. Ocho unidades</a>
+<a href="#actividad">27. Actividad</a>
+<a href="#autoevaluacion">28. Autoevaluación</a>
+<a href="#fuentes">29. Fuentes</a>
+</aside>
+<main>
+
+<section id="proposito">
+<h2>1. Propósito del módulo</h2>
+<p class="lead">Un sistema de IA no está listo porque “parece funcionar”. Está listo cuando existe evidencia reproducible de que resuelve el objetivo, límites operativos que detectan degradación y trazas suficientes para explicar lo ocurrido.</p>
+<p>Este módulo convierte la evaluación en una disciplina de ingeniería. Conecta pruebas offline, observabilidad en producción, análisis de trayectorias y decisiones de lanzamiento en un mismo ciclo de calidad.</p>
+<div class="callout"><strong>Idea central</strong>Evaluar responde “¿cumple el sistema?”; observar responde “¿qué está ocurriendo?”; trazar responde “¿cómo llegó hasta aquí?”. Las tres capacidades deben compartir identificadores, datos y criterios.</div>
+<ul>
+<li>Diseñar datasets y casos de prueba representativos.</li>
+<li>Combinar métricas deterministas, evaluadores con modelos y revisión humana.</li>
+<li>Evaluar respuestas finales, herramientas, workflows y trayectorias agentic.</li>
+<li>Instrumentar trazas, spans, eventos, costes, latencia y errores.</li>
+<li>Definir regresiones, experimentos, criterios de lanzamiento y rollback.</li>
+</ul>
+</section>
+
+<section id="mapa-investigacion">
+<h2>2. Mapa de investigación</h2>
+<table>
+<tr><th>Pregunta</th><th>Evidencia buscada</th><th>Aplicación pedagógica</th></tr>
+<tr><td>¿Cómo estructurar una evaluación repetible?</td><td>Datasets versionados, criterios explícitos y ejecuciones comparables.</td><td>Separar casos, graders y resultados.</td></tr>
+<tr><td>¿Qué debe observarse en un sistema agentic?</td><td>Generaciones, tools, handoffs, guardrails, spans y costes.</td><td>Pasar de logs aislados a trazas end-to-end.</td></tr>
+<tr><td>¿Cómo evaluar una trayectoria?</td><td>Calidad final y secuencia de decisiones contra un comportamiento esperado.</td><td>Distinguir resultado correcto de proceso seguro y eficiente.</td></tr>
+<tr><td>¿Cómo detectar regresiones?</td><td>Baseline, candidato, segmentación y umbrales.</td><td>Convertir cambios de prompt, modelo o tool en experimentos.</td></tr>
+<tr><td>¿Cómo observar sin exponer datos?</td><td>Minimización, redacción, retención y acceso.</td><td>Integrar privacidad desde el diseño de telemetría.</td></tr>
+</table>
+</section>
+
+<section id="decisiones-editoriales">
+<h2>3. Decisiones editoriales</h2>
+<div class="grid">
+<div class="card"><strong>El sistema es la unidad de evaluación</strong>No basta con medir un modelo aislado: se evalúan retrieval, tools, runtime, agentes y resultado.</div>
+<div class="card"><strong>Offline antes de online</strong>Las pruebas controladas reducen riesgo; la producción revela distribución real y casos desconocidos.</div>
+<div class="card"><strong>Métricas por capas</strong>Calidad, seguridad operativa, coste, latencia y experiencia requieren señales diferentes.</div>
+<div class="card"><strong>Trazas como evidencia</strong>La traza no es solo depuración: alimenta datasets, análisis de fallos y regresiones.</div>
+<div class="card"><strong>Evaluadores calibrados</strong>Un grader con modelo necesita rúbrica, ejemplos, validación humana y control de variabilidad.</div>
+<div class="card"><strong>Decisiones reversibles</strong>Cada release debe definir umbrales, canary, rollback y responsable.</div>
+</div>
+<div class="decision"><strong>Frontera con el Módulo 9</strong>Aquí se evalúa y observa seguridad operacional —por ejemplo, violaciones de política o acciones no autorizadas— sin desarrollar todavía el diseño profundo de guardrails y supervisión.</div>
+</section>
+
+<section id="evaluar-observar">
+<h2>4. Evaluación, observabilidad y trazabilidad</h2>
+<table>
+<tr><th>Capacidad</th><th>Pregunta</th><th>Salida</th></tr>
+<tr><td>Evaluación</td><td>¿El comportamiento cumple un criterio?</td><td>Score, etiqueta, pass/fail, explicación.</td></tr>
+<tr><td>Observabilidad</td><td>¿Qué está cambiando en operación?</td><td>Métricas, alertas, paneles, tendencias.</td></tr>
+<tr><td>Trazabilidad</td><td>¿Qué secuencia produjo este resultado?</td><td>Trace con spans, eventos, inputs, outputs y relaciones.</td></tr>
+<tr><td>Auditoría</td><td>¿Quién cambió, aprobó o ejecutó?</td><td>Registro inmutable con identidad y tiempo.</td></tr>
+</table>
+<div class="warning"><strong>Error común</strong>Guardar todos los prompts no crea observabilidad. Sin correlación, esquema, retención y preguntas operativas, solo se acumulan datos difíciles de interpretar.</div>
+</section>
+
+<section id="ciclo">
+<h2>5. Ciclo continuo de calidad</h2>
+<div class="flow"><span>Objetivo</span><b>→</b><span>Dataset</span><b>→</b><span>Ejecución</span><b>→</b><span>Evaluación</span><b>→</b><span>Análisis de trazas</span><b>→</b><span>Cambio</span><b>→</b><span>Release</span><b>↺</b></div>
+<p>El ciclo comienza con una definición observable de éxito. Cada fallo relevante debe convertirse, cuando sea posible, en un caso reproducible. Cada cambio debe compararse contra una baseline y cada release debe seguir produciendo evidencia online.</p>
+</section>
+
+<section id="offline-online">
+<h2>6. Evaluación offline y online</h2>
+<table>
+<tr><th>Modo</th><th>Ventajas</th><th>Limitaciones</th></tr>
+<tr><td>Offline</td><td>Reproducible, barata, segura y apta para CI.</td><td>Puede no representar tráfico real ni casos emergentes.</td></tr>
+<tr><td>Shadow</td><td>Ejecuta candidato con tráfico real sin afectar al usuario.</td><td>Aumenta coste y exige manejo cuidadoso de datos.</td></tr>
+<tr><td>Canary</td><td>Expone una fracción pequeña y permite detener rápido.</td><td>Necesita métricas sensibles y segmentación.</td></tr>
+<tr><td>A/B</td><td>Compara impacto real entre variantes.</td><td>Requiere volumen, control experimental y métricas de producto.</td></tr>
+<tr><td>Online continua</td><td>Detecta degradación, drift y fallos desconocidos.</td><td>El ground truth puede llegar tarde o no existir.</td></tr>
+</table>
+<div class="decision"><strong>Regla</strong>La evaluación offline decide si una versión puede exponerse. La evaluación online decide si debe seguir expuesta.</div>
+</section>
+
+<section id="datasets">
+<h2>7. Datasets y casos de prueba</h2>
+<p>Un dataset de evaluación es un contrato versionado entre el objetivo del producto y la evidencia esperada.</p>
+<table>
+<tr><th>Campo</th><th>Contenido recomendado</th></tr>
+<tr><td>Entrada</td><td>Consulta, contexto, estado inicial y restricciones.</td></tr>
+<tr><td>Expectativa</td><td>Respuesta de referencia, propiedades obligatorias o comportamiento permitido.</td></tr>
+<tr><td>Rúbrica</td><td>Criterios, escala, ejemplos positivos y negativos.</td></tr>
+<tr><td>Segmento</td><td>Idioma, dificultad, dominio, riesgo, tipo de usuario.</td></tr>
+<tr><td>Entorno</td><td>Tools disponibles, datos simulados y tiempo lógico.</td></tr>
+<tr><td>Proveniencia</td><td>Sintético, histórico, experto o incidente real.</td></tr>
+<tr><td>Versión</td><td>Fecha, autor, cambios y compatibilidad.</td></tr>
+</table>
+<div class="callout"><strong>Cobertura útil</strong>Combinar casos normales, bordes, adversariales, ambiguos, multilingües, de tool failure, de abstención y de escalamiento.</div>
+</section>
+
+<section id="metricas">
+<h2>8. Métricas deterministas y evaluadores con modelos</h2>
+<div class="grid">
+<div class="card"><strong>Deterministas</strong>Esquema válido, regex, exact match, JSON, tool correcta, latencia, coste, número de pasos.</div>
+<div class="card"><strong>Semánticas</strong>Relevancia, completitud, groundedness, claridad y cumplimiento de instrucciones.</div>
+<div class="card"><strong>Model graders</strong>Aplican una rúbrica a outputs o trazas; escalan, pero pueden variar y sesgarse.</div>
+<div class="card"><strong>Human review</strong>Calibra rúbricas, resuelve desacuerdos y aporta juicio de dominio.</div>
+</div>
+<p>La combinación correcta depende del criterio. Una propiedad estructural debe verificarse con código; una propiedad semántica puede requerir un grader; una decisión de alto impacto necesita revisión experta.</p>
+<div class="warning"><strong>No confundir</strong>Un evaluador con modelo no crea verdad. Solo automatiza una rúbrica y debe validarse contra juicios humanos.</div>
+</section>
+
+<section id="dimensiones">
+<h2>9. Dimensiones de calidad</h2>
+<table>
+<tr><th>Dimensión</th><th>Pregunta operativa</th><th>Posible medición</th></tr>
+<tr><td>Exactitud</td><td>¿Los hechos y cálculos son correctos?</td><td>Referencia, verificador, ejecución o revisión.</td></tr>
+<tr><td>Relevancia</td><td>¿Responde al objetivo sin desviarse?</td><td>Rúbrica semántica.</td></tr>
+<tr><td>Groundedness</td><td>¿Las afirmaciones están respaldadas por el contexto?</td><td>Entailment, citas y cobertura de evidencia.</td></tr>
+<tr><td>Completitud</td><td>¿Incluye todos los elementos requeridos?</td><td>Checklist, campos y grader.</td></tr>
+<tr><td>Confiabilidad</td><td>¿Se comporta de forma estable ante repetición y fallos?</td><td>Varianza, retries, tasa de éxito.</td></tr>
+<tr><td>Eficiencia</td><td>¿Logra el resultado con recursos razonables?</td><td>Tokens, latencia, coste y pasos.</td></tr>
+</table>
+</section>
+
+<section id="respuestas">
+<h2>10. Evaluar respuestas finales</h2>
+<ul>
+<li>Definir qué debe contener, qué puede contener y qué debe evitar.</li>
+<li>Separar corrección factual de estilo y utilidad.</li>
+<li>Evaluar por segmentos, no solo con un promedio global.</li>
+<li>Registrar evidencia y explicación del grader.</li>
+<li>Repetir casos sensibles para medir estabilidad.</li>
+</ul>
+<div class="case"><strong>Ejemplo</strong>Una respuesta RAG puede ser relevante pero no estar grounded; puede estar grounded pero ser incompleta; puede ser correcta pero demasiado lenta. Cada dimensión necesita su señal.</div>
+</section>
+
+<section id="herramientas">
+<h2>11. Evaluar herramientas y acciones</h2>
+<table>
+<tr><th>Pregunta</th><th>Señal</th></tr>
+<tr><td>¿Seleccionó la herramienta correcta?</td><td>Tool name esperado o conjunto permitido.</td></tr>
+<tr><td>¿Construyó argumentos válidos?</td><td>Schema, tipos, rangos y autorización.</td></tr>
+<tr><td>¿Interpretó la observación?</td><td>Uso correcto del resultado y manejo de errores.</td></tr>
+<tr><td>¿Repitió una acción?</td><td>Idempotency key, duplicados y retries.</td></tr>
+<tr><td>¿Pidió aprobación cuando correspondía?</td><td>Evento de pausa y decisión humana.</td></tr>
+</table>
+<div class="decision"><strong>Principio</strong>Una respuesta final correcta no compensa una acción incorrecta, peligrosa o innecesariamente costosa.</div>
+</section>
+
+<section id="agentes">
+<h2>12. Evaluar agentes y workflows</h2>
+<table>
+<tr><th>Nivel</th><th>Objeto de evaluación</th></tr>
+<tr><td>Turno</td><td>Decisión individual, tool call o respuesta.</td></tr>
+<tr><td>Trayectoria</td><td>Secuencia de pasos, handoffs y replanificación.</td></tr>
+<tr><td>Run</td><td>Resultado end-to-end, coste, latencia y estado final.</td></tr>
+<tr><td>Sesión</td><td>Continuidad, memoria, satisfacción y acumulación de errores.</td></tr>
+<tr><td>Sistema</td><td>Tasa de éxito, capacidad, incidentes y comportamiento por segmento.</td></tr>
+</table>
+<p>Los agentes requieren evaluar tanto el resultado como el camino. Dos ejecuciones pueden terminar con la misma respuesta, pero una puede haber violado permisos, usado herramientas innecesarias o excedido el presupuesto.</p>
+</section>
+
+<section id="trayectorias">
+<h2>13. Evaluación de trayectorias agentic</h2>
+<div class="flow"><span>Objetivo</span><b>→</b><span>Plan</span><b>→</b><span>Tool A</span><b>→</b><span>Observación</span><b>→</b><span>Handoff</span><b>→</b><span>Resultado</span></div>
+<table>
+<tr><th>Criterio</th><th>Pregunta</th></tr>
+<tr><td>Validez</td><td>¿Cada transición estaba permitida?</td></tr>
+<tr><td>Eficiencia</td><td>¿Hubo pasos redundantes o loops?</td></tr>
+<tr><td>Cobertura</td><td>¿Se ejecutaron verificaciones necesarias?</td></tr>
+<tr><td>Recuperación</td><td>¿Manejó errores y resultados inesperados?</td></tr>
+<tr><td>Finalización</td><td>¿Terminó, escaló o abortó con una razón válida?</td></tr>
+</table>
+<div class="callout"><strong>Comparación flexible</strong>En agentes no siempre existe una única trayectoria correcta. Conviene evaluar propiedades obligatorias, eventos prohibidos y resultado, no imponer una secuencia exacta innecesaria.</div>
+</section>
+
+<section id="trazas">
+<h2>14. Trazas, spans y eventos</h2>
+<table>
+<tr><th>Elemento</th><th>Función</th><th>Ejemplo</th></tr>
+<tr><td>Trace</td><td>Operación end-to-end.</td><td>“Resolver ticket de soporte”.</td></tr>
+<tr><td>Span</td><td>Trabajo con inicio, fin y relación padre-hijo.</td><td>Generación, retrieval, tool, handoff.</td></tr>
+<tr><td>Evento</td><td>Hecho puntual dentro de un span.</td><td>Retry, aprobación, error, fallback.</td></tr>
+<tr><td>Atributo</td><td>Metadato consultable.</td><td>Modelo, versión, tenant, tokens.</td></tr>
+<tr><td>Link</td><td>Relación entre operaciones no jerárquicas.</td><td>Job asíncrono o mensaje en cola.</td></tr>
+</table>
+<p>Las trazas agentic deben representar generaciones, tool calls, guardrails, handoffs y eventos personalizados. Un identificador de grupo puede vincular múltiples runs de una misma conversación o proceso.</p>
+</section>
+
+<section id="correlacion">
+<h2>15. Correlación y contexto</h2>
+<ul>
+<li><code>trace_id</code> para la ejecución end-to-end.</li>
+<li><code>span_id</code> y <code>parent_id</code> para la jerarquía.</li>
+<li><code>session_id</code> o <code>group_id</code> para conversaciones relacionadas.</li>
+<li><code>release_id</code> para asociar telemetría a una versión.</li>
+<li><code>eval_case_id</code> para conectar un run con el dataset.</li>
+<li><code>user_segment</code> y <code>tenant</code> solo cuando sean necesarios y seguros.</li>
+</ul>
+<div class="warning"><strong>Cardinalidad</strong>Los identificadores únicos pertenecen a trazas y logs. Usarlos como etiquetas de métricas puede crear costes y paneles inmanejables.</div>
+</section>
+
+<section id="telemetria">
+<h2>16. Telemetría operativa</h2>
+<table>
+<tr><th>Señal</th><th>Ejemplos</th></tr>
+<tr><td>Calidad</td><td>Pass rate, groundedness, completitud, escalamiento.</td></tr>
+<tr><td>Modelo</td><td>Proveedor, modelo, tokens, stop reason, errores.</td></tr>
+<tr><td>Tools</td><td>Tasa de éxito, latencia, retries, argumentos inválidos.</td></tr>
+<tr><td>Agente</td><td>Turnos, handoffs, loops, abandonos y finalización.</td></tr>
+<tr><td>Coste</td><td>Coste por run, usuario, segmento y resultado exitoso.</td></tr>
+<tr><td>Experiencia</td><td>Tiempo a primera respuesta, duración total y feedback.</td></tr>
+</table>
+<p>Las convenciones semánticas ayudan a usar nombres coherentes entre servicios y plataformas. La observabilidad debe ser portable y no depender de un único panel propietario.</p>
+</section>
+
+<section id="experimentos">
+<h2>17. Experimentos y comparación de versiones</h2>
+<table>
+<tr><th>Elemento</th><th>Baseline</th><th>Candidato</th></tr>
+<tr><td>Modelo</td><td>Modelo actual.</td><td>Nuevo modelo o parámetros.</td></tr>
+<tr><td>Prompt</td><td>Versión estable.</td><td>Prompt modificado.</td></tr>
+<tr><td>Retrieval</td><td>Índice y ranking actuales.</td><td>Nueva estrategia.</td></tr>
+<tr><td>Tools</td><td>Contrato vigente.</td><td>Tool o schema actualizado.</td></tr>
+<tr><td>Runtime</td><td>Límites actuales.</td><td>Nuevos retries, routing o memoria.</td></tr>
+</table>
+<p>Una comparación útil fija dataset, entorno, semillas cuando existan, versiones y presupuesto. Debe reportar mejora global, degradaciones por segmento y cambios en coste o latencia.</p>
+</section>
+
+<section id="regresiones">
+<h2>18. Regresiones y puertas de calidad</h2>
+<div class="grid">
+<div class="card"><strong>Suite mínima</strong>Casos críticos y rápidos para cada cambio.</div>
+<div class="card"><strong>Suite completa</strong>Cobertura amplia antes de release.</div>
+<div class="card"><strong>Casos de incidentes</strong>Cada fallo importante se convierte en prueba.</div>
+<div class="card"><strong>Umbrales por segmento</strong>Evitar que un promedio esconda degradaciones.</div>
+</div>
+<div class="decision"><strong>Puerta de release</strong>No basta con “mejoró el score”. El candidato debe respetar límites de calidad, seguridad operacional, coste y latencia.</div>
+</section>
+
+<section id="produccion">
+<h2>19. Monitorización en producción</h2>
+<ul>
+<li>Definir SLI y SLO para disponibilidad, latencia y éxito de tareas.</li>
+<li>Muestrear evaluaciones semánticas online según riesgo y coste.</li>
+<li>Separar errores técnicos de fallos de calidad.</li>
+<li>Crear alertas por cambios sostenidos, no por ruido aislado.</li>
+<li>Conservar ejemplos representativos para análisis posterior.</li>
+<li>Comparar tráfico real con la distribución del dataset offline.</li>
+</ul>
+<div class="callout"><strong>Indicador compuesto</strong>“Tarea exitosa dentro del presupuesto y sin escalamiento inesperado” suele ser más útil que una métrica aislada de tokens o latencia.</div>
+</section>
+
+<section id="feedback">
+<h2>20. Feedback humano</h2>
+<table>
+<tr><th>Fuente</th><th>Valor</th><th>Riesgo</th></tr>
+<tr><td>Usuario explícito</td><td>Satisfacción y utilidad percibida.</td><td>Sesgo de participación.</td></tr>
+<tr><td>Corrección experta</td><td>Ground truth de dominio.</td><td>Coste y desacuerdo entre expertos.</td></tr>
+<tr><td>Comportamiento implícito</td><td>Reintentos, abandono o edición.</td><td>Interpretación ambigua.</td></tr>
+<tr><td>Incidente</td><td>Fallo real de alto valor.</td><td>Muestra pequeña y sensible.</td></tr>
+</table>
+<p>El feedback debe convertirse en etiquetas, nuevos casos y cambios de producto. Guardarlo sin un proceso de revisión produce acumulación, no aprendizaje.</p>
+</section>
+
+<section id="drift">
+<h2>21. Drift y detección de fallos</h2>
+<table>
+<tr><th>Tipo</th><th>Señal</th><th>Respuesta</th></tr>
+<tr><td>Drift de entrada</td><td>Cambian temas, idiomas o longitud.</td><td>Actualizar cobertura y segmentación.</td></tr>
+<tr><td>Drift de datos</td><td>Fuentes envejecen o cambia el dominio.</td><td>Reindexar, validar frescura y provenance.</td></tr>
+<tr><td>Drift de comportamiento</td><td>Cambia la distribución de outputs o tools.</td><td>Comparar por versión y traza.</td></tr>
+<tr><td>Drift de grader</td><td>El evaluador cambia por modelo o prompt.</td><td>Versionar y recalibrar contra humanos.</td></tr>
+<tr><td>Fallo silencioso</td><td>Respuesta plausible con evidencia insuficiente.</td><td>Groundedness, citas y revisión muestreada.</td></tr>
+</table>
+</section>
+
+<section id="release">
+<h2>22. Criterios de lanzamiento y rollback</h2>
+<div class="flow"><span>Offline pass</span><b>→</b><span>Shadow</span><b>→</b><span>Canary</span><b>→</b><span>Expandir</span><b>→</b><span>Monitorizar</span></div>
+<table>
+<tr><th>Decisión</th><th>Criterio</th></tr>
+<tr><td>Lanzar</td><td>Calidad mínima, sin regresiones críticas y presupuesto aceptable.</td></tr>
+<tr><td>Pausar</td><td>Señal insuficiente o fallo no comprendido.</td></tr>
+<tr><td>Rollback</td><td>Degradación sostenida, incidente, coste o latencia fuera de límite.</td></tr>
+<tr><td>Continuar canary</td><td>Resultado prometedor pero muestra pequeña.</td></tr>
+</table>
+<p>El rollback debe estar preparado antes del release: versión anterior identificada, procedimiento probado, propietario y datos compatibles.</p>
+</section>
+
+<section id="privacidad">
+<h2>23. Privacidad y seguridad de las trazas</h2>
+<ul>
+<li>Capturar solo lo necesario para la pregunta operativa.</li>
+<li>Redactar secretos, credenciales, PII y contenido sensible.</li>
+<li>Separar metadatos consultables de payloads restringidos.</li>
+<li>Definir retención por tipo de dato y riesgo.</li>
+<li>Aplicar controles de acceso, cifrado y auditoría.</li>
+<li>Permitir desactivar contenido sensible en traces cuando proceda.</li>
+<li>Usar datos sintéticos o anonimizados para datasets compartidos.</li>
+</ul>
+<div class="warning"><strong>Trade-off</strong>Más detalle puede facilitar la depuración, pero también aumentar exposición, coste y obligaciones de cumplimiento. La trazabilidad debe diseñarse con minimización de datos.</div>
+</section>
+
+<section id="caso">
+<h2>24. Caso aplicado: agente de soporte con evidencia</h2>
+<p>Una empresa opera un agente que responde consultas, busca documentación, consulta el estado de pedidos y escala casos complejos.</p>
+<table>
+<tr><th>Capa</th><th>Diseño</th></tr>
+<tr><td>Dataset</td><td>Consultas normales, ambiguas, multilingües, de tool failure y escalamiento.</td></tr>
+<tr><td>Evaluación</td><td>Exactitud, groundedness, tool correcta, completitud y política de escalamiento.</td></tr>
+<tr><td>Trace</td><td>Retrieval, generación, tool call, observación, retries y resultado.</td></tr>
+<tr><td>Online</td><td>Éxito de tarea, latencia, coste, abandono y feedback.</td></tr>
+<tr><td>Release</td><td>Baseline, shadow, canary del 5 %, umbrales y rollback.</td></tr>
+</table>
+<div class="case"><strong>Aprendizaje</strong>Una respuesta útil puede esconder una tool incorrecta o una fuente no autorizada. El resultado y la trayectoria deben evaluarse juntos.</div>
+</section>
+
+<section id="hub">
+<h2>25. JSG AI Engineering Hub v0.8</h2>
+<table>
+<tr><th>Componente</th><th>Responsabilidad</th></tr>
+<tr><td>Eval Registry</td><td>Versiona datasets, rúbricas, graders y suites.</td></tr>
+<tr><td>Experiment Runner</td><td>Ejecuta baseline y candidatos en entornos controlados.</td></tr>
+<tr><td>Trace Collector</td><td>Recibe trazas, spans, eventos y correlación.</td></tr>
+<tr><td>Semantic Evaluator</td><td>Aplica graders y conserva explicaciones.</td></tr>
+<tr><td>Deterministic Validators</td><td>Comprueban schemas, tools, permisos y límites.</td></tr>
+<tr><td>Human Review Queue</td><td>Gestiona desacuerdos y casos de alto riesgo.</td></tr>
+<tr><td>Quality Warehouse</td><td>Une resultados, versiones, segmentos y costes.</td></tr>
+<tr><td>Drift Monitor</td><td>Detecta cambios en entradas, comportamiento y graders.</td></tr>
+<tr><td>Release Gate</td><td>Aplica umbrales de calidad, coste, latencia y riesgo.</td></tr>
+<tr><td>Rollback Controller</td><td>Revierte a una versión estable y registra la decisión.</td></tr>
+<tr><td>Privacy Filter</td><td>Redacta y minimiza datos antes de persistir telemetría.</td></tr>
+<tr><td>Incident-to-Eval Pipeline</td><td>Convierte fallos reales en casos de regresión.</td></tr>
+</table>
+</section>
+
+<section id="unidades">
+<h2>26. Ocho unidades de progreso</h2>
+<div class="grid">
+<div class="card"><strong>Unidad 1 · Fundamentos de calidad</strong>Distinguir evaluación, observabilidad, trazabilidad y auditoría.</div>
+<div class="card"><strong>Unidad 2 · Datasets y criterios</strong>Diseñar casos, rúbricas, segmentos y versiones.</div>
+<div class="card"><strong>Unidad 3 · Métricas y evaluadores</strong>Combinar validadores deterministas, graders y revisión humana.</div>
+<div class="card"><strong>Unidad 4 · Respuestas, tools y workflows</strong>Evaluar comportamiento por capas.</div>
+<div class="card"><strong>Unidad 5 · Agentes y trayectorias</strong>Medir decisiones, handoffs, recuperación y finalización.</div>
+<div class="card"><strong>Unidad 6 · Trazas y telemetría</strong>Instrumentar spans, eventos, correlación, costes y latencia.</div>
+<div class="card"><strong>Unidad 7 · Producción y regresiones</strong>Comparar versiones, monitorizar drift y gestionar feedback.</div>
+<div class="card"><strong>Unidad 8 · Release, rollback y privacidad</strong>Tomar decisiones operativas con evidencia y minimización de datos.</div>
+</div>
+</section>
+
+<section id="actividad">
+<h2>27. Actividad práctica</h2>
+<p>Diseña un **Evaluation & Observability Canvas** para un sistema RAG, workflow o agente.</p>
+<ul>
+<li>Objetivo de producto y resultado observable.</li>
+<li>Tres segmentos críticos de usuarios o tareas.</li>
+<li>Dataset offline con casos normales, bordes y fallos.</li>
+<li>Métricas deterministas y semánticas.</li>
+<li>Rúbrica de un grader con ejemplos.</li>
+<li>Eventos obligatorios y prohibidos de la trayectoria.</li>
+<li>Esquema de trace, spans y correlación.</li>
+<li>SLI/SLO de calidad, latencia y coste.</li>
+<li>Estrategia de feedback humano.</li>
+<li>Señales de drift.</li>
+<li>Puerta de release, canary y rollback.</li>
+<li>Política de privacidad y retención.</li>
+</ul>
+</section>
+
+<section id="autoevaluacion">
+<h2>28. Autoevaluación</h2>
+<ol>
+<li>¿Qué diferencia existe entre evaluación, observabilidad y trazabilidad?</li>
+<li>¿Por qué un promedio global puede ocultar una regresión?</li>
+<li>¿Qué campos mínimos debe incluir un caso de evaluación?</li>
+<li>¿Cuándo usarías un validador determinista y cuándo un grader con modelo?</li>
+<li>¿Cómo distinguirías exactitud, relevancia, groundedness y completitud?</li>
+<li>¿Qué debe evaluarse en una llamada a herramienta?</li>
+<li>¿Por qué un resultado correcto puede provenir de una trayectoria inaceptable?</li>
+<li>¿Qué relación existe entre trace, span, evento y atributo?</li>
+<li>¿Cómo compararías una baseline con una versión candidata?</li>
+<li>¿Qué señales usarías para detectar drift?</li>
+<li>¿Qué condiciones justificarían un rollback?</li>
+<li>¿Cómo equilibrarías trazabilidad y privacidad?</li>
+</ol>
+</section>
+
+<section id="fuentes">
+<h2>29. Fuentes base</h2>
+<ol>
+<li><a href="https://platform.openai.com/docs/api-reference/evals" target="_blank" rel="noopener noreferrer">OpenAI — Evals API</a>.</li>
+<li><a href="https://platform.openai.com/docs/api-reference/graders" target="_blank" rel="noopener noreferrer">OpenAI — Graders API</a>.</li>
+<li><a href="https://openai.github.io/openai-agents-python/tracing/" target="_blank" rel="noopener noreferrer">OpenAI Agents SDK — Tracing</a>.</li>
+<li><a href="https://openai.github.io/openai-agents-python/running_agents/" target="_blank" rel="noopener noreferrer">OpenAI Agents SDK — Running agents and tracing configuration</a>.</li>
+<li><a href="https://openai.github.io/openai-agents-python/ref/tracing/" target="_blank" rel="noopener noreferrer">OpenAI Agents SDK — Tracing reference</a>.</li>
+<li><a href="https://developers.googleblog.com/agent-development-kit-easy-to-build-multi-agent-applications/" target="_blank" rel="noopener noreferrer">Google — Agent Development Kit and built-in evaluation</a>.</li>
+<li><a href="https://developers.googleblog.com/en/announcing-user-simulation-in-adk-evaluation/" target="_blank" rel="noopener noreferrer">Google — User Simulation in ADK Evaluation</a>.</li>
+<li><a href="https://google.github.io/agents-cli/guide/evaluation/" target="_blank" rel="noopener noreferrer">Google Agents CLI — Evaluation Guide</a>.</li>
+<li><a href="https://opentelemetry.io/docs/concepts/semantic-conventions/" target="_blank" rel="noopener noreferrer">OpenTelemetry — Semantic Conventions</a>.</li>
+<li><a href="https://opentelemetry.io/docs/specs/semconv/" target="_blank" rel="noopener noreferrer">OpenTelemetry — Semantic Conventions specification</a>.</li>
+<li><a href="https://opentelemetry.io/blog/2026/genai-observability/" target="_blank" rel="noopener noreferrer">OpenTelemetry — GenAI observability</a>.</li>
+<li><a href="https://opentelemetry.io/blog/2024/otel-generative-ai/" target="_blank" rel="noopener noreferrer">OpenTelemetry — Traces, metrics and events for Generative AI</a>.</li>
+</ol>
+<p class="small">Las fuentes se seleccionaron por ser documentación oficial, especificaciones o publicaciones técnicas primarias de los proyectos citados.</p>
+</section>
+
+<div class="footer"><strong>AI Engineering Aplicado — Módulo 8</strong><br>Documento fundacional · 22 de julio de 2026.</div>
+</main></div></body></html>

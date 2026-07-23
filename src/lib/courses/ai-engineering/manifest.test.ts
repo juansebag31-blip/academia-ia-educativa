@@ -124,7 +124,14 @@ describe("AI Engineering course contract", () => {
       publish: true,
       manifestPath: "modules/modulo-07-agentes-sistemas-multiagente/module-manifest.json",
     });
-    expect(aiEngineeringCourseManifest.modules.slice(7).every((module) => !module.publish)).toBe(true);
+    expect(aiEngineeringCourseManifest.modules[7]).toMatchObject({
+      editorialSlug: "modulo-08-evaluacion-observabilidad-trazabilidad",
+      publicSlug: "modulo-08-evaluacion-observabilidad-trazabilidad",
+      editorialStatus: "approved",
+      publish: true,
+      manifestPath: "modules/modulo-08-evaluacion-observabilidad-trazabilidad/module-manifest.json",
+    });
+    expect(aiEngineeringCourseManifest.modules.slice(8).every((module) => !module.publish)).toBe(true);
   });
 
   it("prepares and resolves Module 2 with all manifest-declared resources", () => {

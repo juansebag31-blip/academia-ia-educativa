@@ -1,0 +1,46 @@
+# Mapa editorial — Módulo 8
+
+## Tesis central
+
+La calidad de un sistema de IA no se demuestra con demos ni con una única métrica. Se demuestra mediante evidencia reproducible, observabilidad en producción y trazabilidad de las decisiones.
+
+## Progresión pedagógica
+
+1. Diferenciar evaluación, observabilidad y trazabilidad.
+2. Diseñar datasets, casos y rúbricas.
+3. Combinar validadores deterministas, model graders y revisión humana.
+4. Evaluar respuestas, tools, workflows y agentes.
+5. Analizar trayectorias agentic.
+6. Instrumentar traces, spans, eventos y correlación.
+7. Comparar versiones y detectar regresiones.
+8. Monitorizar producción, drift y feedback.
+9. Definir release gates y rollback.
+10. Diseñar privacidad y retención.
+11. Integrar todo en JSG AI Engineering Hub v0.8.
+
+## Decisiones editoriales
+
+- El sistema completo es la unidad de evaluación.
+- Offline y online forman un único ciclo.
+- La trayectoria importa tanto como el resultado.
+- Los graders deben calibrarse con revisión humana.
+- Los promedios globales no sustituyen el análisis por segmentos.
+- Cada incidente relevante debe alimentar la suite de evaluación.
+- La trazabilidad debe diseñarse con minimización de datos.
+- El módulo no profundiza aún en diseño de guardrails; eso corresponde al Módulo 9.
+
+## Caso aplicado
+
+Agente de soporte con evidencia:
+
+- consulta documentación;
+- usa herramientas;
+- escala casos;
+- registra traces;
+- mide groundedness, tool correctness, coste y latencia;
+- usa baseline, shadow y canary;
+- define rollback.
+
+## Resultado esperado
+
+El estudiante debe poder diseñar un Evaluation & Observability Canvas para un sistema RAG, workflow o agente.

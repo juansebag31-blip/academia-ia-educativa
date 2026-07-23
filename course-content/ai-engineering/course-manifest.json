@@ -70,8 +70,10 @@
       "number": 8,
       "title": "Evaluación, observabilidad y trazabilidad",
       "editorialSlug": "modulo-08-evaluacion-observabilidad-trazabilidad",
-      "editorialStatus": "draft",
-      "publish": false
+      "editorialStatus": "approved",
+      "publish": true,
+      "publicSlug": "modulo-08-evaluacion-observabilidad-trazabilidad",
+      "manifestPath": "modules/modulo-08-evaluacion-observabilidad-trazabilidad/module-manifest.json"
     },
     {
       "number": 9,

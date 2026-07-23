@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 2,
+  "sourceVersion": "1.0",
+  "courseSlug": "ai-engineering-aplicado",
+  "module": {
+    "editorialSlug": "modulo-08-evaluacion-observabilidad-trazabilidad",
+    "publicSlug": "modulo-08-evaluacion-observabilidad-trazabilidad",
+    "number": 8,
+    "title": "Evaluación, observabilidad y trazabilidad",
+    "editorialStatus": "approved",
+    "publish": true,
+    "level": "intermedio",
+    "estimatedStudyMinutes": 280,
+    "content": {
+      "foundationalHtml": "content/contenido-fundacional.html",
+      "objectives": {
+        "sectionId": "proposito",
+        "selector": "p.lead"
+      },
+      "activity": {
+        "sectionId": "actividad"
+      },
+      "selfAssessment": {
+        "sectionId": "autoevaluacion",
+        "questionSelector": "ol > li",
+        "questionCount": 12
+      },
+      "sources": {
+        "sectionId": "fuentes",
+        "itemSelector": "ol > li"
+      }
+    },
+    "assets": {
+      "infographic": {
+        "sourcePath": "assets/images/modulo-08-infografia.png",
+        "title": "Evaluación, observabilidad y trazabilidad",
+        "alt": "Infografía del Módulo 8 sobre evaluación, observabilidad, trazabilidad, regresiones y decisiones de release."
+      },
+      "audio": {
+        "mp3SourcePath": "assets/audio/modulo-08-audio.mp3",
+        "m4aSourcePath": "assets/audio/modulo-08-audio.m4a",
+        "transcriptSourcePath": "content/transcripcion.txt",
+        "title": "Ingeniería de IA y trazabilidad técnica"
+      },
+      "cases": [
+        {
+          "id": "soporte-con-evidencia",
+          "sourcePath": "cases/caso-01-soporte-con-evidencia.html"
+        },
+        {
+          "id": "rag-clinico-administrativo",
+          "sourcePath": "cases/caso-02-rag-clinico-administrativo.html"
+        },
+        {
+          "id": "agente-desarrollo-software",
+          "sourcePath": "cases/caso-03-agente-desarrollo-software.html"
+        }
+      ],
+      "presentation": {
+        "sourcePath": "assets/presentations/modulo-08-presentacion.pptx",
+        "title": "Evaluación, observabilidad y trazabilidad",
+        "slidesDirectory": "assets/presentations/slides",
+        "slideCount": 15,
+        "slideFilePattern": "slide-{number:2}.webp",
+        "slideWidth": 1600,
+        "slideHeight": 900,
+        "slideAltTemplate": "Diapositiva {current} de {total} del Módulo 8 — Evaluación, observabilidad y trazabilidad"
+      }
+    },
+    "sections": {
+      "casesTitle": "Casos reales",
+      "presentationTitle": "Presentación"
+    },
+    "interactions": {
+      "activity": {
+        "unitId": "actividad",
+        "responseLabel": "Evaluation & Observability Canvas",
+        "placeholder": "Describe objetivo, dataset, métricas, graders, trazas, SLI/SLO, drift, release, rollback y privacidad."
+      },
+      "selfAssessment": {
+        "unitId": "autoevaluacion"
+      }
+    },
+    "progressUnits": [
+      {
+        "id": "orientacion",
+        "kind": "orientation",
+        "sectionId": "orientacion",
+        "label": "Orientación"
+      },
+      {
+        "id": "contenido",
+        "kind": "foundational-content",
+        "sectionId": "contenido",
+        "label": "Documento fundacional"
+      },
+      {
+        "id": "infografia",
+        "kind": "infographic",
+        "sectionId": "infografia",
+        "label": "Infografía"
+      },
+      {
+        "id": "audio",
+        "kind": "audio",
+        "sectionId": "audio",
+        "label": "Audio explicativo"
+      },
+      {
+        "id": "casos",
+        "kind": "cases",
+        "sectionId": "casos",
+        "label": "Casos reales"
+      },
+      {
+        "id": "presentacion",
+        "kind": "presentation",
+        "sectionId": "presentacion",
+        "label": "Presentación"
+      },
+      {
+        "id": "actividad",
+        "kind": "activity",
+        "sectionId": "actividad",
+        "label": "Actividad"
+      },
+      {
+        "id": "autoevaluacion",
+        "kind": "self-assessment",
+        "sectionId": "autoevaluacion",
+        "label": "Autoevaluación"
+      }
+    ],
+    "visuals": [
+      {
+        "visualId": "evaluacion-observabilidad-trazabilidad",
+        "sourcePath": "assets/images/visuals/visual-01-evaluacion-observabilidad-trazabilidad.png",
+        "afterSection": "evaluar-observar",
+        "alt": "Comparación entre evaluación, observabilidad y trazabilidad.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "anatomia-caso-prueba",
+        "sourcePath": "assets/images/visuals/visual-02-anatomia-caso-prueba.png",
+        "afterSection": "datasets",
+        "alt": "Componentes de un caso de evaluación versionado.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "trayectoria-agentic",
+        "sourcePath": "assets/images/visuals/visual-03-trayectoria-agentic.png",
+        "afterSection": "trayectorias",
+        "alt": "Trayectoria de un agente con objetivo, herramientas, observaciones y handoffs.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "traces-spans-eventos",
+        "sourcePath": "assets/images/visuals/visual-04-traces-spans-eventos.png",
+        "afterSection": "trazas",
+        "alt": "Estructura de trazabilidad con traces, spans, eventos y atributos.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "jsg-hub-v08",
+        "sourcePath": "assets/images/visuals/visual-05-jsg-hub-v08.png",
+        "afterSection": "hub",
+        "alt": "Arquitectura del JSG AI Engineering Hub v0.8 para evaluación, trazas y decisiones operativas.",
+        "width": 1600,
+        "height": 900
+      }
+    ],
+    "keyIdeas": [
+      {
+        "ideaId": "evidencia-reproducible",
+        "afterSection": "ciclo",
+        "text": "Cada fallo importante debe convertirse, cuando sea posible, en un caso reproducible."
+      },
+      {
+        "ideaId": "trayectoria-y-resultado",
+        "afterSection": "trayectorias",
+        "text": "La trayectoria importa tanto como el resultado final: una respuesta correcta no compensa acciones inseguras o innecesarias."
+      },
+      {
+        "ideaId": "release-reversible",
+        "afterSection": "release",
+        "text": "No existe un release serio sin umbrales, canary, rollback y una versión estable identificada."
+      }
+    ]
+  }
+}

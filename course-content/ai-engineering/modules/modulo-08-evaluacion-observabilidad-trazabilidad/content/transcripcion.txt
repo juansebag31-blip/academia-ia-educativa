@@ -1,0 +1,331 @@
+# Guion sincronizado de la infografía — Módulo 8
+
+## Título
+Evaluación, observabilidad y trazabilidad
+
+## Duración objetivo
+18–21 minutos
+
+## Tono
+Profesional, claro, didáctico, técnico y conversacional.
+
+## Audiencia
+Estudiantes de nivel intermedio de AI Engineering.
+
+---
+
+## 0:00–1:15 — Apertura
+
+Presentar la idea central del módulo:
+
+Un sistema de IA no está listo porque “parece funcionar”. Está listo cuando existe evidencia reproducible de que cumple su objetivo, cuando podemos observar qué ocurre en producción y cuando existe trazabilidad suficiente para explicar cómo llegó a un resultado.
+
+Introducir las tres preguntas guía:
+
+- Evaluación: ¿cumple el criterio?
+- Observabilidad: ¿qué está ocurriendo?
+- Trazabilidad: ¿cómo llegó hasta aquí?
+
+Aclarar que estas tres capacidades deben compartir identificadores, datos y criterios.
+
+---
+
+## 1:15–3:00 — Qué significa cada capacidad
+
+Explicar la diferencia entre:
+
+- evaluación;
+- observabilidad;
+- trazabilidad;
+- auditoría.
+
+La evaluación produce un score, etiqueta, pass/fail o explicación.
+
+La observabilidad produce métricas, paneles, alertas y tendencias.
+
+La trazabilidad representa la secuencia completa mediante traces, spans, eventos y atributos.
+
+La auditoría registra quién cambió, aprobó o ejecutó.
+
+Mensaje clave:
+guardar prompts o logs aislados no crea observabilidad por sí mismo.
+
+---
+
+## 3:00–4:40 — Ciclo continuo de calidad
+
+Recorrer el ciclo:
+
+Objetivo → Dataset → Ejecución → Evaluación → Análisis de trazas → Cambio → Release → Monitorización.
+
+Explicar que cada fallo importante debe convertirse, cuando sea posible, en un caso reproducible.
+
+Cada cambio de modelo, prompt, retrieval, herramienta o runtime debe compararse contra una baseline.
+
+---
+
+## 4:40–6:35 — Evaluación offline y online
+
+Explicar los cinco modos:
+
+1. Offline:
+   reproducible, segura y apta para CI.
+
+2. Shadow:
+   usa tráfico real sin afectar al usuario.
+
+3. Canary:
+   exposición parcial con riesgo controlado.
+
+4. A/B:
+   comparación de impacto real.
+
+5. Online continua:
+   detecta drift, degradaciones y casos emergentes.
+
+Regla:
+offline decide si una versión puede exponerse; online decide si debe seguir expuesta.
+
+---
+
+## 6:35–8:40 — Datasets, casos y rúbricas
+
+Explicar qué debe contener un caso de evaluación:
+
+- entrada;
+- expectativa;
+- rúbrica;
+- segmento;
+- entorno;
+- proveniencia;
+- versión.
+
+Describir la cobertura necesaria:
+
+- casos normales;
+- casos borde;
+- casos ambiguos;
+- casos adversariales;
+- tool failure;
+- abstención;
+- escalamiento;
+- casos multilingües.
+
+Explicar que un dataset de evaluación es un contrato versionado entre el objetivo del producto y la evidencia esperada.
+
+---
+
+## 8:40–10:35 — Métricas deterministas y evaluadores con modelos
+
+Distinguir:
+
+### Validadores deterministas
+- schema válido;
+- JSON;
+- regex;
+- exact match;
+- herramienta correcta;
+- latencia;
+- coste;
+- número de pasos.
+
+### Evaluadores semánticos
+- relevancia;
+- completitud;
+- groundedness;
+- claridad;
+- cumplimiento de instrucciones.
+
+### Revisión humana
+- calibra rúbricas;
+- resuelve desacuerdos;
+- aporta juicio experto.
+
+Advertencia:
+un grader con modelo automatiza una rúbrica, pero no crea verdad por sí solo.
+
+---
+
+## 10:35–12:15 — Dimensiones de calidad
+
+Explicar:
+
+- exactitud;
+- relevancia;
+- groundedness;
+- completitud;
+- confiabilidad;
+- eficiencia.
+
+Ejemplo:
+una respuesta RAG puede ser relevante, pero no estar grounded; puede estar grounded, pero ser incompleta; puede ser correcta, pero demasiado lenta o costosa.
+
+---
+
+## 12:15–13:45 — Evaluar respuestas, herramientas y agentes
+
+Aclarar que el sistema completo es la unidad de evaluación.
+
+En herramientas:
+
+- selección correcta;
+- argumentos válidos;
+- interpretación de observaciones;
+- manejo de errores;
+- idempotencia;
+- aprobación cuando corresponde.
+
+En agentes:
+
+- turno;
+- trayectoria;
+- run;
+- sesión;
+- sistema.
+
+Mensaje:
+una respuesta final correcta no compensa una acción insegura, innecesaria o fuera de presupuesto.
+
+---
+
+## 13:45–15:25 — Evaluación de trayectorias agentic
+
+Explicar que una trayectoria debe evaluarse por:
+
+- validez;
+- eficiencia;
+- cobertura;
+- recuperación;
+- finalización.
+
+Aclarar que no siempre existe una única trayectoria correcta.
+
+Conviene evaluar:
+
+- propiedades obligatorias;
+- eventos prohibidos;
+- límites;
+- resultado final.
+
+---
+
+## 15:25–17:10 — Trazas, spans, eventos y correlación
+
+Definir:
+
+- Trace: operación end-to-end.
+- Span: trabajo con inicio, fin y relación padre-hijo.
+- Evento: hecho puntual dentro de un span.
+- Atributo: metadato consultable.
+- Link: relación no jerárquica.
+
+Identificadores útiles:
+
+- trace_id;
+- span_id;
+- parent_id;
+- session_id o group_id;
+- release_id;
+- eval_case_id.
+
+Advertencia:
+no usar identificadores únicos como etiquetas de métricas por problemas de cardinalidad.
+
+---
+
+## 17:10–18:40 — Telemetría operativa
+
+Explicar qué observar:
+
+- modelo;
+- herramientas;
+- handoffs;
+- tokens;
+- coste;
+- latencia;
+- errores;
+- número de turnos;
+- finalización;
+- feedback.
+
+Idea:
+una métrica compuesta como “tarea exitosa dentro del presupuesto y sin escalamiento inesperado” puede ser más útil que una métrica aislada.
+
+---
+
+## 18:40–20:10 — Regresiones, drift y decisiones
+
+Explicar:
+
+### Regresiones
+- suite mínima;
+- suite completa;
+- casos de incidentes;
+- umbrales por segmento.
+
+### Drift
+- drift de entrada;
+- drift de datos;
+- drift de comportamiento;
+- drift de grader.
+
+### Release
+Offline pass → Shadow → Canary → Expandir → Monitorizar.
+
+Decisiones:
+- lanzar;
+- pausar;
+- continuar canary;
+- rollback.
+
+---
+
+## 20:10–21:20 — Privacidad y seguridad de las trazas
+
+Explicar:
+
+- minimización de datos;
+- redacción de secretos y PII;
+- separación entre metadatos y payloads;
+- retención;
+- acceso;
+- cifrado;
+- auditoría.
+
+Mensaje:
+más detalle facilita la depuración, pero aumenta exposición, coste y obligaciones de cumplimiento.
+
+---
+
+## 21:20–22:40 — JSG AI Engineering Hub v0.8
+
+Presentar los componentes:
+
+- Eval Registry;
+- Experiment Runner;
+- Trace Collector;
+- Semantic Evaluator;
+- Deterministic Validators;
+- Human Review Queue;
+- Quality Warehouse;
+- Drift Monitor;
+- Release Gate;
+- Rollback Controller;
+- Privacy Filter;
+- Incident-to-Eval Pipeline.
+
+Explicar que esta versión conecta evaluación, trazas, experimentos y decisiones operativas.
+
+---
+
+## 22:40–23:30 — Cierre
+
+Síntesis:
+
+- no basta con que una respuesta parezca buena;
+- la trayectoria importa tanto como el resultado;
+- no existe un release serio sin criterios de rollback;
+- la privacidad debe formar parte del diseño de trazas.
+
+Transición:
+el siguiente módulo profundizará en seguridad, guardrails y supervisión.
