@@ -1,0 +1,10 @@
+# Mapa editorial — Módulo 12
+
+## Tesis
+Producción = readiness + despliegue + observabilidad + recuperación + ownership.
+
+## Secuencia
+Demo → PRR → arquitectura → configuración → rollout → rollback → observabilidad → evals → seguridad → operación → proyecto final → defensa.
+
+## Integración
+El módulo exige demostrar las capacidades de los Módulos 1–11 sin repetir su contenido.

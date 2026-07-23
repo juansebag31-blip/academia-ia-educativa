@@ -106,8 +106,10 @@
       "number": 12,
       "title": "Producción y proyecto final",
       "editorialSlug": "modulo-12-produccion-proyecto-final",
-      "editorialStatus": "draft",
-      "publish": false
+      "editorialStatus": "approved",
+      "publish": true,
+      "publicSlug": "modulo-12-produccion-proyecto-final",
+      "manifestPath": "modules/modulo-12-produccion-proyecto-final/module-manifest.json"
     }
   ]
 }

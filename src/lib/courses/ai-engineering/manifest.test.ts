@@ -152,7 +152,14 @@ describe("AI Engineering course contract", () => {
       publish: true,
       manifestPath: "modules/modulo-11-producto-automatizacion-empresarial/module-manifest.json",
     });
-    expect(aiEngineeringCourseManifest.modules.slice(11).every((module) => !module.publish)).toBe(true);
+    expect(aiEngineeringCourseManifest.modules[11]).toMatchObject({
+      editorialSlug: "modulo-12-produccion-proyecto-final",
+      publicSlug: "modulo-12-produccion-proyecto-final",
+      editorialStatus: "approved",
+      publish: true,
+      manifestPath: "modules/modulo-12-produccion-proyecto-final/module-manifest.json",
+    });
+    expect(aiEngineeringCourseManifest.modules.every((module) => module.publish)).toBe(true);
   });
 
   it("prepares and resolves Module 2 with all manifest-declared resources", () => {

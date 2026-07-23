@@ -1,0 +1,3 @@
+# Guía de audio — Módulo 12
+
+Audio integrador sobre demo versus producción, PRR, arquitectura, entornos, release/deploy/rollout, rollback, observabilidad, evals, seguridad, datos, coste, incidentes, ownership, decommissioning y proyecto final. El M4A es privado; el MP3 es publicable.

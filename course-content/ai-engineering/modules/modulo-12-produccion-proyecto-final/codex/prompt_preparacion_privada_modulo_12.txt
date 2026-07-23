@@ -1,0 +1,69 @@
+Usa la skill oficial `$course-module-builder` y las plantillas canónicas del repositorio.
+
+Prepara de forma privada el Módulo 12 — Producción y proyecto final.
+
+Base estable: `02c90775b56319020ad00fa22a0865d9cec0ee55`
+Rama exacta: `feature/ai-engineering-module-12`
+Slug: `modulo-12-produccion-proyecto-final`
+Commit reservado: `feat: integrate AI Engineering module 12`
+
+## OBJETIVO
+
+Incorporar el módulo en la rama feature, mantenerlo privado, corregir branding, validar el contrato y preparar la revisión humana.
+
+## EJECUCIÓN
+
+1. Confirma repositorio y base; crea o cambia a la rama exacta desde el commit estable.
+2. Extrae el paquete directamente en una única carpeta canónica:
+   `course-content/ai-engineering/modules/modulo-12-produccion-proyecto-final`
+3. Adapta el contenido al contrato vigente de `schemaVersion: 2` sin reescritura pedagógica.
+4. Mantén exactamente:
+   - `editorialStatus: draft`
+   - `publish: false`
+5. Verifica:
+   - 8 unidades;
+   - 3 casos;
+   - 12 preguntas abiertas;
+   - 15 diapositivas reales;
+   - 5 visuales;
+   - 3 Ideas esenciales;
+   - actividad;
+   - `estimatedStudyMinutes: 180` o ajuste justificado por la fuente editorial.
+6. Convierte los casos al formato HTML canónico cuando corresponda. No publiques respuestas de las preguntas.
+7. Mantén el M4A únicamente como fuente privada y fuera de `public`. Solo el MP3 puede prepararse como asset público.
+8. Revisa el PPTX, sus imágenes internas, las 15 WebP, la infografía y los 5 visuales para detectar branding de NotebookLM o Gemini, textos cortados, superposiciones, conectores sobre etiquetas y desbordamientos. Corrige solo lo necesario y conserva el contenido aprobado.
+9. Abre y exporta el PPTX con una herramienta real de presentación cuando sea posible. Confirma 15 slides finales a `1600 × 900`.
+10. Genera montajes finales separados de:
+    - 15 diapositivas;
+    - 5 visuales.
+11. Ejecuta la validación oficial de `$course-module-builder` y la preparación privada.
+12. Ejecuta `npm test`, `npm run lint` y `npm run build`. Si aparece únicamente el timeout conocido de `manifest.test.ts`, ejecuta la suite completa con un worker y reporta ambos resultados sin alterar configuración compartida.
+13. Comprueba Módulos 1–11 y curso original sin regresiones.
+14. Confirma que la ruta del Módulo 12 continúe en 404 y que no exista carpeta pública estable ni M4A público.
+15. Revisa Git: todos los cambios deben estar limitados a la carpeta canónica del Módulo 12; no debe haber archivos compartidos modificados en esta etapa.
+
+## INFORME
+
+Entrega:
+- rama, base y HEAD;
+- carpeta canónica;
+- estado editorial;
+- schemaVersion y sourceVersion;
+- conteos reales;
+- duración del audio y número real de slides;
+- adaptación del manifiesto;
+- revisión y correcciones de branding;
+- rutas de los montajes;
+- inventario y peso del paquete canónico y de los assets preparados;
+- M4A preparados y públicos: 0;
+- validación oficial;
+- tests, lint y build;
+- HTTP de Módulos 1–11, curso original y 404 del Módulo 12;
+- estado exacto de Git y cambios inesperados.
+
+## DETENERSE ANTES DE
+
+No registres el módulo en `course-manifest.json`.
+No cambies a `approved / publish: true`.
+No crees Preview, commit, push, merge, fast-forward ni producción.
+Detente después del informe privado.

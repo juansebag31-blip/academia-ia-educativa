@@ -1,0 +1,197 @@
+{
+  "schemaVersion": 2,
+  "sourceVersion": "1.0",
+  "courseSlug": "ai-engineering-aplicado",
+  "module": {
+    "editorialSlug": "modulo-12-produccion-proyecto-final",
+    "publicSlug": "modulo-12-produccion-proyecto-final",
+    "number": 12,
+    "title": "Producción y proyecto final",
+    "editorialStatus": "approved",
+    "publish": true,
+    "level": "integrador",
+    "estimatedStudyMinutes": 180,
+    "content": {
+      "foundationalHtml": "content/contenido-fundacional.html",
+      "objectives": {
+        "sectionId": "proposito",
+        "selector": "p.lead"
+      },
+      "activity": {
+        "sectionId": "actividad"
+      },
+      "selfAssessment": {
+        "sectionId": "preguntas",
+        "questionSelector": "ol > li",
+        "questionCount": 12
+      },
+      "sources": {
+        "sectionId": "fuentes",
+        "itemSelector": "ol > li"
+      }
+    },
+    "assets": {
+      "infographic": {
+        "sourcePath": "assets/images/modulo-12-infografia.png",
+        "title": "Producción y proyecto final",
+        "alt": "Infografía del Módulo 12 sobre producción y proyecto final."
+      },
+      "audio": {
+        "mp3SourcePath": "assets/audio/modulo-12-audio.mp3",
+        "m4aSourcePath": "assets/audio/modulo-12-audio.m4a",
+        "transcriptSourcePath": "content/guion-audio.txt",
+        "title": "Producción y proyecto final"
+      },
+      "cases": [
+        {
+          "id": "copiloto-soporte-rollout-canary",
+          "sourcePath": "cases/caso-01-copiloto-soporte-rollout-canary.html"
+        },
+        {
+          "id": "automatizacion-financiera-rollback",
+          "sourcePath": "cases/caso-02-automatizacion-financiera-rollback.html"
+        },
+        {
+          "id": "asistente-conocimiento-evaluacion-continua",
+          "sourcePath": "cases/caso-03-asistente-conocimiento-evaluacion-continua.html"
+        }
+      ],
+      "presentation": {
+        "sourcePath": "assets/presentations/modulo-12-presentacion.pptx",
+        "title": "Producción y proyecto final",
+        "slidesDirectory": "assets/presentations/slides",
+        "slideCount": 15,
+        "slideFilePattern": "slide-{number:2}.webp",
+        "slideWidth": 1600,
+        "slideHeight": 900,
+        "slideAltTemplate": "Diapositiva {current} de {total} del Módulo 12 - Producción y proyecto final"
+      }
+    },
+    "sections": {
+      "casesTitle": "Casos reales",
+      "presentationTitle": "Presentación"
+    },
+    "interactions": {
+      "activity": {
+        "unitId": "actividad",
+        "responseLabel": "Production Readiness Review",
+        "placeholder": "Completa una PRR para tu proyecto final."
+      },
+      "selfAssessment": {
+        "unitId": "autoevaluacion"
+      }
+    },
+    "progressUnits": [
+      {
+        "id": "orientacion",
+        "kind": "orientation",
+        "sectionId": "orientacion",
+        "label": "Orientación"
+      },
+      {
+        "id": "contenido",
+        "kind": "foundational-content",
+        "sectionId": "contenido",
+        "label": "Documento fundacional"
+      },
+      {
+        "id": "infografia",
+        "kind": "infographic",
+        "sectionId": "infografia",
+        "label": "Infografía"
+      },
+      {
+        "id": "audio",
+        "kind": "audio",
+        "sectionId": "audio",
+        "label": "Audio explicativo"
+      },
+      {
+        "id": "casos",
+        "kind": "cases",
+        "sectionId": "casos",
+        "label": "Casos reales"
+      },
+      {
+        "id": "presentacion",
+        "kind": "presentation",
+        "sectionId": "presentacion",
+        "label": "Presentación"
+      },
+      {
+        "id": "actividad",
+        "kind": "activity",
+        "sectionId": "actividad",
+        "label": "Actividad"
+      },
+      {
+        "id": "autoevaluacion",
+        "kind": "self-assessment",
+        "sectionId": "autoevaluacion",
+        "label": "Autoevaluación"
+      }
+    ],
+    "visuals": [
+      {
+        "visualId": "production-readiness-review",
+        "sourcePath": "assets/images/visuals/visual-01.png",
+        "afterSection": "readiness",
+        "alt": "Production Readiness Review con arquitectura, métricas, capacidad, secretos, evaluaciones, runbooks, rollback y ownership.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "release-deploy-rollout",
+        "sourcePath": "assets/images/visuals/visual-02.png",
+        "afterSection": "despliegue",
+        "alt": "Relación entre release, deploy y rollout con estrategias de despliegue progresivo.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "observabilidad-produccion",
+        "sourcePath": "assets/images/visuals/visual-03.png",
+        "afterSection": "observabilidad",
+        "alt": "Capas de observabilidad en producción para servicio, modelo, workflow, calidad y negocio.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "runbook-incidentes",
+        "sourcePath": "assets/images/visuals/visual-04.png",
+        "afterSection": "incidentes",
+        "alt": "Ciclo de un runbook de incidentes desde la detección hasta el aprendizaje.",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "visualId": "jsg-hub-v10",
+        "sourcePath": "assets/images/visuals/visual-05.png",
+        "afterSection": "hub",
+        "alt": "JSG AI Engineering Hub v1.0 integrado por diseño, contexto, acción, calidad, seguridad, operación, producto y producción.",
+        "width": 1600,
+        "height": 900
+      }
+    ],
+    "keyIdeas": [
+      {
+        "ideaId": "readiness-antes-lanzamiento",
+        "afterSection": "readiness",
+        "title": "Readiness antes del lanzamiento",
+        "text": "Funcionar no basta: el sistema debe ser observable, recuperable y operable por responsables claros."
+      },
+      {
+        "ideaId": "rollout-progresivo-rollback",
+        "afterSection": "despliegue",
+        "title": "Rollout progresivo y rollback probado",
+        "text": "Release, deploy y rollout son decisiones distintas. La exposición aumenta solo con evidencia."
+      },
+      {
+        "ideaId": "produccion-ciclo",
+        "afterSection": "incidentes",
+        "title": "Producción es un ciclo",
+        "text": "Desplegar, observar, responder, aprender y mejorar forman parte del producto, no de una etapa posterior."
+      }
+    ]
+  }
+}
