@@ -63,6 +63,8 @@ describe("AI Engineering authentication navigation", () => {
     const coverLink = screen.getByRole("link", { name: "Portada" });
     const resultsLink = screen.getByRole("link", { name: "Resultados" });
     const architectureLink = screen.getByRole("link", { name: "Arquitectura" });
+    resultsLink.addEventListener("click", (event) => event.preventDefault());
+    architectureLink.addEventListener("click", (event) => event.preventDefault());
 
     expect(coverLink).toHaveAttribute("aria-current", "page");
 
@@ -108,6 +110,8 @@ describe("AI Engineering authentication navigation", () => {
       </AiEngineeringAppShell>,
     );
 
+    fireEvent.scroll(window);
+
     await waitFor(() => {
       expect(screen.getByRole("link", { name: "Resultados" })).toHaveAttribute("aria-current", "location");
     });
@@ -117,6 +121,15 @@ describe("AI Engineering authentication navigation", () => {
 
     await waitFor(() => {
       expect(screen.getByRole("link", { name: "Arquitectura" })).toHaveAttribute("aria-current", "location");
+    });
+
+    positions.proyecto = -500;
+    positions.programa = 300;
+    window.history.replaceState(null, "", "/courses/ai-engineering-aplicado#programa");
+    fireEvent(window, new Event("hashchange"));
+
+    await waitFor(() => {
+      expect(screen.getByRole("link", { name: "12 módulos" })).toHaveAttribute("aria-current", "location");
     });
 
     rectSpy.mockRestore();

@@ -314,11 +314,22 @@ function useActiveCourseSection(pathname: string) {
 
     const updateFromScroll = () => {
       const activationLine = Math.min(window.innerHeight * 0.3, 240);
-      let visibleSection: CourseSectionId = sectionFromHash() ?? "portada";
+      const hashSection = sectionFromHash();
+      let visibleSection: CourseSectionId = hashSection ?? "portada";
 
       for (const section of sectionElements) {
         if (section.element.getBoundingClientRect().top <= activationLine) {
           visibleSection = section.sectionId;
+        }
+      }
+
+      const hashElement = hashSection
+        ? sectionElements.find(({ sectionId }) => sectionId === hashSection)?.element
+        : null;
+      if (hashSection && hashElement) {
+        const hashTop = hashElement.getBoundingClientRect().top;
+        if (hashTop > activationLine && hashTop <= window.innerHeight * 0.75) {
+          visibleSection = hashSection;
         }
       }
 
