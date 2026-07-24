@@ -25,12 +25,14 @@ import {
 } from "@/lib/courses/ai-engineering/routes";
 
 const contextLinks = [
-  { href: AI_ENGINEERING_COURSE_HREF, label: "Portada", icon: GraduationCap },
-  { href: `${AI_ENGINEERING_COURSE_HREF}#resultados`, label: "Resultados", icon: BookOpenCheck },
-  { href: `${AI_ENGINEERING_COURSE_HREF}#arquitectura`, label: "Arquitectura", icon: Blocks },
-  { href: `${AI_ENGINEERING_COURSE_HREF}#proyecto`, label: "Proyecto JSG", icon: FolderKanban },
-  { href: `${AI_ENGINEERING_COURSE_HREF}#programa`, label: "12 módulos", icon: Route },
+  { href: AI_ENGINEERING_COURSE_HREF, sectionId: "portada", label: "Portada", icon: GraduationCap },
+  { href: `${AI_ENGINEERING_COURSE_HREF}#resultados`, sectionId: "resultados", label: "Resultados", icon: BookOpenCheck },
+  { href: `${AI_ENGINEERING_COURSE_HREF}#arquitectura`, sectionId: "arquitectura", label: "Arquitectura", icon: Blocks },
+  { href: `${AI_ENGINEERING_COURSE_HREF}#proyecto`, sectionId: "proyecto", label: "Proyecto JSG", icon: FolderKanban },
+  { href: `${AI_ENGINEERING_COURSE_HREF}#programa`, sectionId: "programa", label: "12 módulos", icon: Route },
 ] as const;
+
+type CourseSectionId = (typeof contextLinks)[number]["sectionId"];
 
 export function AiEngineeringAppShell({
   children,
@@ -43,6 +45,7 @@ export function AiEngineeringAppShell({
 }) {
   const pathname = usePathname();
   const moduleNumber = getAiEngineeringModuleNumber(pathname);
+  const [activeSection, setActiveSection] = useActiveCourseSection(pathname);
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const openMenuButtonRef = useRef<HTMLButtonElement>(null);
@@ -103,6 +106,8 @@ export function AiEngineeringAppShell({
           pathname={pathname}
           collapsed={collapsed}
           moduleNumber={moduleNumber}
+          activeSection={activeSection}
+          onSectionChange={setActiveSection}
         />
       </aside>
 
@@ -137,6 +142,8 @@ export function AiEngineeringAppShell({
         <ContextNavigation
           pathname={pathname}
           moduleNumber={moduleNumber}
+          activeSection={activeSection}
+          onSectionChange={setActiveSection}
           onNavigate={closeMobileMenu}
         />
       </aside>
@@ -204,11 +211,15 @@ function ContextNavigation({
   pathname,
   collapsed = false,
   moduleNumber,
+  activeSection,
+  onSectionChange,
   onNavigate,
 }: {
   pathname: string;
   collapsed?: boolean;
   moduleNumber?: number;
+  activeSection: CourseSectionId | null;
+  onSectionChange: (sectionId: CourseSectionId) => void;
   onNavigate?: () => void;
 }) {
   return (
@@ -221,14 +232,17 @@ function ContextNavigation({
       <div className="space-y-2">
         {contextLinks.map((item) => {
           const Icon = item.icon;
-          const active = item.href === AI_ENGINEERING_COURSE_HREF && pathname === AI_ENGINEERING_COURSE_HREF;
+          const active = pathname === AI_ENGINEERING_COURSE_HREF && activeSection === item.sectionId;
           return (
             <Link
               key={item.href}
               href={item.href}
               title={collapsed ? item.label : undefined}
-              onClick={onNavigate}
-              aria-current={active ? "page" : undefined}
+              onClick={() => {
+                onSectionChange(item.sectionId);
+                onNavigate?.();
+              }}
+              aria-current={active ? (item.sectionId === "portada" ? "page" : "location") : undefined}
               className={`focus-ring flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-bold transition motion-reduce:transition-none ${
                 collapsed ? "justify-center" : ""
               } ${active ? "bg-[#0f766e] text-white" : "text-slate-300 hover:bg-white/10 hover:text-white"}`}
@@ -264,6 +278,79 @@ function ContextNavigation({
       ) : null}
     </nav>
   );
+}
+
+function useActiveCourseSection(pathname: string) {
+  const [activeSection, setActiveSection] = useState<CourseSectionId | null>(
+    pathname === AI_ENGINEERING_COURSE_HREF ? "portada" : null,
+  );
+
+  useEffect(() => {
+    if (pathname !== AI_ENGINEERING_COURSE_HREF) {
+      setActiveSection(null);
+      return;
+    }
+
+    const sectionElements = contextLinks
+      .map(({ sectionId }) => ({
+        sectionId,
+        element: document.getElementById(sectionId),
+      }))
+      .filter(
+        (
+          section,
+        ): section is {
+          sectionId: CourseSectionId;
+          element: HTMLElement;
+        } => section.element !== null,
+      );
+
+    let animationFrame = 0;
+
+    const sectionFromHash = () => {
+      const hash = window.location.hash.slice(1);
+      return contextLinks.find(({ sectionId }) => sectionId === hash)?.sectionId ?? null;
+    };
+
+    const updateFromScroll = () => {
+      const activationLine = Math.min(window.innerHeight * 0.3, 240);
+      let visibleSection: CourseSectionId = sectionFromHash() ?? "portada";
+
+      for (const section of sectionElements) {
+        if (section.element.getBoundingClientRect().top <= activationLine) {
+          visibleSection = section.sectionId;
+        }
+      }
+
+      setActiveSection(visibleSection);
+    };
+
+    const scheduleUpdate = () => {
+      window.cancelAnimationFrame(animationFrame);
+      animationFrame = window.requestAnimationFrame(updateFromScroll);
+    };
+
+    const updateFromHash = () => {
+      const hashSection = sectionFromHash();
+      if (hashSection) setActiveSection(hashSection);
+      scheduleUpdate();
+    };
+
+    setActiveSection(sectionFromHash() ?? "portada");
+    scheduleUpdate();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+    window.addEventListener("hashchange", updateFromHash);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      window.removeEventListener("hashchange", updateFromHash);
+    };
+  }, [pathname]);
+
+  return [activeSection, setActiveSection] as const;
 }
 
 function AiEngineeringBrand({ compact = false }: { compact?: boolean }) {
