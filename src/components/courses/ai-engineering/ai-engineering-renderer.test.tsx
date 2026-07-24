@@ -159,9 +159,21 @@ describe("AI Engineering visual renderer", () => {
 
     expect(screen.getAllByRole("heading", { level: 1, name: "Modelos fundacionales y selección" })[0])
       .toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Volver a la portada del curso" })).toHaveAttribute(
+    expect(screen.getAllByRole("link", { name: "Volver a la portada del curso" })[0]).toHaveAttribute(
       "href",
       "/courses/ai-engineering-aplicado",
+    );
+    expect(screen.getByRole("link", {
+      name: "Módulo anterior: De un modelo a un sistema inteligente",
+    })).toHaveAttribute(
+      "href",
+      "/courses/ai-engineering-aplicado/modules/modulo-01",
+    );
+    expect(screen.getByRole("link", {
+      name: "Siguiente módulo: Contexto, estado y memoria",
+    })).toHaveAttribute(
+      "href",
+      "/courses/ai-engineering-aplicado/modules/modulo-03-contexto-estado-memoria",
     );
     expect(screen.getByRole("navigation", { name: "Migas de pan del módulo" })).toBeInTheDocument();
     expect(moduleTwo.configuration.progressUnits).toHaveLength(8);

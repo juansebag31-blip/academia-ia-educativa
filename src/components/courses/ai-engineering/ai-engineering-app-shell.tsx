@@ -17,8 +17,10 @@ import {
   X,
 } from "lucide-react";
 import type { SessionUser } from "@/lib/auth/session";
+import { buildAuthHref } from "@/lib/auth/return-path";
 import {
   AI_ENGINEERING_COURSE_HREF,
+  AI_ENGINEERING_COURSE_SLUG,
   getAiEngineeringModuleNumber,
 } from "@/lib/courses/ai-engineering/routes";
 
@@ -33,9 +35,11 @@ const contextLinks = [
 export function AiEngineeringAppShell({
   children,
   user,
+  pageLabel,
 }: {
   children: React.ReactNode;
   user: SessionUser | null;
+  pageLabel?: string;
 }) {
   const pathname = usePathname();
   const moduleNumber = getAiEngineeringModuleNumber(pathname);
@@ -151,7 +155,7 @@ export function AiEngineeringAppShell({
               <Menu size={22} />
             </button>
 
-            <CourseBreadcrumb moduleNumber={moduleNumber} />
+            <CourseBreadcrumb moduleNumber={moduleNumber} pageLabel={pageLabel} />
 
             <div className="ml-auto flex items-center gap-2">
               <span className="hidden rounded-full border border-[#0f766e]/15 bg-[#e8f5f2] px-3 py-1.5 text-xs font-black text-[#0f766e] md:inline-flex">
@@ -164,10 +168,22 @@ export function AiEngineeringAppShell({
                 </Link>
               ) : (
                 <div className="flex items-center gap-2">
-                  <Link href="/auth/login" className="focus-ring rounded-xl border border-[#0f766e]/20 px-3 py-2 text-sm font-black text-[#0b1f33] hover:bg-[#f3f7f6]">
+                  <Link
+                    href={buildAuthHref("/auth/login", {
+                      returnTo: AI_ENGINEERING_COURSE_HREF,
+                      courseSlug: AI_ENGINEERING_COURSE_SLUG,
+                    })}
+                    className="focus-ring rounded-xl border border-[#0f766e]/20 px-3 py-2 text-sm font-black text-[#0b1f33] hover:bg-[#f3f7f6]"
+                  >
                     Entrar
                   </Link>
-                  <Link href="/auth/register" className="focus-ring hidden rounded-xl bg-[#0f766e] px-3 py-2 text-sm font-black text-white hover:bg-[#0b5f59] sm:inline-flex">
+                  <Link
+                    href={buildAuthHref("/auth/register", {
+                      returnTo: AI_ENGINEERING_COURSE_HREF,
+                      courseSlug: AI_ENGINEERING_COURSE_SLUG,
+                    })}
+                    className="focus-ring hidden rounded-xl bg-[#0f766e] px-3 py-2 text-sm font-black text-white hover:bg-[#0b5f59] sm:inline-flex"
+                  >
                     Registrarse
                   </Link>
                 </div>
@@ -270,7 +286,13 @@ function AiEngineeringBrand({ compact = false }: { compact?: boolean }) {
   );
 }
 
-function CourseBreadcrumb({ moduleNumber }: { moduleNumber?: number }) {
+function CourseBreadcrumb({
+  moduleNumber,
+  pageLabel,
+}: {
+  moduleNumber?: number;
+  pageLabel?: string;
+}) {
   return (
     <nav aria-label="Migas de pan" className="min-w-0">
       <ol className="flex min-w-0 items-center gap-1.5 text-sm">
@@ -282,7 +304,7 @@ function CourseBreadcrumb({ moduleNumber }: { moduleNumber?: number }) {
         </li>
         <li aria-hidden="true" className="text-slate-400"><ChevronRight size={16} /></li>
         <li className="truncate font-bold text-slate-600" aria-current="page">
-          {moduleNumber ? `Módulo ${moduleNumber}` : "Portada"}
+          {pageLabel ?? (moduleNumber ? `Módulo ${moduleNumber}` : "Portada")}
         </li>
       </ol>
     </nav>

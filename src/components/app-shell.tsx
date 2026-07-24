@@ -1,11 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 import { Bell, BrainCircuit, Menu, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import { courseSeed } from "@/lib/course-seed";
 import type { SessionUser } from "@/lib/auth/session";
+import {
+  buildAuthHref,
+  getAuthCourseContext,
+  getSafeAuthCourseSlug,
+  getSafeInternalReturnTo,
+} from "@/lib/auth/return-path";
 import { isAiEngineeringCoursePath } from "@/lib/courses/ai-engineering/routes";
 import { AiEngineeringAppShell } from "./courses/ai-engineering/ai-engineering-app-shell";
 import { SearchBox } from "./search-box";
@@ -16,11 +22,67 @@ export function AppShell({ children, user }: { children: React.ReactNode; user: 
   if (isAiEngineeringCoursePath(pathname)) {
     return <AiEngineeringAppShell user={user}>{children}</AiEngineeringAppShell>;
   }
+  if (pathname.startsWith("/auth/")) {
+    return (
+      <Suspense fallback={<AuthShellFallback>{children}</AuthShellFallback>}>
+        <AuthShellResolver pathname={pathname} user={user}>
+          {children}
+        </AuthShellResolver>
+      </Suspense>
+    );
+  }
 
-  return <StandardAppShell user={user}>{children}</StandardAppShell>;
+  return <StandardAppShell user={user} pathname={pathname}>{children}</StandardAppShell>;
 }
 
-function StandardAppShell({ children, user }: { children: React.ReactNode; user: SessionUser | null }) {
+function AuthShellResolver({
+  children,
+  user,
+  pathname,
+}: {
+  children: React.ReactNode;
+  user: SessionUser | null;
+  pathname: string;
+}) {
+  const searchParams = useSearchParams();
+  const context = getAuthCourseContext(
+    searchParams.get("returnTo"),
+    searchParams.get("courseSlug"),
+  );
+
+  if (context) {
+    return (
+      <AiEngineeringAppShell
+        user={user}
+        pageLabel={pathname === "/auth/register" ? "Registro" : "Acceso"}
+      >
+        {children}
+      </AiEngineeringAppShell>
+    );
+  }
+
+  return <StandardAppShell user={user} pathname={pathname}>{children}</StandardAppShell>;
+}
+
+function AuthShellFallback({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-[#f4f8f7] text-[#0b1f33]">
+      <main className="mx-auto w-full max-w-7xl px-4 py-5 sm:px-8 sm:py-8">
+        {children}
+      </main>
+    </div>
+  );
+}
+
+function StandardAppShell({
+  children,
+  user,
+  pathname,
+}: {
+  children: React.ReactNode;
+  user: SessionUser | null;
+  pathname: string;
+}) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -112,14 +174,9 @@ function StandardAppShell({ children, user }: { children: React.ReactNode; user:
                 </div>
               </Link>
             ) : (
-              <div className="flex items-center gap-2">
-                <Link href="/auth/login" className="rounded-xl border border-line-soft px-3 py-2 text-sm font-black text-slate-700 hover:bg-slate-50">
-                  Entrar
-                </Link>
-                <Link href="/auth/register" className="hidden rounded-xl bg-ember px-3 py-2 text-sm font-black text-white hover:bg-ember-dark sm:inline-flex">
-                  Registrarse
-                </Link>
-              </div>
+              <Suspense fallback={<AuthNavigationLinksView loginHref="/auth/login" registerHref="/auth/register" />}>
+                <AuthNavigationLinks pathname={pathname} />
+              </Suspense>
             )}
           </div>
           <div className="block border-t border-line-soft px-4 py-3 md:hidden">
@@ -128,6 +185,38 @@ function StandardAppShell({ children, user }: { children: React.ReactNode; user:
         </header>
         <main className="mx-auto w-full max-w-7xl px-4 py-5 sm:px-8 sm:py-8">{children}</main>
       </div>
+    </div>
+  );
+}
+
+function AuthNavigationLinks({ pathname }: { pathname: string }) {
+  const searchParams = useSearchParams();
+  const returnTo = pathname.startsWith("/auth/") ? getSafeInternalReturnTo(searchParams.get("returnTo")) : null;
+  const courseSlug = pathname.startsWith("/auth/") ? getSafeAuthCourseSlug(searchParams.get("courseSlug")) : null;
+
+  return (
+    <AuthNavigationLinksView
+      loginHref={returnTo ? buildAuthHref("/auth/login", { returnTo, courseSlug }) : "/auth/login"}
+      registerHref={returnTo ? buildAuthHref("/auth/register", { returnTo, courseSlug }) : "/auth/register"}
+    />
+  );
+}
+
+function AuthNavigationLinksView({
+  loginHref,
+  registerHref,
+}: {
+  loginHref: string;
+  registerHref: string;
+}) {
+  return (
+    <div className="flex items-center gap-2">
+      <Link href={loginHref} className="rounded-xl border border-line-soft px-3 py-2 text-sm font-black text-slate-700 hover:bg-slate-50">
+        Entrar
+      </Link>
+      <Link href={registerHref} className="hidden rounded-xl bg-ember px-3 py-2 text-sm font-black text-white hover:bg-ember-dark sm:inline-flex">
+        Registrarse
+      </Link>
     </div>
   );
 }

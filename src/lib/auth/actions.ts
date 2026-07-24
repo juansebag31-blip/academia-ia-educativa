@@ -3,10 +3,49 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import {
+  buildAuthHref,
+  DEFAULT_AUTH_RETURN_TO,
+  getAuthCourseContext,
+  getSafeInternalReturnTo,
+} from "./return-path";
 import { validateEmail, validatePassword, validateRegistration } from "./validation";
 
-function authRedirect(path: string, type: "error" | "message", message: string): never {
-  redirect(`${path}?${type}=${encodeURIComponent(message)}`);
+type AuthContext = {
+  requestedReturnTo: string | null;
+  returnTo: string;
+  courseSlug: string | null;
+};
+
+function readAuthContext(formData: FormData): AuthContext {
+  const requestedReturnTo = getSafeInternalReturnTo(formData.get("returnTo"));
+  const courseContext = getAuthCourseContext(
+    requestedReturnTo,
+    formData.get("courseSlug"),
+  );
+  return {
+    requestedReturnTo,
+    returnTo: requestedReturnTo ?? DEFAULT_AUTH_RETURN_TO,
+    courseSlug: courseContext?.courseSlug ?? null,
+  };
+}
+
+function authRedirect(
+  path: string,
+  type: "error" | "message",
+  message: string,
+  context?: AuthContext,
+): never {
+  if ((path === "/auth/login" || path === "/auth/register") && context) {
+    redirect(buildAuthHref(path, {
+      [type]: message,
+      returnTo: context.requestedReturnTo,
+      courseSlug: context.courseSlug,
+    }));
+  }
+
+  const searchParams = new URLSearchParams({ [type]: message });
+  redirect(`${path}?${searchParams.toString()}`);
 }
 
 async function getOrigin() {
@@ -15,46 +54,63 @@ async function getOrigin() {
 }
 
 export async function registerAction(formData: FormData) {
+  const context = readAuthContext(formData);
   const result = validateRegistration({
     displayName: String(formData.get("displayName") ?? ""),
     email: String(formData.get("email") ?? ""),
     password: String(formData.get("password") ?? ""),
     confirmPassword: String(formData.get("confirmPassword") ?? ""),
   });
-  if (!result.ok) authRedirect("/auth/register", "error", result.message);
+  if (!result.ok) authRedirect("/auth/register", "error", result.message, context);
 
   const supabase = await createSupabaseServerClient();
-  if (!supabase) authRedirect("/auth/register", "error", "El registro no está configurado.");
+  if (!supabase) {
+    authRedirect("/auth/register", "error", "El registro no está configurado.", context);
+  }
 
   const origin = await getOrigin();
-  const { error } = await supabase.auth.signUp({
+  const callbackUrl = new URL("/auth/callback", origin);
+  callbackUrl.searchParams.set("next", context.returnTo);
+  if (context.courseSlug) callbackUrl.searchParams.set("courseSlug", context.courseSlug);
+  const metadata: Record<string, string> = {
+    display_name: result.value.displayName,
+  };
+  if (context.courseSlug) metadata.course_slug = context.courseSlug;
+
+  const { data, error } = await supabase.auth.signUp({
     email: result.value.email,
     password: result.value.password,
     options: {
-      data: { display_name: result.value.displayName },
-      emailRedirectTo: `${origin}/auth/callback?next=/account`,
+      data: metadata,
+      emailRedirectTo: callbackUrl.toString(),
     },
   });
 
-  if (error) authRedirect("/auth/register", "error", error.message);
-  authRedirect("/auth/login", "message", "Revisa tu correo para confirmar la cuenta.");
+  if (error) authRedirect("/auth/register", "error", error.message, context);
+  if (data.session) redirect(context.returnTo);
+  authRedirect("/auth/login", "message", "Revisa tu correo para confirmar la cuenta.", context);
 }
 
 export async function loginAction(formData: FormData) {
+  const context = readAuthContext(formData);
   const email = validateEmail(String(formData.get("email") ?? ""));
   const password = validatePassword(String(formData.get("password") ?? ""));
-  if (!email.ok) authRedirect("/auth/login", "error", email.message);
-  if (!password.ok) authRedirect("/auth/login", "error", password.message);
+  if (!email.ok) authRedirect("/auth/login", "error", email.message, context);
+  if (!password.ok) authRedirect("/auth/login", "error", password.message, context);
 
   const supabase = await createSupabaseServerClient();
-  if (!supabase) authRedirect("/auth/login", "error", "El inicio de sesión no está configurado.");
+  if (!supabase) {
+    authRedirect("/auth/login", "error", "El inicio de sesión no está configurado.", context);
+  }
 
   const { error } = await supabase.auth.signInWithPassword({
     email: email.value,
     password: password.value,
   });
-  if (error) authRedirect("/auth/login", "error", "Correo o contraseña incorrectos.");
-  redirect("/account");
+  if (error) {
+    authRedirect("/auth/login", "error", "Correo o contraseña incorrectos.", context);
+  }
+  redirect(context.returnTo);
 }
 
 export async function forgotPasswordAction(formData: FormData) {

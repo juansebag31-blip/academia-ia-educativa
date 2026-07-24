@@ -24,6 +24,7 @@ import {
   AiEngineeringLearningVisual,
 } from "./ai-engineering-learning-visual";
 import { AiEngineeringPresentationViewer } from "./ai-engineering-presentation-viewer";
+import { AiEngineeringModuleSequenceNavigation } from "./ai-engineering-module-sequence-navigation";
 import {
   AiEngineeringModuleCompletion,
   AiEngineeringProgressNavigation,
@@ -232,6 +233,7 @@ export function AiEngineeringModulePage({
         ) : null}
       </ModuleSection>
       <AiEngineeringModuleCompletion courseHref={`/courses/${course.summary.slug}`} />
+      <AiEngineeringModuleSequenceNavigation course={course} module={module} />
     </div>
     </AiEngineeringProgressProvider>
   );
