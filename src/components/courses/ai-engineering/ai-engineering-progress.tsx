@@ -7,6 +7,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -27,6 +28,7 @@ import {
   AI_ENGINEERING_UNIT_STATE_EVENT,
   type AiEngineeringUnitCoordinates,
 } from "@/lib/courses/ai-engineering/unit-storage";
+import type { AiEngineeringCourseDefinition } from "@/lib/courses/types";
 
 type ProgressContextValue = {
   units: readonly AiEngineeringProgressUnit[];
@@ -38,6 +40,21 @@ type ProgressContextValue = {
   completeUnit: (unitId: string) => void;
   visitUnit: (unitId: string) => void;
   refresh: () => void;
+};
+
+type AiEngineeringCourseProgressSnapshot = {
+  totalUnits: number;
+  completedUnits: number;
+  completedModules: number;
+  startedModules: number;
+  activeModule?: AiEngineeringCourseDefinition["modules"][number];
+  modules: Array<{
+    moduleSlug: string;
+    completedUnits: number;
+    totalUnits: number;
+    percentage: number;
+  }>;
+  percentage: number;
 };
 
 const ProgressContext = createContext<ProgressContextValue | null>(null);
@@ -271,36 +288,145 @@ export function AiEngineeringModuleCompletion({ courseHref }: { courseHref: stri
 }
 
 export function AiEngineeringCourseProgressCta({
-  courseSlug,
-  moduleSlug,
-  moduleNumber,
-  units,
-  moduleHref,
+  course,
 }: {
-  courseSlug: string;
-  moduleSlug: string;
-  moduleNumber: number;
-  units: readonly AiEngineeringProgressUnit[];
-  moduleHref: string;
+  course: AiEngineeringCourseDefinition;
 }) {
-  const { snapshot } = useAiEngineeringProgressSnapshot(courseSlug, moduleSlug, units);
-  const started = snapshot.percentage > 0 || Object.values(snapshot.statuses).some((status) => status === "in-progress");
+  const { snapshot } = useAiEngineeringCourseProgressSnapshot(course);
+  const activeModule = snapshot.activeModule ?? course.modules[0];
+  const moduleHref = `/courses/${course.summary.slug}/modules/${activeModule.summary.slug}`;
+  const started = snapshot.completedUnits > 0 || snapshot.startedModules > 0;
 
   return (
-    <div className="mt-8 max-w-md" aria-live="polite">
-      <p className="text-sm font-black text-[#0b1f33]">
-        {snapshot.completedCount} de {units.length} etapas · {snapshot.percentage} % completado
-      </p>
-      <ProgressBar percentage={snapshot.percentage} label={`Progreso del Módulo ${moduleNumber}`} />
-      <Link
-        href={moduleHref}
-        className="focus-ring mt-4 inline-flex items-center gap-2 rounded-xl bg-[#0f766e] px-5 py-3.5 text-sm font-black text-white shadow-lg shadow-emerald-950/15 hover:bg-[#0b5f59]"
-      >
-        {started ? `Continuar Módulo ${moduleNumber}` : `Comenzar Módulo ${moduleNumber}`}
-        <ArrowRight size={18} aria-hidden="true" />
-      </Link>
+    <div className="mt-8 max-w-xl rounded-2xl border border-white/15 bg-white/8 p-4 backdrop-blur" aria-live="polite">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-[#99f6e4]">Progreso global</p>
+          <p className="mt-1 text-sm font-black text-white">
+            {snapshot.completedModules} de {course.modules.length} módulos · {snapshot.percentage} % completado
+          </p>
+        </div>
+        <span className="font-mono text-sm font-black text-[#5eead4]">
+          {snapshot.completedUnits}/{snapshot.totalUnits} etapas
+        </span>
+      </div>
+      <ProgressBar
+        percentage={snapshot.percentage}
+        label="Progreso global de AI Engineering Aplicado"
+        tone="dark"
+      />
+      <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+        <Link
+          href={moduleHref}
+          className="focus-ring inline-flex items-center justify-center gap-2 rounded-xl bg-[#2dd4bf] px-5 py-3.5 text-sm font-black text-[#071a2b] shadow-lg shadow-black/20 hover:bg-[#5eead4]"
+        >
+          {snapshot.percentage === 100
+            ? "Repasar el curso"
+            : started
+              ? `Continuar Módulo ${activeModule.summary.order}`
+              : "Comenzar Módulo 1"}
+          <ArrowRight size={18} aria-hidden="true" />
+        </Link>
+        <a
+          href="#programa"
+          className="focus-ring inline-flex items-center justify-center rounded-xl border border-white/20 px-5 py-3.5 text-sm font-black text-white hover:bg-white/10"
+        >
+          Ver los 12 módulos
+        </a>
+      </div>
     </div>
   );
+}
+
+export function useAiEngineeringCourseProgressSnapshot(course: AiEngineeringCourseDefinition) {
+  const createSnapshot = useCallback(() => {
+    const modules = course.modules.map((module) => ({
+      module,
+      progress: readAiEngineeringModuleProgress(
+        course.summary.slug,
+        module.summary.slug,
+        module.configuration.progressUnits,
+      ),
+    }));
+    const totalUnits = modules.reduce((total, item) => total + item.module.configuration.progressUnits.length, 0);
+    const completedUnits = modules.reduce((total, item) => total + item.progress.completedCount, 0);
+    const completedModules = modules.filter(
+      (item) => item.progress.completedCount === item.module.configuration.progressUnits.length,
+    ).length;
+    const startedModules = modules.filter((item) => (
+      item.progress.completedCount > 0
+      || Object.values(item.progress.statuses).some((status) => status === "in-progress")
+    )).length;
+    const inProgressModule = [...modules]
+      .reverse()
+      .find((item) => item.progress.percentage > 0 && item.progress.percentage < 100);
+    const firstIncompleteModule = modules.find((item) => item.progress.percentage < 100);
+    const activeModule = (
+      inProgressModule
+      ?? firstIncompleteModule
+      ?? modules.at(-1)
+    )?.module;
+
+    return {
+      totalUnits,
+      completedUnits,
+      completedModules,
+      startedModules,
+      activeModule,
+      modules: modules.map(({ module, progress }) => ({
+        moduleSlug: module.summary.slug,
+        completedUnits: progress.completedCount,
+        totalUnits: module.configuration.progressUnits.length,
+        percentage: progress.percentage,
+      })),
+      percentage: totalUnits === 0 ? 0 : Math.floor((completedUnits / totalUnits) * 100),
+    };
+  }, [course]);
+  const initialSnapshot = useMemo<AiEngineeringCourseProgressSnapshot>(() => {
+    const modules = course.modules.map((courseModule) => ({
+      moduleSlug: courseModule.summary.slug,
+      completedUnits: 0,
+      totalUnits: courseModule.configuration.progressUnits.length,
+      percentage: 0,
+    }));
+    const totalUnits = modules.reduce((total, item) => total + item.totalUnits, 0);
+
+    return {
+      totalUnits,
+      completedUnits: 0,
+      completedModules: 0,
+      startedModules: 0,
+      activeModule: course.modules[0],
+      modules,
+      percentage: 0,
+    };
+  }, [course]);
+  const [snapshot, setSnapshot] = useState<AiEngineeringCourseProgressSnapshot>(initialSnapshot);
+  const [hydrated, setHydrated] = useState(false);
+
+  useLayoutEffect(() => {
+    setSnapshot(createSnapshot());
+    setHydrated(true);
+  }, [createSnapshot]);
+
+  useEffect(() => {
+    const refresh = () => setSnapshot(createSnapshot());
+    const handleUnitChange = (event: Event) => {
+      const detail = (event as CustomEvent<AiEngineeringUnitCoordinates>).detail;
+      if (detail?.courseSlug === course.summary.slug) refresh();
+    };
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key?.includes(encodeURIComponent(course.summary.slug))) refresh();
+    };
+    window.addEventListener(AI_ENGINEERING_UNIT_STATE_EVENT, handleUnitChange);
+    window.addEventListener("storage", handleStorage);
+    return () => {
+      window.removeEventListener(AI_ENGINEERING_UNIT_STATE_EVENT, handleUnitChange);
+      window.removeEventListener("storage", handleStorage);
+    };
+  }, [course.summary.slug, createSnapshot]);
+
+  return { snapshot, hydrated };
 }
 
 export function useAiEngineeringProgressSnapshot(
@@ -347,7 +473,15 @@ function useProgressContext() {
   return context;
 }
 
-function ProgressBar({ percentage, label }: { percentage: number; label: string }) {
+function ProgressBar({
+  percentage,
+  label,
+  tone = "light",
+}: {
+  percentage: number;
+  label: string;
+  tone?: "light" | "dark";
+}) {
   return (
     <div
       role="progressbar"
@@ -355,7 +489,7 @@ function ProgressBar({ percentage, label }: { percentage: number; label: string 
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={percentage}
-      className="mt-3 h-2 overflow-hidden rounded-full bg-slate-200"
+      className={`mt-3 h-2 overflow-hidden rounded-full ${tone === "dark" ? "bg-white/15" : "bg-slate-200"}`}
     >
       <div
         className="h-full rounded-full bg-[linear-gradient(90deg,#0f766e,#2dd4bf)] transition-[width] duration-300 motion-reduce:transition-none"

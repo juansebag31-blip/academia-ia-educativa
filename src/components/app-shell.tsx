@@ -1,14 +1,26 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Bell, BrainCircuit, Menu, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import { courseSeed } from "@/lib/course-seed";
 import type { SessionUser } from "@/lib/auth/session";
+import { isAiEngineeringCoursePath } from "@/lib/courses/ai-engineering/routes";
+import { AiEngineeringAppShell } from "./courses/ai-engineering/ai-engineering-app-shell";
 import { SearchBox } from "./search-box";
 import { SidebarNavLinks } from "./nav-links";
 
 export function AppShell({ children, user }: { children: React.ReactNode; user: SessionUser | null }) {
+  const pathname = usePathname();
+  if (isAiEngineeringCoursePath(pathname)) {
+    return <AiEngineeringAppShell user={user}>{children}</AiEngineeringAppShell>;
+  }
+
+  return <StandardAppShell user={user}>{children}</StandardAppShell>;
+}
+
+function StandardAppShell({ children, user }: { children: React.ReactNode; user: SessionUser | null }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 

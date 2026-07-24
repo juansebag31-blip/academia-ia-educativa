@@ -4,6 +4,7 @@ import {
   ArrowRight,
   BookOpen,
   BriefcaseBusiness,
+  ChevronRight,
   Clock3,
   FileAudio,
   FileImage,
@@ -63,12 +64,26 @@ export function AiEngineeringModulePage({
       <section id="orientacion" className="scroll-mt-28 relative overflow-hidden rounded-3xl border border-[#0f766e]/20 bg-[linear-gradient(135deg,#ffffff_0%,#f3f7f6_62%,#e8f5f2_100%)] shadow-[0_20px_60px_rgba(11,31,51,0.10)]">
         <div className="absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,#0b1f33,#0f766e,#2dd4bf)]" />
         <div className="relative p-6 sm:p-8 lg:p-10">
+          <nav aria-label="Migas de pan del módulo" className="mb-4">
+            <ol className="flex flex-wrap items-center gap-1.5 text-xs font-bold text-slate-600">
+              <li>
+                <Link
+                  href={`/courses/${course.summary.slug}`}
+                  className="focus-ring rounded-md text-[#0f766e] hover:text-[#0b1f33]"
+                >
+                  AI Engineering Aplicado
+                </Link>
+              </li>
+              <li aria-hidden="true"><ChevronRight size={14} /></li>
+              <li aria-current="page">Módulo {module.summary.order}</li>
+            </ol>
+          </nav>
           <Link
             href={`/courses/${course.summary.slug}`}
             className="focus-ring inline-flex items-center gap-2 rounded-lg text-sm font-bold text-[#0f766e] hover:text-[#0b1f33]"
           >
-            <ArrowLeft size={17} />
-            Volver a {course.summary.title}
+            <ArrowLeft size={17} aria-hidden="true" />
+            Volver a la portada del curso
           </Link>
           <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>

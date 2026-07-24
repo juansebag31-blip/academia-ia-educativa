@@ -31,6 +31,7 @@ export function AiEngineeringCases({ cases }: { cases: AiEngineeringPreparedCase
               id={`${baseId}-tab-${index}`}
               type="button"
               role="tab"
+              aria-label={caseItem.title.trim() || `Caso real ${index + 1}`}
               aria-selected={activeIndex === index}
               aria-controls={`${baseId}-panel-${index}`}
               tabIndex={activeIndex === index ? 0 : -1}
@@ -60,7 +61,10 @@ export function AiEngineeringCases({ cases }: { cases: AiEngineeringPreparedCase
       <div className="space-y-3 md:hidden">
         {cases.map((caseItem, index) => (
           <details key={caseItem.id} open={index === 0} className="group rounded-xl border border-slate-200 bg-white">
-            <summary className="focus-ring cursor-pointer list-none rounded-xl px-4 py-4 font-black text-slate-800 marker:content-none">
+            <summary
+              aria-label={caseItem.title.trim() || `Caso real ${index + 1}`}
+              className="focus-ring cursor-pointer list-none rounded-xl px-4 py-4 font-black text-slate-800 marker:content-none"
+            >
               <span className="flex items-center justify-between gap-3">
                 {caseItem.title}
                 <span aria-hidden="true" className="text-[#0f766e] group-open:rotate-45 motion-reduce:transition-none">+</span>

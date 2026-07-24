@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { resolveCourse } from "@/lib/courses/catalog";
+import { writeAiEngineeringUnitState } from "@/lib/courses/ai-engineering/unit-storage";
 import { AiEngineeringCases } from "./ai-engineering-cases";
 import { AiEngineeringCourseOverview } from "./ai-engineering-course-overview";
 import { AiEngineeringInfographic } from "./ai-engineering-infographic";
@@ -30,6 +31,12 @@ const moduleFour = course.modules.find(
 );
 if (!moduleFour) {
   throw new Error("AI Engineering Module 4 fixture is unavailable.");
+}
+const moduleTwelve = course.modules.find(
+  (module) => module.summary.slug === "modulo-12-produccion-proyecto-final",
+);
+if (!moduleTwelve) {
+  throw new Error("AI Engineering Module 12 fixture is unavailable.");
 }
 
 describe("AI Engineering visual renderer", () => {
@@ -82,55 +89,68 @@ describe("AI Engineering visual renderer", () => {
     );
     expect(screen.getByText("Arquitectura de un sistema inteligente")).toBeInTheDocument();
     expect(screen.getByText("Modelo / RAG / Herramientas")).toBeInTheDocument();
-    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+    expect(screen.getByRole("img", {
+      name: "Usuario, Interfaz, Backend, Orquestador, Modelo RAG Herramientas y Validación humana",
+    })).toBeInTheDocument();
+    expect(screen.getByRole("img", {
+      name: "Capas del proyecto JSG AI Engineering Hub",
+    })).toBeInTheDocument();
     expect(screen.getAllByText("Disponible")).toHaveLength(12);
     expect(screen.queryByText("Próximamente")).not.toBeInTheDocument();
     expect(screen.getByText("Modelos fundacionales y selección")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /02 Disponible Módulo 2 Modelos fundacionales y selección/ })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Módulo 2, Modelos fundacionales y selección/ })).toHaveAttribute(
       "href",
       "/courses/ai-engineering-aplicado/modules/modulo-02-modelos-fundacionales-seleccion",
     );
-    expect(screen.getByRole("link", { name: /03 Disponible Módulo 3 Contexto, estado y memoria/ })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Módulo 3, Contexto, estado y memoria/ })).toHaveAttribute(
       "href",
       "/courses/ai-engineering-aplicado/modules/modulo-03-contexto-estado-memoria",
     );
-    expect(screen.getByText("Herramientas, APIs, function calling y MCP").closest("a")).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Módulo 4, Herramientas, APIs, function calling y MCP/ })).toHaveAttribute(
       "href",
       "/courses/ai-engineering-aplicado/modules/modulo-04-herramientas-apis-function-calling-mcp",
     );
-    expect(screen.getByText("RAG y sistemas de conocimiento").closest("a")).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Módulo 5, RAG y sistemas de conocimiento/ })).toHaveAttribute(
       "href",
       "/courses/ai-engineering-aplicado/modules/modulo-05-rag-sistemas-conocimiento",
     );
-    expect(screen.getByText("Workflows y automatización").closest("a")).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Módulo 6, Workflows y automatización/ })).toHaveAttribute(
       "href",
       "/courses/ai-engineering-aplicado/modules/modulo-06-workflows-automatizacion",
     );
-    expect(screen.getByText("Agentes y sistemas multiagente").closest("a")).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Módulo 7, Agentes y sistemas multiagente/ })).toHaveAttribute(
       "href",
       "/courses/ai-engineering-aplicado/modules/modulo-07-agentes-sistemas-multiagente",
     );
-    expect(screen.getByText("Evaluación, observabilidad y trazabilidad").closest("a")).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Módulo 8, Evaluación, observabilidad y trazabilidad/ })).toHaveAttribute(
       "href",
       "/courses/ai-engineering-aplicado/modules/modulo-08-evaluacion-observabilidad-trazabilidad",
     );
-    expect(screen.getByText("Seguridad, guardrails y supervisión").closest("a")).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Módulo 9, Seguridad, guardrails y supervisión/ })).toHaveAttribute(
       "href",
       "/courses/ai-engineering-aplicado/modules/modulo-09-seguridad-guardrails-supervision",
     );
-    expect(screen.getByText("Coste, velocidad y confiabilidad").closest("a")).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Módulo 10, Coste, velocidad y confiabilidad/ })).toHaveAttribute(
       "href",
       "/courses/ai-engineering-aplicado/modules/modulo-10-coste-velocidad-confiabilidad",
     );
-    expect(screen.getByText("Producto y automatización empresarial").closest("a")).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Módulo 11, Producto y automatización empresarial/ })).toHaveAttribute(
       "href",
       "/courses/ai-engineering-aplicado/modules/modulo-11-producto-automatizacion-empresarial",
     );
-    expect(screen.getByText("Producción y proyecto final").closest("a")).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Módulo 12, Producción y proyecto final/ })).toHaveAttribute(
       "href",
       "/courses/ai-engineering-aplicado/modules/modulo-12-produccion-proyecto-final",
     );
-    expect(screen.getByText("JSG AI Engineering Hub v0.1")).toBeInTheDocument();
+    expect(screen.getByRole("img", {
+      name: "Evolución por niveles desde un modelo aislado hasta un sistema inteligente productivo.",
+    })).toBeInTheDocument();
+    expect(screen.getAllByRole("progressbar", { name: /Progreso del Módulo/ })).toHaveLength(12);
+    expect(screen.getByText("JSG AI Engineering Hub v1.0")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Capacidades para construir IA con criterio profesional" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Cuatro etapas, una progresión técnica" })).toBeInTheDocument();
+    expect(screen.getByRole("progressbar", { name: "Progreso global de AI Engineering Aplicado" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Ver los 12 módulos" })).toHaveAttribute("href", "#programa");
     expect(screen.queryByText("Ruta pedagógica")).not.toBeInTheDocument();
   });
 
@@ -139,6 +159,11 @@ describe("AI Engineering visual renderer", () => {
 
     expect(screen.getAllByRole("heading", { level: 1, name: "Modelos fundacionales y selección" })[0])
       .toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Volver a la portada del curso" })).toHaveAttribute(
+      "href",
+      "/courses/ai-engineering-aplicado",
+    );
+    expect(screen.getByRole("navigation", { name: "Migas de pan del módulo" })).toBeInTheDocument();
     expect(moduleTwo.configuration.progressUnits).toHaveLength(8);
     expect(moduleTwo.content.cases).toHaveLength(3);
     expect(moduleTwo.presentation.slides).toHaveLength(
@@ -316,5 +341,56 @@ describe("AI Engineering visual renderer", () => {
 
     fireEvent.keyDown(tabs[1], { key: "End" });
     expect(tabs[2]).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("derives each module card CTA and progress from the existing unit keys", () => {
+    window.localStorage.clear();
+    for (const unit of moduleOne.configuration.progressUnits) {
+      writeAiEngineeringUnitState(
+        {
+          courseSlug: course.summary.slug,
+          moduleSlug: moduleOne.summary.slug,
+          unitId: unit.id,
+        },
+        { status: "completed" },
+      );
+    }
+    for (const unit of moduleTwo.configuration.progressUnits.slice(0, 2)) {
+      writeAiEngineeringUnitState(
+        {
+          courseSlug: course.summary.slug,
+          moduleSlug: moduleTwo.summary.slug,
+          unitId: unit.id,
+        },
+        { status: "completed" },
+      );
+    }
+
+    render(<AiEngineeringCourseOverview course={course} />);
+
+    expect(screen.getByRole("link", { name: /Revisar módulo: Módulo 1,/ })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Continuar módulo: Módulo 2,/ })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Comenzar módulo: Módulo 3,/ })).toBeInTheDocument();
+    expect(screen.getByRole("progressbar", { name: /Progreso del Módulo 1:/ })).toHaveAttribute(
+      "aria-valuenow",
+      "100",
+    );
+    expect(screen.getByRole("progressbar", { name: /Progreso del Módulo 2:/ })).toHaveAttribute(
+      "aria-valuenow",
+      "25",
+    );
+    expect(screen.getByRole("progressbar", { name: /Progreso del Módulo 3:/ })).toHaveAttribute(
+      "aria-valuenow",
+      "0",
+    );
+    window.localStorage.clear();
+  });
+
+  it("provides accessible names when Module 12 case titles are empty", () => {
+    render(<AiEngineeringCases cases={moduleTwelve.content.cases} />);
+
+    expect(screen.getByRole("tab", { name: "Caso real 1" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Caso real 2" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Caso real 3" })).toBeInTheDocument();
   });
 });
