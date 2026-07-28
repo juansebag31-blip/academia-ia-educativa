@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -9,6 +11,7 @@ import type {
   AiEngineeringCourseDefinition,
   AiEngineeringModule,
 } from "@/lib/courses/types";
+import { useAiEngineeringCourseProgressSnapshot } from "./ai-engineering-progress";
 
 export function AiEngineeringModuleSequenceNavigation({
   course,
@@ -27,6 +30,8 @@ export function AiEngineeringModuleSequenceNavigation({
   const previousModule = currentIndex > 0 ? publishedModules[currentIndex - 1] : undefined;
   const nextModule = currentIndex >= 0 ? publishedModules[currentIndex + 1] : undefined;
   const courseHref = `/courses/${course.summary.slug}`;
+  const { snapshot } = useAiEngineeringCourseProgressSnapshot(course);
+  const courseCompleted = snapshot.totalUnits > 0 && snapshot.completedUnits === snapshot.totalUnits;
 
   return (
     <nav
@@ -78,7 +83,7 @@ export function AiEngineeringModuleSequenceNavigation({
               className="flex h-full min-h-28 items-center justify-center gap-3 rounded-2xl border border-[#0f766e]/20 bg-[#0f766e] p-4 text-center font-black text-white"
             >
               <CheckCircle2 className="shrink-0 text-[#99f6e4]" aria-hidden="true" />
-              <span>Curso completado</span>
+              <span>{courseCompleted ? "Curso completado" : "Último módulo del recorrido"}</span>
             </div>
           )}
         </div>

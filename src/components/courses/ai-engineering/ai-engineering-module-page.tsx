@@ -6,8 +6,6 @@ import {
   BriefcaseBusiness,
   ChevronRight,
   Clock3,
-  FileAudio,
-  FileImage,
   Library,
   ListChecks,
   PencilLine,
@@ -16,9 +14,8 @@ import {
 import type { AiEngineeringProgressKind } from "@/lib/courses/ai-engineering/module-contract";
 import type { AiEngineeringCourseDefinition, AiEngineeringModule } from "@/lib/courses/types";
 import { AiEngineeringActivity } from "./ai-engineering-activity";
-import { AiEngineeringAudioPlayer } from "./ai-engineering-audio-player";
 import { AiEngineeringCases } from "./ai-engineering-cases";
-import { AiEngineeringInfographic } from "./ai-engineering-infographic";
+import { AiEngineeringGuidedStudy } from "./ai-engineering-guided-study";
 import {
   AiEngineeringKeyIdeaCard,
   AiEngineeringLearningVisual,
@@ -153,38 +150,20 @@ export function AiEngineeringModulePage({
         </div>
       </section>
 
-      <ModuleSection id="infografia" icon={<FileImage />} eyebrow="Infografía" title={module.configuration.assets.infographic.title}>
-        <AiEngineeringInfographic
-          src={module.assets.infographic.publicPath}
-          alt={module.configuration.assets.infographic.alt}
-        />
-        <ConfiguredUnitCompletion module={module} kind="infographic" />
-      </ModuleSection>
-
-      <ModuleSection id="audio" icon={<FileAudio />} eyebrow="Audio" title="Audio explicativo">
-        <div className="rounded-2xl bg-[#0b1f33] p-5 text-white sm:p-6">
-          <AiEngineeringAudioPlayer
-            courseSlug={course.summary.slug}
-            moduleSlug={module.summary.slug}
-            src={module.assets.audioMp3.publicPath}
-            type={module.assets.audioMp3.mediaType}
-            title={module.configuration.assets.audio.title}
-            unitId={requireUnitId(module, "audio")}
-          />
-        </div>
-        <details className="group mt-4 rounded-2xl border border-slate-200 bg-slate-50">
-          <summary className="focus-ring cursor-pointer list-none rounded-2xl px-5 py-4 font-black text-slate-800 marker:content-none">
-            <span className="flex items-center justify-between gap-3">
-              Guion o transcripción
-              <span aria-hidden="true" className="text-[#0f766e] group-open:rotate-45 motion-reduce:transition-none">+</span>
-            </span>
-          </summary>
-          <pre className="max-h-[34rem] overflow-auto whitespace-pre-wrap border-t border-slate-200 p-5 font-sans text-sm leading-7 text-slate-700">
-            {module.content.audioScript}
-          </pre>
-        </details>
-        <ConfiguredUnitCompletion module={module} kind="audio" />
-      </ModuleSection>
+      <AiEngineeringGuidedStudy
+        courseSlug={course.summary.slug}
+        moduleSlug={module.summary.slug}
+        infographicSrc={module.assets.infographic.publicPath}
+        infographicAlt={module.configuration.assets.infographic.alt}
+        infographicTitle={module.configuration.assets.infographic.title}
+        audioSrc={module.assets.audioMp3.publicPath}
+        audioType={module.assets.audioMp3.mediaType}
+        audioTitle={module.configuration.assets.audio.title}
+        audioUnitId={requireUnitId(module, "audio")}
+        audioScript={module.content.audioScript}
+        infographicCompletion={<ConfiguredUnitCompletion module={module} kind="infographic" />}
+        audioCompletion={<ConfiguredUnitCompletion module={module} kind="audio" />}
+      />
 
       <ModuleSection id="casos" icon={<BriefcaseBusiness />} eyebrow="Casos" title={module.configuration.sections.casesTitle}>
         <AiEngineeringCases cases={module.content.cases} />

@@ -27,6 +27,7 @@ import {
 } from "./module-validator";
 
 let prepared: PreparedAiEngineeringModule;
+let preparedModulesAll: PreparedAiEngineeringModule[];
 let preparedModuleTwo: PreparedAiEngineeringModule;
 let preparedModuleThree: PreparedAiEngineeringModule;
 let preparedModuleFour: PreparedAiEngineeringModule;
@@ -37,6 +38,7 @@ let fixtureManifest: AiEngineeringModuleManifest;
 beforeAll(async () => {
   await prepareAiEngineeringContent();
   const preparedModules = JSON.parse(await readFile(generatedModulesPath, "utf8")) as PreparedAiEngineeringModule[];
+  preparedModulesAll = preparedModules;
   prepared = preparedModules[0];
   preparedModuleTwo = preparedModules.find(
     (module) => module.moduleSlug === "modulo-02-modelos-fundacionales-seleccion",
@@ -259,6 +261,26 @@ describe("AI Engineering manifest preparation", () => {
       expect(copiedFiles.filter((fileName) => fileName.endsWith(".png"))).toHaveLength(6);
       expect(copiedFiles.filter((fileName) => fileName.endsWith(".mp3"))).toHaveLength(1);
       expect(copiedFiles.filter((fileName) => fileName.endsWith(".pptx"))).toHaveLength(1);
+      expect(copiedFiles.some((fileName) => fileName.toLowerCase().endsWith(".m4a"))).toBe(false);
+    }
+  });
+
+  it("keeps all twelve prepared modules free of public preparation labels and M4A files", async () => {
+    expect(preparedModulesAll).toHaveLength(12);
+
+    for (const preparedModule of preparedModulesAll) {
+      expect(preparedModule.content.foundational.html)
+        .not.toMatch(/TODO_|M4A es privado|Fase A|Versi[oó]n 0\.\d+|revisi[oó]n pedag[oó]gica|posterior integraci[oó]n/i);
+      expect(preparedModule.content.audioScript)
+        .not.toMatch(/TODO_|M4A es privado|MP3 es publicable/i);
+
+      const publicDirectory = path.join(
+        projectRoot,
+        "public",
+        "ai-engineering-assets",
+        preparedModule.moduleSlug,
+      );
+      const copiedFiles = await readdir(publicDirectory, { recursive: true });
       expect(copiedFiles.some((fileName) => fileName.toLowerCase().endsWith(".m4a"))).toBe(false);
     }
   });

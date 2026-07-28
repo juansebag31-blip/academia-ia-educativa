@@ -148,6 +148,7 @@ describe("AI Engineering visual renderer", () => {
     expect(screen.getAllByRole("progressbar", { name: /Progreso del Módulo/ })).toHaveLength(12);
     expect(screen.getByText("JSG AI Engineering Hub v1.0")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Capacidades para construir IA con criterio profesional" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Ver → escuchar → relacionar → aplicar" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Cuatro etapas, una progresión técnica" })).toBeInTheDocument();
     expect(screen.getByRole("progressbar", { name: "Progreso global de AI Engineering Aplicado" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Ver los 12 módulos" })).toHaveAttribute("href", "#programa");
@@ -285,6 +286,27 @@ describe("AI Engineering visual renderer", () => {
       name: "Cargar y reproducir audio: Audio explicativo del Módulo 1",
     }));
     expect(container.querySelector("audio source")).toHaveAttribute("src", moduleOne.assets.audioMp3.publicPath);
+    expect(screen.getByText(/Abre la infografía, inicia el audio/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Acercar infografía" })).toBeInTheDocument();
+    expect(screen.getByRole("button", {
+      name: "Abrir infografía y audio a pantalla completa",
+    })).toBeInTheDocument();
+    const infographicViewport = screen.getByLabelText(/Infografía interactiva/);
+    expect(infographicViewport).toHaveAttribute("tabindex", "0");
+    infographicViewport.focus();
+    fireEvent.keyDown(infographicViewport, { key: "+" });
+    expect(screen.getByLabelText(/Zoom actual: 125 %/)).toBeInTheDocument();
+
+    const guidedStudyOpener = screen.getByRole("button", {
+      name: "Abrir infografía y audio a pantalla completa",
+    });
+    fireEvent.click(guidedStudyOpener);
+    const guidedStudyDialog = screen.getByRole("dialog", { name: "Estudio guiado ampliado" });
+    expect(within(guidedStudyDialog).getByRole("button", { name: "Cerrar vista ampliada" })).toHaveFocus();
+    expect(within(guidedStudyDialog).getByLabelText(moduleOne.configuration.assets.audio.title)).toBeInTheDocument();
+    fireEvent.keyDown(guidedStudyDialog, { key: "Escape" });
+    expect(screen.queryByRole("dialog", { name: "Estudio guiado ampliado" })).not.toBeInTheDocument();
+    expect(guidedStudyOpener).toHaveFocus();
   });
 
   it("opens the 17-slide presentation and supports controls, keyboard and fullscreen", () => {

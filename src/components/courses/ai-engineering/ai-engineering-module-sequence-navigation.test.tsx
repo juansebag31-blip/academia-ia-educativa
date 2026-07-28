@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { resolveCourse } from "@/lib/courses/catalog";
+import { writeAiEngineeringUnitState } from "@/lib/courses/ai-engineering/unit-storage";
 import { AiEngineeringModuleSequenceNavigation } from "./ai-engineering-module-sequence-navigation";
 
 const resolvedCourse = resolveCourse("ai-engineering-aplicado");
@@ -10,6 +11,8 @@ if (!resolvedCourse || resolvedCourse.kind !== "ai-engineering") {
 }
 
 const course = resolvedCourse;
+
+beforeEach(() => window.localStorage.clear());
 
 function renderModule(order: number) {
   const currentModule = course.modules.find((candidate) => candidate.summary.order === order);
@@ -58,7 +61,7 @@ describe("AI Engineering sequential module navigation", () => {
     );
   });
 
-  it("ends module 12 without inventing a module 13", () => {
+  it("identifies module 12 as the last stage until the complete course is finished", () => {
     renderModule(12);
 
     expect(screen.getByRole("link", {
@@ -67,8 +70,27 @@ describe("AI Engineering sequential module navigation", () => {
       "href",
       "/courses/ai-engineering-aplicado/modules/modulo-11-producto-automatizacion-empresarial",
     );
-    expect(screen.getByRole("status")).toHaveTextContent("Curso completado");
+    expect(screen.getByRole("status")).toHaveTextContent("Último módulo del recorrido");
     expect(document.body.innerHTML).not.toContain("modulo-13");
+  });
+
+  it("shows course completion only after every manifest-defined unit is complete", () => {
+    for (const courseModule of course.modules) {
+      for (const unit of courseModule.configuration.progressUnits) {
+        writeAiEngineeringUnitState(
+          {
+            courseSlug: course.summary.slug,
+            moduleSlug: courseModule.summary.slug,
+            unitId: unit.id,
+          },
+          { status: "completed" },
+        );
+      }
+    }
+
+    renderModule(12);
+
+    expect(screen.getByRole("status")).toHaveTextContent("Curso completado");
   });
 
   it("keeps navigation keyboard-focusable and leaves progress storage intact", () => {

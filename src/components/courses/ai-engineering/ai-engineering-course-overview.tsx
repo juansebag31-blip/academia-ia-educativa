@@ -7,9 +7,13 @@ import {
   DatabaseZap,
   FolderKanban,
   GraduationCap,
+  Headphones,
   Layers3,
+  MessageSquareText,
+  MousePointerClick,
   Rocket,
   ShieldCheck,
+  Waypoints,
 } from "lucide-react";
 import type { AiEngineeringCourseDefinition } from "@/lib/courses/types";
 import { AiEngineeringCourseCatalog } from "./ai-engineering-course-catalog";
@@ -63,6 +67,29 @@ const coursePhases = [
     modules: "Módulos 11–12",
     title: "Producto y producción",
     description: "Automatización empresarial y proyecto final integrador.",
+  },
+] as const;
+
+const studyMethod = [
+  {
+    icon: MousePointerClick,
+    title: "Ver",
+    description: "Comprensión guiada de la estructura visual y sus relaciones principales.",
+  },
+  {
+    icon: Headphones,
+    title: "Escuchar",
+    description: "Repaso en audio para acompañar la lectura, pausar y volver sobre cada bloque.",
+  },
+  {
+    icon: Waypoints,
+    title: "Relacionar",
+    description: "Procesamiento activo para conectar conceptos, decisiones y arquitectura.",
+  },
+  {
+    icon: MessageSquareText,
+    title: "Aplicar",
+    description: "Casos y actividades para explicar con palabras propias y trasladar lo aprendido.",
   },
 ] as const;
 
@@ -141,6 +168,39 @@ export function AiEngineeringCourseOverview({ course }: { course: AiEngineeringC
             );
           })}
         </div>
+      </section>
+
+      <section
+        id="metodo"
+        aria-labelledby="metodo-title"
+        className="scroll-mt-24 rounded-[2rem] border border-[#0f766e]/15 bg-[#0b1f33] p-6 text-white shadow-[0_18px_60px_rgba(11,31,51,0.14)] sm:p-8 lg:p-10"
+      >
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-[#5eead4]">Método de estudio</p>
+        <h2 id="metodo-title" className="mt-2 text-2xl font-black tracking-tight sm:text-3xl">
+          Ver → escuchar → relacionar → aplicar
+        </h2>
+        <p className="mt-3 max-w-3xl leading-7 text-slate-300">
+          Cada módulo combina comprensión guiada, conexión audiovisual, procesamiento activo y aplicación práctica.
+        </p>
+        <ol className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {studyMethod.map((step, index) => {
+            const Icon = step.icon;
+            return (
+              <li key={step.title} className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="flex size-11 items-center justify-center rounded-xl bg-[#0f766e] text-[#99f6e4]">
+                    <Icon size={22} aria-hidden="true" />
+                  </span>
+                  <span className="font-mono text-xs font-black text-[#5eead4]">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                </div>
+                <h3 className="mt-4 text-lg font-black">{step.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-300">{step.description}</p>
+              </li>
+            );
+          })}
+        </ol>
       </section>
 
       <section
