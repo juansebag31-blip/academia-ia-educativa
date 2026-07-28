@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import type {
   AiEngineeringCourseDefinition,
   AiEngineeringModule,
@@ -11,6 +11,7 @@ import { useAiEngineeringCourseProgressSnapshot } from "./ai-engineering-progres
 
 type ModuleCardEditorial = {
   description: string;
+  imageSrc?: string;
   visualId?: string;
   slideNumber?: number;
   alt: string;
@@ -19,8 +20,8 @@ type ModuleCardEditorial = {
 const moduleCardEditorial: Record<string, ModuleCardEditorial> = {
   "modulo-01": {
     description: "Distingue la capacidad de un modelo de la arquitectura completa que la convierte en producto.",
-    slideNumber: 3,
-    alt: "Evolución por niveles desde un modelo aislado hasta un sistema inteligente productivo.",
+    imageSrc: "/ai-engineering-course/cards/modulo-01-del-modelo-a-la-aplicacion.webp",
+    alt: "Un modelo de inteligencia artificial evoluciona hacia un sistema completo con memoria, herramientas, orquestación, evaluación, seguridad y una aplicación para el usuario.",
   },
   "modulo-02-modelos-fundacionales-seleccion": {
     description: "Selecciona modelos según la tarea, las restricciones y la evaluación documentada.",
@@ -128,21 +129,12 @@ export function AiEngineeringCourseCatalog({
                   sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
                   className="object-contain"
                 />
-                <span className="absolute left-3 top-3 rounded-full border border-white/20 bg-[#071a2b]/90 px-3 py-1.5 font-mono text-xs font-black text-[#99f6e4] shadow-lg backdrop-blur">
-                  Módulo {String(courseModule.summary.order).padStart(2, "0")}
-                </span>
               </div>
 
               <div className="flex flex-1 flex-col p-5 sm:p-6">
-                <div className="flex items-start justify-between gap-3">
-                  <p className="text-xs font-black uppercase tracking-[0.16em] text-[#0f766e]">
-                    Módulo {courseModule.summary.order}
-                  </p>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-2.5 py-1 text-[11px] font-black text-emerald-800">
-                    <CheckCircle2 size={14} aria-hidden="true" />
-                    Disponible
-                  </span>
-                </div>
+                <p className="text-[15px] font-black uppercase tracking-[0.14em] text-[#0f766e]">
+                  Módulo {courseModule.summary.order}
+                </p>
 
                 <h3
                   id={titleId}
@@ -200,6 +192,8 @@ function resolveCardImage(
   courseModule: AiEngineeringModule,
   editorial: ModuleCardEditorial,
 ) {
+  if (editorial.imageSrc) return editorial.imageSrc;
+
   if (editorial.slideNumber) {
     const slide = courseModule.presentation.slides[editorial.slideNumber - 1];
     if (slide) return slide.publicPath;

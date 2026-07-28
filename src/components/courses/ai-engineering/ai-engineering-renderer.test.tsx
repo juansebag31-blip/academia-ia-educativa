@@ -95,7 +95,25 @@ describe("AI Engineering visual renderer", () => {
     expect(screen.getByRole("img", {
       name: "Capas del proyecto JSG AI Engineering Hub",
     })).toBeInTheDocument();
-    expect(screen.getAllByText("Disponible")).toHaveLength(12);
+    const moduleOneCardImage = screen.getByRole("img", {
+      name: "Un modelo de inteligencia artificial evoluciona hacia un sistema completo con memoria, herramientas, orquestación, evaluación, seguridad y una aplicación para el usuario.",
+    });
+    expect(decodeURIComponent(moduleOneCardImage.getAttribute("src") ?? "")).toContain(
+      "/ai-engineering-course/cards/modulo-01-del-modelo-a-la-aplicacion.webp",
+    );
+    const moduleTwoCardImage = screen.getByRole("img", {
+      name: "Proceso de selección de modelos desde el problema real hasta una decisión documentada.",
+    });
+    expect(decodeURIComponent(moduleTwoCardImage.getAttribute("src") ?? "")).not.toContain(
+      "/ai-engineering-course/cards/modulo-01-del-modelo-a-la-aplicacion.webp",
+    );
+    expect(screen.queryByText("Disponible")).not.toBeInTheDocument();
+    expect(screen.queryByText("Módulo 01")).not.toBeInTheDocument();
+    expect(screen.getAllByText(/^Módulo \d+$/)).toHaveLength(12);
+    expect(screen.getByText("Módulo 1")).toHaveClass("text-[15px]");
+    expect(screen.getAllByRole("link", {
+      name: /módulo: Módulo \d+,/i,
+    })).toHaveLength(12);
     expect(screen.queryByText("Próximamente")).not.toBeInTheDocument();
     expect(screen.getByText("Modelos fundacionales y selección")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Módulo 2, Modelos fundacionales y selección/ })).toHaveAttribute(
@@ -142,9 +160,6 @@ describe("AI Engineering visual renderer", () => {
       "href",
       "/courses/ai-engineering-aplicado/modules/modulo-12-produccion-proyecto-final",
     );
-    expect(screen.getByRole("img", {
-      name: "Evolución por niveles desde un modelo aislado hasta un sistema inteligente productivo.",
-    })).toBeInTheDocument();
     expect(screen.getAllByRole("progressbar", { name: /Progreso del Módulo/ })).toHaveLength(12);
     expect(screen.getByText("JSG AI Engineering Hub v1.0")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Capacidades para construir IA con criterio profesional" })).toBeInTheDocument();
