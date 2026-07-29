@@ -39,6 +39,57 @@ if (!moduleTwelve) {
   throw new Error("AI Engineering Module 12 fixture is unavailable.");
 }
 
+const expectedCourseCardImages = [
+  {
+    path: "/ai-engineering-course/cards/modulo-01-del-modelo-a-la-aplicacion.webp",
+    alt: "Un modelo de inteligencia artificial evoluciona hacia un sistema completo con memoria, herramientas, orquestación, evaluación, seguridad y una aplicación para el usuario.",
+  },
+  {
+    path: "/ai-engineering-course/cards/modulo-02-modelos-fundacionales-seleccion.webp",
+    alt: "Comparación documentada de modelos de IA según capacidad, coste, velocidad, seguridad y adecuación a la tarea.",
+  },
+  {
+    path: "/ai-engineering-course/cards/modulo-03-contexto-estado-memoria.webp",
+    alt: "Sistema de IA que conserva contexto, estado y memoria para sostener conversaciones y procesos coherentes.",
+  },
+  {
+    path: "/ai-engineering-course/cards/modulo-04-herramientas-apis-function-calling-mcp.webp",
+    alt: "Modelo de IA conectado mediante function calling y MCP con APIs, bases de datos, servicios y herramientas externas.",
+  },
+  {
+    path: "/ai-engineering-course/cards/modulo-05-rag-sistemas-conocimiento.webp",
+    alt: "Flujo RAG que ingiere documentos, crea representaciones vectoriales, recupera evidencia y genera respuestas fundamentadas.",
+  },
+  {
+    path: "/ai-engineering-course/cards/modulo-06-workflows-automatizacion.webp",
+    alt: "Workflow automatizado que conecta disparadores, decisiones, herramientas, acciones, excepciones y resultados verificables.",
+  },
+  {
+    path: "/ai-engineering-course/cards/modulo-07-agentes-sistemas-multiagente.webp",
+    alt: "Sistema multiagente con roles especializados, memoria compartida, herramientas, coordinación y supervisión humana.",
+  },
+  {
+    path: "/ai-engineering-course/cards/modulo-08-evaluacion-observabilidad-trazabilidad.webp",
+    alt: "Panel de evaluación y observabilidad con métricas, trazas, alertas, análisis de calidad y mejora continua.",
+  },
+  {
+    path: "/ai-engineering-course/cards/modulo-09-seguridad-guardrails-supervision.webp",
+    alt: "Sistema de IA protegido por guardrails, filtros, políticas, alertas, trazabilidad y supervisión humana.",
+  },
+  {
+    path: "/ai-engineering-course/cards/modulo-10-coste-velocidad-confiabilidad.webp",
+    alt: "Equilibrio operativo entre coste, latencia y confiabilidad mediante optimización, caché, límites, monitoreo y resiliencia.",
+  },
+  {
+    path: "/ai-engineering-course/cards/modulo-11-producto-automatizacion-empresarial.webp",
+    alt: "Plataforma empresarial de IA que convierte necesidades de negocio en productos automatizados, medibles y escalables.",
+  },
+  {
+    path: "/ai-engineering-course/cards/modulo-12-produccion-proyecto-final.webp",
+    alt: "Ciclo completo para validar, desplegar, operar y mejorar un sistema de IA, culminando en un proyecto final reproducible.",
+  },
+] as const;
+
 describe("AI Engineering visual renderer", () => {
   it("renders declarative image visuals with their approved alternative text", () => {
     render(
@@ -95,18 +146,10 @@ describe("AI Engineering visual renderer", () => {
     expect(screen.getByRole("img", {
       name: "Capas del proyecto JSG AI Engineering Hub",
     })).toBeInTheDocument();
-    const moduleOneCardImage = screen.getByRole("img", {
-      name: "Un modelo de inteligencia artificial evoluciona hacia un sistema completo con memoria, herramientas, orquestación, evaluación, seguridad y una aplicación para el usuario.",
-    });
-    expect(decodeURIComponent(moduleOneCardImage.getAttribute("src") ?? "")).toContain(
-      "/ai-engineering-course/cards/modulo-01-del-modelo-a-la-aplicacion.webp",
-    );
-    const moduleTwoCardImage = screen.getByRole("img", {
-      name: "Proceso de selección de modelos desde el problema real hasta una decisión documentada.",
-    });
-    expect(decodeURIComponent(moduleTwoCardImage.getAttribute("src") ?? "")).not.toContain(
-      "/ai-engineering-course/cards/modulo-01-del-modelo-a-la-aplicacion.webp",
-    );
+    for (const expectedImage of expectedCourseCardImages) {
+      const image = screen.getByRole("img", { name: expectedImage.alt });
+      expect(decodeURIComponent(image.getAttribute("src") ?? "")).toContain(expectedImage.path);
+    }
     expect(screen.queryByText("Disponible")).not.toBeInTheDocument();
     expect(screen.queryByText("Módulo 01")).not.toBeInTheDocument();
     expect(screen.getAllByText(/^Módulo \d+$/)).toHaveLength(12);
