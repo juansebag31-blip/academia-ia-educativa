@@ -66,11 +66,11 @@ const expectedCourseCardImages = [
   },
   {
     path: "/ai-engineering-course/cards/modulo-07-agentes-sistemas-multiagente.webp",
-    alt: "Sistema multiagente con roles especializados, memoria compartida, herramientas, coordinación y supervisión humana.",
+    alt: "Red de agentes de IA especializados que colaboran con memoria compartida y coordinación para resolver una tarea común.",
   },
   {
     path: "/ai-engineering-course/cards/modulo-08-evaluacion-observabilidad-trazabilidad.webp",
-    alt: "Panel de evaluación y observabilidad con métricas, trazas, alertas, análisis de calidad y mejora continua.",
+    alt: "Panel de evaluación y monitoreo de un sistema de IA con métricas, trazas, revisión y validación de resultados.",
   },
   {
     path: "/ai-engineering-course/cards/modulo-09-seguridad-guardrails-supervision.webp",
@@ -78,15 +78,15 @@ const expectedCourseCardImages = [
   },
   {
     path: "/ai-engineering-course/cards/modulo-10-coste-velocidad-confiabilidad.webp",
-    alt: "Equilibrio operativo entre coste, latencia y confiabilidad mediante optimización, caché, límites, monitoreo y resiliencia.",
+    alt: "Sistema de IA que equilibra coste, velocidad y confiabilidad mediante optimización, rendimiento y validación segura.",
   },
   {
     path: "/ai-engineering-course/cards/modulo-11-producto-automatizacion-empresarial.webp",
-    alt: "Plataforma empresarial de IA que convierte necesidades de negocio en productos automatizados, medibles y escalables.",
+    alt: "Flujo de producto de IA que transforma personas, procesos y datos en resultados empresariales medibles.",
   },
   {
     path: "/ai-engineering-course/cards/modulo-12-produccion-proyecto-final.webp",
-    alt: "Ciclo completo para validar, desplegar, operar y mejorar un sistema de IA, culminando en un proyecto final reproducible.",
+    alt: "Paso de un sistema de IA desde el desarrollo hasta un despliegue en producción seguro, monitoreado y listo para operar.",
   },
 ] as const;
 
