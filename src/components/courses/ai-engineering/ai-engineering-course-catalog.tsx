@@ -14,69 +14,56 @@ type ModuleCardEditorial = {
   imageSrc?: string;
   visualId?: string;
   slideNumber?: number;
-  alt: string;
 };
 
 const moduleCardEditorial: Record<string, ModuleCardEditorial> = {
   "modulo-01": {
     description: "Distingue la capacidad de un modelo de la arquitectura completa que la convierte en producto.",
     imageSrc: "/ai-engineering-course/cards/modulo-01-del-modelo-a-la-aplicacion.webp",
-    alt: "Un modelo de inteligencia artificial evoluciona hacia un sistema completo con memoria, herramientas, orquestación, evaluación, seguridad y una aplicación para el usuario.",
   },
   "modulo-02-modelos-fundacionales-seleccion": {
     description: "Selecciona modelos según la tarea, las restricciones y la evaluación documentada.",
     imageSrc: "/ai-engineering-course/cards/modulo-02-modelos-fundacionales-seleccion.webp",
-    alt: "Comparación documentada de modelos de IA según capacidad, coste, velocidad, seguridad y adecuación a la tarea.",
   },
   "modulo-03-contexto-estado-memoria": {
     description: "Diseña contexto, estado y memoria para sostener interacciones y procesos confiables.",
     imageSrc: "/ai-engineering-course/cards/modulo-03-contexto-estado-memoria.webp",
-    alt: "Sistema de IA que conserva contexto, estado y memoria para sostener conversaciones y procesos coherentes.",
   },
   "modulo-04-herramientas-apis-function-calling-mcp": {
     description: "Conecta herramientas y datos mediante APIs, function calling y MCP con control explícito.",
     imageSrc: "/ai-engineering-course/cards/modulo-04-herramientas-apis-function-calling-mcp.webp",
-    alt: "Modelo de IA conectado mediante function calling y MCP con APIs, bases de datos, servicios y herramientas externas.",
   },
   "modulo-05-rag-sistemas-conocimiento": {
     description: "Construye sistemas RAG que recuperan evidencia y responden con conocimiento verificable.",
     imageSrc: "/ai-engineering-course/cards/modulo-05-rag-sistemas-conocimiento.webp",
-    alt: "Flujo RAG que ingiere documentos, crea representaciones vectoriales, recupera evidencia y genera respuestas fundamentadas.",
   },
   "modulo-06-workflows-automatizacion": {
     description: "Orquesta procesos definidos, resilientes e idempotentes con IA bajo control.",
     imageSrc: "/ai-engineering-course/cards/modulo-06-workflows-automatizacion.webp",
-    alt: "Workflow automatizado que conecta disparadores, decisiones, herramientas, acciones, excepciones y resultados verificables.",
   },
   "modulo-07-agentes-sistemas-multiagente": {
     description: "Diseña agentes y equipos multiagente con roles, contratos y supervisión.",
     imageSrc: "/ai-engineering-course/cards/modulo-07-agentes-sistemas-multiagente.webp",
-    alt: "Red de agentes de IA especializados que colaboran con memoria compartida y coordinación para resolver una tarea común.",
   },
   "modulo-08-evaluacion-observabilidad-trazabilidad": {
     description: "Evalúa calidad, observa comportamiento y traza decisiones de extremo a extremo.",
     imageSrc: "/ai-engineering-course/cards/modulo-08-evaluacion-observabilidad-trazabilidad.webp",
-    alt: "Panel de evaluación y monitoreo de un sistema de IA con métricas, trazas, revisión y validación de resultados.",
   },
   "modulo-09-seguridad-guardrails-supervision": {
     description: "Aplica guardrails, permisos y supervisión humana frente a amenazas reales.",
     imageSrc: "/ai-engineering-course/cards/modulo-09-seguridad-guardrails-supervision.webp",
-    alt: "Sistema de IA protegido por guardrails, filtros, políticas, alertas, trazabilidad y supervisión humana.",
   },
   "modulo-10-coste-velocidad-confiabilidad": {
     description: "Equilibra coste, latencia y confiabilidad con presupuestos operativos explícitos.",
     imageSrc: "/ai-engineering-course/cards/modulo-10-coste-velocidad-confiabilidad.webp",
-    alt: "Sistema de IA que equilibra coste, velocidad y confiabilidad mediante optimización, rendimiento y validación segura.",
   },
   "modulo-11-producto-automatizacion-empresarial": {
     description: "Convierte oportunidades empresariales en productos y automatizaciones medibles.",
     imageSrc: "/ai-engineering-course/cards/modulo-11-producto-automatizacion-empresarial.webp",
-    alt: "Flujo de producto de IA que transforma personas, procesos y datos en resultados empresariales medibles.",
   },
   "modulo-12-produccion-proyecto-final": {
     description: "Prepara lanzamiento, operación y mejora continua del proyecto final.",
     imageSrc: "/ai-engineering-course/cards/modulo-12-produccion-proyecto-final.webp",
-    alt: "Paso de un sistema de IA desde el desarrollo hasta un despliegue en producción seguro, monitoreado y listo para operar.",
   },
 };
 
@@ -124,7 +111,7 @@ export function AiEngineeringCourseCatalog({
               <div className="relative aspect-video overflow-hidden border-b border-[#0f766e]/15 bg-[#071a2b]">
                 <Image
                   src={imageSrc}
-                  alt={editorial.alt}
+                  alt=""
                   fill
                   sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
                   className="object-contain"
@@ -173,7 +160,6 @@ export function AiEngineeringCourseCatalog({
 
                 <Link
                   href={href}
-                  aria-label={`${action}: Módulo ${courseModule.summary.order}, ${courseModule.summary.title}`}
                   className="focus-ring mt-5 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#0f766e] px-4 py-3 text-sm font-black text-white shadow-sm hover:bg-[#0b625c]"
                 >
                   {action}

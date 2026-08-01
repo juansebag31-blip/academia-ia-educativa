@@ -40,54 +40,18 @@ if (!moduleTwelve) {
 }
 
 const expectedCourseCardImages = [
-  {
-    path: "/ai-engineering-course/cards/modulo-01-del-modelo-a-la-aplicacion.webp",
-    alt: "Un modelo de inteligencia artificial evoluciona hacia un sistema completo con memoria, herramientas, orquestación, evaluación, seguridad y una aplicación para el usuario.",
-  },
-  {
-    path: "/ai-engineering-course/cards/modulo-02-modelos-fundacionales-seleccion.webp",
-    alt: "Comparación documentada de modelos de IA según capacidad, coste, velocidad, seguridad y adecuación a la tarea.",
-  },
-  {
-    path: "/ai-engineering-course/cards/modulo-03-contexto-estado-memoria.webp",
-    alt: "Sistema de IA que conserva contexto, estado y memoria para sostener conversaciones y procesos coherentes.",
-  },
-  {
-    path: "/ai-engineering-course/cards/modulo-04-herramientas-apis-function-calling-mcp.webp",
-    alt: "Modelo de IA conectado mediante function calling y MCP con APIs, bases de datos, servicios y herramientas externas.",
-  },
-  {
-    path: "/ai-engineering-course/cards/modulo-05-rag-sistemas-conocimiento.webp",
-    alt: "Flujo RAG que ingiere documentos, crea representaciones vectoriales, recupera evidencia y genera respuestas fundamentadas.",
-  },
-  {
-    path: "/ai-engineering-course/cards/modulo-06-workflows-automatizacion.webp",
-    alt: "Workflow automatizado que conecta disparadores, decisiones, herramientas, acciones, excepciones y resultados verificables.",
-  },
-  {
-    path: "/ai-engineering-course/cards/modulo-07-agentes-sistemas-multiagente.webp",
-    alt: "Red de agentes de IA especializados que colaboran con memoria compartida y coordinación para resolver una tarea común.",
-  },
-  {
-    path: "/ai-engineering-course/cards/modulo-08-evaluacion-observabilidad-trazabilidad.webp",
-    alt: "Panel de evaluación y monitoreo de un sistema de IA con métricas, trazas, revisión y validación de resultados.",
-  },
-  {
-    path: "/ai-engineering-course/cards/modulo-09-seguridad-guardrails-supervision.webp",
-    alt: "Sistema de IA protegido por guardrails, filtros, políticas, alertas, trazabilidad y supervisión humana.",
-  },
-  {
-    path: "/ai-engineering-course/cards/modulo-10-coste-velocidad-confiabilidad.webp",
-    alt: "Sistema de IA que equilibra coste, velocidad y confiabilidad mediante optimización, rendimiento y validación segura.",
-  },
-  {
-    path: "/ai-engineering-course/cards/modulo-11-producto-automatizacion-empresarial.webp",
-    alt: "Flujo de producto de IA que transforma personas, procesos y datos en resultados empresariales medibles.",
-  },
-  {
-    path: "/ai-engineering-course/cards/modulo-12-produccion-proyecto-final.webp",
-    alt: "Paso de un sistema de IA desde el desarrollo hasta un despliegue en producción seguro, monitoreado y listo para operar.",
-  },
+  "/ai-engineering-course/cards/modulo-01-del-modelo-a-la-aplicacion.webp",
+  "/ai-engineering-course/cards/modulo-02-modelos-fundacionales-seleccion.webp",
+  "/ai-engineering-course/cards/modulo-03-contexto-estado-memoria.webp",
+  "/ai-engineering-course/cards/modulo-04-herramientas-apis-function-calling-mcp.webp",
+  "/ai-engineering-course/cards/modulo-05-rag-sistemas-conocimiento.webp",
+  "/ai-engineering-course/cards/modulo-06-workflows-automatizacion.webp",
+  "/ai-engineering-course/cards/modulo-07-agentes-sistemas-multiagente.webp",
+  "/ai-engineering-course/cards/modulo-08-evaluacion-observabilidad-trazabilidad.webp",
+  "/ai-engineering-course/cards/modulo-09-seguridad-guardrails-supervision.webp",
+  "/ai-engineering-course/cards/modulo-10-coste-velocidad-confiabilidad.webp",
+  "/ai-engineering-course/cards/modulo-11-producto-automatizacion-empresarial.webp",
+  "/ai-engineering-course/cards/modulo-12-produccion-proyecto-final.webp",
 ] as const;
 
 describe("AI Engineering visual renderer", () => {
@@ -131,7 +95,7 @@ describe("AI Engineering visual renderer", () => {
   });
 
   it("renders the course cover from the multicourse catalog", () => {
-    render(<AiEngineeringCourseOverview course={course} />);
+    const { container } = render(<AiEngineeringCourseOverview course={course} />);
 
     expect(screen.getByRole("heading", { level: 1, name: "AI Engineering Aplicado" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Comenzar Módulo 1" })).toHaveAttribute(
@@ -146,63 +110,41 @@ describe("AI Engineering visual renderer", () => {
     expect(screen.getByRole("img", {
       name: "Capas del proyecto JSG AI Engineering Hub",
     })).toBeInTheDocument();
-    for (const expectedImage of expectedCourseCardImages) {
-      const image = screen.getByRole("img", { name: expectedImage.alt });
-      expect(decodeURIComponent(image.getAttribute("src") ?? "")).toContain(expectedImage.path);
+    const cardImages = Array.from(
+      container.querySelectorAll<HTMLImageElement>("img"),
+    ).filter((image) =>
+      decodeURIComponent(image.getAttribute("src") ?? "").includes(
+        "/ai-engineering-course/cards/",
+      ),
+    );
+    expect(cardImages).toHaveLength(12);
+    for (const [index, image] of cardImages.entries()) {
+      expect(decodeURIComponent(image.getAttribute("src") ?? "")).toContain(
+        expectedCourseCardImages[index],
+      );
+      expect(image).toHaveAttribute("alt", "");
     }
     expect(screen.queryByText("Disponible")).not.toBeInTheDocument();
     expect(screen.queryByText("Módulo 01")).not.toBeInTheDocument();
     expect(screen.getAllByText(/^Módulo \d+$/)).toHaveLength(12);
     expect(screen.getByText("Módulo 1")).toHaveClass("text-[15px]");
-    expect(screen.getAllByRole("link", {
-      name: /módulo: Módulo \d+,/i,
-    })).toHaveLength(12);
+    expect(screen.getAllByRole("link", { name: "Comenzar módulo" })).toHaveLength(12);
     expect(screen.queryByText("Próximamente")).not.toBeInTheDocument();
     expect(screen.getByText("Modelos fundacionales y selección")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Módulo 2, Modelos fundacionales y selección/ })).toHaveAttribute(
-      "href",
-      "/courses/ai-engineering-aplicado/modules/modulo-02-modelos-fundacionales-seleccion",
-    );
-    expect(screen.getByRole("link", { name: /Módulo 3, Contexto, estado y memoria/ })).toHaveAttribute(
-      "href",
-      "/courses/ai-engineering-aplicado/modules/modulo-03-contexto-estado-memoria",
-    );
-    expect(screen.getByRole("link", { name: /Módulo 4, Herramientas, APIs, function calling y MCP/ })).toHaveAttribute(
-      "href",
-      "/courses/ai-engineering-aplicado/modules/modulo-04-herramientas-apis-function-calling-mcp",
-    );
-    expect(screen.getByRole("link", { name: /Módulo 5, RAG y sistemas de conocimiento/ })).toHaveAttribute(
-      "href",
-      "/courses/ai-engineering-aplicado/modules/modulo-05-rag-sistemas-conocimiento",
-    );
-    expect(screen.getByRole("link", { name: /Módulo 6, Workflows y automatización/ })).toHaveAttribute(
-      "href",
-      "/courses/ai-engineering-aplicado/modules/modulo-06-workflows-automatizacion",
-    );
-    expect(screen.getByRole("link", { name: /Módulo 7, Agentes y sistemas multiagente/ })).toHaveAttribute(
-      "href",
-      "/courses/ai-engineering-aplicado/modules/modulo-07-agentes-sistemas-multiagente",
-    );
-    expect(screen.getByRole("link", { name: /Módulo 8, Evaluación, observabilidad y trazabilidad/ })).toHaveAttribute(
-      "href",
-      "/courses/ai-engineering-aplicado/modules/modulo-08-evaluacion-observabilidad-trazabilidad",
-    );
-    expect(screen.getByRole("link", { name: /Módulo 9, Seguridad, guardrails y supervisión/ })).toHaveAttribute(
-      "href",
-      "/courses/ai-engineering-aplicado/modules/modulo-09-seguridad-guardrails-supervision",
-    );
-    expect(screen.getByRole("link", { name: /Módulo 10, Coste, velocidad y confiabilidad/ })).toHaveAttribute(
-      "href",
-      "/courses/ai-engineering-aplicado/modules/modulo-10-coste-velocidad-confiabilidad",
-    );
-    expect(screen.getByRole("link", { name: /Módulo 11, Producto y automatización empresarial/ })).toHaveAttribute(
-      "href",
-      "/courses/ai-engineering-aplicado/modules/modulo-11-producto-automatizacion-empresarial",
-    );
-    expect(screen.getByRole("link", { name: /Módulo 12, Producción y proyecto final/ })).toHaveAttribute(
-      "href",
-      "/courses/ai-engineering-aplicado/modules/modulo-12-produccion-proyecto-final",
-    );
+    for (const courseModule of course.modules) {
+      const article = screen
+        .getByRole("heading", { name: courseModule.summary.title })
+        .closest("article");
+      expect(article).not.toBeNull();
+      expect(
+        within(article as HTMLElement).getByRole("link", {
+          name: "Comenzar módulo",
+        }),
+      ).toHaveAttribute(
+        "href",
+        `/courses/ai-engineering-aplicado/modules/${courseModule.summary.slug}`,
+      );
+    }
     expect(screen.getAllByRole("progressbar", { name: /Progreso del Módulo/ })).toHaveLength(12);
     expect(screen.getByText("JSG AI Engineering Hub v1.0")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Capacidades para construir IA con criterio profesional" })).toBeInTheDocument();
@@ -460,9 +402,9 @@ describe("AI Engineering visual renderer", () => {
 
     render(<AiEngineeringCourseOverview course={course} />);
 
-    expect(screen.getByRole("link", { name: /Revisar módulo: Módulo 1,/ })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Continuar módulo: Módulo 2,/ })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Comenzar módulo: Módulo 3,/ })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Revisar módulo" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Continuar módulo" })).toBeInTheDocument();
+    expect(screen.getAllByRole("link", { name: "Comenzar módulo" })).toHaveLength(10);
     expect(screen.getByRole("progressbar", { name: /Progreso del Módulo 1:/ })).toHaveAttribute(
       "aria-valuenow",
       "100",

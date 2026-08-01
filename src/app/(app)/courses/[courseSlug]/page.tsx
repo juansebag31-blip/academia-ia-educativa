@@ -6,6 +6,11 @@ import { ModuleCard } from "@/components/module-card";
 import { ModuleImageFrame } from "@/components/module-image-frame";
 import { AiEngineeringCourseOverview } from "@/components/courses/ai-engineering/ai-engineering-course-overview";
 import { LocalCourseProgress } from "@/components/learning/local-progress";
+import {
+  AI_ENGINEERING_COURSE_DESCRIPTION,
+  AI_ENGINEERING_COURSE_IMAGE,
+  createAiEngineeringMetadata,
+} from "@/lib/courses/ai-engineering/publication";
 import { getCourseRouteParams, resolveCourse } from "@/lib/courses/catalog";
 
 export function generateStaticParams() {
@@ -20,6 +25,17 @@ export async function generateMetadata({
   const { courseSlug } = await params;
   const courseDefinition = resolveCourse(courseSlug);
   if (!courseDefinition) return {};
+
+  if (courseDefinition.kind === "ai-engineering") {
+    return createAiEngineeringMetadata({
+      title: courseDefinition.summary.title,
+      description: AI_ENGINEERING_COURSE_DESCRIPTION,
+      canonicalPath: `/courses/${courseSlug}`,
+      imageSrc: AI_ENGINEERING_COURSE_IMAGE,
+      imageAlt:
+        "AI Engineering Aplicado: recorrido profesional de doce módulos",
+    });
+  }
 
   return {
     title: courseDefinition.summary.title,

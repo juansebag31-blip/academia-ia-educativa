@@ -13,6 +13,10 @@ import { AiEngineeringModulePage } from "@/components/courses/ai-engineering/ai-
 import { LocalLessonStatus, LocalModuleProgress } from "@/components/learning/local-progress";
 import { VideoPlayer } from "@/components/video-player";
 import { findAdjacentModules } from "@/lib/course";
+import {
+  aiEngineeringModulePublication,
+  createAiEngineeringMetadata,
+} from "@/lib/courses/ai-engineering/publication";
 import { getModuleRouteParams, resolveCourseModule } from "@/lib/courses/catalog";
 import { getModuleResourceBundle } from "@/lib/module-resource-bundles";
 
@@ -29,11 +33,21 @@ export async function generateMetadata({
   const resolvedModule = resolveCourseModule(courseSlug, moduleSlug);
   if (!resolvedModule) return {};
 
+  if (resolvedModule.kind === "ai-engineering") {
+    const publication = aiEngineeringModulePublication[moduleSlug];
+
+    return createAiEngineeringMetadata({
+      title: resolvedModule.summary.title,
+      description: publication.description,
+      canonicalPath: `/courses/${courseSlug}/modules/${moduleSlug}`,
+      imageSrc: publication.imageSrc,
+      imageAlt: `Portada del Módulo ${resolvedModule.summary.order}: ${resolvedModule.summary.title}`,
+    });
+  }
+
   return {
     title: resolvedModule.summary.title,
-    description: resolvedModule.kind === "standard"
-      ? resolvedModule.module.purpose
-      : resolvedModule.summary.title,
+    description: resolvedModule.module.purpose,
   };
 }
 

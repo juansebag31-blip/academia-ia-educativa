@@ -285,6 +285,20 @@ describe("AI Engineering manifest preparation", () => {
     }
   });
 
+  it("keeps public edition labels normalized while preserving Hub versions", () => {
+    for (const preparedModule of preparedModulesAll) {
+      expect(preparedModule.content.foundational.html).toMatch(
+        /Edici[oó]n 2026/i,
+      );
+      expect(preparedModule.content.foundational.html).not.toMatch(
+        /Versi[oó]n 0\.\d+/i,
+      );
+      expect(preparedModule.content.foundational.html).toMatch(
+        /JSG(?: AI Engineering)? Hub v(?:0\.\d+|1\.0)/i,
+      );
+    }
+  });
+
   it("removes wrappers, global styles, scripts and inline handlers", () => {
     const documents = [prepared.content.foundational, prepared.content.visualAudio, ...prepared.content.cases]
       .filter((document): document is NonNullable<typeof document> => Boolean(document));
