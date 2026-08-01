@@ -53,7 +53,7 @@ export function AiEngineeringCases({ cases }: { cases: AiEngineeringPreparedCase
             tabIndex={0}
             className="focus-ring mt-4 rounded-2xl border border-slate-200 bg-white p-6"
           >
-            <SanitizedHtml html={caseItem.html} />
+            <SanitizedHtml html={caseItem.html} headingPolicy="case-title" />
           </div>
         ))}
       </div>
@@ -71,7 +71,7 @@ export function AiEngineeringCases({ cases }: { cases: AiEngineeringPreparedCase
               </span>
             </summary>
             <div className="border-t border-slate-200 p-4">
-              <SanitizedHtml html={caseItem.html} />
+              <SanitizedHtml html={caseItem.html} headingPolicy="case-title" />
             </div>
           </details>
         ))}

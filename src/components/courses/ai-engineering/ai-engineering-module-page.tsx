@@ -119,7 +119,10 @@ export function AiEngineeringModulePage({
         <div className="p-5 sm:p-8">
           {module.content.foundational.introHtml ? (
             <div className="mb-8 rounded-2xl border border-[#0f766e]/20 bg-[#f3f7f6] p-5 sm:p-7">
-              <SanitizedHtml html={module.content.foundational.introHtml} />
+              <SanitizedHtml
+                html={module.content.foundational.introHtml}
+                headingPolicy="duplicate-document-title"
+              />
             </div>
           ) : null}
           <div className="divide-y divide-slate-200">

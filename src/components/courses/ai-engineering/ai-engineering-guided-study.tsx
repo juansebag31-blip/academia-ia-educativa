@@ -183,7 +183,11 @@ export function AiEngineeringGuidedStudy({
                     <FileImage size={17} aria-hidden="true" />
                     Infografía
                   </p>
-                  <h3 id="infografia-title" className="mt-1 text-xl font-black text-[#0b1f33]">
+                  <h3
+                    id="infografia-title"
+                    aria-label={`Infografía: ${infographicTitle}`}
+                    className="mt-1 text-xl font-black text-[#0b1f33]"
+                  >
                     {infographicTitle}
                   </h3>
                 </div>

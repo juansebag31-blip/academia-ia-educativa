@@ -158,7 +158,7 @@ describe("AI Engineering visual renderer", () => {
   it("renders Module 2 from its manifest-derived quantities", () => {
     const { container } = render(<AiEngineeringModulePage course={course} module={moduleTwo} />);
 
-    expect(screen.getAllByRole("heading", { level: 1, name: "Modelos fundacionales y selección" })[0])
+    expect(screen.getByRole("heading", { level: 1, name: "Modelos fundacionales y selección" }))
       .toBeInTheDocument();
     expect(screen.getAllByRole("link", { name: "Volver a la portada del curso" })[0]).toHaveAttribute(
       "href",
@@ -197,10 +197,69 @@ describe("AI Engineering visual renderer", () => {
     expect(container.querySelector("audio source")).toHaveAttribute("src", moduleTwo.assets.audioMp3.publicPath);
   });
 
+  it.each(course.modules.map((courseModule) => [courseModule.summary.title, courseModule] as const))(
+    "exposes one module heading and a logical case hierarchy in %s",
+    (_title, courseModule) => {
+      const { container } = render(<AiEngineeringModulePage course={course} module={courseModule} />);
+
+      expect(within(container).getAllByRole("heading", { level: 1 })).toHaveLength(1);
+      expect(
+        within(container).getByRole("heading", {
+          level: 1,
+          name: courseModule.summary.title,
+        }),
+      ).toBeInTheDocument();
+      expect(
+        within(container).getAllByRole("heading", {
+          name: courseModule.summary.title,
+          exact: true,
+        }),
+      ).toHaveLength(1);
+      expect(
+        within(container).getByRole("heading", {
+          level: 3,
+          name: `Infografía: ${courseModule.configuration.assets.infographic.title}`,
+        }),
+      ).toBeInTheDocument();
+
+      const duplicateDocumentTitle = container.querySelector(
+        "[data-ai-engineering-document-title]",
+      );
+      expect(duplicateDocumentTitle?.tagName).toBe("P");
+      expect(duplicateDocumentTitle).toHaveAttribute("aria-hidden", "true");
+      expect(duplicateDocumentTitle).toHaveTextContent(courseModule.summary.title);
+
+      const casesSection = container.querySelector("section#casos");
+      expect(casesSection).not.toBeNull();
+      expect(
+        within(casesSection as HTMLElement).getByRole("heading", {
+          level: 2,
+          name: courseModule.configuration.sections.casesTitle,
+        }),
+      ).toBeInTheDocument();
+
+      const activeCasePanel = casesSection?.querySelector<HTMLElement>(
+        '[role="tabpanel"]:not([hidden])',
+      );
+      const activeCaseTitle = activeCasePanel?.querySelector(
+        "[data-ai-engineering-case-title]",
+      );
+      expect(activeCaseTitle?.tagName).toBe("H3");
+      expect(activeCaseTitle?.textContent?.trim()).not.toBe("");
+      expect(
+        within(activeCasePanel as HTMLElement).getByRole("heading", {
+          level: 3,
+          name: activeCaseTitle?.textContent?.trim(),
+        }),
+      ).toBeInTheDocument();
+
+    },
+  );
+
   it("renders Module 3 from its manifest-derived quantities", () => {
     const { container } = render(<AiEngineeringModulePage course={course} module={moduleThree} />);
 
-    expect(screen.getAllByRole("heading", { level: 1, name: "Contexto, estado y memoria" })[0])
+    expect(screen.getByRole("heading", { level: 1, name: "Contexto, estado y memoria" }))
       .toBeInTheDocument();
     expect(moduleThree.configuration.progressUnits).toHaveLength(8);
     expect(moduleThree.content.cases).toHaveLength(3);
@@ -223,7 +282,7 @@ describe("AI Engineering visual renderer", () => {
   it("renders Module 4 from its manifest-derived quantities and official sources", () => {
     const { container } = render(<AiEngineeringModulePage course={course} module={moduleFour} />);
 
-    expect(screen.getAllByRole("heading", { level: 1, name: "Herramientas, APIs, function calling y MCP" })[0])
+    expect(screen.getByRole("heading", { level: 1, name: "Herramientas, APIs, function calling y MCP" }))
       .toBeInTheDocument();
     expect(moduleFour.configuration.progressUnits).toHaveLength(8);
     expect(moduleFour.content.cases).toHaveLength(3);
