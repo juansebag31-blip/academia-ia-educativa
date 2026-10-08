@@ -16,6 +16,12 @@
     "test:watch": "vitest",
     "db:seed": "tsx scripts/seed-db.ts",
     "content:import": "tsx scripts/import-pdfs.ts",
+    "content:prepare:rag": "tsx scripts/prepare-rag-corpus.ts",
+    "content:validate:rag": "tsx scripts/prepare-rag-corpus.ts --check",
+    "rag:smoke": "node --conditions=react-server --import tsx scripts/test-rag-vector-search.ts",
+    "rag:index": "node --conditions=react-server --import tsx scripts/index-rag-corpus.ts",
+    "rag:evaluate": "node --conditions=react-server --import tsx scripts/evaluate-rag-retrieval.ts",
+    "rag:evaluate:generation": "node --conditions=react-server --import tsx scripts/evaluate-rag-generation.ts",
     "content:prepare:ai-engineering": "tsx scripts/prepare-ai-engineering-content.ts",
     "content:validate:ai-engineering-module": "tsx scripts/manage-ai-engineering-module.ts validate",
     "content:prepare:ai-engineering-module": "tsx scripts/manage-ai-engineering-module.ts prepare",
@@ -24,6 +30,7 @@
   },
   "dependencies": {
     "@drizzle-team/brocli": "^0.10.2",
+    "@google/genai": "2.27.0",
     "@supabase/ssr": "^0.12.0",
     "@supabase/supabase-js": "^2.108.1",
     "@tailwindcss/typography": "^0.5.16",
@@ -35,7 +42,8 @@
     "pdf-lib": "^1.17.1",
     "pdf-parse": "^1.1.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "server-only": "0.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

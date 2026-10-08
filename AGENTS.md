@@ -67,8 +67,8 @@ If a command cannot be run because of missing environment values or local servic
 ## Supabase and Secrets
 
 - Public browser variables are `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_APP_URL`, and `NEXT_PUBLIC_CONTACT_EMAIL`.
-- Server-only values include `SUPABASE_SERVICE_ROLE_KEY`, `MARKETING_HASH_SECRET`, `MARKETING_DOWNLOAD_SECRET`, `RESEND_API_KEY`, and `RESEND_FROM_EMAIL`.
-- Never expose `SUPABASE_SERVICE_ROLE_KEY` or any secret with a `NEXT_PUBLIC_` prefix.
+- Server-only values include `SUPABASE_SECRET_KEY`, `GEMINI_API_KEY`, `MARKETING_HASH_SECRET`, `MARKETING_DOWNLOAD_SECRET`, `RESEND_API_KEY`, and `RESEND_FROM_EMAIL`.
+- Never expose `SUPABASE_SECRET_KEY`, `GEMINI_API_KEY`, or any secret with a `NEXT_PUBLIC_` prefix.
 - Check `.env.example` for the current variable list before adding or renaming environment variables.
 - When touching Supabase migrations, preserve RLS assumptions and make migrations idempotent where practical.
 

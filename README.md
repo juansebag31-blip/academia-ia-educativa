@@ -112,6 +112,18 @@ npm run content:prepare:ai-engineering
 
 ## Testing y calidad
 
+### RAG fundamentado, sin interfaz
+
+La capa server-only de RAG mantiene desacoplados embeddings, retrieval y generación. El modelo generador se configura con `GEMINI_RAG_MODEL`; `RAG_SIMILARITY_THRESHOLD` controla el corte de suficiencia antes de invocar al generador.
+
+El valor inicial `0.700` es **experimental**: proviene de la evaluación controlada del corpus y no debe considerarse definitivo hasta probar consultas reales de estudiantes. Cuando el primer resultado queda por debajo del corte, el sistema devuelve `insufficient_evidence` sin solicitar una generación.
+
+```powershell
+npm run rag:evaluate:generation
+```
+
+La evaluación utiliza hasta cinco fragmentos, exige citas `[S#]` válidas y no habilita búsqueda web, historial, streaming ni una API pública.
+
 La suite cubre, entre otros aspectos, catálogo y rutas de AI Engineering, evaluaciones, estado local, autenticación, retorno seguro después del login, importación a Supabase, certificados, marketing y SEO.
 
 ```powershell
@@ -134,7 +146,7 @@ El repositorio contiene la preparación técnica para Search Console; la indexac
 ## Seguridad
 
 - No subir `.env`, `.env.local`, bases SQLite ni credenciales.
-- Nunca exponer `SUPABASE_SERVICE_ROLE_KEY` con el prefijo `NEXT_PUBLIC_`.
+- Nunca exponer `SUPABASE_SECRET_KEY` ni `GEMINI_API_KEY` con el prefijo `NEXT_PUBLIC_`.
 - Mantener secretos de marketing y Resend exclusivamente en el servidor.
 - Conservar las políticas RLS al modificar el esquema de Supabase.
 - El kit se entrega con token firmado y no como archivo público directo.
@@ -191,7 +203,7 @@ Sin variables de Supabase, las funciones remotas no estarán disponibles, pero e
 Los nombres y su alcance están documentados en [`.env.example`](.env.example):
 
 - públicas: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_CONTACT_EMAIL`;
-- privadas: `SUPABASE_SERVICE_ROLE_KEY`, `MARKETING_HASH_SECRET`, `MARKETING_DOWNLOAD_SECRET`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`.
+- privadas: `SUPABASE_SECRET_KEY`, `GEMINI_API_KEY`, `GEMINI_RAG_MODEL`, `RAG_SIMILARITY_THRESHOLD`, `MARKETING_HASH_SECRET`, `MARKETING_DOWNLOAD_SECRET`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`.
 
 ### Scripts útiles
 
