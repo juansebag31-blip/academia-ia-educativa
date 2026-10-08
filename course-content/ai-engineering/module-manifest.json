@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "sourceVersion": "1.0",
+  "sourceVersion": "1.1",
   "courseSlug": "ai-engineering-aplicado",
   "module": {
     "editorialSlug": "modulo-01-modelo-a-sistema-inteligente",
@@ -35,13 +35,20 @@
       "infographic": {
         "sourcePath": "assets/images/modulo-01-infografia.png",
         "title": "De un modelo a un sistema inteligente",
-        "alt": "Infografía del Módulo 1 sobre el recorrido de un modelo a un sistema inteligente"
+        "alt": "Infografía del Módulo 1 sobre el recorrido de un modelo a un sistema inteligente",
+        "width": 1055,
+        "height": 1491
+      },
+      "guidedInfographicAudio": {
+        "mp3SourcePath": "assets/audio/modulo-01-lectura-guiada-infografia.mp3",
+        "title": "Lectura guiada de la infografía",
+        "instruction": "Escucha esta guía mientras recorres la infografía. La narración sigue su estructura para ayudarte a comprender cada concepto en orden."
       },
       "audio": {
         "mp3SourcePath": "assets/audio/modulo-01-audio-explicativo.mp3",
         "m4aSourcePath": "assets/audio/modulo-01-audio-explicativo.m4a",
         "transcriptSourcePath": "content/modulo-01/guion-audio.txt",
-        "title": "Audio explicativo del Módulo 1"
+        "title": "Podcast / Audio Overview de NotebookLM"
       },
       "cases": [
         {

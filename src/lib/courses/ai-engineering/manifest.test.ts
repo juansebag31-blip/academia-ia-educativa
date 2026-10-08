@@ -231,7 +231,14 @@ describe("AI Engineering course contract", () => {
 
 describe("AI Engineering manifest preparation", () => {
   it("copies public media with stable routes and unchanged bytes", async () => {
-    for (const asset of [prepared.assets.infographic, prepared.assets.audioMp3, prepared.assets.presentation]) {
+    for (const asset of [
+      prepared.assets.infographic,
+      prepared.assets.guidedInfographicAudioMp3,
+      prepared.assets.audioMp3,
+      prepared.assets.presentation,
+    ]) {
+      expect(asset).toBeDefined();
+      if (!asset) continue;
       expect(asset.publicPath).toMatch(/^\/ai-engineering-assets\/modulo-01\//);
       const source = await readFile(path.join(projectRoot, "course-content", "ai-engineering", asset.sourcePath));
       const copied = await readFile(path.join(projectRoot, "public", asset.publicPath.replace(/^\//, "")));
@@ -242,7 +249,9 @@ describe("AI Engineering manifest preparation", () => {
     }
     expect(prepared.assets.audioM4a?.sourcePath).toBe(aiEngineeringManifest.module.assets.audio.m4aSourcePath);
     const copiedNames = await readdir(path.join(projectRoot, "public", "ai-engineering-assets", "modulo-01"));
+    expect(copiedNames.filter((fileName) => fileName.toLowerCase().endsWith(".mp3"))).toHaveLength(2);
     expect(copiedNames.some((fileName) => fileName.toLowerCase().endsWith(".m4a"))).toBe(false);
+    expect(copiedNames.some((fileName) => fileName.toLowerCase().endsWith(".wav"))).toBe(false);
   });
 
   it("copies Modules 2, 3 and 4 public assets while keeping their M4A sources private", async () => {

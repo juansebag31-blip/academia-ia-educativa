@@ -318,7 +318,10 @@ describe("AI Engineering visual renderer", () => {
       "href",
       "#autoevaluacion",
     );
-    expect(screen.getByText("Recorrido del módulo · 8 etapas")).toBeInTheDocument();
+    const progressNavigation = screen.getByText("Recorrido del módulo · 8 etapas").closest("details")?.parentElement;
+    expect(progressNavigation).toBeInTheDocument();
+    expect(progressNavigation).toHaveClass("space-y-3");
+    expect(progressNavigation).not.toHaveClass("sticky");
     expect(screen.getByRole("link", { name: "Comenzar módulo" })).toHaveAttribute("href", "#contenido");
     expect(screen.queryByText("approved-content-ready-for-integration")).not.toBeInTheDocument();
     expect(container.querySelectorAll("#contenido article")).toHaveLength(12);
@@ -341,11 +344,27 @@ describe("AI Engineering visual renderer", () => {
     expect(screen.getAllByLabelText(/Respuesta \d/)).toHaveLength(8);
     expect(container.querySelector("audio")).not.toBeInTheDocument();
 
+    expect(moduleOne.assets.guidedInfographicAudioMp3).toBeDefined();
+    expect(screen.getAllByText(/Escucha esta guía mientras recorres la infografía/)).toHaveLength(2);
+    expect(screen.getByRole("heading", { name: "Lectura guiada de la infografía" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Podcast / Audio Overview de NotebookLM" })).toBeInTheDocument();
+
     fireEvent.click(screen.getByRole("button", {
-      name: "Cargar y reproducir audio: Audio explicativo del Módulo 1",
+      name: "Cargar y reproducir audio: Lectura guiada de la infografía",
     }));
-    expect(container.querySelector("audio source")).toHaveAttribute("src", moduleOne.assets.audioMp3.publicPath);
-    expect(screen.getByText(/Abre la infografía, inicia el audio/)).toBeInTheDocument();
+    expect(container.querySelector("audio source")).toHaveAttribute(
+      "src",
+      moduleOne.assets.guidedInfographicAudioMp3?.publicPath,
+    );
+
+    fireEvent.click(screen.getByRole("button", {
+      name: "Cargar y reproducir audio: Podcast / Audio Overview de NotebookLM",
+    }));
+    expect(Array.from(container.querySelectorAll("audio source")).map((source) => source.getAttribute("src")))
+      .toEqual(expect.arrayContaining([
+        moduleOne.assets.guidedInfographicAudioMp3?.publicPath,
+        moduleOne.assets.audioMp3.publicPath,
+      ]));
     expect(screen.getByRole("button", { name: "Acercar infografía" })).toBeInTheDocument();
     expect(screen.getByRole("button", {
       name: "Abrir infografía y audio a pantalla completa",
@@ -362,7 +381,18 @@ describe("AI Engineering visual renderer", () => {
     fireEvent.click(guidedStudyOpener);
     const guidedStudyDialog = screen.getByRole("dialog", { name: "Estudio guiado ampliado" });
     expect(within(guidedStudyDialog).getByRole("button", { name: "Cerrar vista ampliada" })).toHaveFocus();
-    expect(within(guidedStudyDialog).getByLabelText(moduleOne.configuration.assets.audio.title)).toBeInTheDocument();
+    expect(within(guidedStudyDialog).getByLabelText("Lectura guiada de la infografía", {
+      selector: "audio",
+    })).toBeInTheDocument();
+    expect(guidedStudyDialog).toHaveClass("h-[100dvh]", "overflow-hidden");
+    expect(within(guidedStudyDialog).getByRole("complementary", {
+      name: "Lectura guiada de la infografía",
+    })).toHaveClass("shrink-0");
+    expect(Array.from(container.querySelectorAll("audio source")).map((source) => source.getAttribute("src")))
+      .toEqual(expect.arrayContaining([
+        moduleOne.assets.guidedInfographicAudioMp3?.publicPath,
+        moduleOne.assets.audioMp3.publicPath,
+      ]));
     fireEvent.keyDown(guidedStudyDialog, { key: "Escape" });
     expect(screen.queryByRole("dialog", { name: "Estudio guiado ampliado" })).not.toBeInTheDocument();
     expect(guidedStudyOpener).toHaveFocus();

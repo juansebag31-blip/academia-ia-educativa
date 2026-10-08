@@ -162,7 +162,7 @@ export function AiEngineeringProgressNavigation() {
   const lastUnit = resumeUnitId ? findAiEngineeringProgressUnit(units, resumeUnitId) : undefined;
 
   return (
-    <div className="sticky top-3 z-30 space-y-3">
+    <div className="space-y-3">
       {lastUnit && snapshot.percentage < 100 ? (
         <div className="flex flex-col gap-3 rounded-2xl border border-[#0f766e]/25 bg-[#eef7f5] px-4 py-3 shadow-card sm:flex-row sm:items-center sm:justify-between">
           <div>

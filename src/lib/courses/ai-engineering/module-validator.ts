@@ -70,6 +70,13 @@ export async function validateAiEngineeringModulePackage(
   requireExtension(moduleConfig.content.foundationalHtml, [".html"], "foundational HTML");
   if (moduleConfig.content.visualAudioHtml) requireExtension(moduleConfig.content.visualAudioHtml, [".html"], "visual-audio HTML");
   requireExtension(moduleConfig.assets.infographic.sourcePath, [".png", ".webp", ".jpg", ".jpeg"], "infographic");
+  if (moduleConfig.assets.guidedInfographicAudio) {
+    requireExtension(
+      moduleConfig.assets.guidedInfographicAudio.mp3SourcePath,
+      [".mp3"],
+      "guided infographic audio",
+    );
+  }
   requireExtension(moduleConfig.assets.audio.mp3SourcePath, [".mp3"], "web audio");
   if (moduleConfig.assets.audio.m4aSourcePath) requireExtension(moduleConfig.assets.audio.m4aSourcePath, [".m4a"], "source audio");
   requireExtension(moduleConfig.assets.presentation.sourcePath, [".pptx"], "presentation");
@@ -173,6 +180,7 @@ function collectSourceFiles(manifest: AiEngineeringModuleManifest) {
     moduleConfig.content.foundationalHtml,
     moduleConfig.content.visualAudioHtml,
     moduleConfig.assets.infographic.sourcePath,
+    moduleConfig.assets.guidedInfographicAudio?.mp3SourcePath,
     moduleConfig.assets.audio.mp3SourcePath,
     moduleConfig.assets.audio.m4aSourcePath,
     moduleConfig.assets.audio.transcriptSourcePath,

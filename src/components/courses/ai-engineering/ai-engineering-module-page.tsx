@@ -159,6 +159,18 @@ export function AiEngineeringModulePage({
         infographicSrc={module.assets.infographic.publicPath}
         infographicAlt={module.configuration.assets.infographic.alt}
         infographicTitle={module.configuration.assets.infographic.title}
+        infographicWidth={module.configuration.assets.infographic.width}
+        infographicHeight={module.configuration.assets.infographic.height}
+        guidedInfographicAudio={
+          module.configuration.assets.guidedInfographicAudio && module.assets.guidedInfographicAudioMp3
+            ? {
+                src: module.assets.guidedInfographicAudioMp3.publicPath,
+                type: module.assets.guidedInfographicAudioMp3.mediaType,
+                title: module.configuration.assets.guidedInfographicAudio.title,
+                instruction: module.configuration.assets.guidedInfographicAudio.instruction,
+              }
+            : undefined
+        }
         audioSrc={module.assets.audioMp3.publicPath}
         audioType={module.assets.audioMp3.mediaType}
         audioTitle={module.configuration.assets.audio.title}

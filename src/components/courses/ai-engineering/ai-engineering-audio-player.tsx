@@ -14,13 +14,15 @@ export function AiEngineeringAudioPlayer({
   type,
   title,
   unitId,
+  persistProgress = true,
 }: {
-  courseSlug: string;
-  moduleSlug: string;
+  courseSlug?: string;
+  moduleSlug?: string;
   src: string;
   type: string;
   title: string;
-  unitId: string;
+  unitId?: string;
+  persistProgress?: boolean;
 }) {
   const [loaded, setLoaded] = useState(false);
   const [savedPosition, setSavedPosition] = useState(0);
@@ -28,6 +30,7 @@ export function AiEngineeringAudioPlayer({
   const lastSavedSecondRef = useRef(0);
 
   useEffect(() => {
+    if (!persistProgress || !courseSlug || !moduleSlug || !unitId) return;
     const state = readAiEngineeringStandardUnitState(
       courseSlug,
       moduleSlug,
@@ -36,9 +39,10 @@ export function AiEngineeringAudioPlayer({
     const position = Math.max(0, state.positionSeconds ?? 0);
     setSavedPosition(position);
     lastSavedSecondRef.current = Math.floor(position);
-  }, [courseSlug, moduleSlug, unitId]);
+  }, [courseSlug, moduleSlug, persistProgress, unitId]);
 
   function savePosition(positionSeconds: number) {
+    if (!persistProgress || !courseSlug || !moduleSlug || !unitId) return;
     const roundedPosition = Math.max(0, Math.floor(positionSeconds));
     lastSavedSecondRef.current = roundedPosition;
     patchAiEngineeringStandardUnitState(courseSlug, moduleSlug, unitId, {

@@ -18,25 +18,22 @@ const MIN_ZOOM = 1;
 const MAX_ZOOM = 2.5;
 const ZOOM_STEP = 0.25;
 
-export function AiEngineeringGuidedStudy({
-  courseSlug,
-  moduleSlug,
-  infographicSrc,
-  infographicAlt,
-  infographicTitle,
-  audioSrc,
-  audioType,
-  audioTitle,
-  audioUnitId,
-  audioScript,
-  infographicCompletion,
-  audioCompletion,
-}: {
+type GuidedInfographicAudio = {
+  src: string;
+  type: string;
+  title: string;
+  instruction: string;
+};
+
+type AiEngineeringGuidedStudyProps = {
   courseSlug: string;
   moduleSlug: string;
   infographicSrc: string;
   infographicAlt: string;
   infographicTitle: string;
+  infographicWidth?: number;
+  infographicHeight?: number;
+  guidedInfographicAudio?: GuidedInfographicAudio;
   audioSrc: string;
   audioType: string;
   audioTitle: string;
@@ -44,12 +41,31 @@ export function AiEngineeringGuidedStudy({
   audioScript: string;
   infographicCompletion: ReactNode;
   audioCompletion: ReactNode;
-}) {
+};
+
+export function AiEngineeringGuidedStudy({
+  courseSlug,
+  moduleSlug,
+  infographicSrc,
+  infographicAlt,
+  infographicTitle,
+  infographicWidth = 1055,
+  infographicHeight = 1491,
+  guidedInfographicAudio,
+  audioSrc,
+  audioType,
+  audioTitle,
+  audioUnitId,
+  audioScript,
+  infographicCompletion,
+  audioCompletion,
+}: AiEngineeringGuidedStudyProps) {
   const [zoom, setZoom] = useState(MIN_ZOOM);
   const [expanded, setExpanded] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const openerRef = useRef<HTMLButtonElement>(null);
+  const usesDedicatedStudyLayout = Boolean(guidedInfographicAudio);
 
   useEffect(() => {
     function handleFullscreenChange() {
@@ -101,7 +117,7 @@ export function AiEngineeringGuidedStudy({
     if (!expanded || event.key !== "Tab") return;
     const focusable = Array.from(
       event.currentTarget.querySelectorAll<HTMLElement>(
-        'button:not([disabled]), a[href], audio[controls], summary, [tabindex]:not([tabindex="-1"])',
+        'button:not([disabled]):not([tabindex="-1"]), a[href], audio[controls], summary, [tabindex]:not([tabindex="-1"])',
       ),
     );
     if (focusable.length === 0) return;
@@ -130,6 +146,127 @@ export function AiEngineeringGuidedStudy({
   }
 
   const zoomPercent = Math.round(zoom * 100);
+  const infographic = (
+    <article
+      id="infografia"
+      aria-labelledby="infografia-title"
+      className={expanded
+        ? "flex min-h-0 flex-1 flex-col rounded-2xl border border-slate-200 bg-[#f5f8f7] p-3 sm:p-4"
+        : "scroll-mt-28 min-w-0 rounded-2xl border border-slate-200 bg-[#f5f8f7] p-4 sm:p-5"}
+    >
+      <div className="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-[#0f766e]">
+            <FileImage size={17} aria-hidden="true" />
+            Infografía
+          </p>
+          <h3
+            id="infografia-title"
+            aria-label={`Infografía: ${infographicTitle}`}
+            className="mt-1 text-xl font-black text-[#0b1f33]"
+          >
+            {infographicTitle}
+          </h3>
+        </div>
+        <div className="flex flex-wrap gap-2" aria-label="Controles de ampliación">
+          <ControlButton
+            label="Alejar infografía"
+            onClick={() => updateZoom(zoom - ZOOM_STEP)}
+            disabled={zoom <= MIN_ZOOM}
+            icon={<ZoomOut size={18} aria-hidden="true" />}
+          />
+          <ControlButton
+            label="Restablecer zoom"
+            onClick={() => updateZoom(MIN_ZOOM)}
+            disabled={zoom === MIN_ZOOM}
+            icon={<RotateCcw size={18} aria-hidden="true" />}
+          />
+          <ControlButton
+            label="Acercar infografía"
+            onClick={() => updateZoom(zoom + ZOOM_STEP)}
+            disabled={zoom >= MAX_ZOOM}
+            icon={<ZoomIn size={18} aria-hidden="true" />}
+          />
+          <button
+            ref={openerRef}
+            type="button"
+            onClick={() => void enterExpandedView()}
+            tabIndex={expanded ? -1 : 0}
+            aria-hidden={expanded ? "true" : undefined}
+            className={expanded
+              ? "sr-only"
+              : "focus-ring inline-flex items-center gap-2 rounded-xl bg-[#0f766e] px-3 py-2 text-xs font-black text-white"}
+            aria-label="Abrir infografía y audio a pantalla completa"
+          >
+            <Maximize2 size={18} aria-hidden="true" />
+            Pantalla completa
+          </button>
+        </div>
+      </div>
+
+      <p className="sr-only" aria-live="polite">Zoom de la infografía: {zoomPercent} %.</p>
+      <div
+        tabIndex={0}
+        onKeyDown={handleInfographicKeyDown}
+        aria-label={`Infografía interactiva. Zoom actual: ${zoomPercent} %. Usa más, menos o cero para ajustar.`}
+        className={expanded
+          ? "focus-ring mt-4 min-h-0 flex-1 overflow-auto rounded-xl border border-[#0f766e]/20 bg-[#071a2b]"
+          : usesDedicatedStudyLayout
+            ? "focus-ring mt-4 max-h-[78vh] min-h-[28rem] overflow-auto rounded-xl border border-[#0f766e]/20 bg-[#071a2b]"
+            : "focus-ring mt-4 h-[62vh] min-h-[26rem] max-h-[52rem] overflow-auto rounded-xl border border-[#0f766e]/20 bg-[#071a2b]"}
+      >
+        {usesDedicatedStudyLayout ? (
+          <div className="mx-auto min-w-full" style={{ width: `${zoomPercent}%` }}>
+            <Image
+              src={infographicSrc}
+              alt={infographicAlt}
+              width={infographicWidth}
+              height={infographicHeight}
+              sizes={expanded ? "100vw" : "(max-width: 1024px) 94vw, 82vw"}
+              className="h-auto w-full max-w-none"
+              priority={expanded}
+            />
+          </div>
+        ) : (
+          <div
+            className="relative mx-auto min-h-full min-w-full"
+            style={{
+              width: `${zoomPercent}%`,
+              height: `${Math.max(100, zoomPercent)}%`,
+              minHeight: `${Math.round(62 * zoom)}vh`,
+            }}
+          >
+            <Image
+              src={infographicSrc}
+              alt={infographicAlt}
+              fill
+              sizes={expanded ? "80vw" : "(max-width: 1024px) 92vw, 62vw"}
+              className="object-contain"
+            />
+          </div>
+        )}
+      </div>
+
+      <div className="mt-4 flex shrink-0 flex-wrap items-center justify-between gap-3">
+        <p className="text-xs font-semibold text-slate-600">
+          Atajos: <kbd className="font-mono">+</kbd>, <kbd className="font-mono">−</kbd> y <kbd className="font-mono">0</kbd>.
+        </p>
+        <a
+          href={infographicSrc}
+          download
+          className="focus-ring inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-black text-slate-700"
+        >
+          <Download size={18} aria-hidden="true" />
+          Descargar PNG
+        </a>
+      </div>
+
+      {guidedInfographicAudio ? (
+        <GuidedAudioDock audio={guidedInfographicAudio} expanded={expanded} />
+      ) : null}
+      {expanded ? null : infographicCompletion}
+    </article>
+  );
 
   return (
     <section
@@ -142,7 +279,8 @@ export function AiEngineeringGuidedStudy({
           Estudio visual y auditivo
         </h2>
         <p className="mt-3 max-w-4xl leading-7 text-slate-700">
-          Abre la infografía, inicia el audio y sigue visualmente los bloques explicados. Pausa al finalizar cada sección, identifica la relación principal y trata de explicarla con tus propias palabras antes de continuar.
+          {guidedInfographicAudio?.instruction
+            ?? "Abre la infografía, inicia el audio y sigue visualmente los bloques explicados. Pausa al finalizar cada sección, identifica la relación principal y trata de explicarla con tus propias palabras antes de continuar."}
         </p>
       </div>
 
@@ -153,12 +291,12 @@ export function AiEngineeringGuidedStudy({
         aria-label={expanded ? "Estudio guiado ampliado" : undefined}
         onKeyDown={handleKeyDown}
         className={expanded
-          ? "fixed inset-0 z-[110] overflow-auto bg-[#eef7f5] p-3 sm:p-5"
+          ? "fixed inset-0 z-[110] flex h-[100dvh] flex-col overflow-hidden bg-[#eef7f5] p-3 sm:p-5"
           : "bg-white p-4 sm:p-6"}
       >
-        <div className={expanded ? "mx-auto max-w-[1500px]" : ""}>
+        <div className={expanded ? "mx-auto flex h-full min-h-0 w-full max-w-[1600px] flex-col" : ""}>
           {expanded ? (
-            <div className="mb-3 flex justify-end">
+            <div className="mb-3 flex shrink-0 justify-end">
               <button
                 ref={closeButtonRef}
                 type="button"
@@ -171,148 +309,154 @@ export function AiEngineeringGuidedStudy({
             </div>
           ) : null}
 
-          <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1.35fr)_minmax(19rem,.65fr)]">
-            <article
-              id="infografia"
-              aria-labelledby="infografia-title"
-              className="scroll-mt-28 min-w-0 rounded-2xl border border-slate-200 bg-[#f5f8f7] p-4 sm:p-5"
-            >
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <p className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-[#0f766e]">
-                    <FileImage size={17} aria-hidden="true" />
-                    Infografía
-                  </p>
-                  <h3
-                    id="infografia-title"
-                    aria-label={`Infografía: ${infographicTitle}`}
-                    className="mt-1 text-xl font-black text-[#0b1f33]"
-                  >
-                    {infographicTitle}
-                  </h3>
-                </div>
-                <div className="flex flex-wrap gap-2" aria-label="Controles de ampliación">
-                  <ControlButton
-                    label="Alejar infografía"
-                    onClick={() => updateZoom(zoom - ZOOM_STEP)}
-                    disabled={zoom <= MIN_ZOOM}
-                    icon={<ZoomOut size={18} aria-hidden="true" />}
-                  />
-                  <ControlButton
-                    label="Restablecer zoom"
-                    onClick={() => updateZoom(MIN_ZOOM)}
-                    disabled={zoom === MIN_ZOOM}
-                    icon={<RotateCcw size={18} aria-hidden="true" />}
-                  />
-                  <ControlButton
-                    label="Acercar infografía"
-                    onClick={() => updateZoom(zoom + ZOOM_STEP)}
-                    disabled={zoom >= MAX_ZOOM}
-                    icon={<ZoomIn size={18} aria-hidden="true" />}
-                  />
-                  <button
-                    ref={openerRef}
-                    type="button"
-                    onClick={() => void enterExpandedView()}
-                    tabIndex={expanded ? -1 : 0}
-                    aria-hidden={expanded ? "true" : undefined}
-                    className={expanded
-                      ? "sr-only"
-                      : "focus-ring inline-flex items-center gap-2 rounded-xl bg-[#0f766e] px-3 py-2 text-xs font-black text-white"}
-                    aria-label="Abrir infografía y audio a pantalla completa"
-                  >
-                    <Maximize2 size={18} aria-hidden="true" />
-                    Pantalla completa
-                  </button>
-                </div>
-              </div>
-
-              <p className="sr-only" aria-live="polite">Zoom de la infografía: {zoomPercent} %.</p>
-              <div
-                tabIndex={0}
-                onKeyDown={handleInfographicKeyDown}
-                aria-label={`Infografía interactiva. Zoom actual: ${zoomPercent} %. Usa más, menos o cero para ajustar.`}
-                className="focus-ring mt-4 h-[62vh] min-h-[26rem] max-h-[52rem] overflow-auto rounded-xl border border-[#0f766e]/20 bg-[#071a2b]"
-              >
-                <div
-                  className="relative mx-auto min-h-full min-w-full"
-                  style={{
-                    width: `${zoomPercent}%`,
-                    height: `${Math.max(100, zoomPercent)}%`,
-                    minHeight: `${Math.round(62 * zoom)}vh`,
-                  }}
-                >
-                  <Image
-                    src={infographicSrc}
-                    alt={infographicAlt}
-                    fill
-                    sizes={expanded ? "80vw" : "(max-width: 1024px) 92vw, 62vw"}
-                    className="object-contain"
-                  />
-                </div>
-              </div>
-
-              <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-                <p className="text-xs font-semibold text-slate-600">
-                  Atajos: <kbd className="font-mono">+</kbd>, <kbd className="font-mono">−</kbd> y <kbd className="font-mono">0</kbd>.
-                </p>
-                <a
-                  href={infographicSrc}
-                  download
-                  className="focus-ring inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-black text-slate-700"
-                >
-                  <Download size={18} aria-hidden="true" />
-                  Descargar PNG
-                </a>
-              </div>
-              {infographicCompletion}
-            </article>
-
-            <article
-              id="audio"
-              aria-labelledby="audio-title"
-              className="scroll-mt-28 min-w-0 rounded-2xl border border-[#0f766e]/20 bg-[#0b1f33] p-4 text-white sm:p-5 lg:sticky lg:top-4"
-            >
-              <p className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-[#5eead4]">
-                <FileAudio size={17} aria-hidden="true" />
-                Audio
-              </p>
-              <h3 id="audio-title" className="mt-1 text-xl font-black">Audio explicativo</h3>
-              <p className="mt-2 text-sm leading-6 text-slate-300">
-                Reproduce, pausa y retoma el audio mientras recorres la infografía.
-              </p>
-
-              <div className="mt-4 overflow-hidden rounded-xl border border-white/15">
-                <AiEngineeringAudioPlayer
-                  courseSlug={courseSlug}
-                  moduleSlug={moduleSlug}
-                  src={audioSrc}
-                  type={audioType}
-                  title={audioTitle}
-                  unitId={audioUnitId}
-                />
-              </div>
-
-              <details className="group mt-4 rounded-xl border border-white/15 bg-white/5">
-                <summary className="focus-ring cursor-pointer list-none rounded-xl px-4 py-3 font-black marker:content-none">
-                  <span className="flex items-center justify-between gap-3">
-                    Guion o transcripción
-                    <span aria-hidden="true" className="text-[#5eead4] group-open:rotate-45 motion-reduce:transition-none">+</span>
-                  </span>
-                </summary>
-                <pre className="max-h-[28rem] overflow-auto whitespace-pre-wrap border-t border-white/15 p-4 font-sans text-sm leading-7 text-slate-200">
-                  {audioScript}
-                </pre>
-              </details>
-
-              <div className="[&>div]:border-white/15 [&>div]:bg-white/10 [&_span]:text-white">
-                {audioCompletion}
-              </div>
-            </article>
-          </div>
+          {usesDedicatedStudyLayout ? (
+            <div className={expanded ? "flex min-h-0 flex-1" : ""}>{infographic}</div>
+          ) : (
+            <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1.35fr)_minmax(19rem,.65fr)]">
+              {infographic}
+              <PodcastPanel
+                courseSlug={courseSlug}
+                moduleSlug={moduleSlug}
+                audioSrc={audioSrc}
+                audioType={audioType}
+                audioTitle={audioTitle}
+                audioUnitId={audioUnitId}
+                audioScript={audioScript}
+                audioCompletion={audioCompletion}
+              />
+            </div>
+          )}
         </div>
       </div>
+      {usesDedicatedStudyLayout ? (
+        <div
+          className={expanded ? "hidden" : "bg-white px-4 pb-4 sm:px-6 sm:pb-6"}
+          aria-hidden={expanded ? "true" : undefined}
+        >
+          <PodcastPanel
+            courseSlug={courseSlug}
+            moduleSlug={moduleSlug}
+            audioSrc={audioSrc}
+            audioType={audioType}
+            audioTitle={audioTitle}
+            audioUnitId={audioUnitId}
+            audioScript={audioScript}
+            audioCompletion={audioCompletion}
+            independent
+          />
+        </div>
+      ) : null}
     </section>
+  );
+}
+
+function GuidedAudioDock({
+  audio,
+  expanded,
+}: {
+  audio: GuidedInfographicAudio;
+  expanded: boolean;
+}) {
+  return (
+    <aside
+      aria-labelledby="guided-infographic-audio-title"
+      className={expanded
+        ? "mt-3 shrink-0 rounded-xl border border-white/15 bg-[#0b1f33] p-3 text-white shadow-2xl sm:p-4"
+        : "mt-4 rounded-xl border border-[#0f766e]/25 bg-[#0b1f33] p-4 text-white sm:p-5"}
+    >
+      <div className="grid items-center gap-3 md:grid-cols-[minmax(0,1fr)_minmax(18rem,.65fr)]">
+        <div>
+          <p className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-[#5eead4]">
+            <FileAudio size={17} aria-hidden="true" />
+            Guía sincronizada
+          </p>
+          <h4 id="guided-infographic-audio-title" className="mt-1 text-lg font-black">
+            {audio.title}
+          </h4>
+          <p className="mt-1 text-sm leading-6 text-slate-300">{audio.instruction}</p>
+        </div>
+        <div className="overflow-hidden rounded-xl border border-white/15">
+          <AiEngineeringAudioPlayer
+            src={audio.src}
+            type={audio.type}
+            title={audio.title}
+            persistProgress={false}
+          />
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+function PodcastPanel({
+  courseSlug,
+  moduleSlug,
+  audioSrc,
+  audioType,
+  audioTitle,
+  audioUnitId,
+  audioScript,
+  audioCompletion,
+  independent = false,
+}: {
+  courseSlug: string;
+  moduleSlug: string;
+  audioSrc: string;
+  audioType: string;
+  audioTitle: string;
+  audioUnitId: string;
+  audioScript: string;
+  audioCompletion: ReactNode;
+  independent?: boolean;
+}) {
+  return (
+    <article
+      id="audio"
+      aria-labelledby="audio-title"
+      className={independent
+        ? "scroll-mt-28 mt-5 min-w-0 rounded-2xl border border-[#0f766e]/20 bg-[#0b1f33] p-4 text-white sm:p-5"
+        : "scroll-mt-28 min-w-0 rounded-2xl border border-[#0f766e]/20 bg-[#0b1f33] p-4 text-white sm:p-5 lg:sticky lg:top-4"}
+    >
+      <p className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-[#5eead4]">
+        <FileAudio size={17} aria-hidden="true" />
+        {independent ? "Recurso independiente" : "Audio"}
+      </p>
+      <h3 id="audio-title" className="mt-1 text-xl font-black">
+        {independent ? audioTitle : "Audio explicativo"}
+      </h3>
+      <p className="mt-2 text-sm leading-6 text-slate-300">
+        {independent
+          ? "El Audio Overview de NotebookLM se mantiene separado de la lectura guiada de la infografía."
+          : "Reproduce, pausa y retoma el audio mientras recorres la infografía."}
+      </p>
+
+      <div className="mt-4 overflow-hidden rounded-xl border border-white/15">
+        <AiEngineeringAudioPlayer
+          courseSlug={courseSlug}
+          moduleSlug={moduleSlug}
+          src={audioSrc}
+          type={audioType}
+          title={audioTitle}
+          unitId={audioUnitId}
+        />
+      </div>
+
+      <details className="group mt-4 rounded-xl border border-white/15 bg-white/5">
+        <summary className="focus-ring cursor-pointer list-none rounded-xl px-4 py-3 font-black marker:content-none">
+          <span className="flex items-center justify-between gap-3">
+            Guion o transcripción
+            <span aria-hidden="true" className="text-[#5eead4] group-open:rotate-45 motion-reduce:transition-none">+</span>
+          </span>
+        </summary>
+        <pre className="max-h-[28rem] overflow-auto whitespace-pre-wrap border-t border-white/15 p-4 font-sans text-sm leading-7 text-slate-200">
+          {audioScript}
+        </pre>
+      </details>
+
+      <div className="[&>div]:border-white/15 [&>div]:bg-white/10 [&_span]:text-white">
+        {audioCompletion}
+      </div>
+    </article>
   );
 }
 

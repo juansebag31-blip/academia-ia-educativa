@@ -18,6 +18,7 @@ import type {
   AiEngineeringAssets,
   AiEngineeringPreparedHtml,
   AiEngineeringPresentationConfig,
+  AiEngineeringPublicAsset,
   PreparedAiEngineeringModule,
 } from "../src/lib/courses/types";
 
@@ -76,7 +77,7 @@ export async function prepareAiEngineeringModulePackage(
 
   await copyPublicAssets(packageRoot, publicModuleRoot, assets, presentation, visuals);
   const assetUrlsByFilename = new Map(
-    [assets.infographic, assets.audioMp3, assets.presentation].map((asset) => [
+    publicAssetsFor(assets).map((asset) => [
       path.basename(asset.sourcePath),
       asset.publicPath,
     ]),
@@ -132,6 +133,13 @@ function buildAssets(manifest: AiEngineeringModuleManifest): AiEngineeringAssets
       publicPath: `${publicUrlRoot}/${path.basename(moduleConfig.assets.infographic.sourcePath)}`,
       mediaType: mediaTypeFor(moduleConfig.assets.infographic.sourcePath),
     },
+    guidedInfographicAudioMp3: moduleConfig.assets.guidedInfographicAudio
+      ? {
+          sourcePath: moduleConfig.assets.guidedInfographicAudio.mp3SourcePath,
+          publicPath: `${publicUrlRoot}/${path.basename(moduleConfig.assets.guidedInfographicAudio.mp3SourcePath)}`,
+          mediaType: "audio/mpeg",
+        }
+      : undefined,
     audioMp3: {
       sourcePath: moduleConfig.assets.audio.mp3SourcePath,
       publicPath: `${publicUrlRoot}/${path.basename(moduleConfig.assets.audio.mp3SourcePath)}`,
@@ -184,7 +192,7 @@ async function copyPublicAssets(
   await rm(publicModuleRoot, { recursive: true, force: true });
   await mkdir(publicModuleRoot, { recursive: true });
 
-  for (const asset of [assets.infographic, assets.audioMp3, assets.presentation]) {
+  for (const asset of publicAssetsFor(assets)) {
     const destination = path.join(publicCourseRootFor(publicModuleRoot), asset.publicPath.replace(/^\/ai-engineering-assets\//, ""));
     assertInside(publicModuleRoot, destination);
     await mkdir(path.dirname(destination), { recursive: true });
@@ -208,6 +216,15 @@ async function copyPublicAssets(
     await mkdir(path.dirname(destination), { recursive: true });
     await copyFile(resolveSourcePath(packageRoot, visual.sourcePath), destination);
   }
+}
+
+function publicAssetsFor(assets: AiEngineeringAssets): AiEngineeringPublicAsset[] {
+  return [
+    assets.infographic,
+    assets.guidedInfographicAudioMp3,
+    assets.audioMp3,
+    assets.presentation,
+  ].filter((asset): asset is AiEngineeringPublicAsset => Boolean(asset));
 }
 
 function publicCourseRootFor(publicModuleRoot: string) {

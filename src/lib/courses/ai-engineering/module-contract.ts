@@ -102,7 +102,18 @@ export type AiEngineeringModuleManifest = {
       sources: { sectionId: string; itemSelector: string };
     };
     assets: {
-      infographic: { sourcePath: string; title: string; alt: string };
+      infographic: {
+        sourcePath: string;
+        title: string;
+        alt: string;
+        width?: number;
+        height?: number;
+      };
+      guidedInfographicAudio?: {
+        mp3SourcePath: string;
+        title: string;
+        instruction: string;
+      };
       audio: {
         mp3SourcePath: string;
         m4aSourcePath?: string;
@@ -214,6 +225,29 @@ export function parseAiEngineeringModuleManifest(value: unknown): AiEngineeringM
   requireString(infographic.sourcePath, "module.assets.infographic.sourcePath");
   requireString(infographic.title, "module.assets.infographic.title");
   requireString(infographic.alt, "module.assets.infographic.alt");
+  if ((infographic.width === undefined) !== (infographic.height === undefined)) {
+    throw new Error("AI Engineering module.assets.infographic width and height must be declared together.");
+  }
+  if (infographic.width !== undefined) {
+    requirePositiveInteger(infographic.width, "module.assets.infographic.width");
+    requirePositiveInteger(infographic.height, "module.assets.infographic.height");
+  }
+
+  if (assets.guidedInfographicAudio !== undefined) {
+    const guidedAudio = requireRecord(
+      assets.guidedInfographicAudio,
+      "module.assets.guidedInfographicAudio",
+    );
+    requireString(
+      guidedAudio.mp3SourcePath,
+      "module.assets.guidedInfographicAudio.mp3SourcePath",
+    );
+    requireString(guidedAudio.title, "module.assets.guidedInfographicAudio.title");
+    requireString(
+      guidedAudio.instruction,
+      "module.assets.guidedInfographicAudio.instruction",
+    );
+  }
 
   const audio = requireRecord(assets.audio, "module.assets.audio");
   requireString(audio.mp3SourcePath, "module.assets.audio.mp3SourcePath");

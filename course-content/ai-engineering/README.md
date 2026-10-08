@@ -12,7 +12,8 @@ Los archivos incluidos son contenido aprobado. Codex debe integrarlos, no resumi
 
 - `content/modulo-01/contenido-fundacional.html`: cuadernillo principal.
 - `assets/images/modulo-01-infografia.png`: infografía definitiva.
-- `assets/audio/modulo-01-audio-explicativo.mp3`: audio oficial.
+- `assets/audio/modulo-01-lectura-guiada-infografia.mp3`: lectura guiada para recorrer la infografía.
+- `assets/audio/modulo-01-audio-explicativo.mp3`: podcast / Audio Overview de NotebookLM conservado como recurso independiente.
 - `cases/`: tres casos reales independientes.
 - `assets/presentations/modulo-01-presentacion.pptx`: presentación educativa.
 - `module-manifest.json`: metadatos y rutas.

@@ -55,6 +55,7 @@ export type AiEngineeringAssets = {
   contentHtml: AiEngineeringSourceAsset;
   visualAudioHtml?: AiEngineeringSourceAsset;
   infographic: AiEngineeringPublicAsset;
+  guidedInfographicAudioMp3?: AiEngineeringPublicAsset;
   audioMp3: AiEngineeringPublicAsset;
   audioM4a?: AiEngineeringSourceAsset;
   audioScript: AiEngineeringSourceAsset;
