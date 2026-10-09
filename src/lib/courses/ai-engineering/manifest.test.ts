@@ -268,7 +268,9 @@ describe("AI Engineering manifest preparation", () => {
         preparedModule.configuration.assets.presentation.slideCount,
       );
       expect(copiedFiles.filter((fileName) => fileName.endsWith(".png"))).toHaveLength(6);
-      expect(copiedFiles.filter((fileName) => fileName.endsWith(".mp3"))).toHaveLength(1);
+      expect(copiedFiles.filter((fileName) => fileName.endsWith(".mp3"))).toHaveLength(
+        preparedModule.assets.guidedInfographicAudioMp3 ? 2 : 1,
+      );
       expect(copiedFiles.filter((fileName) => fileName.endsWith(".pptx"))).toHaveLength(1);
       expect(copiedFiles.some((fileName) => fileName.toLowerCase().endsWith(".m4a"))).toBe(false);
     }

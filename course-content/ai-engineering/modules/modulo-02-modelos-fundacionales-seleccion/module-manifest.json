@@ -34,7 +34,14 @@
       "infographic": {
         "sourcePath": "assets/images/infografia-modulo-02.png",
         "alt": "Infografía sobre selección profesional de modelos fundacionales",
-        "title": "Modelos fundacionales y selección"
+        "title": "Modelos fundacionales y selección",
+        "width": 1055,
+        "height": 1491
+      },
+      "guidedInfographicAudio": {
+        "mp3SourcePath": "assets/audio/modulo-02-lectura-guiada-infografia.mp3",
+        "title": "Lectura guiada de la infografía",
+        "instruction": "Escucha esta guía mientras recorres la infografía. La narración sigue su estructura para ayudarte a comprender cada concepto en orden."
       },
       "audio": {
         "mp3SourcePath": "assets/audio/modulo-02-audio-explicativo.mp3",
