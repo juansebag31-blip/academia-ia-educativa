@@ -114,7 +114,7 @@ npm run content:prepare:ai-engineering
 
 ### RAG fundamentado y tutor local
 
-La capa server-only de RAG mantiene desacoplados embeddings, retrieval y generación. El modelo generador se configura con `GEMINI_RAG_MODEL`; `RAG_SIMILARITY_THRESHOLD` controla el corte de suficiencia antes de invocar al generador.
+La capa server-only de RAG mantiene desacoplados embeddings, retrieval y generación. El modelo generador se configura con `GEMINI_RAG_MODEL`; la recomendación validada para la primera versión pública es `gemini-3.5-flash-lite`. `RAG_SIMILARITY_THRESHOLD` controla el corte de suficiencia antes de invocar al generador.
 
 El valor inicial `0.700` es **experimental**: proviene de la evaluación controlada del corpus y no debe considerarse definitivo hasta probar consultas reales de estudiantes. Cuando el primer resultado queda por debajo del corte, el sistema devuelve `insufficient_evidence` sin solicitar una generación.
 
