@@ -9,6 +9,7 @@ import type {
 type GeminiGenerationProviderOptions = {
   onRequest?: () => void;
   onRetry?: (event: { attempt: number; delayMs: number; reason: string }) => void;
+  maxAttempts?: number;
 };
 
 export class GeminiRagGenerationProvider implements RagGenerationProvider {
@@ -16,6 +17,7 @@ export class GeminiRagGenerationProvider implements RagGenerationProvider {
   private readonly client: GoogleGenAI;
   private readonly onRequest?: GeminiGenerationProviderOptions["onRequest"];
   private readonly onRetry?: GeminiGenerationProviderOptions["onRetry"];
+  private readonly maxAttempts: number;
 
   constructor(
     apiKey: string,
@@ -24,10 +26,17 @@ export class GeminiRagGenerationProvider implements RagGenerationProvider {
   ) {
     if (!apiKey.trim()) throw new Error("GEMINI_API_KEY no está configurada.");
     if (!model.trim()) throw new Error("GEMINI_RAG_MODEL no está configurado.");
+    if (
+      options.maxAttempts !== undefined
+      && (!Number.isInteger(options.maxAttempts) || options.maxAttempts < 1)
+    ) {
+      throw new Error("maxAttempts debe ser un entero positivo.");
+    }
     this.client = new GoogleGenAI({ apiKey });
     this.model = model.trim();
     this.onRequest = options.onRequest;
     this.onRetry = options.onRetry;
+    this.maxAttempts = options.maxAttempts ?? 6;
   }
 
   async generateAnswer(request: RagGenerationRequest) {
@@ -60,7 +69,7 @@ export class GeminiRagGenerationProvider implements RagGenerationProvider {
         });
       },
       {
-        maxAttempts: 6,
+        maxAttempts: this.maxAttempts,
         baseDelayMs: 2_000,
         maxDelayMs: 60_000,
         onRetry: this.onRetry,

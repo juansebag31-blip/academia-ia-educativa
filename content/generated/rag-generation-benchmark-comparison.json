@@ -1,0 +1,2317 @@
+{
+  "auditVersion": "rag-generation-model-comparison-v1",
+  "generatedAt": "2026-10-09T01:23:49.685Z",
+  "evaluationContract": {
+    "answerableCases": 15,
+    "externalCases": 5,
+    "oneInitialGenerationAttemptPerCase": true,
+    "externalCasesMustGateBeforeGeneration": true,
+    "sameCorpusRetrievalThresholdContextAndPrompt": true
+  },
+  "rubric": {
+    "fidelity": {
+      "0": "Hay una afirmación relevante no sustentada o no hay respuesta.",
+      "1": "Sólo hay una inferencia menor razonable.",
+      "2": "Todas las afirmaciones sustantivas están respaldadas."
+    },
+    "coverage": {
+      "0": "No responde el núcleo o no hay respuesta.",
+      "1": "Omite un concepto importante o es excesivamente breve.",
+      "2": "Cubre núcleo y conceptos esperados."
+    },
+    "pedagogicalClarity": {
+      "0": "Confusa o inexistente.",
+      "1": "Comprensible pero densa, breve o desorganizada.",
+      "2": "Clara, ordenada y pedagógica."
+    },
+    "citationsAndGrounding": {
+      "0": "Citas inválidas, grounding insuficiente o respuesta inexistente.",
+      "1": "Colocación imperfecta sin afirmaciones no sustentadas.",
+      "2": "Citas válidas y todo bloque sustantivo citado."
+    },
+    "format": {
+      "0": "Incumple el contrato o no hay respuesta.",
+      "1": "Defecto menor consumible.",
+      "2": "Cumple el contrato estructurado."
+    },
+    "failureRule": "Una afirmación relevante no sustentada marca fallo aunque el total sea alto."
+  },
+  "auditMethod": [
+    "Comparación literal de cada respuesta con contextChunks.",
+    "Validación de cada [S#] contra sources.",
+    "Revisión de cobertura contra el concepto esperado de cada caso.",
+    "Los bloques automáticos sin cita de 3.8 y el único de 3.5 son transiciones no sustantivas.",
+    "Los siete errores de 3.1 conservaron el único intento y puntúan como fallo de formato."
+  ],
+  "recommendation": {
+    "productionModel": "gemini-3.5-flash-lite",
+    "reason": "Completó 15/15 respuestas y 5/5 rechazos externos sin reintentos, con grounding íntegro y mayor concisión. Gemini 3.1 falló el contrato JSON en 7/15 casos.",
+    "productionConfigurationChanged": false
+  },
+  "models": [
+    {
+      "model": "gemini-3.8-flash",
+      "complete": true,
+      "classification": "BASELINE APROBADO",
+      "summary": {
+        "validAnswers": 15,
+        "totalAnswerable": 15,
+        "externalRejectedBeforeGenerator": 5,
+        "totalExternal": 5,
+        "meanScoreOutOf10": 10,
+        "unsupportedClaims": 0,
+        "relevantUnsupportedClaimFailures": 0,
+        "invalidCitationCases": 0,
+        "substantiveUncitedBlocks": 0,
+        "nonSubstantiveUncitedTransitions": 12,
+        "formatFailures": 0,
+        "averageAnswerWords": 266.13,
+        "averageAnswerableAttemptLatencyMs": null,
+        "generatorRetries": 24,
+        "httpRequests": {
+          "total": null,
+          "generation": 39,
+          "note": "Fase 4A no registró el total combinado; sólo 39 solicitudes generativas."
+        }
+      },
+      "relationalCases": [
+        {
+          "id": "rel-fuentes-verificacion",
+          "group": "relational",
+          "question": "¿Cómo se relacionan la calidad de las fuentes, la verificación y las alucinaciones de la IA?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 407,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            2,
+            4,
+            9,
+            1
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [
+            {
+              "block": "La relación entre la calidad de las fuentes, la verificación y las alucinaciones de la IA se comprende a partir de cómo operan los modelos de lenguaje y cuál es el rol activo del usuario en el trabajo académico:",
+              "classification": "non_substantive_transition",
+              "reason": "Introduce la explicación o lista posterior; no agrega un hecho independiente y los bloques sustantivos sí están citados."
+            }
+          ],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Relación entre fuentes, alucinaciones, verificación y juicio humano.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": null,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "rel-estudiante-responsable",
+          "group": "relational",
+          "question": "¿Cómo puede un estudiante usar NotebookLM para preparar un examen sin delegar su aprendizaje?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 314,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            7,
+            6
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [
+            {
+              "block": "El material del curso propone las siguientes pautas y etapas pedagógicas para lograrlo:",
+              "classification": "non_substantive_transition",
+              "reason": "Introduce la explicación o lista posterior; no agrega un hecho independiente y los bloques sustantivos sí están citados."
+            }
+          ],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Estudio activo, verificación, producción propia y ética.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": null,
+          "generatorRetries": 4,
+          "error": null
+        },
+        {
+          "id": "rel-docente-fuentes",
+          "group": "relational",
+          "question": "¿Cómo puede un docente diseñar una clase y su evaluación a partir de fuentes propias?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 306,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            8,
+            6
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [
+            {
+              "block": "A nivel pedagógico, el docente puede seguir estos pasos clave:",
+              "classification": "non_substantive_transition",
+              "reason": "Introduce la explicación o lista posterior; no agrega un hecho independiente y los bloques sustantivos sí están citados."
+            }
+          ],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Objetivo, fuentes, diseño, evaluación, verificación y adaptación.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": null,
+          "generatorRetries": 4,
+          "error": null
+        }
+      ],
+      "cases": [
+        {
+          "id": "m01-fluidez-verdad",
+          "group": "module",
+          "question": "¿Por qué la fluidez de un modelo de lenguaje no equivale a verdad?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 136,
+          "sourceIds": [
+            "S1",
+            "S2"
+          ],
+          "sourceModules": [
+            1,
+            2
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Patrones, diferencia fluidez/verdad y verificación.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": null,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "m02-alucinaciones",
+          "group": "module",
+          "question": "¿Por qué aparecen errores o alucinaciones en la IA generativa?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 205,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4"
+          ],
+          "sourceModules": [
+            2
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [
+            {
+              "block": "Este fenómeno y los errores ocurren principalmente por las siguientes razones explicadas en el material:",
+              "classification": "non_substantive_transition",
+              "reason": "Introduce la explicación o lista posterior; no agrega un hecho independiente y los bloques sustantivos sí están citados."
+            }
+          ],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Definición de alucinación y causas frecuentes.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": null,
+          "generatorRetries": 1,
+          "error": null
+        },
+        {
+          "id": "m03-procesamiento",
+          "group": "module",
+          "question": "¿Dónde ocurre realmente el procesamiento de una herramienta de IA y qué función tienen servidores y chips?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 179,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            3,
+            1
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [
+            {
+              "block": "Respecto a los componentes específicos consultados:",
+              "classification": "non_substantive_transition",
+              "reason": "Introduce la explicación o lista posterior; no agrega un hecho independiente y los bloques sustantivos sí están citados."
+            }
+          ],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Infraestructura, servidores, procesamiento y GPU.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": null,
+          "generatorRetries": 1,
+          "error": null
+        },
+        {
+          "id": "m04-privacidad",
+          "group": "module",
+          "question": "¿Qué debería revisar antes de subir datos o documentos sensibles a una herramienta de IA?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 210,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            4,
+            6,
+            10
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Autorización, minimización, anonimización y materiales permitidos.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": null,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "m05-elegir-herramienta",
+          "group": "module",
+          "question": "¿Cómo elijo entre NotebookLM, un chatbot conversacional y un buscador con IA para una tarea educativa?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 275,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            5,
+            2,
+            6,
+            3
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [
+            {
+              "block": "Para elegir adecuadamente la herramienta de IA según la tarea educativa, se deben considerar sus características y propósitos pedagógicos:",
+              "classification": "non_substantive_transition",
+              "reason": "Introduce la explicación o lista posterior; no agrega un hecho independiente y los bloques sustantivos sí están citados."
+            }
+          ],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Diferencia NotebookLM, chatbot y buscador según propósito y fuentes.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": null,
+          "generatorRetries": 4,
+          "error": null
+        },
+        {
+          "id": "m06-fuentes-corazon",
+          "group": "module",
+          "question": "¿Por qué las fuentes son el corazón de NotebookLM?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 248,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            6,
+            2,
+            7,
+            5,
+            3
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [
+            {
+              "block": "Las fuentes se consideran el corazón de NotebookLM debido a varias razones fundamentales:",
+              "classification": "non_substantive_transition",
+              "reason": "Introduce la explicación o lista posterior; no agrega un hecho independiente y los bloques sustantivos sí están citados."
+            }
+          ],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Fuentes como límite de alcance, confiabilidad y marco pedagógico.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": null,
+          "generatorRetries": 1,
+          "error": null
+        },
+        {
+          "id": "m07-examenes",
+          "group": "module",
+          "question": "¿Cómo se pueden preparar exámenes con NotebookLM?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 373,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            7,
+            6
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [
+            {
+              "block": "El proceso estructurado de preparación se compone de las siguientes etapas:",
+              "classification": "non_substantive_transition",
+              "reason": "Introduce la explicación o lista posterior; no agrega un hecho independiente y los bloques sustantivos sí están citados."
+            }
+          ],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Diagnóstico, práctica, respuesta propia, corrección, repaso y ética.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": null,
+          "generatorRetries": 1,
+          "error": null
+        },
+        {
+          "id": "m08-inclusion",
+          "group": "module",
+          "question": "¿Cómo adaptar materiales para distintos niveles y necesidades sin perder rigor académico?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 317,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            8,
+            9,
+            2
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [
+            {
+              "block": "Para adaptar materiales a distintos niveles y necesidades sin perder el rigor académico, el material del curso propone las siguientes pautas:",
+              "classification": "non_substantive_transition",
+              "reason": "Introduce la explicación o lista posterior; no agrega un hecho independiente y los bloques sustantivos sí están citados."
+            }
+          ],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Adaptación por niveles, rigor, privacidad y control docente.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": null,
+          "generatorRetries": 2,
+          "error": null
+        },
+        {
+          "id": "m09-honestidad",
+          "group": "module",
+          "question": "¿Cómo aprovechar IA para investigar sin plagiar ni presentar como propias ideas ajenas?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 372,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            9
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [
+            {
+              "block": "Para aprovechar la inteligencia artificial en la investigación sin incurrir en plagio ni adjudicarse ideas ajenas, es indispensable aplicar criterios claros de honestidad académica, autoría y rigor metodológico:",
+              "classification": "non_substantive_transition",
+              "reason": "Introduce la explicación o lista posterior; no agrega un hecho independiente y los bloques sustantivos sí están citados."
+            }
+          ],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Autoría, citas, verificación, síntesis propia y edición humana.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": null,
+          "generatorRetries": 3,
+          "error": null
+        },
+        {
+          "id": "m10-rubrica",
+          "group": "module",
+          "question": "¿Qué criterios incluye la rúbrica de evaluación del proyecto final?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 289,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            10,
+            6,
+            null,
+            8
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Cinco criterios de la rúbrica y sus niveles.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": null,
+          "generatorRetries": 1,
+          "error": null
+        },
+        {
+          "id": "m11-rutina",
+          "group": "module",
+          "question": "¿Qué rutina concreta propone el curso para mantenerse actualizado?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 180,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            11
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Rutina semanal, quincenal, mensual, trimestral y regla 70-20-10.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": null,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "overview-metodologia",
+          "group": "program_overview",
+          "question": "¿Cuál es la metodología didáctica general del programa?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 181,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            null,
+            7,
+            11
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [
+            {
+              "block": "Esta metodología se distribuye en tres componentes principales de formación:",
+              "classification": "non_substantive_transition",
+              "reason": "Introduce la explicación o lista posterior; no agrega un hecho independiente y los bloques sustantivos sí están citados."
+            },
+            {
+              "block": "Asimismo, el programa propone un ciclo de aprendizaje dinámico para el trabajo con IA que articula las siguientes etapas:",
+              "classification": "non_substantive_transition",
+              "reason": "Introduce la explicación o lista posterior; no agrega un hecho independiente y los bloques sustantivos sí están citados."
+            }
+          ],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Distribución 30-50-20 y ciclo metodológico.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": null,
+          "generatorRetries": 2,
+          "error": null
+        },
+        {
+          "id": "rel-fuentes-verificacion",
+          "group": "relational",
+          "question": "¿Cómo se relacionan la calidad de las fuentes, la verificación y las alucinaciones de la IA?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 407,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            2,
+            4,
+            9,
+            1
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [
+            {
+              "block": "La relación entre la calidad de las fuentes, la verificación y las alucinaciones de la IA se comprende a partir de cómo operan los modelos de lenguaje y cuál es el rol activo del usuario en el trabajo académico:",
+              "classification": "non_substantive_transition",
+              "reason": "Introduce la explicación o lista posterior; no agrega un hecho independiente y los bloques sustantivos sí están citados."
+            }
+          ],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Relación entre fuentes, alucinaciones, verificación y juicio humano.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": null,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "rel-estudiante-responsable",
+          "group": "relational",
+          "question": "¿Cómo puede un estudiante usar NotebookLM para preparar un examen sin delegar su aprendizaje?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 314,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            7,
+            6
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [
+            {
+              "block": "El material del curso propone las siguientes pautas y etapas pedagógicas para lograrlo:",
+              "classification": "non_substantive_transition",
+              "reason": "Introduce la explicación o lista posterior; no agrega un hecho independiente y los bloques sustantivos sí están citados."
+            }
+          ],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Estudio activo, verificación, producción propia y ética.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": null,
+          "generatorRetries": 4,
+          "error": null
+        },
+        {
+          "id": "rel-docente-fuentes",
+          "group": "relational",
+          "question": "¿Cómo puede un docente diseñar una clase y su evaluación a partir de fuentes propias?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 306,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            8,
+            6
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [
+            {
+              "block": "A nivel pedagógico, el docente puede seguir estos pasos clave:",
+              "classification": "non_substantive_transition",
+              "reason": "Introduce la explicación o lista posterior; no agrega un hecho independiente y los bloques sustantivos sí están citados."
+            }
+          ],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Objetivo, fuentes, diseño, evaluación, verificación y adaptación.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": null,
+          "generatorRetries": 4,
+          "error": null
+        }
+      ]
+    },
+    {
+      "model": "gemini-3.5-flash-lite",
+      "complete": true,
+      "classification": "APTO PARA PRODUCCIÓN",
+      "summary": {
+        "validAnswers": 15,
+        "totalAnswerable": 15,
+        "externalRejectedBeforeGenerator": 5,
+        "totalExternal": 5,
+        "meanScoreOutOf10": 10,
+        "unsupportedClaims": 0,
+        "relevantUnsupportedClaimFailures": 0,
+        "invalidCitationCases": 0,
+        "substantiveUncitedBlocks": 0,
+        "nonSubstantiveUncitedTransitions": 1,
+        "formatFailures": 0,
+        "averageAnswerWords": 170.73,
+        "averageAnswerableAttemptLatencyMs": 4687.86,
+        "generatorRetries": 0,
+        "httpRequests": {
+          "total": 56,
+          "generation": 15,
+          "note": "Incluye metadata de modelo, embedding, retrieval y generación."
+        }
+      },
+      "relationalCases": [
+        {
+          "id": "rel-fuentes-verificacion",
+          "group": "relational",
+          "question": "¿Cómo se relacionan la calidad de las fuentes, la verificación y las alucinaciones de la IA?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 190,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            2,
+            4,
+            9,
+            1
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Relación entre fuentes, alucinaciones, verificación y juicio humano.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 5452.8,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "rel-estudiante-responsable",
+          "group": "relational",
+          "question": "¿Cómo puede un estudiante usar NotebookLM para preparar un examen sin delegar su aprendizaje?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 232,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            7,
+            6
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Estudio activo, verificación, producción propia y ética.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 2867.89,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "rel-docente-fuentes",
+          "group": "relational",
+          "question": "¿Cómo puede un docente diseñar una clase y su evaluación a partir de fuentes propias?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 238,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            8,
+            6
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [
+            {
+              "block": "El diseño de la clase y la evaluación se puede estructurar siguiendo pasos específicos:",
+              "classification": "non_substantive_transition",
+              "reason": "Introduce la explicación o lista posterior; no agrega un hecho independiente y los bloques sustantivos sí están citados."
+            }
+          ],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Objetivo, fuentes, diseño, evaluación, verificación y adaptación.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 5631.17,
+          "generatorRetries": 0,
+          "error": null
+        }
+      ],
+      "cases": [
+        {
+          "id": "m01-fluidez-verdad",
+          "group": "module",
+          "question": "¿Por qué la fluidez de un modelo de lenguaje no equivale a verdad?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 126,
+          "sourceIds": [
+            "S1",
+            "S2"
+          ],
+          "sourceModules": [
+            1,
+            2
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Patrones, diferencia fluidez/verdad y verificación.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 2196.56,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "m02-alucinaciones",
+          "group": "module",
+          "question": "¿Por qué aparecen errores o alucinaciones en la IA generativa?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 117,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4"
+          ],
+          "sourceModules": [
+            2
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Definición de alucinación y causas frecuentes.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 2747.61,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "m03-procesamiento",
+          "group": "module",
+          "question": "¿Dónde ocurre realmente el procesamiento de una herramienta de IA y qué función tienen servidores y chips?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 147,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            3,
+            1
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Infraestructura, servidores, procesamiento y GPU.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 7924.58,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "m04-privacidad",
+          "group": "module",
+          "question": "¿Qué debería revisar antes de subir datos o documentos sensibles a una herramienta de IA?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 121,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            4,
+            6,
+            10
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Autorización, minimización, anonimización y materiales permitidos.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 5260.29,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "m05-elegir-herramienta",
+          "group": "module",
+          "question": "¿Cómo elijo entre NotebookLM, un chatbot conversacional y un buscador con IA para una tarea educativa?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 250,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            5,
+            2,
+            6,
+            3
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Diferencia NotebookLM, chatbot y buscador según propósito y fuentes.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 9945.1,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "m06-fuentes-corazon",
+          "group": "module",
+          "question": "¿Por qué las fuentes son el corazón de NotebookLM?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 96,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            6,
+            2,
+            7,
+            5,
+            3
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Fuentes como límite de alcance, confiabilidad y marco pedagógico.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 4060.23,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "m07-examenes",
+          "group": "module",
+          "question": "¿Cómo se pueden preparar exámenes con NotebookLM?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 221,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            7,
+            6
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Diagnóstico, práctica, respuesta propia, corrección, repaso y ética.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 4907.3,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "m08-inclusion",
+          "group": "module",
+          "question": "¿Cómo adaptar materiales para distintos niveles y necesidades sin perder rigor académico?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 128,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            8,
+            9,
+            2
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Adaptación por niveles, rigor, privacidad y control docente.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 3933.75,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "m09-honestidad",
+          "group": "module",
+          "question": "¿Cómo aprovechar IA para investigar sin plagiar ni presentar como propias ideas ajenas?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 200,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            9
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Autoría, citas, verificación, síntesis propia y edición humana.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 3479.27,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "m10-rubrica",
+          "group": "module",
+          "question": "¿Qué criterios incluye la rúbrica de evaluación del proyecto final?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 175,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            10,
+            6,
+            null,
+            8
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Cinco criterios de la rúbrica y sus niveles.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 4100.51,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "m11-rutina",
+          "group": "module",
+          "question": "¿Qué rutina concreta propone el curso para mantenerse actualizado?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 186,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            11
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Rutina semanal, quincenal, mensual, trimestral y regla 70-20-10.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 4269.56,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "overview-metodologia",
+          "group": "program_overview",
+          "question": "¿Cuál es la metodología didáctica general del programa?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 134,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            null,
+            7,
+            11
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Distribución 30-50-20 y ciclo metodológico.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 3541.31,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "rel-fuentes-verificacion",
+          "group": "relational",
+          "question": "¿Cómo se relacionan la calidad de las fuentes, la verificación y las alucinaciones de la IA?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 190,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            2,
+            4,
+            9,
+            1
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Relación entre fuentes, alucinaciones, verificación y juicio humano.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 5452.8,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "rel-estudiante-responsable",
+          "group": "relational",
+          "question": "¿Cómo puede un estudiante usar NotebookLM para preparar un examen sin delegar su aprendizaje?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 232,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            7,
+            6
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Estudio activo, verificación, producción propia y ética.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 2867.89,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "rel-docente-fuentes",
+          "group": "relational",
+          "question": "¿Cómo puede un docente diseñar una clase y su evaluación a partir de fuentes propias?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 238,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            8,
+            6
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [
+            {
+              "block": "El diseño de la clase y la evaluación se puede estructurar siguiendo pasos específicos:",
+              "classification": "non_substantive_transition",
+              "reason": "Introduce la explicación o lista posterior; no agrega un hecho independiente y los bloques sustantivos sí están citados."
+            }
+          ],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Objetivo, fuentes, diseño, evaluación, verificación y adaptación.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 5631.17,
+          "generatorRetries": 0,
+          "error": null
+        }
+      ]
+    },
+    {
+      "model": "gemini-3.1-flash-lite",
+      "complete": true,
+      "classification": "NO APTO",
+      "summary": {
+        "validAnswers": 8,
+        "totalAnswerable": 15,
+        "externalRejectedBeforeGenerator": 5,
+        "totalExternal": 5,
+        "meanScoreOutOf10": 5.27,
+        "unsupportedClaims": 0,
+        "relevantUnsupportedClaimFailures": 0,
+        "invalidCitationCases": 0,
+        "substantiveUncitedBlocks": 0,
+        "nonSubstantiveUncitedTransitions": 0,
+        "formatFailures": 7,
+        "averageAnswerWords": 209.75,
+        "averageAnswerableAttemptLatencyMs": 9329.39,
+        "generatorRetries": 0,
+        "httpRequests": {
+          "total": 57,
+          "generation": 15,
+          "note": "Incluye metadata de modelo, embedding, retrieval y generación."
+        }
+      },
+      "relationalCases": [
+        {
+          "id": "rel-fuentes-verificacion",
+          "group": "relational",
+          "question": "¿Cómo se relacionan la calidad de las fuentes, la verificación y las alucinaciones de la IA?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 223,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            2,
+            4,
+            9,
+            1
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Relación entre fuentes, alucinaciones, verificación y juicio humano.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 5438.31,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "rel-estudiante-responsable",
+          "group": "relational",
+          "question": "¿Cómo puede un estudiante usar NotebookLM para preparar un examen sin delegar su aprendizaje?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 1,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 9,
+          "wordCount": 283,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            7,
+            6
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Estudio activo, verificación, producción propia y ética.",
+          "clarityAudit": "Correcta, pero concentra una lista extensa en un único párrafo.",
+          "latencyMs": 6071.25,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "rel-docente-fuentes",
+          "group": "relational",
+          "question": "¿Cómo puede un docente diseñar una clase y su evaluación a partir de fuentes propias?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 228,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            8,
+            6
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Objetivo, fuentes, diseño, evaluación, verificación y adaptación.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 4608.44,
+          "generatorRetries": 0,
+          "error": null
+        }
+      ],
+      "cases": [
+        {
+          "id": "m01-fluidez-verdad",
+          "group": "module",
+          "question": "¿Por qué la fluidez de un modelo de lenguaje no equivale a verdad?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 132,
+          "sourceIds": [
+            "S1",
+            "S2"
+          ],
+          "sourceModules": [
+            1,
+            2
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Patrones, diferencia fluidez/verdad y verificación.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 2514.17,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "m02-alucinaciones",
+          "group": "module",
+          "question": "¿Por qué aparecen errores o alucinaciones en la IA generativa?",
+          "status": "error",
+          "validAnswer": false,
+          "score": {
+            "fidelity": 0,
+            "coverage": 0,
+            "pedagogicalClarity": 0,
+            "citationsAndGrounding": 0,
+            "format": 0
+          },
+          "totalScore": 0,
+          "wordCount": 0,
+          "sourceIds": [],
+          "sourceModules": [],
+          "allCitationsValid": false,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": true,
+          "failureReasons": [
+            "structured_output_parse_failure"
+          ],
+          "coverageAudit": "Sin respuesta evaluable por incumplimiento del contrato JSON en el único intento.",
+          "clarityAudit": "Sin respuesta evaluable.",
+          "latencyMs": 3621.07,
+          "generatorRetries": 0,
+          "error": "Gemini devolvió una respuesta RAG que no es JSON válido."
+        },
+        {
+          "id": "m03-procesamiento",
+          "group": "module",
+          "question": "¿Dónde ocurre realmente el procesamiento de una herramienta de IA y qué función tienen servidores y chips?",
+          "status": "error",
+          "validAnswer": false,
+          "score": {
+            "fidelity": 0,
+            "coverage": 0,
+            "pedagogicalClarity": 0,
+            "citationsAndGrounding": 0,
+            "format": 0
+          },
+          "totalScore": 0,
+          "wordCount": 0,
+          "sourceIds": [],
+          "sourceModules": [],
+          "allCitationsValid": false,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": true,
+          "failureReasons": [
+            "structured_output_parse_failure"
+          ],
+          "coverageAudit": "Sin respuesta evaluable por incumplimiento del contrato JSON en el único intento.",
+          "clarityAudit": "Sin respuesta evaluable.",
+          "latencyMs": 7088.34,
+          "generatorRetries": 0,
+          "error": "Gemini devolvió una respuesta RAG que no es JSON válido."
+        },
+        {
+          "id": "m04-privacidad",
+          "group": "module",
+          "question": "¿Qué debería revisar antes de subir datos o documentos sensibles a una herramienta de IA?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 138,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            4,
+            6,
+            10
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Autorización, minimización, anonimización y materiales permitidos.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 5119.05,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "m05-elegir-herramienta",
+          "group": "module",
+          "question": "¿Cómo elijo entre NotebookLM, un chatbot conversacional y un buscador con IA para una tarea educativa?",
+          "status": "error",
+          "validAnswer": false,
+          "score": {
+            "fidelity": 0,
+            "coverage": 0,
+            "pedagogicalClarity": 0,
+            "citationsAndGrounding": 0,
+            "format": 0
+          },
+          "totalScore": 0,
+          "wordCount": 0,
+          "sourceIds": [],
+          "sourceModules": [],
+          "allCitationsValid": false,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": true,
+          "failureReasons": [
+            "structured_output_parse_failure"
+          ],
+          "coverageAudit": "Sin respuesta evaluable por incumplimiento del contrato JSON en el único intento.",
+          "clarityAudit": "Sin respuesta evaluable.",
+          "latencyMs": 6977.53,
+          "generatorRetries": 0,
+          "error": "Gemini devolvió una respuesta RAG que no es JSON válido."
+        },
+        {
+          "id": "m06-fuentes-corazon",
+          "group": "module",
+          "question": "¿Por qué las fuentes son el corazón de NotebookLM?",
+          "status": "error",
+          "validAnswer": false,
+          "score": {
+            "fidelity": 0,
+            "coverage": 0,
+            "pedagogicalClarity": 0,
+            "citationsAndGrounding": 0,
+            "format": 0
+          },
+          "totalScore": 0,
+          "wordCount": 0,
+          "sourceIds": [],
+          "sourceModules": [],
+          "allCitationsValid": false,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": true,
+          "failureReasons": [
+            "structured_output_parse_failure"
+          ],
+          "coverageAudit": "Sin respuesta evaluable por incumplimiento del contrato JSON en el único intento.",
+          "clarityAudit": "Sin respuesta evaluable.",
+          "latencyMs": 5615.73,
+          "generatorRetries": 0,
+          "error": "Gemini devolvió una respuesta RAG que no es JSON válido."
+        },
+        {
+          "id": "m07-examenes",
+          "group": "module",
+          "question": "¿Cómo se pueden preparar exámenes con NotebookLM?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 194,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            7,
+            6
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Diagnóstico, práctica, respuesta propia, corrección, repaso y ética.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 5695.93,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "m08-inclusion",
+          "group": "module",
+          "question": "¿Cómo adaptar materiales para distintos niveles y necesidades sin perder rigor académico?",
+          "status": "error",
+          "validAnswer": false,
+          "score": {
+            "fidelity": 0,
+            "coverage": 0,
+            "pedagogicalClarity": 0,
+            "citationsAndGrounding": 0,
+            "format": 0
+          },
+          "totalScore": 0,
+          "wordCount": 0,
+          "sourceIds": [],
+          "sourceModules": [],
+          "allCitationsValid": false,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": true,
+          "failureReasons": [
+            "structured_output_parse_failure"
+          ],
+          "coverageAudit": "Sin respuesta evaluable por incumplimiento del contrato JSON en el único intento.",
+          "clarityAudit": "Sin respuesta evaluable.",
+          "latencyMs": 3881.61,
+          "generatorRetries": 0,
+          "error": "Gemini devolvió una respuesta RAG que no es JSON válido."
+        },
+        {
+          "id": "m09-honestidad",
+          "group": "module",
+          "question": "¿Cómo aprovechar IA para investigar sin plagiar ni presentar como propias ideas ajenas?",
+          "status": "error",
+          "validAnswer": false,
+          "score": {
+            "fidelity": 0,
+            "coverage": 0,
+            "pedagogicalClarity": 0,
+            "citationsAndGrounding": 0,
+            "format": 0
+          },
+          "totalScore": 0,
+          "wordCount": 0,
+          "sourceIds": [],
+          "sourceModules": [],
+          "allCitationsValid": false,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": true,
+          "failureReasons": [
+            "structured_output_parse_failure"
+          ],
+          "coverageAudit": "Sin respuesta evaluable por incumplimiento del contrato JSON en el único intento.",
+          "clarityAudit": "Sin respuesta evaluable.",
+          "latencyMs": 69568.75,
+          "generatorRetries": 0,
+          "error": "Gemini devolvió una respuesta RAG que no es JSON válido."
+        },
+        {
+          "id": "m10-rubrica",
+          "group": "module",
+          "question": "¿Qué criterios incluye la rúbrica de evaluación del proyecto final?",
+          "status": "error",
+          "validAnswer": false,
+          "score": {
+            "fidelity": 0,
+            "coverage": 0,
+            "pedagogicalClarity": 0,
+            "citationsAndGrounding": 0,
+            "format": 0
+          },
+          "totalScore": 0,
+          "wordCount": 0,
+          "sourceIds": [],
+          "sourceModules": [],
+          "allCitationsValid": false,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": true,
+          "failureReasons": [
+            "structured_output_parse_failure"
+          ],
+          "coverageAudit": "Sin respuesta evaluable por incumplimiento del contrato JSON en el único intento.",
+          "clarityAudit": "Sin respuesta evaluable.",
+          "latencyMs": 5434.88,
+          "generatorRetries": 0,
+          "error": "Gemini devolvió una respuesta RAG que no es JSON válido."
+        },
+        {
+          "id": "m11-rutina",
+          "group": "module",
+          "question": "¿Qué rutina concreta propone el curso para mantenerse actualizado?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 272,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            11
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Rutina semanal, quincenal, mensual, trimestral y regla 70-20-10.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 3091.32,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "overview-metodologia",
+          "group": "program_overview",
+          "question": "¿Cuál es la metodología didáctica general del programa?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 208,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            null,
+            7,
+            11
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Distribución 30-50-20 y ciclo metodológico.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 5214.53,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "rel-fuentes-verificacion",
+          "group": "relational",
+          "question": "¿Cómo se relacionan la calidad de las fuentes, la verificación y las alucinaciones de la IA?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 223,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            2,
+            4,
+            9,
+            1
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Relación entre fuentes, alucinaciones, verificación y juicio humano.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 5438.31,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "rel-estudiante-responsable",
+          "group": "relational",
+          "question": "¿Cómo puede un estudiante usar NotebookLM para preparar un examen sin delegar su aprendizaje?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 1,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 9,
+          "wordCount": 283,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            7,
+            6
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Estudio activo, verificación, producción propia y ética.",
+          "clarityAudit": "Correcta, pero concentra una lista extensa en un único párrafo.",
+          "latencyMs": 6071.25,
+          "generatorRetries": 0,
+          "error": null
+        },
+        {
+          "id": "rel-docente-fuentes",
+          "group": "relational",
+          "question": "¿Cómo puede un docente diseñar una clase y su evaluación a partir de fuentes propias?",
+          "status": "answered",
+          "validAnswer": true,
+          "score": {
+            "fidelity": 2,
+            "coverage": 2,
+            "pedagogicalClarity": 2,
+            "citationsAndGrounding": 2,
+            "format": 2
+          },
+          "totalScore": 10,
+          "wordCount": 228,
+          "sourceIds": [
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "sourceModules": [
+            8,
+            6
+          ],
+          "allCitationsValid": true,
+          "invalidCitations": [],
+          "uncitedBlockReview": [],
+          "unsupportedClaims": [],
+          "relevantUnsupportedClaimFailure": false,
+          "formatFailure": false,
+          "failureReasons": [],
+          "coverageAudit": "Objetivo, fuentes, diseño, evaluación, verificación y adaptación.",
+          "clarityAudit": "Clara, pedagógica y proporcionada a la pregunta.",
+          "latencyMs": 4608.44,
+          "generatorRetries": 0,
+          "error": null
+        }
+      ]
+    }
+  ]
+}

@@ -124,6 +124,16 @@ npm run rag:evaluate:generation
 
 La evaluación utiliza hasta cinco fragmentos y exige citas `[S#]` válidas. En desarrollo existe un tutor local en las páginas del curso y de cada módulo mediante `POST /api/assistant`. La ruta se deshabilita por defecto en producción; no incluye búsqueda web, historial ni streaming.
 
+Para comparar temporalmente otro generador sin cambiar `GEMINI_RAG_MODEL`, indica el modelo solo en el proceso del benchmark:
+
+```powershell
+$env:RAG_BENCHMARK_MODEL="gemini-3.5-flash-lite"
+npm.cmd run rag:benchmark:generation
+Remove-Item Env:RAG_BENCHMARK_MODEL
+```
+
+El benchmark comprueba el modelo con la SDK oficial, ejecuta las mismas 15 preguntas respondibles y 5 externas de Fase 4A, reutiliza retrieval, prompt y umbral del motor RAG y guarda un checkpoint completo separado por modelo. Cada generación se intenta una sola vez y se aplica una pausa conservadora de 10 segundos entre llamadas. La pausa puede ajustarse temporalmente con `RAG_BENCHMARK_DELAY_MS` sin modificar `.env.local`.
+
 La suite cubre, entre otros aspectos, catálogo y rutas de AI Engineering, evaluaciones, estado local, autenticación, retorno seguro después del login, importación a Supabase, certificados, marketing y SEO.
 
 ```powershell

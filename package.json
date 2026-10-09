@@ -22,6 +22,8 @@
     "rag:index": "node --conditions=react-server --import tsx scripts/index-rag-corpus.ts",
     "rag:evaluate": "node --conditions=react-server --import tsx scripts/evaluate-rag-retrieval.ts",
     "rag:evaluate:generation": "node --conditions=react-server --import tsx scripts/evaluate-rag-generation.ts",
+    "rag:benchmark:generation": "node --conditions=react-server --import tsx scripts/benchmark-rag-generation-model.ts",
+    "rag:audit:generation-models": "node --conditions=react-server --import tsx scripts/audit-rag-generation-benchmarks.ts",
     "content:prepare:ai-engineering": "tsx scripts/prepare-ai-engineering-content.ts",
     "content:validate:ai-engineering-module": "tsx scripts/manage-ai-engineering-module.ts validate",
     "content:prepare:ai-engineering-module": "tsx scripts/manage-ai-engineering-module.ts prepare",
