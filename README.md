@@ -112,7 +112,7 @@ npm run content:prepare:ai-engineering
 
 ## Testing y calidad
 
-### RAG fundamentado, sin interfaz
+### RAG fundamentado y tutor local
 
 La capa server-only de RAG mantiene desacoplados embeddings, retrieval y generación. El modelo generador se configura con `GEMINI_RAG_MODEL`; `RAG_SIMILARITY_THRESHOLD` controla el corte de suficiencia antes de invocar al generador.
 
@@ -122,7 +122,7 @@ El valor inicial `0.700` es **experimental**: proviene de la evaluación control
 npm run rag:evaluate:generation
 ```
 
-La evaluación utiliza hasta cinco fragmentos, exige citas `[S#]` válidas y no habilita búsqueda web, historial, streaming ni una API pública.
+La evaluación utiliza hasta cinco fragmentos y exige citas `[S#]` válidas. En desarrollo existe un tutor local en las páginas del curso y de cada módulo mediante `POST /api/assistant`. La ruta se deshabilita por defecto en producción; no incluye búsqueda web, historial ni streaming.
 
 La suite cubre, entre otros aspectos, catálogo y rutas de AI Engineering, evaluaciones, estado local, autenticación, retorno seguro después del login, importación a Supabase, certificados, marketing y SEO.
 

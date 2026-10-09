@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowRight, Download, FileText, GraduationCap } from "lucide-react";
 import { ModuleCard } from "@/components/module-card";
 import { ModuleImageFrame } from "@/components/module-image-frame";
+import { AssistantChat } from "@/components/rag/assistant-chat";
 import { AiEngineeringCourseOverview } from "@/components/courses/ai-engineering/ai-engineering-course-overview";
 import { LocalCourseProgress } from "@/components/learning/local-progress";
 import {
@@ -123,6 +124,8 @@ export default async function CoursePage({ params }: { params: Promise<{ courseS
           ))}
         </div>
       </section>
+
+      <AssistantChat courseSlug={activeCourse.slug} />
     </div>
   );
 }

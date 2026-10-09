@@ -13,6 +13,8 @@ export async function answerRagQuestion(options: {
   generationProvider: RagGenerationProvider;
   question: string;
   courseSlug: string;
+  moduleSlug?: string | null;
+  filterByModule?: boolean;
   threshold: number;
   topK?: number;
   maxContextChunks?: number;
@@ -22,6 +24,9 @@ export async function answerRagQuestion(options: {
     provider: options.embeddingProvider,
     query: options.question,
     courseSlug: options.courseSlug,
+    // The API carries module context now, but retrieval remains course-wide
+    // until a soft-preference strategy is calibrated with learner questions.
+    moduleSlug: options.filterByModule ? options.moduleSlug : null,
     matchCount: options.topK ?? DEFAULT_RAG_RETRIEVAL_TOP_K,
   });
 

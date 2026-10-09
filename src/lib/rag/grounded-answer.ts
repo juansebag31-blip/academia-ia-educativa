@@ -4,27 +4,12 @@ import {
   selectRagContext,
 } from "./context-selection";
 import type { RagGenerationProvider } from "./generation-provider";
+import type { GroundedRagAnswer, RagAnswerSource } from "./public-contract";
 import type { RagSearchResult } from "./retrieval";
 
+export type { GroundedRagAnswer, RagAnswerSource } from "./public-contract";
+
 export const DEFAULT_RAG_SUFFICIENCY_THRESHOLD = 0.7;
-
-export type RagAnswerSource = {
-  id: string;
-  moduleNumber: number | null;
-  moduleTitle: string | null;
-  sectionTitle: string | null;
-  subsectionTitle: string | null;
-  pageStart: number;
-  pageEnd: number;
-  routePath: string | null;
-  similarity: number;
-};
-
-export type GroundedRagAnswer = {
-  status: "answered" | "insufficient_evidence";
-  answer: string | null;
-  sources: RagAnswerSource[];
-};
 
 export type RagCitationAudit = {
   citations: string[];

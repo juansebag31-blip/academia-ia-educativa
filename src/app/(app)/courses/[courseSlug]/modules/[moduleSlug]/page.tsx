@@ -9,6 +9,7 @@ import { ModuleInfographic } from "@/components/module-infographic";
 import { ModuleNavigation } from "@/components/module-navigation";
 import { ModuleResourceLibrary } from "@/components/module-resource-library";
 import { ModuleSourceDocument } from "@/components/module-source-document";
+import { AssistantChat } from "@/components/rag/assistant-chat";
 import { AiEngineeringModulePage } from "@/components/courses/ai-engineering/ai-engineering-module-page";
 import { LocalLessonStatus, LocalModuleProgress } from "@/components/learning/local-progress";
 import { VideoPlayer } from "@/components/video-player";
@@ -169,6 +170,8 @@ export default async function ModulePage({ params }: { params: Promise<{ courseS
         courseSlug={activeCourse.slug}
         latestAttempt={undefined}
       />
+
+      <AssistantChat courseSlug={activeCourse.slug} moduleSlug={courseModule.slug} />
 
       <ModuleNavigation
         courseSlug={activeCourse.slug}
