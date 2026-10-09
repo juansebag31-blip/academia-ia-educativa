@@ -10,9 +10,13 @@ export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   if (!isRagAssistantApiEnabled()) return assistantNotAvailableResponse();
-  return handleAssistantRequest(request, { answerQuestion: answerRagAssistantQuestion });
+  return handleAssistantRequest(request, {
+    answerQuestion: (input) => answerRagAssistantQuestion(input, request),
+  });
 }
 
 export function GET(request: Request) {
-  return handleAssistantRequest(request, { answerQuestion: answerRagAssistantQuestion });
+  return handleAssistantRequest(request, {
+    answerQuestion: (input) => answerRagAssistantQuestion(input, request),
+  });
 }

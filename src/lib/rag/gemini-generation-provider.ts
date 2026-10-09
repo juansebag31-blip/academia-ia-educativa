@@ -7,7 +7,7 @@ import type {
 } from "./generation-provider";
 
 type GeminiGenerationProviderOptions = {
-  onRequest?: () => void;
+  onRequest?: () => void | Promise<void>;
   onRetry?: (event: { attempt: number; delayMs: number; reason: string }) => void;
   maxAttempts?: number;
 };
@@ -42,7 +42,7 @@ export class GeminiRagGenerationProvider implements RagGenerationProvider {
   async generateAnswer(request: RagGenerationRequest) {
     const response = await withTransientRetry(
       async () => {
-        this.onRequest?.();
+        await this.onRequest?.();
         return this.client.models.generateContent({
           model: this.model,
           contents: request.userPrompt,

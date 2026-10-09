@@ -1,4 +1,5 @@
 import { courseSeed } from "@/lib/course-seed";
+import { RagAssistantProtectionError } from "./assistant-errors";
 import {
   RAG_ASSISTANT_MAX_QUESTION_LENGTH,
   type GroundedRagAnswer,
@@ -50,6 +51,20 @@ function statusFromError(error: unknown) {
 }
 
 function publicProviderError(error: unknown) {
+  if (error instanceof RagAssistantProtectionError) {
+    const messages = {
+      anonymous_daily_limit:
+        "Alcanzaste el límite diario de consultas como visitante. Puedes volver a intentarlo mañana o iniciar sesión para disponer de más consultas.",
+      authenticated_daily_limit:
+        "Alcanzaste el límite diario de consultas del tutor. Podrás volver a utilizarlo mañana.",
+      burst_limit:
+        "Enviaste varias consultas en poco tiempo. Espera un minuto antes de volver a intentarlo.",
+      global_capacity:
+        "El tutor alcanzó temporalmente su capacidad diaria. Intenta nuevamente más tarde.",
+    } as const;
+    return errorResponse(error.publicCode, messages[error.publicCode], error.httpStatus);
+  }
+
   if (error instanceof RagAssistantTimeoutError) {
     return errorResponse(
       "request_timeout",

@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { courseSeed } from "@/lib/course-seed";
 import { handleAssistantRequest } from "@/lib/rag/assistant-handler";
+import { RagAssistantProtectionError } from "@/lib/rag/assistant-errors";
 import type { GroundedRagAnswer } from "@/lib/rag/public-contract";
 
 const validBody = {
@@ -164,6 +165,24 @@ describe("POST /api/assistant", () => {
     expect(response.status).toBe(429);
     expect(serialized).toContain("quota_exceeded");
     expect(serialized).not.toContain("secret");
+    expect(serialized).not.toContain("stack");
+  });
+
+  it.each([
+    ["anonymous_daily_limit", 429],
+    ["authenticated_daily_limit", 429],
+    ["burst_limit", 429],
+    ["global_capacity", 503],
+  ] as const)("maps the protected capacity state %s to a safe public error", async (code, status) => {
+    const response = await handleAssistantRequest(request(validBody), {
+      answerQuestion: async () => { throw new RagAssistantProtectionError(code, status); },
+    });
+    const serialized = JSON.stringify(await bodyOf(response));
+
+    expect(response.status).toBe(status);
+    expect(serialized).toContain(code);
+    expect(serialized).not.toContain("SUPABASE_SECRET_KEY");
+    expect(serialized).not.toContain("Gemini");
     expect(serialized).not.toContain("stack");
   });
 

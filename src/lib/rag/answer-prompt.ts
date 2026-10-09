@@ -1,5 +1,7 @@
 import type { SelectedRagContext } from "./context-selection";
 
+export const RAG_TUTOR_PROMPT_VERSION = "grounded-citations-v2";
+
 export const RAG_TUTOR_SYSTEM_INSTRUCTION = `Eres el tutor pedagógico de Academia IA Educativa.
 
 Reglas obligatorias:

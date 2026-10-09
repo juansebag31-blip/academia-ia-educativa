@@ -251,7 +251,13 @@ describe("RAG vector infrastructure", () => {
     expect(envExample).toContain("GEMINI_API_KEY=");
     expect(envExample).toContain("GEMINI_RAG_MODEL=gemini-3.5-flash-lite");
     expect(envExample).toContain("RAG_SIMILARITY_THRESHOLD=0.700");
+    expect(envExample).toContain("RAG_RATE_LIMIT_SECRET=");
+    expect(envExample).toContain("RAG_ANONYMOUS_DAILY_LIMIT=5");
+    expect(envExample).toContain("RAG_AUTHENTICATED_DAILY_LIMIT=20");
+    expect(envExample).toContain("RAG_DAILY_GENERATION_BUDGET=400");
+    expect(envExample).toContain("RAG_DAILY_EMBEDDING_BUDGET=450");
     expect(envExample).not.toContain("NEXT_PUBLIC_GEMINI_API_KEY=");
+    expect(envExample).not.toContain("NEXT_PUBLIC_RAG_RATE_LIMIT_SECRET=");
     expect(envExample).not.toContain("NEXT_PUBLIC_GEMINI_RAG_MODEL=");
   });
 });

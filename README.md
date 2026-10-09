@@ -124,6 +124,12 @@ npm run rag:evaluate:generation
 
 La evaluación utiliza hasta cinco fragmentos y exige citas `[S#]` válidas. En desarrollo existe un tutor local en las páginas del curso y de cada módulo mediante `POST /api/assistant`. La ruta se deshabilita por defecto en producción; no incluye búsqueda web, historial ni streaming.
 
+La protección de cuota del tutor se persiste en Supabase mediante operaciones atómicas compatibles con Vercel serverless. Los visitantes disponen por defecto de 5 consultas diarias y 2 por minuto; las cuentas autenticadas, de 20 diarias y 5 por minuto. Para visitantes se combina una cookie HTTP-only con la señal de red disponible y solo se conserva un HMAC server-side: nunca se almacena la IP en texto claro. `RAG_RATE_LIMIT_SECRET` debe ser un secreto independiente de al menos 32 caracteres.
+
+`RAG_DAILY_GENERATION_BUDGET=400` reserva margen frente al cupo diario del generador y se descuenta únicamente justo antes de cada solicitud HTTP real a Gemini, incluidos reintentos. Las preguntas con evidencia insuficiente no consumen generación. `RAG_DAILY_EMBEDDING_BUDGET=450` añade un límite independiente para consultas vectoriales no cacheadas.
+
+La caché server-only usa coincidencia exacta después de normalizar Unicode, mayúsculas y espacios. No persiste el texto de la pregunta: solo hashes y la respuesta pública validada. Su clave incluye curso, contexto de módulo, versión del corpus, modelo de embeddings, modelo generador, versión del prompt y configuración de retrieval; cambiar cualquiera de ellos invalida naturalmente las entradas anteriores. Los errores transitorios nunca se cachean.
+
 Para comparar temporalmente otro generador sin cambiar `GEMINI_RAG_MODEL`, indica el modelo solo en el proceso del benchmark:
 
 ```powershell
@@ -213,7 +219,7 @@ Sin variables de Supabase, las funciones remotas no estarán disponibles, pero e
 Los nombres y su alcance están documentados en [`.env.example`](.env.example):
 
 - públicas: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_CONTACT_EMAIL`;
-- privadas: `SUPABASE_SECRET_KEY`, `GEMINI_API_KEY`, `GEMINI_RAG_MODEL`, `RAG_SIMILARITY_THRESHOLD`, `MARKETING_HASH_SECRET`, `MARKETING_DOWNLOAD_SECRET`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`.
+- privadas: `SUPABASE_SECRET_KEY`, `GEMINI_API_KEY`, `GEMINI_RAG_MODEL`, `RAG_SIMILARITY_THRESHOLD`, `RAG_RATE_LIMIT_SECRET`, límites y presupuestos `RAG_*`, `MARKETING_HASH_SECRET`, `MARKETING_DOWNLOAD_SECRET`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`.
 
 ### Scripts útiles
 
