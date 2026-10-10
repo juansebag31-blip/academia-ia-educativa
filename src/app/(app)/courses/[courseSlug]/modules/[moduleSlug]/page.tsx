@@ -71,6 +71,8 @@ export default async function ModulePage({ params }: { params: Promise<{ courseS
 
   return (
     <div className="space-y-8">
+      <AssistantChat courseSlug={activeCourse.slug} moduleSlug={courseModule.slug} />
+
       <section className="rounded-2xl border border-line-soft bg-white p-7 shadow-card">
         <div className="mb-7 overflow-hidden rounded-2xl">
           <ModuleImageFrame image={courseModule.image} className="h-64" zoomable />
@@ -170,8 +172,6 @@ export default async function ModulePage({ params }: { params: Promise<{ courseS
         courseSlug={activeCourse.slug}
         latestAttempt={undefined}
       />
-
-      <AssistantChat courseSlug={activeCourse.slug} moduleSlug={courseModule.slug} />
 
       <ModuleNavigation
         courseSlug={activeCourse.slug}

@@ -61,6 +61,8 @@ export default async function CoursePage({ params }: { params: Promise<{ courseS
 
   return (
     <div className="space-y-8">
+      <AssistantChat courseSlug={activeCourse.slug} />
+
       <section className="overflow-hidden rounded-2xl border border-line-soft bg-white shadow-card">
         <div className="grid lg:grid-cols-[0.95fr_1.05fr]">
           <div className="relative min-h-72 text-white">
@@ -124,8 +126,6 @@ export default async function CoursePage({ params }: { params: Promise<{ courseS
           ))}
         </div>
       </section>
-
-      <AssistantChat courseSlug={activeCourse.slug} />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { BookOpenCheck, ExternalLink, LoaderCircle, MessageCircleQuestion, Send } from "lucide-react";
+import { BrainCircuit, BookOpenCheck, ExternalLink, LoaderCircle, Send, ShieldCheck, Sparkles } from "lucide-react";
 import { FormEvent, Fragment, useId, useState } from "react";
 import {
   RAG_ASSISTANT_MAX_QUESTION_LENGTH,
@@ -70,6 +70,9 @@ export function AssistantChat({ courseSlug, moduleSlug = null }: AssistantChatPr
   const [result, setResult] = useState<GroundedRagAnswer | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const scopeDescription = moduleSlug
+    ? "Preguntá sobre este módulo o sobre cualquier tema del curso. El asistente responde basándose en los materiales de Academia IA, con fuentes y páginas para que puedas verificar la información."
+    : "Consultá cualquiera de los 11 módulos. El asistente responde basándose en los materiales de Academia IA, con fuentes y páginas para que puedas verificar la información.";
 
   async function submitQuestion(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -103,28 +106,34 @@ export function AssistantChat({ courseSlug, moduleSlug = null }: AssistantChatPr
 
   return (
     <section
+      id="asistente-ia"
       aria-labelledby={`${fieldId}-title`}
-      className="overflow-hidden rounded-2xl border border-blue-200 bg-gradient-to-br from-white via-blue-50/70 to-cyan-50 shadow-card"
+      className="scroll-mt-40 overflow-hidden rounded-3xl border border-blue-300/70 bg-white shadow-[0_24px_70px_rgba(37,99,235,0.16)] sm:scroll-mt-28"
     >
-      <div className="border-b border-blue-100 px-5 py-5 sm:px-7">
-        <div className="flex items-start gap-3">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-ink text-white shadow-lg shadow-blue-950/15">
-            <MessageCircleQuestion size={23} aria-hidden="true" />
+      <div className="relative overflow-hidden bg-[linear-gradient(125deg,#071a2b_0%,#123b73_55%,#5b21b6_100%)] px-5 py-7 text-white sm:px-8 sm:py-9">
+        <div className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-cyan-300/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 left-1/3 h-52 w-52 rounded-full bg-violet-300/20 blur-3xl" />
+        <div className="relative flex min-w-0 items-start gap-4 sm:gap-5">
+          <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/10 text-cyan-100 shadow-xl shadow-blue-950/30 backdrop-blur sm:h-16 sm:w-16">
+            <BrainCircuit size={31} aria-hidden="true" />
           </span>
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-ember">Tutor con fuentes</p>
-            <h2 id={`${fieldId}-title`} className="mt-1 text-xl font-black text-ink sm:text-2xl">
-              Pregunta al material del curso
+          <div className="min-w-0">
+            <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-cyan-200">
+              <Sparkles size={15} aria-hidden="true" />
+              Inteligencia artificial para aprender
+            </p>
+            <h2 id={`${fieldId}-title`} className="mt-2 break-words text-2xl font-black leading-tight sm:text-3xl">
+              Asistente IA del curso
             </h2>
-            <p className="mt-1 max-w-3xl text-sm leading-6 text-slate-600">
-              El tutor responde únicamente con los módulos y documentos de Academia IA Educativa.
+            <p className="mt-3 max-w-4xl text-sm leading-6 text-blue-50 sm:text-base sm:leading-7">
+              {scopeDescription}
             </p>
           </div>
         </div>
       </div>
 
-      <form onSubmit={submitQuestion} className="space-y-4 p-5 sm:p-7">
-        <label htmlFor={fieldId} className="block text-sm font-black text-slate-800">
+      <form onSubmit={submitQuestion} className="space-y-4 bg-gradient-to-br from-white via-blue-50/55 to-cyan-50/60 p-5 sm:p-8">
+        <label htmlFor={fieldId} className="block text-base font-black text-ink">
           Escribe tu pregunta
         </label>
         <textarea
@@ -135,24 +144,30 @@ export function AssistantChat({ courseSlug, moduleSlug = null }: AssistantChatPr
           rows={4}
           disabled={isLoading}
           placeholder="Ejemplo: ¿Por qué una respuesta fluida de IA puede contener errores?"
-          className="focus-ring w-full resize-y rounded-2xl border border-blue-200 bg-white px-4 py-3 text-base text-ink shadow-sm placeholder:text-slate-400 disabled:cursor-wait disabled:bg-slate-50"
-          aria-describedby={`${fieldId}-help`}
+          className="focus-ring min-h-32 w-full resize-y rounded-2xl border border-blue-300 bg-white px-4 py-4 text-base leading-7 text-ink shadow-[0_10px_30px_rgba(37,99,235,0.08)] placeholder:text-slate-400 disabled:cursor-wait disabled:bg-slate-50"
+          aria-describedby={`${fieldId}-context ${fieldId}-safety`}
         />
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p id={`${fieldId}-help`} className="text-xs leading-5 text-slate-500">
-            No incluyas datos personales ni información sensible. Máximo {RAG_ASSISTANT_MAX_QUESTION_LENGTH} caracteres.
-          </p>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div className="space-y-1.5">
+            <p id={`${fieldId}-context`} className="text-sm font-semibold leading-6 text-slate-700">
+              Respuestas basadas en los materiales del curso, con fuentes y páginas para verificar la información.
+            </p>
+            <p id={`${fieldId}-safety`} className="flex items-start gap-1.5 text-xs leading-5 text-slate-500">
+              <ShieldCheck className="mt-0.5 shrink-0" size={14} aria-hidden="true" />
+              <span>No incluyas datos personales ni información sensible. Máximo {RAG_ASSISTANT_MAX_QUESTION_LENGTH} caracteres.</span>
+            </p>
+          </div>
           <button
             type="submit"
             disabled={isLoading || !question.trim()}
-            className="focus-ring inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-ember px-5 py-3 text-sm font-black text-white transition hover:bg-ember-dark disabled:cursor-not-allowed disabled:opacity-50"
+            className="focus-ring inline-flex min-h-12 w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-ember px-5 py-3 text-sm font-black text-white shadow-lg shadow-blue-900/20 transition hover:bg-ember-dark disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
           >
             {isLoading ? (
               <LoaderCircle className="animate-spin" size={18} aria-hidden="true" />
             ) : (
               <Send size={18} aria-hidden="true" />
             )}
-            {isLoading ? "Consultando fuentes…" : "Enviar pregunta"}
+            {isLoading ? "Consultando fuentes…" : "Preguntar al Asistente IA"}
           </button>
         </div>
       </form>

@@ -15,9 +15,12 @@ describe("AssistantChat", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     render(<AssistantChat courseSlug="ia-educativa-notebooklm" />);
+    expect(screen.getByRole("region", { name: "Asistente IA del curso" })).toHaveAttribute("id", "asistente-ia");
+    expect(screen.getByText(/Consultá cualquiera de los 11 módulos/)).toBeInTheDocument();
+    expect(screen.getByText(/Respuestas basadas en los materiales del curso/)).toBeInTheDocument();
     const field = screen.getByLabelText("Escribe tu pregunta");
     fireEvent.change(field, { target: { value: "¿Qué es NotebookLM?" } });
-    fireEvent.click(screen.getByRole("button", { name: "Enviar pregunta" }));
+    fireEvent.click(screen.getByRole("button", { name: "Preguntar al Asistente IA" }));
 
     await waitFor(() => {
       expect(screen.getByRole("button", { name: "Consultando fuentes…" })).toBeDisabled();
@@ -47,7 +50,8 @@ describe("AssistantChat", () => {
     fireEvent.change(screen.getByLabelText("Escribe tu pregunta"), {
       target: { value: "¿Qué es NotebookLM?" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Enviar pregunta" }));
+    expect(screen.getByText(/Preguntá sobre este módulo o sobre cualquier tema del curso/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Preguntar al Asistente IA" }));
 
     await screen.findByText("Respuesta fundamentada");
     expect(fetchMock).toHaveBeenCalledWith("/api/assistant", expect.objectContaining({
@@ -85,7 +89,7 @@ describe("AssistantChat", () => {
     fireEvent.change(screen.getByLabelText("Escribe tu pregunta"), {
       target: { value: "¿Quién ganó el último partido?" },
     });
-    fireEvent.submit(screen.getByRole("button", { name: "Enviar pregunta" }).closest("form")!);
+    fireEvent.submit(screen.getByRole("button", { name: "Preguntar al Asistente IA" }).closest("form")!);
 
     await waitFor(() => {
       expect(screen.getByText(
@@ -109,7 +113,7 @@ describe("AssistantChat", () => {
     fireEvent.change(screen.getByLabelText("Escribe tu pregunta"), {
       target: { value: "¿Qué es NotebookLM?" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Enviar pregunta" }));
+    fireEvent.click(screen.getByRole("button", { name: "Preguntar al Asistente IA" }));
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "El tutor alcanzó temporalmente su límite de uso. Intenta nuevamente más tarde.",
