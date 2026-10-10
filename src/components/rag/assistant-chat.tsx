@@ -1,8 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { BrainCircuit, BookOpenCheck, ExternalLink, LoaderCircle, Send, ShieldCheck, Sparkles } from "lucide-react";
-import { FormEvent, Fragment, useId, useState } from "react";
+import {
+  BrainCircuit,
+  BookOpenCheck,
+  Check,
+  ClipboardCopy,
+  ClipboardPaste,
+  ExternalLink,
+  LoaderCircle,
+  Search,
+  Send,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
+import { FormEvent, Fragment, useEffect, useId, useRef, useState } from "react";
 import {
   RAG_ASSISTANT_MAX_QUESTION_LENGTH,
   type GroundedRagAnswer,
@@ -17,6 +29,70 @@ type AssistantChatProps = {
 
 const insufficientMessage =
   "El material del curso no contiene información suficiente para responder esta pregunta.";
+const googleHomeUrl = "https://www.google.com/";
+
+export function buildGoogleSearchUrl(question: string) {
+  const normalizedQuestion = question.normalize("NFKC").trim().replace(/\s+/g, " ");
+  const compactQuestion = normalizedQuestion.length > 180
+    ? `${normalizedQuestion.slice(0, 177).trimEnd()}…`
+    : normalizedQuestion;
+  const usefulSuffix = /\b(explicaci[oó]n|fuentes?)\b/i.test(compactQuestion)
+    ? ""
+    : " explicación fuentes";
+
+  return `https://www.google.com/search?q=${encodeURIComponent(`${compactQuestion}${usefulSuffix}`)}`;
+}
+
+export function buildDeepeningContext(question: string, answer: string) {
+  return [
+    "Quiero profundizar este tema y comprenderlo mejor.",
+    "",
+    "Pregunta original:",
+    question.trim(),
+    "",
+    "Explicación de mi curso:",
+    answer.trim(),
+    "",
+    "Ayúdame a:",
+    "- explicarlo por secciones;",
+    "- relacionar los conceptos principales;",
+    "- aportar ejemplos;",
+    "- señalar información complementaria;",
+    "- indicar fuentes confiables y actuales.",
+  ].join("\n");
+}
+
+async function copyPlainText(text: string) {
+  if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // Continue with the local selection fallback when clipboard permission is unavailable.
+    }
+  }
+
+  if (typeof document === "undefined" || typeof document.execCommand !== "function") {
+    return false;
+  }
+
+  const field = document.createElement("textarea");
+  field.value = text;
+  field.setAttribute("readonly", "");
+  field.style.position = "fixed";
+  field.style.opacity = "0";
+  document.body.appendChild(field);
+  field.select();
+  field.setSelectionRange(0, text.length);
+
+  try {
+    return document.execCommand("copy");
+  } catch {
+    return false;
+  } finally {
+    field.remove();
+  }
+}
 
 function isErrorResponse(response: RagAssistantApiResponse): response is Extract<
   RagAssistantApiResponse,
@@ -67,12 +143,57 @@ function sourcePages(source: RagAnswerSource) {
 export function AssistantChat({ courseSlug, moduleSlug = null }: AssistantChatProps) {
   const fieldId = useId();
   const [question, setQuestion] = useState("");
+  const [answeredQuestion, setAnsweredQuestion] = useState<string | null>(null);
   const [result, setResult] = useState<GroundedRagAnswer | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [actionFeedback, setActionFeedback] = useState<string | null>(null);
+  const feedbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scopeDescription = moduleSlug
     ? "Preguntá sobre este módulo o sobre cualquier tema del curso. El asistente responde basándose en los materiales de Academia IA, con fuentes y páginas para que puedas verificar la información."
     : "Consultá cualquiera de los 11 módulos. El asistente responde basándose en los materiales de Academia IA, con fuentes y páginas para que puedas verificar la información.";
+
+  useEffect(() => () => {
+    if (feedbackTimeoutRef.current) clearTimeout(feedbackTimeoutRef.current);
+  }, []);
+
+  function clearActionFeedback() {
+    if (feedbackTimeoutRef.current) {
+      clearTimeout(feedbackTimeoutRef.current);
+      feedbackTimeoutRef.current = null;
+    }
+    setActionFeedback(null);
+  }
+
+  function showActionFeedback(message: string) {
+    if (feedbackTimeoutRef.current) clearTimeout(feedbackTimeoutRef.current);
+    setActionFeedback(message);
+    feedbackTimeoutRef.current = setTimeout(() => {
+      setActionFeedback(null);
+      feedbackTimeoutRef.current = null;
+    }, 4_000);
+  }
+
+  async function copyAnswer() {
+    if (result?.status !== "answered" || !result.answer) return;
+    const copied = await copyPlainText(result.answer);
+    showActionFeedback(copied
+      ? "Respuesta copiada"
+      : "No se pudo copiar automáticamente. Seleccioná el texto de la respuesta para copiarlo.");
+  }
+
+  async function copyForDeepening() {
+    if (result?.status !== "answered" || !result.answer || !answeredQuestion) return;
+
+    const copyPromise = copyPlainText(buildDeepeningContext(answeredQuestion, result.answer));
+    const googleWindow = window.open(googleHomeUrl, "_blank", "noopener,noreferrer");
+    if (googleWindow) googleWindow.opener = null;
+
+    const copied = await copyPromise;
+    showActionFeedback(copied
+      ? "Contexto copiado. Pegalo en Google para profundizar."
+      : "Google está abierto, pero no se pudo copiar el contexto automáticamente.");
+  }
 
   async function submitQuestion(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -82,6 +203,8 @@ export function AssistantChat({ courseSlug, moduleSlug = null }: AssistantChatPr
     setIsLoading(true);
     setError(null);
     setResult(null);
+    setAnsweredQuestion(null);
+    clearActionFeedback();
 
     try {
       const response = await fetch("/api/assistant", {
@@ -97,6 +220,7 @@ export function AssistantChat({ courseSlug, moduleSlug = null }: AssistantChatPr
         return;
       }
       setResult(payload);
+      setAnsweredQuestion(payload.status === "answered" ? trimmedQuestion : null);
     } catch {
       setError("No fue posible conectar con el tutor. Comprueba el servidor local e inténtalo nuevamente.");
     } finally {
@@ -195,6 +319,62 @@ export function AssistantChat({ courseSlug, moduleSlug = null }: AssistantChatPr
               </p>
               <AnswerWithCitations answer={result.answer} />
             </div>
+
+            {answeredQuestion ? (
+              <div className="border-t border-slate-100 pt-5">
+                <p className="text-xs font-black uppercase tracking-[0.14em] text-slate-500">
+                  Herramientas para seguir aprendiendo
+                </p>
+                <div
+                  role="group"
+                  aria-label="Acciones para profundizar la respuesta"
+                  className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap"
+                >
+                  <button
+                    type="button"
+                    onClick={copyAnswer}
+                    className="focus-ring inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-black text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-800 sm:w-auto"
+                  >
+                    {actionFeedback === "Respuesta copiada" ? (
+                      <Check size={17} className="text-emerald-600" aria-hidden="true" />
+                    ) : (
+                      <ClipboardCopy size={17} aria-hidden="true" />
+                    )}
+                    Copiar respuesta
+                  </button>
+                  <a
+                    href={buildGoogleSearchUrl(answeredQuestion)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="focus-ring inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-black text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-800 sm:w-auto"
+                  >
+                    <Search size={17} aria-hidden="true" />
+                    Buscar en Google
+                  </a>
+                  <button
+                    type="button"
+                    onClick={copyForDeepening}
+                    className="focus-ring inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-black text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-800 sm:w-auto"
+                  >
+                    <ClipboardPaste size={17} aria-hidden="true" />
+                    Copiar para profundizar
+                  </button>
+                </div>
+                <p
+                  role="status"
+                  aria-live="polite"
+                  aria-atomic="true"
+                  className="mt-2 min-h-5 text-sm font-bold text-emerald-700"
+                >
+                  {actionFeedback ?? ""}
+                </p>
+                <p className="mt-2 text-xs leading-5 text-slate-500">
+                  ¿Querés seguir investigando? Podés llevar esta explicación a un buscador para ampliar el tema.
+                  {" "}<strong>Academia IA</strong> contiene el material oficial del curso; la información de
+                  {" "}<strong>Google y la web</strong> es externa y conviene verificar sus fuentes.
+                </p>
+              </div>
+            ) : null}
 
             <div className="border-t border-slate-100 pt-5">
               <h3 className="text-sm font-black uppercase tracking-wide text-slate-500">Fuentes utilizadas</h3>
