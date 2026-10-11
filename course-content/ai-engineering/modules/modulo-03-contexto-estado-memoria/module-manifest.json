@@ -34,7 +34,14 @@
       "infographic": {
         "sourcePath": "assets/images/infografia-modulo-03.png",
         "alt": "Infografía educativa sobre contexto, estado y memoria en sistemas de inteligencia artificial",
-        "title": "Contexto, estado y memoria"
+        "title": "Contexto, estado y memoria",
+        "width": 1055,
+        "height": 1491
+      },
+      "guidedInfographicAudio": {
+        "mp3SourcePath": "assets/audio/modulo-03-lectura-guiada-infografia.mp3",
+        "title": "Lectura guiada de la infografía",
+        "instruction": "Escucha esta guía mientras recorres la infografía. La narración sigue su estructura para ayudarte a comprender cada concepto en orden."
       },
       "audio": {
         "mp3SourcePath": "assets/audio/modulo-03-audio-explicativo.mp3",

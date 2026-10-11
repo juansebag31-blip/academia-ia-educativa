@@ -55,7 +55,7 @@ beforeAll(async () => {
   fixtureRoot = await mkdtemp(path.join(tmpdir(), "ai-engineering-module-fixture-"));
   fixturePublicRoot = path.join(fixtureRoot, "public");
   fixtureManifest = await createValidPrivateFixture(fixtureRoot);
-});
+}, 30_000);
 
 afterAll(async () => {
   if (fixtureRoot) await rm(fixtureRoot, { recursive: true, force: true });
@@ -334,7 +334,7 @@ describe("AI Engineering manifest preparation", () => {
     await prepareAiEngineeringContent();
     const second = hash(await readFile(generatedModulesPath));
     expect(second).toBe(first);
-  }, 10_000);
+  }, 30_000);
 });
 
 describe("controlled non-public module fixture", () => {

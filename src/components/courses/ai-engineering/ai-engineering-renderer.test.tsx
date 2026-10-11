@@ -288,10 +288,25 @@ describe("AI Engineering visual renderer", () => {
       moduleThree.assets.presentation.publicPath,
     );
     expect(container.querySelector("audio")).not.toBeInTheDocument();
+    expect(moduleThree.assets.guidedInfographicAudioMp3).toBeDefined();
+    expect(screen.getByRole("heading", { name: "Lectura guiada de la infografía" })).toBeInTheDocument();
+    expect(screen.getByText("Recurso independiente")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: moduleThree.configuration.assets.audio.title })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", {
+      name: "Cargar y reproducir audio: Lectura guiada de la infografía",
+    }));
+    expect(container.querySelector("audio source")).toHaveAttribute(
+      "src",
+      moduleThree.assets.guidedInfographicAudioMp3?.publicPath,
+    );
     fireEvent.click(screen.getByRole("button", {
       name: `Cargar y reproducir audio: ${moduleThree.configuration.assets.audio.title}`,
     }));
-    expect(container.querySelector("audio source")).toHaveAttribute("src", moduleThree.assets.audioMp3.publicPath);
+    expect(Array.from(container.querySelectorAll("audio source")).map((source) => source.getAttribute("src")))
+      .toEqual(expect.arrayContaining([
+        moduleThree.assets.guidedInfographicAudioMp3?.publicPath,
+        moduleThree.assets.audioMp3.publicPath,
+      ]));
   });
 
   it("renders Module 4 from its manifest-derived quantities and official sources", () => {
